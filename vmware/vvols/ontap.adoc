@@ -23,7 +23,7 @@ La licence ONTAP FlexClone (incluse avec ONTAP ONE) et l'appliance ONTAP Tools s
 
 === Architecture VASA Provider des outils ONTAP lors de l'utilisation d'iSCSI ou FCP
 
-image:vvols-image5.png["Architecture VASA Provider des outils ONTAP,240"]
+image:vvols-image5.png["Architecture VASA Provider des outils ONTAP"]
 
 
 
@@ -90,7 +90,7 @@ Le fournisseur VASA inclut un tableau de bord contenant des informations sur les
 
 ==== Tableau de bord vVols des outils ONTAP
 
-image:vvols-image6.png["Tableau de bord vVols des outils ONTAP,400"]
+image:vvols-image6.png["Tableau de bord vVols des outils ONTAP"]
 
 
 
@@ -166,7 +166,7 @@ Meilleures pratiques d'utilisation des vVols avec ONTAP.
 
 Segmentation à un seul initiateur :
 
-image:vvols-image7.gif["Segmentation à un seul initiateur avec quatre nœuds,400"]
+image:vvols-image7.gif["Segmentation à un seul initiateur avec quatre nœuds"]
 
 Pour plus d'informations sur les meilleures pratiques, reportez-vous aux documents suivants :
 
@@ -210,5 +210,5 @@ https://www.netapp.com/pdf.html?item=/media/10681-tr4684.pdf["_TR-4684 implémen
 [[Figure_6]]
 Exemple de configuration réseau utilisant vVols sur NFS v3 :
 
-image:vvols-image18.png["Configuration réseau utilisant vVols sur NFS v3.500"] 
+image:vvols-image18.png["Configuration réseau utilisant vVols sur NFS v3"] 
 |===
