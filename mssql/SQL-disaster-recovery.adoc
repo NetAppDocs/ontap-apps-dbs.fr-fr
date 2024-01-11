@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: mssql/SQL-disaster-recovery.html 
+keywords: MS-SQL,mssql,SQL Server, disaster recovery, snapmirror 
+summary: Microsoft SQL Server sur ONTAP 
+---
+= Reprise sur incident de Microsoft SQL Server
+:allow-uri-read: 
+
+
+[role="lead"]
+NetApp propose différentes approches pour augmenter la disponibilité des données en cas de défaillance matérielle, logicielle ou de site.
+
+NetApp propose des technologies telles que MetroCluster, SnapMirror Business Continuity(SM-BC) , SnapMirror. Vous trouverez une description de ces fonctions link:../common/overview-dr.html["ici"].
+
+
+
+== SnapMirror NetApp
+
+La technologie NetApp SnapMirror offre une solution rapide et flexible pour les entreprises qui met en miroir ou répliquent des données sur des réseaux LAN et WAN. La technologie SnapMirror transfère uniquement les blocs de données de 4 Ko modifiés vers la destination après le transfert de base initial, ce qui réduit considérablement les besoins en bande passante réseau. SnapMirror offre une réplication asynchrone au niveau du volume basée sur un intervalle de mise à jour de réplication configuré.
+Voici les recommandations pour SnapMirror pour SQL Server :
+
+* Si CIFS est utilisé, le SVM de destination doit être membre du même domaine Active Directory dont le SVM source est membre, de sorte que les listes de contrôle d'accès (ACL) stockées dans les fichiers NAS ne soient pas interrompues pendant la reprise après un incident.
+* L'utilisation de noms de volume de destination identiques aux noms de volume source n'est pas requise, mais peut faciliter la gestion du processus de montage des volumes de destination dans la destination. Si CIFS est utilisé, vous devez rendre l'espace de noms NAS de destination identique dans les chemins et la structure de répertoires vers l'espace de noms source.
+* À des fins de cohérence, ne planifiez pas la mise à jour de SnapMirror à partir des contrôleurs. Cependant, activez SnapMirror Update depuis SnapCenter pour mettre à jour SnapMirror une fois la sauvegarde complète ou la sauvegarde du journal terminée.
+* Distribuez les volumes contenant des données SQL Server sur différents nœuds du cluster pour permettre à tous les nœuds de cluster de partager l'activité de réplication SnapMirror. Cette distribution optimise l'utilisation des ressources du nœud.
+
+
+Pour plus d'informations sur SnapMirror, reportez-vous à la section link:https://www.netapp.com/us/media/tr-4015.pdf["Tr-4015 : Guide de configuration et des meilleures pratiques de SnapMirror pour ONTAP 9"^].

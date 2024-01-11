@@ -1,0 +1,41 @@
+---
+sidebar: sidebar 
+permalink: mssql/storage-efficiency.html 
+keywords: MS-SQL,mssql,SQL Server 
+summary: Microsoft SQL Server sur ONTAP 
+---
+= Efficacité du stockage ONTAP avec Microsoft SQL Server
+:allow-uri-read: 
+
+
+[role="lead"]
+L'efficacité du stockage désigne la capacité de stocker et de gérer des données SQL Server d'une manière qui utilise le moins d'espace de stockage avec peu ou pas d'impact sur les performances globales du système.
+
+L'efficacité du stockage combine RAID, le provisionnement (disposition et utilisation globales), la mise en miroir et d'autres technologies de protection des données. Les technologies NetApp telles que les copies Snapshot, le provisionnement fin et FlexClone permettent de réaliser des économies en optimisant le stockage existant de l'infrastructure et en différant, voire en évitant, les dépenses futures en stockage. Plus vous utilisez ces technologies ensemble, plus vous réalisez d'économies. Pour plus d'informations, voir link:../common/ontap/thin-provisioning.html["recommandations de provisionnement"]
+
+La compression, la compaction et la déduplication du stockage sont d'autres options d'efficacité du stockage qui permettent d'augmenter la quantité de données logiques correspondant à un volume de stockage physique donné. Pour plus d'informations, reportez-vous à la section link:../common/ontap/efficiency.html["meilleures pratiques en matière d'efficacité"].
+
+SQL Server dispose également de fonctionnalités permettant de compresser et de gérer efficacement les données. SQL Server prend actuellement en charge deux types de compression de données : la compression de ligne et la compression de page.
+
+La compression de ligne modifie le format de stockage des données. Par exemple, il change les entiers et les décimales au format de longueur variable au lieu de leur format natif de longueur fixe. Il remplace également les chaînes de caractères de longueur fixe par le format de longueur variable en éliminant les espaces vides. La compression de page implémente la compression de ligne et deux autres stratégies de compression (compression de préfixe et compression de dictionnaire). Vous trouverez plus de détails sur la compression de page dans link:https://learn.microsoft.com/en-us/sql/relational-databases/data-compression/page-compression-implementation?view=sql-server-ver16&redirectedfrom=MSDN["Mise en œuvre de la compression de page"^].
+
+La compression des données est actuellement prise en charge dans les éditions entreprise, Développeur et évaluation de SQL Server 2008 et versions ultérieures. Bien que la compression puisse être effectuée par la base de données elle-même, elle est rarement observée dans un environnement SQL Server.
+
+Voici les recommandations pour la gestion de l'espace pour les fichiers de données SQL Server
+
+* Utiliser le provisionnement fin dans les environnements SQL Server pour améliorer l'utilisation de l'espace et réduire les besoins globaux en stockage lorsque la fonctionnalité de garantie d'espace est utilisée.
+* Utilisez le croissance automatique dans la plupart des configurations de déploiement courantes, car l'administrateur du stockage ne doit contrôler l'utilisation de l'espace dans l'agrégat.
+* Il est conseillé de ne pas activer la déduplication sur les volumes contenant des fichiers de données SQL Server, sauf si le volume contient plusieurs copies des mêmes données, telles que la restauration de la base de données à partir de sauvegardes sur un seul volume.
+
+
+
+
+== Réclamations d'espace
+
+La récupération d'espace peut être lancée régulièrement pour restaurer l'espace inutilisé d'une LUN. Avec SnapCenter, vous pouvez utiliser la commande PowerShell suivante pour démarrer la récupération d'espace.
+
+[listing]
+----
+Invoke-SdHostVolumeSpaceReclaim -Path drive_path
+----
+Si vous devez exécuter la récupération d'espace, ce processus doit être exécuté pendant les périodes de faible activité car il consomme initialement des cycles sur l'hôte.

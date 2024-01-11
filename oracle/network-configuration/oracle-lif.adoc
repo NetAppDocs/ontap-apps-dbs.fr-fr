@@ -1,0 +1,152 @@
+---
+sidebar: sidebar 
+permalink: oracle/network-configuration/oracle-lif.html 
+keywords: LIF, multipath, multipathing 
+summary: 'Conception d"interface logique pour les bases de données Oracle' 
+---
+= Conception d'interface logique pour les bases de données Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Les bases de données Oracle doivent accéder au stockage. Les interfaces logiques (LIF) correspondent à la tuyauterie réseau qui connecte une machine virtuelle de stockage (SVM) au réseau et, par conséquent, à la base de données. Une conception correcte des LIF est requise pour s'assurer qu'il y a suffisamment de bande passante pour chaque charge de travail de la base de données, et le basculement ne provoque pas de perte des services de stockage.
+
+Cette section présente les principes clés de conception des LIF. Pour obtenir une documentation plus complète, reportez-vous au link:https://docs.netapp.com/us-en/ontap/network-management/index.html["Documentation de gestion de réseau ONTAP"]. Comme pour les autres aspects de l'architecture de la base de données, les meilleures options pour la conception des machines virtuelles de stockage (SVM, appelé SVM au niveau de l'interface de ligne de commande) et de l'interface logique (LIF) dépendent largement des besoins en termes d'évolutivité et des besoins de l'entreprise.
+
+Tenez compte des principaux sujets suivants lors de l'élaboration d'une stratégie LIF :
+
+* *Performances.* la bande passante du réseau est-elle suffisante ?
+* *Résilience.* y a-t-il des points de défaillance uniques dans la conception?
+* *Gérabilité.* le réseau peut-il être mis à l'échelle sans interruption ?
+
+
+Ces rubriques s'appliquent à la solution de bout en bout, de l'hôte aux commutateurs et au système de stockage.
+
+
+
+== Types de LIF
+
+Il existe plusieurs types de LIF. link:https://docs.netapp.com/us-en/ontap/networking/lif_compatibility_with_port_types.html["Documentation ONTAP sur les types de LIF"] Fournir des informations plus complètes à ce sujet, mais d'un point de vue fonctionnel, les LIF peuvent être divisées en plusieurs groupes :
+
+* *LIFs de gestion de clusters et de nœuds.* utilisées pour gérer le cluster de stockage.
+* *LIF de gestion SVM.* interfaces permettant l'accès à une SVM via l'API REST ou ONTAPI (aussi connue sous le nom de ZAPI) pour des fonctions telles que la création de snapshots ou le redimensionnement de volumes. Des produits tels que SnapManager pour Oracle (SMO) doivent avoir accès à une LIF de gestion SVM.
+* *Interfaces de données LIF.* pour FC, iSCSI, NVMe/FC, NVMe/TCP, NFS, ou SMB/CIFS.
+
+
+
+NOTE: Une LIF de données utilisée pour le trafic NFS peut également être utilisée à des fins de gestion en modifiant la politique de pare-feu de `data` à `mgmt` Ou une autre règle autorisant HTTP, HTTPS ou SSH. Ce changement peut simplifier la configuration du réseau en évitant la configuration de chaque hôte pour l'accès à la fois à la LIF de données NFS et à une LIF de gestion distincte. Il n'est pas possible de configurer une interface pour l'iSCSI et le trafic de gestion, bien que les deux utilisent un protocole IP. Une LIF de gestion distincte est requise dans les environnements iSCSI.
+
+
+
+== Conception de SAN LIF
+
+La conception de LIF dans un environnement SAN est relativement simple pour une raison : les chemins d'accès multiples. Toutes les implémentations SAN modernes permettent à un client d'accéder aux données sur plusieurs chemins réseau indépendants et de sélectionner le ou les chemins d'accès les plus adaptés. Par conséquent, les performances du design LIF sont plus simples à gérer, car les clients SAN équilibrent automatiquement la charge en E/S sur les meilleurs chemins disponibles.
+
+Si un chemin devient indisponible, le client sélectionne automatiquement un autre chemin. La simplicité de conception qui en résulte rend les LIF SAN généralement plus faciles à gérer. Cela ne signifie pas pour autant qu'un environnement SAN est toujours plus facile à gérer, car de nombreux autres aspects du stockage SAN sont bien plus complexes que NFS. Cela signifie simplement que la conception de la LIF SAN est plus facile.
+
+
+
+=== Performance
+
+La bande passante est l'élément le plus important à prendre en compte dans les performances de LIF dans un environnement SAN. Par exemple, un cluster ONTAP AFF à deux nœuds doté de deux ports FC 16 Gb par nœud permet d'obtenir jusqu'à 32 Go de bande passante vers/depuis chaque nœud.
+
+
+
+=== Résilience
+
+Les LIF SAN ne basculent pas sur un système de stockage AFF. Si une LIF SAN échoue en raison du basculement du contrôleur, le logiciel de chemins d'accès multiples du client détecte la perte d'un chemin et redirige les E/S vers une autre LIF. Avec les systèmes de stockage ASA, les LIF basculent après un court délai, mais cela n'interrompt pas les E/S, car il existe déjà des chemins actifs sur l'autre contrôleur. Le processus de basculement a lieu afin de restaurer l'accès de l'hôte sur tous les ports définis.
+
+
+
+=== Gestion aisée
+
+La migration des LIF est une tâche beaucoup plus courante dans un environnement NFS, car elle est souvent associée au déplacement des volumes au sein du cluster. Il n'est pas nécessaire de migrer une LIF dans un environnement SAN lorsque les volumes sont déplacés au sein de la paire HA. En effet, une fois le déplacement de volume terminé, ONTAP envoie une notification au SAN concernant un changement de chemins et les clients SAN se réoptimisent automatiquement. La migration de LIF avec SAN est principalement associée à des modifications matérielles physiques majeures. Par exemple, si une mise à niveau des contrôleurs sans interruption est requise, une LIF SAN est migrée vers le nouveau matériel. Si un port FC est défectueux, une LIF peut être migrée vers un port non utilisé.
+
+
+
+=== Recommandations de conception
+
+NetApp fait les recommandations suivantes :
+
+* Ne créez pas plus de chemins que nécessaire. Un nombre excessif de chemins complique la gestion globale et peut entraîner des problèmes de basculement de chemin sur certains hôtes. De plus, certains hôtes ont des limites de chemin inattendues pour les configurations comme le démarrage SAN.
+* Très peu de configurations doivent nécessiter plus de quatre chemins vers une LUN. L'intérêt d'avoir plus de deux nœuds de chemins publicitaires vers les LUN est limité, car l'agrégat hébergeant une LUN est inaccessible en cas de défaillance du nœud qui détient la LUN et de son partenaire haute disponibilité. Dans ce cas, la création de chemins sur des nœuds autres que la paire haute disponibilité principale n'est pas utile.
+* Même si vous pouvez gérer le nombre de chemins de LUN visibles en sélectionnant les ports inclus dans les zones FC, il est généralement plus facile d'inclure tous les points cibles potentiels dans la zone FC et de contrôler la visibilité des LUN au niveau des ONTAP.
+* Dans ONTAP 8.3 et versions ultérieures, la fonction de mappage de LUN sélectif (SLM) est la fonction par défaut. Avec SLM, toute nouvelle LUN est automatiquement annoncée à partir du nœud qui possède l'agrégat sous-jacent et du partenaire HA du nœud. Cet arrangement évite de créer des ensembles de ports ou de configurer le zoning pour limiter l'accessibilité des ports. Chaque LUN est disponible sur le nombre minimal de nœuds requis pour des performances et une résilience optimales.
+*Dans le cas où un LUN doit être migré en dehors des deux contrôleurs, les nœuds supplémentaires peuvent être ajoutés avec le `lun mapping add-reporting-nodes` De sorte que les LUN soient annoncées sur les nouveaux nœuds. Vous créez ainsi des chemins SAN supplémentaires vers les LUN pour la migration des LUN. Toutefois, l'hôte doit effectuer une opération de découverte pour utiliser les nouveaux chemins.
+* Ne vous souciez pas trop du trafic indirect. Dans un environnement très exigeant en E/S, il est préférable d'éviter le trafic indirect pour lequel chaque microseconde de latence est critique, mais l'impact visible sur la performance est négligeable pour les charges de travail classiques.
+
+
+
+
+== Conception de LIF NFS
+
+Contrairement aux protocoles SAN, NFS dispose d'une capacité limitée de définir plusieurs chemins d'accès aux données. Les extensions NFS parallèles (pNFS) à NFSv4 répondent à cette limitation, mais l'ajout de chemins d'accès supplémentaires devient rarement intéressant dans la mesure où les vitesses ethernet atteignent 100 Go et au-delà.
+
+
+
+=== Performances et résilience
+
+Bien que la mesure des performances d'une LIF SAN consiste principalement à calculer la bande passante totale à partir de tous les chemins principaux, la détermination des performances d'une LIF NFS nécessite d'étudier de plus près la configuration réseau exacte. Par exemple, deux ports 10 Gbit peuvent être configurés comme ports physiques bruts ou en tant que groupe d'interface LACP (Link Aggregation Control Protocol). S'ils sont configurés en tant que groupe d'interface, plusieurs stratégies d'équilibrage de charge sont disponibles et fonctionnent différemment selon que le trafic est commuté ou routé. Enfin, Oracle Direct NFS (dNFS) propose des configurations d'équilibrage de charge qui n'existent pour le moment dans aucun client OS NFS.
+
+Contrairement aux protocoles SAN, les systèmes de fichiers NFS nécessitent une résilience au niveau de la couche de protocole. Par exemple, une LUN est toujours configurée avec les chemins d'accès multiples activés, ce qui signifie que plusieurs canaux redondants sont disponibles pour le système de stockage, chacun utilisant le protocole FC. Un système de fichiers NFS, en revanche, dépend de la disponibilité d'un seul canal TCP/IP qui ne peut être protégé qu'au niveau de la couche physique. C'est pourquoi des options telles que le basculement de port et l'agrégation de ports LACP existent.
+
+Dans un environnement NFS, les performances et la résilience sont fournies au niveau de la couche du protocole réseau. En conséquence, ces deux sujets sont étroitement liés et doivent être discutés ensemble.
+
+
+
+==== Lier les LIFs aux groupes de ports
+
+Pour lier une LIF à un port group, associez l'adresse IP de la LIF à un groupe de ports physiques. La méthode principale pour agréger les ports physiques est le LACP. La fonctionnalité de tolérance aux pannes de LACP est assez simple : chaque port d'un groupe LACP est surveillé et supprimé du groupe de ports en cas de dysfonctionnement. Cependant, il existe de nombreuses idées fausses sur le fonctionnement de LACP en matière de performances :
+
+* LACP ne requiert pas que la configuration sur le switch corresponde au terminal. Par exemple, ONTAP peut être configuré avec un équilibrage de charge basé sur IP, tandis qu'un commutateur peut utiliser un équilibrage de charge basé sur MAC.
+* Chaque noeud final utilisant une connexion LACP peut choisir indépendamment le port de transmission des paquets, mais il ne peut pas choisir le port utilisé pour la réception. Cela signifie que le trafic de ONTAP vers une destination particulière est lié à un port particulier, et que le trafic de retour peut arriver sur une interface différente. Cela ne cause cependant aucun problème.
+* LACP ne distribue pas uniformément le trafic en permanence. Dans un grand environnement comptant de nombreux clients NFS, le résultat est même généralement l'utilisation de tous les ports d'une agrégation LACP. Cependant, tout système de fichiers NFS dans l'environnement est limité à la bande passante d'un seul port, et non à l'agrégation complète.
+* Bien que les politiques LACP robin-Robin soient disponibles sur ONTAP, ces règles n'abordent pas la connexion entre un switch et un hôte. Par exemple, une configuration avec une jonction LACP à quatre ports sur un hôte et une jonction LACP à quatre ports sur ONTAP ne peut toujours lire un système de fichiers qu'à l'aide d'un seul port. Bien que ONTAP puisse transmettre des données via les quatre ports, aucune technologie de commutation n'est actuellement disponible, qui envoie du commutateur à l'hôte via les quatre ports. Un seul est utilisé.
+
+
+L'approche la plus courante dans les grands environnements composés de nombreux hôtes de base de données est de créer un agrégat LACP comportant un nombre approprié d'interfaces 10 Gbit (ou plus rapides) en utilisant l'équilibrage de la charge IP. Cette approche permet à ONTAP d'assurer une utilisation uniforme de tous les ports, tant qu'il y a suffisamment de clients. L'équilibrage de la charge est défaillant lorsque la configuration compte moins de clients, car les ressources en ligne LACP ne redistribuent pas la charge de manière dynamique.
+
+Lorsqu'une connexion est établie, le trafic dans une direction particulière est placé sur un seul port. Par exemple, une base de données effectuant une analyse de table complète sur un système de fichiers NFS connecté via une jonction LACP à quatre ports lit les données via une seule carte d'interface réseau (NIC). Si seulement trois serveurs de base de données se trouvent dans un tel environnement, il est possible que les trois derniers lisent à partir du même port, alors que les trois autres ports sont inactifs.
+
+
+
+==== Lier les LIF à des ports physiques
+
+La liaison d'une LIF à un port physique permet un contrôle plus granulaire de la configuration du réseau, car une adresse IP donnée sur un système ONTAP n'est associée qu'à un seul port réseau à la fois. La résilience s'obtient ensuite via la configuration des groupes de basculement et des règles de basculement.
+
+
+
+==== Stratégies de basculement et groupes de basculement
+
+Le comportement des LIF durant une interruption du réseau est contrôlé par des règles de basculement et des groupes de basculement. Les options de configuration ont été modifiées avec les différentes versions de ONTAP. Consulter le link:https://docs.netapp.com/us-en/ontap/networking/configure_failover_groups_and_policies_for_lifs_overview.html["Documentation de gestion de réseau ONTAP pour les groupes et politiques de basculement"] Pour plus d'informations sur la version de ONTAP déployée.
+
+Les versions ONTAP 8.3 et supérieures permettent la gestion du basculement des LIF sur la base des domaines de diffusion. Par conséquent, un administrateur peut définir tous les ports ayant accès à un sous-réseau donné et autoriser ONTAP à sélectionner une LIF de basculement appropriée. Cette approche peut être utilisée par certains clients, mais elle est limitée dans un environnement de réseau de stockage haut débit en raison du manque de prévisibilité. Par exemple, un environnement peut inclure à la fois des ports 1 Gbit pour l'accès aux systèmes de fichiers de routine et des ports 10 Gbit pour les E/S des fichiers de données Si les deux types de ports existent dans le même broadcast domain, le basculement de LIF peut entraîner le déplacement des E/S des fichiers de données d'un port 10 Gb vers un port 1 Gb.
+
+En résumé, tenez compte des pratiques suivantes :
+
+. Configurez un groupe de basculement comme défini par l'utilisateur.
+. Remplissez le groupe de basculement avec les ports du contrôleur partenaire de basculement de stockage (SFO) de sorte que les LIF suivent les agrégats lors d'un basculement de stockage. Cela évite de créer du trafic indirect.
+. Utilisez les ports de basculement avec des caractéristiques de performance correspondantes à la LIF d'origine. Par exemple, une LIF située sur un seul port physique de 10 Go doit inclure un groupe de basculement doté d'un seul port 10 Go. Une LIF LACP à quatre ports doit basculer vers une autre LIF LACP à quatre ports. Ces ports seraient un sous-ensemble des ports définis dans le domaine de diffusion.
+. Définissez la politique de basculement sur partenaire SFO uniquement. Veillez donc à ce que la LIF suive l'agrégat lors du failover.
+
+
+
+
+==== Restauration automatique
+
+Réglez le `auto-revert` paramètre selon vos besoins. La plupart des clients préfèrent définir ce paramètre sur `true` Pour que la LIF rerevienne sur son port home. Cependant, dans certains cas, les clients ont défini cette option sur `false `afin qu'un basculement inattendu puisse être recherché avant de renvoyer une LIF à son port de attache.
+
+
+
+==== Rapport LIF/volume
+
+On croit souvent, à tort, qu'il doit y avoir une relation 1:1 entre les volumes et les LIFs NFS. Même si cette configuration est requise pour déplacer un volume n'importe où dans un cluster sans jamais créer de trafic d'interconnexion supplémentaire, elle n'est pas obligatoire de manière catégorique. Le trafic intercluster doit être envisagé, mais la simple présence du trafic intercluster ne crée pas de problèmes. Nombre des bancs d'essai publiés pour ONTAP portent sur des E/S principalement indirectes
+
+Par exemple, un projet de base de données contenant un nombre relativement limité de bases de données pour lesquelles seuls 40 volumes nécessitent des performances élevées peut justifier un rapport volume 1:1 vers une stratégie LIF, un arrangement qui nécessiterait 40 adresses IP. N'importe quel volume peut ensuite être déplacé n'importe où dans le cluster avec la LIF associée, et le trafic serait toujours direct, minimisant ainsi chaque source de latence, même à des niveaux d'une microseconde.
+
+Par exemple, un grand environnement hébergé peut être plus facilement géré avec une relation 1:1 entre les clients et les LIF. Au fil du temps, un volume peut avoir besoin d'être migré vers un autre nœud, ce qui provoque du trafic indirect. Cependant, l'effet sur les performances doit être indétectable à moins que les ports réseau du commutateur d'interconnexion ne soient saturés. En cas de problème, une nouvelle LIF peut être établie sur des nœuds supplémentaires et l'hôte peut être mis à jour dans la fenêtre de maintenance suivante afin de supprimer le trafic indirect de la configuration.

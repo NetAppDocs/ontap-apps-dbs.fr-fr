@@ -1,0 +1,24 @@
+---
+sidebar: sidebar 
+permalink: oracle/storage-configuration/oracle-nfs-caching.html 
+keywords: NFS 
+summary: Bases de données de mise en cache des attributs NFS 
+---
+= Mise en cache NFS avec les bases de données
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La présence de l'une des options de montage suivantes entraîne la désactivation de la mise en cache de l'hôte :
+
+....
+cio, actimeo=0, noac, forcedirectio
+....
+Ces paramètres peuvent avoir un effet négatif important sur la vitesse d'installation du logiciel, de correction et des opérations de sauvegarde/restauration. Dans certains cas, en particulier avec les applications en cluster, ces options sont obligatoires car elles doivent inévitablement assurer la cohérence du cache sur tous les nœuds du cluster. Dans d'autres cas, les clients utilisent ces paramètres par erreur, ce qui entraîne des dommages inutiles aux performances.
+
+De nombreux clients suppriment temporairement ces options de montage lors de l'installation ou de l'application de correctifs binaires. Cette suppression peut être effectuée en toute sécurité si l'utilisateur vérifie qu'aucun autre processus n'utilise activement le répertoire cible pendant le processus d'installation ou de correction.

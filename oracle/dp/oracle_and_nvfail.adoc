@@ -1,0 +1,22 @@
+---
+sidebar: sidebar 
+permalink: oracle/dp/oracle_and_nvfail.html 
+keywords: oracle, metrocluster, nvfail 
+summary: Configuration de NVFAIL pour protéger les bases de données Oracle 
+---
+= Oracle et NVFAIL
+:allow-uri-read: 
+
+
+[role="lead"]
+NVFAIL est une fonctionnalité de ONTAP qui assure l'intégrité lors des scénarios de basculement catastrophiques.
+
+En raison de la gestion de caches internes volumineux, les bases de données sont vulnérables à la corruption lors des événements de basculement du stockage. Si un événement catastrophique nécessite de forcer un basculement ONTAP ou de forcer le basculement MetroCluster, quel que soit l'état de santé de la configuration globale, les modifications qui ont été reconnues précédemment peuvent être supprimées. Le contenu de la matrice de stockage recule dans le temps et l'état du cache de la base de données ne reflète plus l'état des données sur le disque. Cette incohérence entraîne une corruption des données.
+
+La mise en cache peut avoir lieu au niveau des applications ou des serveurs. Par exemple, une configuration Oracle Real application Cluster (RAC) avec des serveurs actifs sur un site principal et un site distant met en cache les données dans la SGA d'Oracle. Une opération de basculement forcé entraînant des pertes de données risque de corrompre la base de données, car les blocs stockés dans la mémoire SGA peuvent ne pas correspondre aux blocs du disque.
+
+L'utilisation de la mise en cache est moins évidente au niveau du système de fichiers du système d'exploitation. Les blocs d'un système de fichiers NFS monté peuvent être mis en cache dans le système d'exploitation. Un système de fichiers en cluster basé sur des LUN situés sur le site principal peut également être monté sur des serveurs du site distant, et une fois encore, les données peuvent être mises en cache. Une défaillance de la mémoire NVRAM, un basculement forcé ou un basculement forcé dans ces situations peuvent entraîner une corruption du système de fichiers.
+
+ONTAP protège les bases de données et les systèmes d'exploitation de ce scénario avec NVFAIL et ses paramètres associés.
+
+Pour plus d'informations, veuillez lire link:../../common/dp/integrity.html#hardware-failure-protection-nvfail["NVFAIL avec paires HA"] et link:../../common/metrocluster/nvfail.html["NVFAIL avec MetroCluster"]

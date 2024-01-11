@@ -1,0 +1,14 @@
+---
+sidebar: sidebar 
+permalink: vmware/links/tr-4792.html 
+keywords: design, HCI, computing, vmware, cloud, graphics, virtualization 
+summary: 'Le rapport technique TR-4792 fournit des recommandations sur l"utilisation du NetApp HCI 615C pour les workloads de graphiques 3D dans un environnement VMware Horizon optimisé par les processeurs graphiques (GPU) et le logiciel de virtualisation NVIDIA.' 
+---
+= NetApp HCI pour l'infrastructure de postes de travail virtuels avec VMware Horizon 7 : offrez aux utilisateurs intensifs des graphiques 3D
+:allow-uri-read: 
+
+
+[role="lead"]
+Le rapport technique TR-4792 fournit des conseils sur l'utilisation du nœud de calcul NetApp H615C pour les workloads de graphiques 3D dans un environnement VMware Horizon optimisé par les processeurs graphiques (GPU) et le logiciel de virtualisation NVIDIA. Il fournit également les résultats des tests préliminaires de SPECviewperf 13 pour le H615C.
+
+link:https://www.netapp.com/pdf.html?item=/media/7125-tr4792.pdf["NetApp HCI pour l'infrastructure de postes de travail virtuels avec VMware Horizon 7 : offrez aux utilisateurs intensifs des graphiques 3D"^]

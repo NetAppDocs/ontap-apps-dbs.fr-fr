@@ -1,0 +1,33 @@
+---
+sidebar: sidebar 
+permalink: oracle/tiering/oracle-snapshot-tiering.html 
+keywords: tiering, fabricpool 
+summary: Tiering Snapshot Oracle 
+---
+= Tiering Snapshot Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La version initiale de FabricPool a ciblé le cas d'utilisation de la sauvegarde. Les seuls types de blocs qui ont pu être hiérarchisés sont les blocs qui n'étaient plus associés aux données dans le système de fichiers actif. Par conséquent, seuls les blocs de données des snapshots peuvent être déplacés vers le niveau de capacité. Il s'agit là de l'une des options de hiérarchisation les plus sécurisées lorsque vous devez vous assurer que les performances ne sont jamais affectées.
+
+
+
+== Règles - snapshots locaux
+
+Deux options sont disponibles pour le Tiering des blocs de snapshots inactifs vers le niveau de capacité. Tout d'abord, le `snapshot-only` la règle cible uniquement les blocs de snapshot. Bien que le `auto` la politique inclut le `snapshot-only` et tiering des blocs à partir du système de fichiers actif. Ce n'est peut-être pas souhaitable.
+
+Le `tiering-minimum-cooling-days` value doit être défini sur une période qui met à disposition les données éventuellement requises lors d'une restauration sur le tier de performance. Par exemple, la plupart des scénarios de restauration d'une base de données de production stratégique incluent un point de restauration à un moment donné au cours des jours précédents. Réglage a `tiering-minimum-cooling-days` la valeur 3 garantit que toute restauration du fichier entraîne un fichier qui offre immédiatement des performances maximales. Tous les blocs des fichiers actifs sont toujours présents sur un système de stockage rapide sans avoir à les restaurer à partir du niveau de capacité.
+
+
+
+== Règles - snapshots répliqués
+
+Les snapshots répliqués avec SnapMirror ou SnapVault, uniquement utilisés pour la restauration, doivent généralement utiliser FabricPool `all` politique. Avec cette règle, les métadonnées sont répliquées, mais tous les blocs de données sont immédiatement envoyés au niveau de capacité pour des performances maximales. La plupart des processus de restauration impliquent des E/S séquentielles, ce qui est intrinsèquement efficace. Le délai de restauration à partir de la destination du magasin d'objets doit être évalué, mais dans une architecture bien conçue, ce processus de restauration ne doit pas nécessairement être beaucoup plus lent que la restauration à partir de données locales.
+
+Si les données répliquées sont également destinées à être utilisées pour le clonage, le `auto` la politique est plus appropriée, avec un `tiering-minimum-cooling-days` valeur qui englobe les données qui doivent être utilisées régulièrement dans un environnement de clonage. Par exemple, le jeu de travail actif d'une base de données peut inclure des données lues ou écrites au cours des trois jours précédents, mais il peut également inclure 6 mois de données historiques supplémentaires. Si oui, alors le `auto` La règle appliquée à la destination SnapMirror met à disposition le jeu de travail sur le Tier de performance.

@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: mssql/workloads.html 
+keywords: MS-SQL,mssql,SQL Server 
+summary: Microsoft SQL Server sur ONTAP 
+---
+= Workloads Microsoft SQL Server
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+La plate-forme de base de données SQL Server peut prendre en charge de nombreuses applications.
+
+Avant de déployer SQL Server, vous devez comprendre les exigences de charge de travail de la base de données des applications prises en charge par vos instances SQL Server. Chaque application a des exigences variables en termes de capacité, de performance et de disponibilité. Par conséquent, chaque base de données doit être conçue de manière à répondre de manière optimale à ces exigences. De nombreuses entreprises classent les bases de données en plusieurs niveaux de gestion, en utilisant les exigences des applications pour définir des contrats de niveau de service. Les charges de travail SQL Server sont les suivantes :
+
+* Les bases de données OLTP sont souvent également les bases de données les plus stratégiques d'une entreprise. Ces bases de données prennent généralement en charge les applications orientées client et sont considérées comme essentielles aux opérations stratégiques de l'entreprise. Les bases de données OLTP stratégiques et les applications qu'elles prennent en charge disposent souvent de SLA qui exigent des niveaux de performances élevés et sont sensibles à la dégradation des performances et à la disponibilité. Ils peuvent également être candidats pour toujours sur les clusters de basculement ou pour toujours sur les groupes de disponibilité. La combinaison E/S de ces types de bases de données se caractérise généralement par une lecture aléatoire de 75 à 90 % et une écriture de 25 à 10 %.
+* Les bases de données du système d'aide à la décision (DSS) peuvent également être appelées data warehouses. Ces bases de données jouent un rôle stratégique dans de nombreuses entreprises qui s'appuient sur l'analytique pour leurs activités. Ces bases de données sont sensibles à l'utilisation du CPU et aux opérations de lecture à partir du disque lors de l'exécution de requêtes. Dans de nombreuses entreprises, les bases de données DSS sont les plus critiques à la fin du mois, du trimestre et de l'année Cette charge de travail présente généralement un mélange d'E/S de lecture à 100 %.
+
+
+
+
+== Analyse comparative
+
+Le transaction Process Council (TPC) est une société à but non lucratif fondée pour définir des points de référence pour le traitement des transactions et les bases de données et pour diffuser des données objectives et vérifiables sur le rendement de PTC à l'industrie. Les tests TPC simulent des environnements informatiques complets dans lesquels un ensemble d'utilisateurs exécute des transactions sur des bases de données.
+
+[cols="1,1,1"]
+|===
+
+
+| Type de workload | Scénario | Rapport de lecture/écriture (pourcentages) 
+
+
+| OLTP | TPC-C | ~75/25 
+
+
+| OLTP | TPC-E | ~90/10 
+
+
+| DSS | TPC-H. | ~100/0 
+|===
+Bien que diverses options de génération de charges de travail soient disponibles, nous nous efforçons généralement de mesurer les performances des bases de données SQL Server lors du traitement de charges de travail transactionnelles, et nous utilisons les outils TPC-E de Microsoft ou TPC-H à l'aide de HammerDB (link:http://www.hammerdb.com/document.html["HammerDB.com"]^). Les instructions détaillées sur l'utilisation de ces bancs d'essai spécifiques n'entrent pas dans le cadre de ce document.

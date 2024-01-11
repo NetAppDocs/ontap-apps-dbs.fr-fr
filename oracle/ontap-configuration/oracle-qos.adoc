@@ -1,0 +1,58 @@
+---
+sidebar: sidebar 
+permalink: oracle/ontap-configuration/oracle-qos.html 
+keywords: qos, bandwidth, minimum, guaranteed 
+summary: Gestion des performances Oracle avec QoS 
+---
+= Qualité de service avec les bases de données Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Pour gérer efficacement et en toute sécurité plusieurs bases de données Oracle, il est nécessaire de disposer d'une stratégie de qualité de service efficace. C'est pourquoi les systèmes de stockage modernes offrent des performances toujours plus élevées.
+
+Plus précisément, l'adoption croissante des systèmes de stockage 100 % Flash a permis de consolider les charges de travail. Les baies de stockage qui reposent sur des supports rotatifs ne prennent généralement en charge qu'un nombre limité de charges de travail exigeantes en E/S, car leurs capacités IOPS sont limitées par rapport aux anciens disques rotatifs. Une ou deux bases de données fortement actives saturaient les disques sous-jacents bien avant que les contrôleurs de stockage n'atteignent leurs limites. Cela a changé. Il est possible de saturer les contrôleurs de stockage les plus puissants, car le nombre de disques SSD requis est relativement faible. Cela signifie que vous pouvez exploiter pleinement les capacités des contrôleurs sans craindre un effondrement soudain des performances lors de pics de latence des supports rotatifs.
+
+À titre d'exemple de référence, un simple système AFF A800 HA à deux nœuds est capable de traiter jusqu'à un million d'IOPS aléatoires avant que la latence ne dépasse la milliseconde. On pourrait s'attendre à ce que très peu de charges de travail atteignent de tels niveaux. L'utilisation optimale de cette baie AFF A800 implique l'hébergement de plusieurs workloads. Pour ce faire, la sécurité et la prévisibilité exigent des contrôles de QoS.
+
+Il existe deux types de qualité de service (QoS) dans ONTAP : les IOPS et la bande passante. Les contrôles de QoS peuvent être appliqués aux SVM, volumes, LUN et fichiers.
+
+
+
+== QoS des IOPS
+
+Un contrôle de la QoS pour les IOPS est évidemment basé sur l'ensemble des IOPS d'une ressource donnée, mais il existe un certain nombre d'aspects de la QoS pour les IOPS qui peuvent ne pas être intuitifs. Au départ, quelques clients ont été surpris par l'augmentation apparente de la latence lorsqu'un seuil d'IOPS est atteint. L'augmentation de la latence est la conséquence naturelle de la limitation des IOPS. Logiquement, il fonctionne de la même manière qu'un système de jetons. Par exemple, si un volume donné contenant des fichiers de données dispose d'une limite de 10 000 IOPS, chaque E/S arrivant doit d'abord recevoir un jeton pour poursuivre le traitement. Tant que plus de 10 000 jetons n'ont pas été consommés en une seconde donnée, aucun retard n'est présent. Si les opérations d'E/S doivent attendre la réception de leur jeton, cet attente apparaît comme une latence supplémentaire. Plus une charge de travail est élevée, plus les E/S sont longues à attendre dans la file d'attente pour le traitement de son tour, ce qui apparaît comme une latence plus élevée.
+
+
+NOTE: Soyez prudent lorsque vous appliquez des contrôles QoS aux données des transactions de base de données/journaux de reprise. Alors que les demandes de performances liées à la journalisation de reprise sont généralement très élevées, bien inférieures à celles des fichiers de données, l'activité du journal de reprise est en rafales. L'E/S se produit en de brèves impulsions et une limite de QoS qui semble appropriée pour les niveaux d'E/S de reprise moyens peut être trop basse pour les exigences réelles. Cela peut entraîner de strictes limitations de performance en cas d'engagement de la QoS avec chaque pic de journal de reprise. En général, la journalisation des opérations de reprise et d'archivage ne doit pas être limitée par la QoS.
+
+
+
+== QoS de la bande passante
+
+Toutes les tailles d'E/S ne sont pas identiques. Par exemple, une base de données peut effectuer de nombreuses lectures de blocs de petite taille, ce qui entraînerait l'atteinte du seuil d'IOPS, mais il est également possible que les bases de données effectuent une analyse de table complète comprenant un très petit nombre de lectures de blocs volumineux, qui consomment une très grande quantité de bande passante, mais relativement peu d'IOPS.
+
+De même, un environnement VMware peut générer un nombre très élevé d'IOPS aléatoires au démarrage, mais exécuter moins d'E/S, mais plus importantes, lors d'une sauvegarde externe.
+
+Pour gérer efficacement les performances, les IOPS ou la bande passante doivent parfois être limitées, voire les deux.
+
+
+
+== QoS minimale/garantie
+
+De nombreux clients recherchent une solution incluant une QoS garantie, qui semble plus difficile à atteindre qu'elle ne le paraît et qui risque d'être très gaspillée. Par exemple, pour placer 10 bases de données avec une garantie de 10 000 IOPS, il est nécessaire de dimensionner un système dans le cas où les 10 bases de données s'exécutent simultanément à 10 000 IOPS, pour un total de 100 000.
+
+La meilleure utilisation pour les contrôles QoS minimaux est de protéger les charges de travail stratégiques. Prenons l'exemple d'un contrôleur ONTAP avec un maximum de 500 000 IOPS et un mélange de charges de travail de production et de développement. Vous devez appliquer des règles de QoS maximales aux workloads de développement pour empêcher toute base de données de monopoliser le contrôleur. Vous appliqueriez ensuite des règles de QoS minimales aux charges de travail de production afin de vous assurer que les IOPS requises sont toujours disponibles, le cas échéant.
+
+
+
+== La QoS adaptative
+
+La QoS adaptative fait référence à la fonctionnalité ONTAP où la limite de QoS repose sur la capacité de l'objet de stockage. Elle est rarement utilisée avec les bases de données, car il n'existe généralement aucun lien entre la taille d'une base de données et ses exigences de performances. Les grandes bases de données peuvent être quasiment inertes, tandis que les bases de données plus petites peuvent être celles qui nécessitent le plus d'IOPS.
+
+La QoS adaptative peut s'avérer très utile avec les datastores de virtualisation, car les exigences en IOPS de ces jeux de données ont tendance à être corrélées à la taille totale de la base de données. Un datastore plus récent contenant 1 To de fichiers VMDK devrait avoir besoin d'environ la moitié des performances pour un datastore de 2 To. La QoS adaptative vous permet d'augmenter automatiquement les limites de qualité de service lorsque le datastore est rempli de données.

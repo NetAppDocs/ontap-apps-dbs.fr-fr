@@ -1,0 +1,23 @@
+---
+sidebar: sidebar 
+permalink: oracle/dp/oracle_consistency_group_backup.html 
+keywords: oracle, data, protection, consistency, group, backup, volume, archive, log, redo, controlfiles 
+summary: Sauvegardes de groupes de cohérence pour Oracle sur ONTAP 
+---
+= Sauvegarde de groupe de cohérence Oracle
+:allow-uri-read: 
+
+
+[role="lead"]
+Pour obtenir la sauvegarde la plus simple possible, il vous suffit de placer l'intégralité de la base de données Oracle dans un seul volume.
+
+La protection des fichiers de données, des journaux d'archivage, des journaux de reprise et des fichiers de contrôle avec un seul snapshot constitue une méthode valide de sauvegarde, de restauration et de réplication.  Toutefois, le RPO est limité au point de la sauvegarde elle-même. Il convient pour un RPO d'une heure ou plus. Si une base de données s'étend sur plusieurs volumes, vous devez créer des snapshots de groupe de cohérence à l'aide de l'un des outils évoqués précédemment.
+
+Par exemple, l'ensemble de la base de données peut se trouver dans un seul volume avec la planification de snapshots suivante :
+
+* 72 snapshots par heure
+* 30 snapshots de nuit
+* 12 snapshots mensuels
+
+
+Vous bénéficiez ainsi d'un RPO d'une heure sur la période de roulement des 72 heures précédentes, ainsi que de sauvegardes supplémentaires nocturnes et mensuelles. Il est également possible d'inclure plusieurs bases de données ou fichiers d'application dans le volume unique ou l'ensemble de copies Snapshot de groupe de cohérence afin d'assurer des sauvegardes cohérentes dans un environnement plus vaste.

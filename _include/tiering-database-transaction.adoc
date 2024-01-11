@@ -1,0 +1,17 @@
+= Stratégies
+:allow-uri-read: 
+
+
+La plupart des bases de données relationnelles opèrent en mode d'archivage du journal de transactions pour assurer une restauration instantanée. Les modifications apportées aux bases de données sont validées en enregistrant les modifications dans les journaux de transactions et le journal de transactions est conservé sans être écrasé. Il peut donc s'avérer nécessaire de conserver un énorme volume de journaux de transactions archivés. De nombreux autres workflows applicatifs génèrent des données qui doivent être conservées, mais il est très peu probable qu'elles soient accessibles.
+
+Pour résoudre ces problèmes, FabricPool propose une solution unique avec hiérarchisation intégrée. Les fichiers sont stockés et restent accessibles à leur emplacement habituel, mais ne prennent pratiquement pas d'espace sur la baie principale.
+
+
+
+== Stratégies
+
+Utiliser un `tiering-minimum-cooling-days` la règle de quelques jours permet de conserver les blocs dans les fichiers récemment créés (les fichiers les plus susceptibles d'être requis à court terme) sur le niveau de performance. Les blocs de données des anciens fichiers sont ensuite déplacés vers le niveau de capacité.
+
+Le `auto` applique la hiérarchisation des invites lorsque le seuil de refroidissement a été atteint, que les journaux aient été supprimés ou qu'ils continuent d'exister dans le système de fichiers principal. Le stockage de tous les journaux potentiellement requis dans un seul emplacement du système de fichiers actif simplifie également la gestion. Il n'y a aucune raison de rechercher un fichier à restaurer à l'aide de snapshots.
+
+Certaines applications, telles que Microsoft SQL Server, tronquent les fichiers journaux de transactions pendant les opérations de sauvegarde afin que les journaux ne soient plus dans le système de fichiers actif. Il est possible d'économiser de la capacité à l'aide de `snapshot-only` la règle de tiering, mais la règle `auto` la règle n'est pas utile pour les données de journal car il devrait rarement y avoir des données de journal refroidies dans le système de fichiers actif.

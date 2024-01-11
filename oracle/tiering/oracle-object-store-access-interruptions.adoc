@@ -1,0 +1,23 @@
+---
+sidebar: sidebar 
+permalink: oracle/tiering/oracle-object-store-access-interruptions.html 
+keywords: tiering, fabricpool, interruption 
+summary: 'Accès à la base de données pendant les interruptions d"accès au magasin d"objets' 
+---
+= Interruptions d'accès au magasin d'objets
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Le Tiering d'un dataset avec FabricPool entraîne une dépendance entre la baie de stockage primaire et le Tier de magasin d'objets. De nombreuses options de stockage objet offrent différents niveaux de disponibilité. Il est important de comprendre l'impact d'une éventuelle perte de connectivité entre la baie de stockage primaire et le niveau de stockage objet.
+
+Si une E/S émise par ONTAP nécessite des données du niveau de capacité et que les ONTAP ne peuvent pas atteindre le niveau de capacité pour récupérer des blocs, les E/S finissent par être sorties. L'effet de ce délai dépend du protocole utilisé. Dans un environnement NFS, ONTAP répond par une réponse EJUKEBOX ou EDELAY, selon le protocole. Certains systèmes d'exploitation plus anciens peuvent interpréter cela comme une erreur, mais les systèmes d'exploitation actuels et les niveaux de correctifs actuels du client Oracle Direct NFS traitent cette erreur comme une nouvelle tentative et continuent d'attendre la fin des E/S.
+
+Un délai plus court s'applique aux environnements SAN. Si un bloc de l'environnement de magasin d'objets est requis et reste inaccessible pendant deux minutes, une erreur de lecture est renvoyée à l'hôte. Le volume ONTAP et les LUN restent en ligne, mais le système d'exploitation hôte peut signaler le système de fichiers comme étant dans un état d'erreur.
+
+Les problèmes de connectivité du stockage objet `snapshot-only` la politique est moins préoccupante, car seules les données de sauvegarde sont hiérarchisées. Les problèmes de communication ralentiraient la récupération des données, mais n'affecteraient pas les données utilisées activement. Le `auto` et `all` Les règles permettent le Tiering des données inactives de la LUN active, ce qui signifie qu'une erreur lors de la récupération des données du magasin d'objets peut affecter la disponibilité de la base de données. Un déploiement SAN doté de ces règles doit uniquement être utilisé avec un stockage objet de grande qualité et des connexions réseau conçues pour une haute disponibilité. NetApp StorageGRID est la meilleure option.

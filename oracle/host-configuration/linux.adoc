@@ -1,0 +1,162 @@
+---
+sidebar: sidebar 
+permalink: oracle/host-configuration/linux.html 
+keywords: oracle, database, ontap, linux, nfs, xfs, ext4, slot tables 
+summary: Oracle sous ONTAP sous Linux 
+---
+= Linux
+:allow-uri-read: 
+
+
+[role="lead"]
+Rubriques de configuration spécifiques au système d'exploitation Linux.
+
+
+
+== Tables de rainures
+
+Les performances NFS sous Linux dépendent d'un paramètre appelé `tcp_max_slot_table_entries`. Veuillez consulter le link:../../common/storage-configuration/nfs.html["NFS"] pour les informations critiques.
+
+
+
+== Options de montage NFS Linux
+
+Le tableau suivant répertorie les options de montage NFS Linux pour une seule instance.
+
+|===
+| Type de fichier | Options de montage 
+
+
+| Accueil ADR | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144` 
+
+
+| Fichiers de contrôle
+Fichiers de données
+Journaux de reprise | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+nointr` 
+
+
+| ORACLE_HOME | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+nointr` 
+|===
+Le tableau suivant répertorie les options de montage NFS Linux pour RAC.
+
+|===
+| Type de fichier | Options de montage 
+
+
+| Accueil ADR | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+actimeo=0` 
+
+
+| Fichiers de contrôle
+Fichiers de données
+Journaux de reprise | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+nointr,actimeo=0` 
+
+
+| CRS/vote | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+nointr,noac,actimeo=0` 
+
+
+| Ressource dédiée `ORACLE_HOME` | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144` 
+
+
+| Partagée `ORACLE_HOME` | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+nointr,actimeo=0` 
+|===
+La principale différence entre les options de montage à instance unique et RAC est l'ajout de `actimeo=0` aux options de montage. Cet ajout a pour effet de désactiver la mise en cache du système d'exploitation hôte, ce qui permet à toutes les instances du cluster RAC d'avoir une vue cohérente de l'état des données. En utilisant le `init.ora` paramètre `filesystemio_options=setall` a le même effet que la désactivation de la mise en cache de l'hôte, il est toujours nécessaire de l'utiliser `actimeo=0`.
+
+La raison `actimeo=0` est requis pour le partage `ORACLE_HOME` Les déploiements visent à faciliter la cohérence des fichiers tels que les fichiers de mots de passe Oracle et les fichiers spfiles. Si chaque instance d'un cluster RAC possède un dédié `ORACLE_HOME`, ce paramètre n'est pas requis.
+
+En règle générale, les fichiers ne provenant pas de bases de données doivent être montés avec les mêmes options que celles utilisées pour les fichiers de données à instance unique. Toutefois, certaines applications peuvent avoir des exigences différentes. Évitez les options de montage `noac` et `actimeo=0` si possible parce que ces options désactivent la lecture et la mise en mémoire tampon au niveau du système de fichiers. Cela peut entraîner de graves problèmes de performances pour les processus tels que l'extraction, la translation et le chargement.
+
+
+
+=== ACCESS et GETATTR
+
+Certains clients ont remarqué qu'un niveau extrêmement élevé d'autres IOPS, comme L'ACCÈS et GETATTR, peut dominer leurs charges de travail. Dans des cas extrêmes, les opérations telles que les lectures et les écritures peuvent représenter jusqu'à 10 % du total. Il s'agit d'un comportement normal avec toute base de données qui inclut l'utilisation de `actimeo=0` et/ou `noac` Sous Linux car ces options font que le système d'exploitation Linux recharge en permanence les métadonnées de fichiers à partir du système de stockage. Les opérations telles que ACCESS et GETATTR sont des opérations à faible impact qui sont traitées à partir du cache ONTAP dans un environnement de base de données. Elles ne doivent pas être considérées comme des IOPS authentiques, comme les lectures et les écritures, qui génèrent une véritable demande pour les systèmes de stockage. Cependant, ces autres IOPS créent une certaine charge, en particulier dans les environnements RAC. Pour résoudre ce problème, activez dNFS, qui contourne le cache du tampon du système d'exploitation et évite ces opérations de métadonnées inutiles.
+
+
+
+=== NFS direct Linux
+
+Une option de montage supplémentaire, appelée `nosharecache`, Est requis lorsque (a) dNFS est activé et (b) qu'un volume source est monté plusieurs fois sur un seul serveur (c) avec un montage NFS imbriqué. Cette configuration est principalement utilisée dans les environnements prenant en charge les applications SAP. Par exemple, un seul volume sur un système NetApp peut avoir un répertoire situé sur `/vol/oracle/base` et une seconde à `/vol/oracle/home`. Si `/vol/oracle/base` est monté à `/oracle` et `/vol/oracle/home` est monté à `/oracle/home`, Le résultat est des montages NFS imbriqués qui proviennent de la même source.
+
+Le système d'exploitation peut détecter cela `/oracle` et `/oracle/home` résident sur le même volume, qui est le même système de fichiers source. Le système d'exploitation utilise ensuite le même descripteur de périphérique pour accéder aux données. Cela améliore l'utilisation de la mise en cache du système d'exploitation et de certaines autres opérations, mais interfère avec dNFS. Si dNFS doit accéder à un fichier, tel que le `spfile`, activé `/oracle/home`, il peut tenter par erreur d'utiliser le mauvais chemin d'accès aux données. Le résultat est une opération d'E/S défaillante. Dans ces configurations, ajoutez le `nosharecache` Option de montage sur tout système de fichiers NFS qui partage un volume FlexVol source avec un autre système de fichiers NFS sur cet hôte. Cela force le système d'exploitation Linux à allouer un descripteur de périphérique indépendant pour ce système de fichiers.
+
+
+
+=== Linux Direct NFS et Oracle RAC
+
+DNFS présente des avantages spéciaux en matière de performances pour Oracle RAC sur le système d'exploitation Linux. En effet, Linux ne dispose pas d'une méthode permettant de forcer les E/S directes, qui est requise avec RAC pour assurer la cohérence entre les nœuds. Pour contourner ce problème, Linux nécessite l'utilisation du `actimeo=0` Mount option, qui entraîne l'expiration immédiate des données de fichier à partir du cache du système d'exploitation. Cette option force à son tour le client Linux NFS à relire en permanence les données d'attributs, ce qui endommage la latence et augmente la charge sur le contrôleur de stockage.
+
+L'activation de dNFS contourne le client NFS hôte et évite ces dommages. Plusieurs clients ont signalé une amélioration significative des performances sur les clusters RAC et une baisse significative de la charge ONTAP (en particulier par rapport aux autres IOPS) lors de l'activation de dNFS.
+
+
+
+=== Linux Direct NFS et fichier orangfstab
+
+Si vous utilisez dNFS sur Linux avec l'option de chemins d'accès multiples, vous devez utiliser plusieurs sous-réseaux. Sur d'autres systèmes d'exploitation, vous pouvez établir plusieurs canaux dNFS à l'aide du `LOCAL` et `DONTROUTE` Options de configuration de plusieurs canaux dNFS sur un même sous-réseau. Cependant, cela ne fonctionne pas correctement sur Linux et des problèmes de performances inattendus peuvent survenir. Sous Linux, chaque carte réseau utilisée pour le trafic dNFS doit se trouver sur un sous-réseau différent.
+
+
+
+=== Planificateur d'E/S.
+
+Le noyau Linux permet un contrôle de bas niveau sur la façon dont les E/S sont planifiées pour bloquer les périphériques. Les valeurs par défaut sur les différentes distributions de Linux varient considérablement. Les tests montrent que la date limite offre habituellement les meilleurs résultats, mais il arrive que le NOOP ait été légèrement meilleur. La différence de performance est minime, mais testez les deux options s'il est nécessaire d'extraire les performances maximales d'une configuration de base de données. Dans de nombreuses configurations, le paramètre CFQ est le paramètre par défaut. Il a démontré des problèmes de performances significatifs avec les charges de travail de la base de données.
+
+Pour plus d'informations sur la configuration du planificateur d'E/S, reportez-vous à la documentation du fournisseur Linux correspondant.
+
+
+
+=== Chemins d'accès multiples
+
+Certains clients ont rencontré des pannes durant une interruption du réseau, car le démon multivoie ne s'exécutait pas sur leur système. Sur les versions récentes de Linux, le processus d'installation du système d'exploitation et le démon de chemins d'accès multiples peuvent exposer ces systèmes d'exploitation à ce problème. Les packages sont installés correctement, mais ils ne sont pas configurés pour un démarrage automatique après un redémarrage.
+
+Par exemple, la valeur par défaut du démon multiacheminement sur RHEL5.5 peut apparaître comme suit :
+
+....
+[root@host1 iscsi]# chkconfig --list | grep multipath
+multipathd      0:off   1:off   2:off   3:off   4:off   5:off   6:off
+....
+Ceci peut être corrigé à l'aide des commandes suivantes :
+
+....
+[root@host1 iscsi]# chkconfig multipathd on
+[root@host1 iscsi]# chkconfig --list | grep multipath
+multipathd      0:off   1:off   2:on    3:on    4:on    5:on    6:off
+....
+
+
+== Mise en miroir ASM
+
+La mise en miroir ASM peut nécessiter des modifications des paramètres de chemins d'accès multiples Linux pour permettre à ASM de reconnaître un problème et de basculer vers un autre groupe de pannes. La plupart des configurations ASM sur ONTAP reposent sur une redondance externe. La protection des données est assurée par la baie externe et ASM ne met pas en miroir les données. Certains sites utilisent ASM avec redondance normale pour fournir une mise en miroir bidirectionnelle, généralement entre différents sites.
+
+Les paramètres Linux indiqués dans le link:https://docs.netapp.com/us-en/ontap-sanhost/hu_fcp_scsi_index.html["Documentation des utilitaires hôtes NetApp"] Incluez les paramètres de chemins d'accès multiples qui entraînent une mise en file d'attente illimitée des E/S. Cela signifie qu'une E/S sur un périphérique LUN sans chemin d'accès actif attend tant que les E/S sont terminées. Cette opération est généralement souhaitable, car les hôtes Linux attendent tant que nécessaire la fin des modifications du chemin SAN, le redémarrage des commutateurs FC ou le basculement d'un système de stockage.
+
+Ce comportement de mise en file d'attente illimité cause un problème de mise en miroir ASM car ASM doit recevoir une erreur d'E/S pour qu'il puisse réessayer d'E/S sur une autre LUN.
+
+Définissez les paramètres suivants dans Linux `multipath.conf` Fichier pour les LUN ASM utilisés avec la mise en miroir ASM :
+
+....
+polling_interval 5
+no_path_retry 24
+....
+Ces paramètres créent une temporisation de 120 secondes pour les périphériques ASM. Le délai d'attente est calculé comme étant le `polling_interval` * `no_path_retry` en secondes. Il peut être nécessaire d'ajuster la valeur exacte dans certaines circonstances, mais un délai de 120 secondes doit être suffisant pour la plupart des utilisations. En particulier, 120 secondes doivent permettre un basculement ou un retour du contrôleur sans générer d'erreur d'E/S susceptible de mettre le groupe défaillant hors ligne.
+
+Un plus bas `no_path_retry` La valeur peut réduire le temps nécessaire à ASM pour passer à un autre groupe de pannes, mais augmente également le risque de basculement indésirable lors des activités de maintenance, telles qu'une prise de contrôle. Le risque peut être atténué par une surveillance attentive de l'état de mise en miroir ASM. Si un basculement indésirable se produit, les miroirs peuvent être rapidement resynchronisés si la resynchronisation est effectuée relativement rapidement. Pour plus d'informations, consultez la documentation Oracle sur ASM Fast Mirror Resync pour la version du logiciel Oracle utilisé.
+
+
+
+== Options de montage Linux xfs, ext3 et ext4
+
+
+TIP: *NetApp recommande* d'utiliser les options de montage par défaut.

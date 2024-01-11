@@ -1,0 +1,126 @@
+---
+sidebar: sidebar 
+permalink: oracle/storage-configuration/oracle-leases-and-locks.html 
+keywords: NFS, lease 
+summary: Bases de données Oracle et locations et verrouillages NFS 
+---
+= Locations et verrouillages NFS - Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+NFSv3 est sans état. Cela signifie que le serveur NFS (ONTAP) ne suit pas les systèmes de fichiers montés, par qui ou quels verrous sont réellement en place.
+
+ONTAP dispose de certaines fonctionnalités qui enregistreront les tentatives de montage. Vous savez donc quels clients accèdent aux données et il se peut que des verrous consultatifs soient présents, mais les informations ne sont pas 100 % complètes. Elle ne peut pas être terminée, car le suivi de l'état du client NFS ne fait pas partie de la norme NFSv3.
+
+
+
+== État NFSv4
+
+En revanche, NFSv4 est avec état. Le serveur NFSv4 suit les clients qui utilisent les systèmes de fichiers, les fichiers existants, les fichiers et/ou les régions de fichiers verrouillés, etc Cela signifie qu'une communication régulière entre un serveur NFSv4 doit être établie pour maintenir les données d'état à jour.
+
+Les États les plus importants gérés par le serveur NFS sont les verrous NFSv4 et les locations NFSv4, qui sont très étroitement liés. Vous devez comprendre comment chacun fonctionne par lui-même, et comment ils se rapportent les uns aux autres.
+
+
+
+== Verrous NFSv4
+
+Avec NFSv3, les verrous sont consultatifs. Un client NFS peut toujours modifier ou supprimer un fichier « verrouillé ». Un verrou NFSv3 n'expire pas de lui-même, il doit être supprimé. Cela crée des problèmes. Par exemple, si une application en cluster crée des verrous NFSv3 et que l'un des nœuds tombe en panne, que faire ? Vous pouvez coder l'application sur les nœuds survivants pour supprimer les verrous, mais comment savoir que c'est sûr ? Le nœud « en panne » est peut-être opérationnel, mais ne communique pas avec le reste du cluster ?
+
+Avec NFSv4, les verrous ont une durée limitée. Tant que le client tenant les Locks continue à s'archiver avec le serveur NFSv4, aucun autre client n'est autorisé à acquérir ces Locks. Si un client ne parvient pas à s'archiver avec NFSv4, les verrous seront éventuellement révoqués par le serveur et d'autres clients pourront demander et obtenir des verrous.
+
+
+
+== Locations NFSv4
+
+Les verrous NFSv4 sont associés à un bail NFSv4. Lorsqu'un client NFSv4 établit une connexion avec un serveur NFSv4, il obtient un bail. Si le client obtient un verrou (il existe plusieurs types de verrous), le verrou est associé au bail.
+
+Ce bail a un délai défini. Par défaut, ONTAP définit la valeur de temporisation sur 30 secondes :
+
+....
+Cluster01::*> nfs server show -vserver vserver1 -fields v4-lease-seconds
+
+vserver   v4-lease-seconds
+--------- ----------------
+vserver1  30
+....
+Cela signifie qu'un client NFSv4 doit vérifier avec le serveur NFSv4 toutes les 30 secondes pour renouveler ses baux.
+
+Le bail est automatiquement renouvelé par n'importe quelle activité. Ainsi, si le client effectue des travaux, il n'est pas nécessaire d'effectuer des opérations supplémentaires. Si une application devient silencieuse et ne fait pas de véritable travail, elle devra effectuer une sorte d'opération de maintien en vie (appelée SÉQUENCE). Il s'agit essentiellement de dire « Je suis toujours là, veuillez actualiser mes contrats de location ».
+
+ *Question:* What happens if you lose network connectivity for 31 seconds?
+NFSv3 est sans état. Il ne s'attend pas à ce que les clients communiquent. NFSv4 est avec état et une fois la période de location expirée, le bail expire, et les verrous sont révoqués et les fichiers verrouillés sont mis à disposition des autres clients.
+
+Avec NFSv3, vous pouvez déplacer les câbles réseau, redémarrer les switchs réseau, modifier la configuration et être sûr qu'aucun problème ne se produirait. En général, les applications attendront patiemment le bon fonctionnement de la connexion réseau.
+
+Avec NFSv4, vous disposez de 30 secondes (sauf si vous avez augmenté la valeur de ce paramètre dans ONTAP) pour terminer votre travail. Si vous dépassez cette limite, vos contrats de location sont échus. Normalement, cela provoque des pannes d'application.
+
+Par exemple, si vous disposez d'une base de données Oracle et que vous rencontrez une perte de connectivité réseau (parfois appelée « partition réseau ») qui dépasse le délai d'expiration du bail, vous plantez la base de données.
+
+Voici un exemple de ce qui se passe dans le journal des alertes Oracle si cela se produit :
+
+....
+2022-10-11T15:52:55.206231-04:00
+Errors in file /orabin/diag/rdbms/ntap/NTAP/trace/NTAP_ckpt_25444.trc:
+ORA-00202: control file: '/redo0/NTAP/ctrl/control01.ctl'
+ORA-27072: File I/O error
+Linux-x86_64 Error: 5: Input/output error
+Additional information: 4
+Additional information: 1
+Additional information: 4294967295
+2022-10-11T15:52:59.842508-04:00
+Errors in file /orabin/diag/rdbms/ntap/NTAP/trace/NTAP_ckpt_25444.trc:
+ORA-00206: error in writing (block 3, # blocks 1) of control file
+ORA-00202: control file: '/redo1/NTAP/ctrl/control02.ctl'
+ORA-27061: waiting for async I/Os failed
+....
+Si vous examinez les syslog, vous devriez voir plusieurs de ces erreurs :
+
+....
+Oct 11 15:52:55 host1 kernel: NFS: nfs4_reclaim_open_state: Lock reclaim failed!
+Oct 11 15:52:55 host1 kernel: NFS: nfs4_reclaim_open_state: Lock reclaim failed!
+Oct 11 15:52:55 host1 kernel: NFS: nfs4_reclaim_open_state: Lock reclaim failed!
+....
+Les messages du journal sont généralement le premier signe d'un problème, autre que le blocage de l'application. En général, vous ne voyez rien pendant la panne réseau, car les processus et le système d'exploitation lui-même sont bloqués et tentent d'accéder au système de fichiers NFS.
+
+Les erreurs apparaissent une fois que le réseau est de nouveau opérationnel. Dans l'exemple ci-dessus, une fois la connectivité rétablie, le système d'exploitation a tenté de réacquérir les verrous, mais il était trop tard. Le bail avait expiré et les serrures ont été retirées. Cela entraîne une erreur qui se propage jusqu'à la couche Oracle et provoque le message dans le journal des alertes. Vous pouvez voir des variations sur ces modèles en fonction de la version et de la configuration de la base de données.
+
+En résumé, NFSv3 tolère l'interruption du réseau, mais NFSv4 est plus sensible et impose une période de location définie.
+
+Que se passe-t-il si un délai de 30 secondes n'est pas acceptable ? Que se passe-t-il si vous gérez un réseau changeant de façon dynamique où les commutateurs sont redémarrés ou les câbles sont déplacés et que le résultat est une interruption occasionnelle du réseau ? Vous pouvez choisir de prolonger la période de location, mais pour savoir si vous voulez y parvenir, vous devez expliquer les périodes de grâce NFSv4.
+
+
+
+== Périodes de grâce NFSv4
+
+Lorsqu'un serveur NFSv3 est redémarré, il est prêt à transmettre les E/S presque instantanément. Il ne maintenait aucune sorte d'état concernant les clients. Le résultat est qu'une opération de basculement ONTAP semble souvent proche de l'instantané. Dès qu'un contrôleur est prêt à commencer à transmettre des données, il envoie un ARP au réseau qui signale le changement de topologie. En règle générale, les clients le détectent presque instantanément et le flux des données reprend.
+
+NFSv4, cependant, fera une courte pause. Cela fait partie du fonctionnement de NFSv4.
+
+Les serveurs NFSv4 doivent suivre les baux, les verrous et les utilisateurs des données. Si un serveur NFS fonctionne de manière incohérente et redémarre, ou perd de l'alimentation pendant un moment, ou est redémarré pendant l'activité de maintenance, le résultat est le bail/verrouillage et d'autres informations client sont perdues. Le serveur doit déterminer quel client utilise les données avant de reprendre les opérations. C'est là que intervient le délai de grâce.
+
+Si vous mettez soudainement votre serveur NFSv4 hors/sous tension. Lorsqu'il est rétabli, les clients qui tentent de reprendre l'E/S reçoivent une réponse qui dit essentiellement « J'ai perdu les informations de location/verrouillage. Voulez-vous réenregistrer vos verrous ? » C'est le début de la période de grâce. La valeur par défaut est 45 secondes sur ONTAP :
+
+....
+Cluster01::> nfs server show -vserver vserver1 -fields v4-grace-seconds
+
+vserver   v4-grace-seconds
+--------- ----------------
+vserver1  45
+....
+Par conséquent, après un redémarrage, un contrôleur met en pause les E/S tandis que tous les clients récupèrent leurs baux et verrous. Une fois le délai de grâce terminé, le serveur reprend les opérations d'E/S.
+
+
+
+== Délais de location par rapport aux délais de grâce
+
+Le délai de grâce et la période de location sont connectés. Comme mentionné ci-dessus, le délai de bail par défaut est de 30 secondes, ce qui signifie que les clients NFSv4 doivent s'enregistrer auprès du serveur au moins toutes les 30 secondes, sinon ils perdent leur bail et, à leur tour, leurs verrous. Le délai de grâce existe pour permettre à un serveur NFS de reconstruire les données de bail/verrouillage, et il prend par défaut 45 secondes. ONTAP exige que le délai de grâce soit supérieur de 15 secondes à la période de location. Cela permet de s'assurer qu'un environnement client NFS conçu pour renouveler les contrats de location au moins toutes les 30 secondes aura la possibilité d'archiver avec le serveur après un redémarrage. Un délai de grâce de 45 secondes garantit que tous les clients qui s'attendent à renouveler leur contrat de location au moins toutes les 30 secondes ont certainement l'occasion de le faire.
+
+Si un délai de 30 secondes n'est pas acceptable, vous pouvez choisir de prolonger la période de location. Si vous souhaitez augmenter le délai de bail à 60 secondes pour résister à une panne de réseau de 60 secondes, vous devrez augmenter le délai de grâce à au moins 75 secondes. ONTAP exige qu'il soit supérieur de 15 secondes à la période de location. Une pause d'E/S plus longue sera donc nécessaire lors du basculement du contrôleur.
+
+Ce ne devrait normalement pas être un problème. En général, les utilisateurs ne mettent à jour les contrôleurs ONTAP qu'une ou deux fois par an. En outre, les basculements non planifiés en raison de défaillances matérielles sont extrêmement rares. En outre, si vous aviez un réseau où une panne réseau de 60 secondes était possible, et que le délai de bail était de 60 secondes, vous n'auriez probablement pas à vous opposer à un basculement rare du système de stockage, ce qui aurait entraîné une pause de 75 secondes non plus. Vous avez déjà reconnu que vous disposez d'un réseau qui s'arrête pendant plus de 60 secondes plutôt fréquemment.

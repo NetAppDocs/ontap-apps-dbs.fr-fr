@@ -1,0 +1,84 @@
+---
+sidebar: sidebar 
+permalink: oracle/dr/metrocluster/oracle-physical-metrocluster.html 
+keywords: metrocluster, MCC, MCC-IP 
+summary: Architecture physique MetroCluster - Oracle 
+---
+= Architecture physique MetroCluster - Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../../../media/
+
+
+[role="lead"]
+Pour comprendre le fonctionnement des bases de données Oracle dans un environnement MetroCluster, il est nécessaire d'expliquer la conception physique d'un système MetroCluster.
+
+
+NOTE: Cette documentation remplace le rapport technique _TR-4592 : Oracle on MetroCluster._
+
+
+
+== MetroCluster est disponible dans 3 configurations différentes
+
+* Paires HAUTE DISPONIBILITÉ avec connectivité IP
+* Paires HAUTE DISPONIBILITÉ avec connectivité FC
+* Contrôleur unique avec connectivité FC
+
+
+[REMARQUE]le terme « connectivité » fait référence à la connexion en cluster utilisée pour la réplication entre sites. Il ne fait pas référence aux protocoles hôtes. Tous les protocoles côté hôte sont pris en charge comme d'habitude dans une configuration MetroCluster, quel que soit le type de connexion utilisé pour les communications entre clusters.
+
+
+
+== IP MetroCluster
+
+La configuration IP MetroCluster à paire haute disponibilité utilise deux ou quatre nœuds par site. Cette option de configuration augmente la complexité et les coûts liés à l'option à deux nœuds, mais elle offre un avantage important : la redondance intrasite. Une simple panne de contrôleur ne nécessite pas l'accès aux données via le WAN. L'accès aux données reste local via l'autre contrôleur local.
+
+La plupart des clients choisissent la connectivité IP, car les exigences d'infrastructure sont plus simples. Auparavant, la connectivité inter-sites à haut débit était généralement plus facile à provisionner avec des commutateurs FC et fibre noire. Cependant, les circuits IP à haut débit et à faible latence sont aujourd'hui plus facilement disponibles.
+
+L'architecture est également plus simple, car les contrôleurs disposent des seules connexions entre les sites. Dans les MetroCluster FC, un contrôleur écrit directement sur les disques du site opposé et requiert ainsi des connexions SAN, des commutateurs et des ponts supplémentaires. En revanche, un contrôleur dans une configuration IP écrit sur les lecteurs opposés via le contrôleur.
+
+Pour plus d'informations, consultez la documentation officielle de ONTAP et https://www.netapp.com/pdf.html?item=/media/13481-tr4689.pdf["Architecture et conception de la solution IP de MetroCluster"^].
+
+image:mccip.png["Erreur : image graphique manquante"]
+
+
+
+== MetroCluster FC à connexion SAN HA-pair
+
+La configuration MetroCluster FC à paire haute disponibilité utilise deux ou quatre nœuds par site. Cette option de configuration augmente la complexité et les coûts liés à l'option à deux nœuds, mais elle offre un avantage important : la redondance intrasite. Une simple panne de contrôleur ne nécessite pas l'accès aux données via le WAN. L'accès aux données reste local via l'autre contrôleur local.
+
+image:mcc-4-node.png["Erreur : image graphique manquante"]
+
+Certaines infrastructures multisites ne sont pas conçues pour les opérations en mode actif-actif. Elles sont plutôt utilisées comme site principal et site de reprise après incident. Dans ce cas, il est généralement préférable d'utiliser une option MetroCluster à paire HA pour les raisons suivantes :
+
+* Bien qu'un cluster MetroCluster à deux nœuds soit un système haute disponibilité, toute panne inattendue d'un contrôleur ou une maintenance planifiée implique que les services de données soient en ligne sur le site opposé. Si la connectivité réseau entre les sites ne prend pas en charge la bande passante requise, les performances sont affectées. La seule option serait également de basculer les différents systèmes d'exploitation hôtes et les services associés vers le site secondaire. Le cluster MetroCluster de paire haute disponibilité élimine ce problème, car la perte d'un contrôleur simplifie le basculement au sein du même site.
+* Certaines topologies réseau ne sont pas conçues pour l'accès intersite, mais utilisent des sous-réseaux différents ou des SAN FC isolés. Dans ce cas, le cluster MetroCluster à deux nœuds ne fonctionne plus comme un système haute disponibilité, car le contrôleur secondaire ne peut plus transmettre de données aux serveurs sur le site opposé. L'option MetroCluster de paire haute disponibilité est nécessaire pour assurer une redondance complète.
+* Si une infrastructure à deux sites est considérée comme une seule infrastructure extrêmement disponible, la configuration MetroCluster à deux nœuds est adaptée. Toutefois, si le système doit fonctionner pendant une période prolongée après une panne sur le site, une paire haute disponibilité est recommandée, car la haute disponibilité continue d'être disponible sur un seul site.
+
+
+
+
+== MetroCluster FC à deux nœuds avec connexion SAN
+
+La configuration MetroCluster à deux nœuds n'utilise qu'un nœud par site. Cette conception est plus simple que l'option de paire haute disponibilité, car le nombre de composants à configurer et à gérer est inférieur. Elle a également réduit les besoins en infrastructure en termes de câblage et de commutation FC. Enfin, il réduit les coûts.
+
+image:mcc-2-node.png["Erreur : image graphique manquante"]
+
+L'impact évident de cette conception est que la défaillance du contrôleur sur un seul site signifie que les données sont disponibles depuis le site opposé. Cette restriction n'est pas nécessairement un problème. De nombreuses entreprises disposent d'opérations de data Center multisites avec des réseaux étendus, ultra-rapides et à faible latence qui fonctionnent essentiellement comme une infrastructure unique. Dans ce cas, la version à deux nœuds de MetroCluster est la configuration préférée. Plusieurs fournisseurs de services utilisent actuellement des systèmes à deux nœuds de plusieurs pétaoctets.
+
+
+
+== Fonctions de résilience MetroCluster
+
+Une solution MetroCluster ne présente aucun point de défaillance unique :
+
+* Chaque contrôleur dispose de deux chemins d'accès indépendants aux tiroirs disques sur le site local.
+* Chaque contrôleur dispose de deux chemins d'accès indépendants aux tiroirs disques du site distant.
+* Chaque contrôleur dispose de deux chemins d'accès indépendants aux contrôleurs sur le site opposé.
+* Dans la configuration HA-pair, chaque contrôleur dispose de deux chemins vers son partenaire local.
+
+
+En résumé, n'importe quel composant de la configuration peut être supprimé sans compromettre la capacité de MetroCluster à transmettre des données. La seule différence en termes de résilience entre les deux options est que la version à paire haute disponibilité reste un système de stockage haute disponibilité global après une panne de site.

@@ -1,0 +1,85 @@
+---
+sidebar: sidebar 
+permalink: oracle/ontap-configuration/oracle-thin-provisioning.html 
+keywords: thin provisioning, oracle 
+summary: Provisionnement fin Oracle et ONTAP 
+---
+= Provisionnement fin avec Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Le provisionnement fin pour une base de données Oracle nécessite une planification minutieuse, car il en résulte une configuration d'espace sur un système de stockage qui n'est pas nécessairement physiquement disponible. Cela vaut vraiment le coup, car une fois correctement effectué, il en résulte des économies considérables et des améliorations en termes de gestion.
+
+Le provisionnement fin, de nombreuses formes, fait partie intégrante de nombreuses fonctionnalités offertes par ONTAP à l'environnement applicatif d'entreprise. Le provisionnement fin est également étroitement lié aux technologies d'efficacité pour la même raison : les fonctionnalités d'efficacité permettent de stocker davantage de données logiques que ce qui existe techniquement sur le système de stockage.
+
+La plupart des snapshots impliquent un provisionnement fin. Par exemple, une base de données classique de 10 To sur un système de stockage NetApp compte environ 30 jours de copies Snapshot. Cet arrangement donne lieu à environ 10 To de données visibles dans le système de fichiers actif et 300 To dédiés aux snapshots. La capacité totale de stockage de 310 To réside généralement dans un espace d'environ 12 To à 15 To. La base de données active consomme 10 To et les 300 To de données restantes ne nécessitent que 2 à 5 To d'espace, car seules les modifications apportées aux données d'origine sont stockées.
+
+Le clonage est également un exemple de provisionnement fin. Un client NetApp majeur a créé 40 clones d'une base de données de 80 To à utiliser pour le développement. Si les 40 développeurs qui utilisent ces clones surécrivent chaque bloc dans chaque fichier de données, plus de 3,2 po de stockage seraient nécessaires. En pratique, le chiffre d'affaires est faible et l'espace collectif requis est proche de 40 To, car seules les modifications sont stockées sur les disques.
+
+
+
+== Gestion de l'espace
+
+Le provisionnement fin d'un environnement applicatif doit être extrêmement prudent, car les taux de modification des données peuvent augmenter de manière inattendue. Par exemple, la consommation d'espace due aux snapshots peut augmenter rapidement si les tables de base de données sont réindexées ou si des correctifs à grande échelle sont appliqués aux invités VMware. Une sauvegarde mal placée peut écrire une grande quantité de données dans un délai très court. Enfin, il peut être difficile de restaurer certaines applications si un système de fichiers manque d'espace de façon inattendue.
+
+Avec une configuration soigneuse de, ces risques peuvent être maîtrisés `volume-autogrow` et `snapshot-autodelete` règles. Comme leurs noms l'indiquent, ces options permettent de créer des règles qui effacent automatiquement l'espace consommé par les snapshots ou augmentent un volume pour prendre en charge des données supplémentaires. De nombreuses options sont disponibles et les besoins varient selon les clients.
+
+Voir la link:https://docs.netapp.com/us-en/ontap/volumes/index.html["documentation sur la gestion du stockage logique"] pour une discussion complète de ces fonctionnalités.
+
+
+
+== Provisionnement fin des LUN
+
+L'efficacité du provisionnement fin des LUN actives dans un environnement de système de fichiers peut être perdue au fil du temps suite à la suppression des données. À moins que les données supprimées ne soient remplacées par des zéros ou que l'espace ne soit libéré par la récupération d'espace TRIM/UNMAP, les données « effacées » occupent de plus en plus d'espace non alloué dans le système de fichiers. En outre, l'utilisation du provisionnement fin des LUN actives est limitée dans de nombreux environnements de base de données, car les fichiers de données sont initialisés sur leur taille complète au moment de la création.
+
+Une planification minutieuse de la configuration de LVM peut améliorer l'efficacité et réduire les besoins en provisionnement du stockage et en redimensionnement des LUN. Lorsqu'un LVM tel que Veritas VxVM ou Oracle ASM est utilisé, les LUN sous-jacentes sont divisés en extensions qui ne sont utilisées que lorsque cela est nécessaire. Par exemple, si un dataset commence à 2 To mais peut atteindre 10 To au fil du temps, ce dataset peut être placé sur 10 To de LUN à provisionnement fin organisées dans un groupe de disques LVM. Elle occupant seulement 2 To d'espace au moment de la création et réclarait uniquement de l'espace supplémentaire, dans la mesure où les extensions sont allouées pour prendre en charge la croissance du volume des données. Ce processus est sûr tant que l'espace est surveillé.
+
+
+
+== Réservations fractionnaires
+
+La réserve fractionnaire fait référence au comportement d'une LUN dans un volume en ce qui concerne l'efficacité de l'espace. Lorsque l'option `fractional-reserve` est défini sur 100 %. toutes les données du volume peuvent connaître un taux de rotation de 100 % avec n'importe quel modèle de données, sans épuiser l'espace sur le volume.
+
+Par exemple, prenons l'exemple d'une base de données située sur une seule LUN de 250 Go dans un volume de 1 To. La création d'un snapshot entraînerait immédiatement la réservation d'un espace supplémentaire de 250 Go dans le volume, garantissant ainsi que l'espace disponible sur le volume ne serait pas insuffisant pour quelque raison que ce soit. L'utilisation de réserves fractionnaires est généralement inutile car il est très peu probable que chaque octet du volume de base de données ait besoin d'être écrasé. Il n'y a aucune raison de réserver de l'espace pour un événement qui ne se produit jamais. Cependant, si un client ne peut pas surveiller la consommation d'espace dans un système de stockage et doit être certain que l'espace ne sera jamais épuisé, des réservations fractionnaires de 100 % seront nécessaires pour utiliser les snapshots.
+
+
+
+== Compression et déduplication
+
+La compression et la déduplication sont deux formes de provisionnement fin. Par exemple, une empreinte des données de 50 To peut être compressée jusqu'à 30 To, ce qui permet d'économiser 20 To. Pour que la compression offre tous les avantages, il faut utiliser quelques 20 To pour d'autres données ou acheter le système de stockage avec moins de 50 To. Il en résulte une quantité de données stockées supérieure à ce qui n'est techniquement disponible sur le système de stockage. Du point de vue des données, il y a 50 To de données, même si celles-ci ne occupent que 30 To sur les disques.
+
+Il est toujours possible que la compressibilité d'un dataset change, ce qui entraîne une consommation accrue de l'espace réel. Cette augmentation de la consommation signifie que la compression doit être gérée comme avec les autres formes de provisionnement fin en termes de surveillance et d'utilisation `volume-autogrow` et `snapshot-autodelete`.
+
+La compression et la déduplication sont présentées plus en détail dans la section link:efficiency.html
+
+
+
+=== Compression et réservations fractionnaires
+
+La compression est une forme d'allocation dynamique. Les réservations fractionnaires affectent l'utilisation de la compression, avec une remarque importante ; l'espace est réservé avant la création du snapshot. Normalement, la réserve fractionnaire n'est importante que si un instantané existe. S'il n'y a pas de snapshot, la réserve fractionnaire n'est pas importante. Ce n'est pas le cas avec la compression. Si une LUN est créée sur un volume avec compression, ONTAP conserve l'espace nécessaire pour prendre en charge un snapshot. Ce comportement peut être déroutant pendant la configuration, mais il est normal.
+
+Prenons l'exemple d'un volume de 10 Go avec une LUN de 5 Go compressée à 2,5 Go sans copie Snapshot. Prenez en compte ces deux scénarios :
+
+* La réserve fractionnaire = 100 entraîne une utilisation de 7,5 Go
+* La réserve fractionnaire = 0 entraîne une utilisation de 2,5 Go
+
+
+Le premier scénario comprend 2,5 Go de consommation d'espace pour les données actuelles et 5 Go d'espace pour représenter 100 % de chiffre d'affaires de la source en prévision de l'utilisation des snapshots. Le deuxième scénario ne réserve pas d'espace supplémentaire.
+
+Bien que cette situation puisse sembler confuse, il est peu probable qu'elle soit rencontrée dans la pratique. La compression implique un provisionnement fin et le provisionnement fin dans un environnement LUN nécessite des réservations fractionnaires. Il est toujours possible d'écraser des données compressées par un élément non compressible, ce qui signifie qu'un volume doit être à provisionnement fin pour la compression, pour réaliser des économies.
+
+[TIP]
+====
+*NetApp recommande* les configurations de réserve suivantes :
+
+* Réglez `fractional-reserve` à 0 lorsque la surveillance de la capacité de base est en place avec `volume-autogrow` et `snapshot-autodelete`.
+* Réglez `fractional-reserve` à 100 s'il n'y a pas de capacité de surveillance ou s'il est impossible d'évacuer l'espace en quelque circonstance que ce soit.
+
+
+====

@@ -1,0 +1,23 @@
+---
+sidebar: sidebar 
+permalink: postgres/native-dp.html 
+keywords: PostgreSQL,database,postgres 
+summary: Bases de données PostgreSQL sur ONTAP 
+---
+= Protection native des données
+:allow-uri-read: 
+
+
+[role="lead"]
+L'un des principaux aspects de la conception du stockage est l'activation de la protection pour les volumes PostgreSQL. Les clients peuvent protéger leurs bases de données PostgreSQL en utilisant l'approche dump ou en utilisant des sauvegardes de système de fichiers. Cette section décrit les différentes approches de sauvegarde de bases de données individuelles ou de l'ensemble du cluster.
+
+Il existe trois approches de sauvegarde des données PostgreSQL :
+
+* Dump SQL Server
+* Sauvegarde au niveau du système de fichiers
+* Archivage continu
+
+
+L'idée derrière la méthode de vidage de SQL Server est de générer un fichier avec des commandes SQL Server qui, une fois renvoyées au serveur, peuvent recréer la base de données telle qu'elle était au moment de la sauvegarde. PostgreSQL fournit les programmes utilitaires `pg_dump` et `pg_dump_all` pour la création de sauvegardes individuelles et au niveau du cluster. Ces vidages sont logiques et ne contiennent pas suffisamment d'informations pour être utilisés par la relecture WAL.
+
+Une autre stratégie de sauvegarde consiste à utiliser une sauvegarde au niveau du système de fichiers, dans laquelle les administrateurs copient directement les fichiers utilisés par PostgreSQL pour stocker les données dans la base de données. Cette méthode s'effectue en mode hors ligne : la base de données ou le cluster doit être arrêté. Une autre alternative est d'utiliser `pg_basebackup` Pour exécuter une sauvegarde de diffusion à chaud de la base de données PostgreSQL.

@@ -1,0 +1,45 @@
+---
+sidebar: sidebar 
+permalink: oracle/storage-configuration/oracle-direct-nfs.html 
+keywords: oracle, database, ontap, nfs, ADR, dNFS 
+summary: NFS direct Oracle 
+---
+= Directement sur Oracle NFS
+:allow-uri-read: 
+
+
+[role="lead"]
+Les bases de données Oracle peuvent utiliser NFS de deux manières.
+
+Tout d'abord, il peut utiliser un système de fichiers monté à l'aide du client NFS natif qui fait partie du système d'exploitation. Il s'agit parfois de kernel NFS ou KNFS. Le système de fichiers NFS est monté et utilisé par la base de données Oracle exactement comme toute autre application utiliserait un système de fichiers NFS.
+
+La deuxième méthode est Oracle Direct NFS (dNFS). Il s'agit d'une implémentation de la norme NFS dans le logiciel de base de données Oracle. Elle ne modifie pas la façon dont les bases de données Oracle sont configurées ou gérées par l'administrateur de base de données. Tant que les paramètres du système de stockage lui-même sont corrects, l'utilisation de dNFS doit être transparente pour l'équipe DBA et les utilisateurs finaux.
+
+Les systèmes de fichiers NFS habituels sont toujours montés sur une base de données avec la fonction dNFS activée. Une fois la base de données ouverte, la base de données Oracle ouvre un ensemble de sessions TCP/IP et effectue directement des opérations NFS.
+
+
+
+== NFS direct
+
+La valeur principale de Direct NFS d'Oracle est de contourner le client NFS hôte et d'effectuer des opérations de fichiers NFS directement sur un serveur NFS. Pour l'activer, il suffit de modifier la bibliothèque Oracle Disk Manager (ODM). Vous trouverez des instructions sur ce processus dans la documentation Oracle.
+
+L'utilisation de dNFS entraîne une amélioration significative des performances d'E/S et réduit la charge sur l'hôte et le système de stockage, car les E/S sont effectuées de la manière la plus efficace possible.
+
+En outre, Oracle dNFS inclut une *option* pour les chemins d'accès multiples et la tolérance aux pannes de l'interface réseau. Par exemple, il est possible de lier deux interfaces de 10 Gbits pour offrir 20 Go de bande passante. En cas de défaillance d'une interface, les E/S sont relancées sur l'autre interface. L'opération globale est très similaire aux chemins d'accès multiples FC. Les chemins d'accès multiples étaient courants il y a plusieurs années, alors que l'ethernet 1 Gbit était la norme la plus courante. Une carte réseau 10 Go suffit pour la plupart des charges de travail Oracle, mais si un nombre supérieur de cartes réseau 10 Go sont requises, elles peuvent être reliées.
+
+Lorsque dNFS est utilisé, il est essentiel que tous les correctifs décrits dans Oracle Doc 1495104.1 soient installés. Si un correctif ne peut pas être installé, l'environnement doit être évalué pour s'assurer que les bugs décrits dans ce document ne causent pas de problèmes. Dans certains cas, une incapacité à installer les correctifs requis empêche l'utilisation de dNFS.
+
+N'utilisez pas dNFS avec tout type de résolution de noms round-Robin, y compris DNS, DDNS, NIS ou toute autre méthode. Cela inclut la fonction d'équilibrage de la charge DNS disponible dans ONTAP. Lorsqu'une base de données Oracle utilisant dNFS résout un nom d'hôte en adresse IP, elle ne doit pas être modifiée lors des recherches ultérieures. Cela peut entraîner des pannes de la base de données Oracle et une corruption potentielle des données.
+
+
+
+=== Accès direct au NFS et au système de fichiers hôte
+
+L'utilisation de dNFS peut parfois causer des problèmes pour les applications ou les activités des utilisateurs qui dépendent des systèmes de fichiers visibles montés sur l'hôte car le client dNFS accède au système de fichiers hors bande à partir du système d'exploitation hôte. Le client dNFS peut créer, supprimer et modifier des fichiers sans connaître le système d'exploitation.
+
+Lorsque les options de montage des bases de données à instance unique sont utilisées, elles permettent la mise en cache des attributs de fichiers et de répertoires, ce qui signifie également que le contenu d'un répertoire est mis en cache. Par conséquent, dNFS peut créer un fichier, et il y a un court délai avant que le système d'exploitation ne relise le contenu du répertoire et que le fichier devienne visible pour l'utilisateur. Ce n'est généralement pas un problème, mais, dans de rares cas, des utilitaires tels que SAP BR*Tools peuvent présenter des problèmes. Si cela se produit, modifiez les options de montage pour utiliser les recommandations pour Oracle RAC. Ce changement entraîne la désactivation de l'ensemble de la mise en cache de l'hôte.
+
+Ne modifiez les options de montage que si (a) dNFS est utilisé et (b) un problème résulte d'un décalage dans la visibilité des fichiers. Si dNFS n'est pas utilisé, les options de montage Oracle RAC sur une base de données à instance unique entraînent une dégradation des performances.
+
+
+NOTE: Voir la remarque sur `nosharecache` dans link:../host-configuration/linux.html#linux-direct-nfs["Options de montage NFS Linux"] Pour un problème dNFS spécifique à Linux qui peut produire des résultats inhabituels.

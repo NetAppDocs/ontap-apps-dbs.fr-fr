@@ -1,0 +1,12 @@
+---
+sidebar: sidebar 
+permalink: mysql/storage.html 
+keywords: MySQL,MariaDB,schedulers 
+summary: MySQL sur ONTAP 
+---
+= Configuration de stockage sous-jacente
+:allow-uri-read: 
+
+
+[role="lead"]
+Pour plus d'informations sur la configuration du stockage utilisé pour les bases de données MySQL, reportez-vous à la section link:../common/storage-configuration/overview.html["Configuration du stockage des applications d'entreprise sur ONTAP"]

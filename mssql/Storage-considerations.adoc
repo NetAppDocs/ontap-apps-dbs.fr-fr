@@ -1,0 +1,99 @@
+---
+sidebar: sidebar 
+permalink: mssql/Storage-considerations.html 
+keywords: MS-SQL,mssql,SQL Server, database layout 
+summary: Microsoft SQL Server sur ONTAP 
+---
+= Considérations relatives au stockage Microsoft SQL Server
+:allow-uri-read: 
+
+
+[role="lead"]
+L'association des solutions de stockage NetApp et de Microsoft SQL Server permet de concevoir des systèmes de stockage de base de données d'entreprise capables de répondre aux exigences des applications les plus exigeantes.
+
+Pour optimiser ces deux technologies, il est essentiel de comprendre le modèle et les caractéristiques d'E/S de SQL Server. Une infrastructure de stockage bien conçue pour une base de données SQL Server supporte les performances de SQL Server et la gestion de l'infrastructure SQL Server. Une bonne disposition du stockage permet également de réussir le déploiement initial et d'assurer une croissance progressive de l'environnement à mesure que l'entreprise se développe.
+
+
+
+== Conception du stockage des données
+
+Pour les bases de données SQL Server qui n'utilisent pas SnapCenter pour effectuer des sauvegardes, Microsoft recommande de placer les données et les fichiers journaux sur des disques distincts. Pour les applications qui mettent à jour et demandent simultanément des données, le fichier journal est très gourmand en écriture et le fichier de données (selon votre application) consomme beaucoup de ressources en lecture/écriture. Pour la récupération des données, le fichier journal n'est pas nécessaire. Par conséquent, les demandes de données peuvent être satisfaites à partir du fichier de données placé sur son propre disque.
+
+Lorsque vous créez une nouvelle base de données, Microsoft recommande de spécifier des disques distincts pour les données et les journaux. Pour déplacer des fichiers après la création de la base de données, la base de données doit être mise hors ligne. Pour plus d'informations sur les recommandations de Microsoft, consultez la section link:https://docs.microsoft.com/en-us/sql/relational-databases/policy-based-management/place-data-and-log-files-on-separate-drives?view=sql-server-ver15["Placez les fichiers de données et les fichiers journaux sur des lecteurs distincts"^].
+
+
+
+== 64 bits
+
+Les agrégats sont les principaux conteneurs de stockage pour les configurations de stockage NetApp. Ils contiennent un ou plusieurs groupes RAID composés à la fois de disques de données et de disques de parité. NetApp a effectué plusieurs tests de caractérisation des charges de travail d'E/S à l'aide d'agrégats partagés et dédiés, avec des fichiers de données et des fichiers journaux de transactions séparés. Les tests montrent qu'un grand agrégat avec un plus grand nombre de piles et de groupes RAID optimise et améliore les performances du stockage et est plus facile à gérer pour les administrateurs pour deux raisons :
+
+* Un grand agrégat rend les capacités d'E/S de toutes les piles de disques disponibles pour tous les fichiers.
+* Un seul grand agrégat permet d'optimiser l'utilisation de l'espace disque.
+
+
+Pour la haute disponibilité (HA), placer la réplique synchrone secondaire SQL Server Always On Availability Group sur une machine virtuelle de stockage (SVM) distincte dans l'agrégat. Pour la reprise sur incident, placez la réplication asynchrone sur un agrégat faisant partie d'un cluster de stockage distinct dans le site de reprise sur incident, le contenu étant répliqué à l'aide de la technologie NetApp SnapMirror. Pour des performances de stockage optimales, NetApp recommande de disposer d'au moins 10 % d'espace libre dans un agrégat.
+
+
+
+== Volumes
+
+Les volumes NetApp FlexVol sont créés et résident dans des agrégats. De nombreux volumes peuvent être créés dans un seul agrégat, et chaque volume peut être étendu, réduit ou déplacé entre les agrégats sans temps d'indisponibilité pour les utilisateurs.
+
+
+
+=== Considérations relatives à la conception des volumes
+
+Avant de créer une conception de volume de base de données, il est important de comprendre comment le modèle et les caractéristiques d'E/S SQL Server varient en fonction de la charge de travail et des exigences de sauvegarde et de restauration. Consultez les recommandations NetApp suivantes pour les volumes flexibles :
+
+* Utilisez des volumes flexibles pour stocker des fichiers de base de données SQL Server et éviter de partager des volumes entre des hôtes.
+* Utilisez des points de montage NTFS au lieu de lettres de lecteur pour dépasser la limite de 26 lettres de lecteur dans Windows. Lorsque vous utilisez des points de montage de volume, il est généralement recommandé de donner au libellé de volume le même nom que le point de montage.
+* Le cas échéant, configurez une règle de dimensionnement automatique de volume pour éviter les conditions de manque d'espace. 17 Guide des meilleures pratiques pour Microsoft SQL Server avec ONTAP © 2022 NetApp, Inc Tous droits réservés.
+* Activer la réallocation de lecture sur le volume lorsque le profil d'E/S de la base de données SQL Server comprend principalement des lectures séquentielles volumineuses, telles que les charges de travail du système d'aide à la décision. La fonctionnalité de réallocation de lecture optimise les blocs pour améliorer les performances.
+* Si vous installez SQL Server sur un partage SMB, assurez-vous que Unicode est activé sur les volumes SMB/CIFS pour la création de dossiers.
+* Définissez la valeur de la réserve de copie Snapshot NetApp dans le volume sur zéro pour faciliter la surveillance sur le plan opérationnel.
+* Désactivez les plannings de copie Snapshot™ de stockage et les stratégies de conservation. Utilisez plutôt SnapCenter pour coordonner les copies Snapshot des volumes de données SQL Server.
+* Placez les bases de données système SQL Server sur un volume dédié ou un VMDK.
+* Tempdb est une base de données système utilisée par SQL Server comme espace de travail temporaire, en particulier pour les opérations DBCC CHECKDB exigeantes en E/S. Par conséquent, placez cette base de données sur un volume dédié avec un jeu séparé de piles de disques. Dans les grands environnements dans lesquels le nombre de volumes est un défi, vous pouvez consolider tempdb en un nombre réduit de volumes et le stocker dans le même volume que les autres bases de données système après une planification minutieuse. La protection des données pour tempdb n'est pas une priorité élevée car cette base de données est recréée à chaque redémarrage de SQL Server.
+* Placez les fichiers de données utilisateur (.mdf) sur des volumes distincts car ils sont des workloads de lecture/écriture aléatoires. Il est courant de créer des sauvegardes du journal de transactions plus fréquemment que les sauvegardes de bases de données. Pour cette raison, placez les fichiers journaux de transactions (.ldf) sur un volume distinct ou un fichier VMDK à partir des fichiers de données afin de pouvoir créer des plannings de sauvegarde indépendants pour chacun d'eux. Cette séparation isole également les E/S d'écriture séquentielle des fichiers journaux des E/S de lecture/écriture aléatoires des fichiers de données et améliore considérablement les performances de SQL Server.
+
+
+
+
+== LUN
+
+* Assurez-vous que les fichiers de base de données utilisateur et le répertoire des journaux pour stocker la sauvegarde des journaux se trouvent sur des volumes distincts afin d'empêcher la règle de conservation d'écraser les snapshots lorsqu'ils sont utilisés avec la technologie SnapVault.
+* Assurez-vous que les bases de données SQL Server résident sur des LUN distincts des LUN qui ne disposent pas de fichiers de base de données, tels que les fichiers de recherche en texte intégral.
+* Le placement de fichiers secondaires de base de données (dans le cadre d'un groupe de fichiers) sur des volumes distincts améliore les performances de la base de données SQL Server. Cette séparation est valide uniquement si le fichier .mdf de la base de données ne partage pas son LUN avec d'autres fichiers .mdf.
+* Si vous créez des LUN à l'aide de DiskManager ou d'autres outils, assurez-vous que la taille de l'unité d'allocation est définie sur 64 Ko pour les partitions lors du formatage des LUN.
+* Voir la link:https://www.netapp.com/media/10680-tr4080.pdf["Microsoft Windows et MPIO natif conformément aux meilleures pratiques ONTAP pour les SAN modernes"] Pour appliquer la prise en charge des chemins d'accès multiples sur Windows aux périphériques iSCSI dans les propriétés MPIO.
+
+
+
+
+=== Répertoire du journal
+
+Le répertoire des journaux est spécifié dans SQL Server pour stocker les données de sauvegarde du journal de transactions au niveau de l'hôte. Si vous utilisez SnapCenter pour sauvegarder les fichiers journaux, chaque hôte SQL Server utilisé par SnapCenter doit disposer d'un répertoire de journaux hôte configuré pour effectuer des sauvegardes de journaux. SnapCenter dispose d'un référentiel de base de données. Les métadonnées liées aux opérations de sauvegarde, de restauration ou de clonage sont donc stockées dans un référentiel de base de données central.
+
+La taille du répertoire de journaux hôte est calculée comme suit :
+Taille du répertoire des journaux hôtes = ( (taille LDF maximale de la base de données x taux de modification quotidien du journal %) x (rétention des snapshots) ÷ (1 - espace de surcharge de la LUN %)
+La formule de dimensionnement du répertoire des journaux hôte suppose un espace supplémentaire de 10 % pour les LUN
+
+Placez le répertoire des journaux sur un volume ou une LUN dédié. La quantité de données dans le répertoire du journal hôte dépend de la taille des sauvegardes et du nombre de jours pendant lesquels les sauvegardes sont conservées. SnapCenter n'autorise qu'un seul répertoire de journaux hôte par hôte SQL Server. Vous pouvez configurer les répertoires de journaux hôtes dans SnapCenter --> hôte --> configurer le plug-in.
+
+[TIP]
+====
+*NetApp recommande* ce qui suit pour un répertoire de journaux hôte :
+
+* Assurez-vous que le répertoire du journal de l'hôte n'est partagé par aucun autre type de données pouvant potentiellement corrompre les données du snapshot de sauvegarde.
+* Ne placez pas de bases de données utilisateur ou de bases de données système sur un LUN qui héberge des points de montage.
+* Créez le répertoire des journaux hôtes sur le volume FlexVol dédié sur lequel SnapCenter copie les journaux de transactions.
+* Utilisez les assistants SnapCenter pour migrer les bases de données vers le stockage NetApp de sorte que les bases de données soient stockées dans des emplacements valides, ce qui permet de réaliser les opérations de sauvegarde et de restauration SnapCenter. N'oubliez pas que le processus de migration est disruptif et peut mettre les bases de données hors ligne pendant la migration.
+* Les conditions suivantes doivent être en place pour les instances de cluster de basculement (FCI) de SQL Server :
++
+** Si vous utilisez une instance de cluster de basculement, la LUN du répertoire de journalisation de l'hôte doit être une ressource de disque de cluster dans le même groupe de cluster que l'instance SQL Server en cours de sauvegarde SnapCenter.
+** Si vous utilisez une instance de cluster de basculement, les bases de données utilisateur doivent être placées sur des LUN partagées qui sont des ressources de cluster de disques physiques affectées au groupe de clusters associé à l'instance SQL Server.
+
+
+
+
+====

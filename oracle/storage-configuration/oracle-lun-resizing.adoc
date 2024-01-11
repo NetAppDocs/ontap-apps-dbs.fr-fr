@@ -1,0 +1,23 @@
+---
+sidebar: sidebar 
+permalink: oracle/storage-configuration/oracle-lun-resizing.html 
+keywords: SAN, ASM, LVM 
+summary: Redimensionnement des LUN et des LVM avec les bases de données Oracle 
+---
+= Redimensionnement des LUN et basé sur LVM
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Lorsqu'un système de fichiers SAN a atteint sa limite de capacité, il existe deux options pour augmenter l'espace disponible :
+
+* Augmentez la taille des LUN.
+* Ajoutez une LUN à un groupe de volumes existant et développez les volumes logiques contenus.
+
+
+Bien que le redimensionnement des LUN soit une option d'augmentation de la capacité, il est généralement préférable d'utiliser un LVM, y compris Oracle ASM. L'une des principales raisons pour lesquelles les LVM existent est d'éviter la nécessité d'un redimensionnement des LUN. Avec une LVM, plusieurs LUN sont reliées entre elles dans un pool de stockage virtuel. Les volumes logiques extraits de ce pool sont gérés par le LVM et peuvent être facilement redimensionnés. Il est également possible d'éviter les points sensibles sur un disque en distribuant un volume logique donné à tous les LUN disponibles. Une migration transparente peut généralement être effectuée à l'aide du gestionnaire de volumes pour déplacer les extensions sous-jacentes d'un volume logique vers de nouvelles LUN.

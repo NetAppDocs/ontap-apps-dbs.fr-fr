@@ -1,0 +1,17 @@
+---
+sidebar: sidebar 
+permalink: oracle/dp/overview-dr.html 
+keywords: oracle, database, ontap 
+summary: 'NetApp ONTAP est une puissante plateforme de gestion des données dotée de fonctionnalités natives qui incluent des fonctionnalités de sauvegarde instantanée, de restauration et de clonage, des fonctions d"efficacité telles que la compression à la volée, des mises à niveau matérielles sans interruption et l"importation d"une LUN à partir d"une baie de stockage étrangère.' 
+---
+= Reprise sur incident Oracle
+:allow-uri-read: 
+
+
+[role="lead"]
+NetApp MetroCluster propose une solution hautement disponible sans perte de données pour les workloads Oracle stratégiques.
+
+De plus, les solutions intégrées telles que MetroCluster simplifient les bases de données, les applications et les infrastructures de virtualisation Oracle, qui évoluent horizontalement et complexes. MetroCluster remplace plusieurs produits et stratégies externes de protection des données par une baie de stockage centrale simple. Elle offre des fonctionnalités intégrées de sauvegarde, de restauration, de reprise après incident et de haute disponibilité au sein d'un seul système de stockage en cluster.
+
+
+NOTE: Cette documentation remplace le rapport technique _TR-4592 : Oracle on MetroCluster._

@@ -1,0 +1,27 @@
+---
+sidebar: sidebar 
+permalink: oracle/tiering/oracle-backup-tiering.html 
+keywords: tiering, fabricpool 
+summary: Tiering de sauvegarde Oracle 
+---
+= Tiering de sauvegarde Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Les sauvegardes d'applications traditionnelles incluent des produits tels qu'Oracle Recovery Manager, qui créent des sauvegardes basées sur des fichiers en dehors de l'emplacement de la base de données d'origine.
+
+ `tiering-minimum-cooling-days` policy of a few days preserves the most recent backups, and therefore the backups most likely to be required for an urgent recovery situation, on the performance tier. The data blocks of the older files are then moved to the capacity tier.
+Le `auto` la règle est la règle la plus appropriée pour les données de sauvegarde. Cela garantit une hiérarchisation rapide lorsque le seuil de refroidissement a été atteint, que les fichiers aient été supprimés ou qu'ils continuent d'exister dans le système de fichiers principal. Le stockage de tous les fichiers potentiellement requis dans un emplacement unique du système de fichiers actif simplifie également la gestion. Il n'y a aucune raison de rechercher un fichier à restaurer à l'aide de snapshots.
+
+Le `snapshot-only` la stratégie peut être mise en œuvre, mais elle s'applique uniquement aux blocs qui ne sont plus dans le système de fichiers actif. Par conséquent, les fichiers d'un partage NFS ou SMB doivent d'abord être supprimés avant de pouvoir placer les données dans un Tier.
+
+Cette règle serait encore moins efficace avec une configuration de LUN, car la suppression d'un fichier d'une LUN supprime uniquement les références de fichier des métadonnées du système de fichiers. Les blocs réels des LUN restent en place jusqu'à ce qu'ils soient remplacés. Cette situation peut entraîner un délai long entre la suppression d'un fichier et l'écrasement des blocs et leur candidature à la hiérarchisation. Il est avantageux de déplacer le `snapshot-only` Bloque le niveau de capacité, mais, dans l'ensemble, la gestion FabricPool des données de sauvegarde fonctionne mieux avec le `auto` politique.
+
+
+NOTE: Cette approche permet aux utilisateurs de gérer plus efficacement l'espace requis pour les sauvegardes, mais FabricPool lui-même n'est pas une technologie de sauvegarde. Le Tiering des fichiers de sauvegarde vers un magasin d'objets simplifie la gestion, car les fichiers restent visibles sur le système de stockage d'origine. Cependant, les blocs de données de destination du magasin d'objets dépendent du système de stockage d'origine. En cas de perte du volume source, les données du magasin d'objets ne sont plus utilisables.

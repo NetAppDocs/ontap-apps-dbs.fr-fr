@@ -1,0 +1,31 @@
+---
+sidebar: sidebar 
+permalink: mysql/slot-tables.html 
+keywords: MySQL,MariaDB,TR-4722 
+summary: MySQL sur ONTAP 
+---
+= Tables de rainures
+:allow-uri-read: 
+
+
+[role="lead"]
+Les performances NFS sous Linux dépendent d'un paramètre appelé `tcp_max_slot_table_entries`.
+
+Ce paramètre régule le nombre d'opérations NFS en attente autorisées sur un système d'exploitation Linux.
+
+La valeur par défaut de la plupart des noyaux dérivés de 2.6, qui incluent RH5 et OL5, est 16. Cependant, cette valeur par défaut entraîne souvent des problèmes de performances. Le problème inverse se produit sur les noyaux plus récents dans lesquels le `tcp_max_slot_table_entries` la valeur par défaut est 65536 et peut causer des problèmes de stockage en inondant le système de requêtes excessives. RHEL 7 et RHEL 8 ont une valeur par défaut de 65536. La solution consiste à définir cette valeur de manière statique. Utilisez la valeur 128 pour tout système d'exploitation Linux utilisant le stockage NetApp NFS avec une base de données MySQL. Pour définir cette valeur dans Red Hat Enterprise Linux, placez l'entrée suivante dans /etc/sysctl.conf :
+
+Réglez `tcp_max_slot_table_entries`:
+
+....
+[root@host1 ~]# echo "sunrpc.tcp_max_slot_table_entries = 128" >> /etc/sysctl.conf
+[root@host1 ~]# sysctl -p
+....
+Vérifiez que la valeur est définie :
+
+....
+[root@host1 ~]# sysctl sunrpc.tcp_max_slot_table_entries
+sunrpc.tcp_max_slot_table_entries = 128
+....
+
+NOTE: Un autre paramètre a un nom très similaire `tcp_slot_table_entries`. Cette valeur définit le nombre d'emplacements affectés à une session TCP lors de la première établissement. Il n'est pas nécessaire de modifier cette valeur.

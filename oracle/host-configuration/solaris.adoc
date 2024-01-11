@@ -1,0 +1,246 @@
+---
+sidebar: sidebar 
+permalink: oracle/host-configuration/solaris.html 
+keywords: oracle, database, ontap, solaris, zfs 
+summary: 'Oracle sur ONTAP à l"aide de Solaris' 
+---
+= Solaris
+:allow-uri-read: 
+
+
+[role="lead"]
+Rubriques de configuration spécifiques au système d'exploitation Solaris.
+
+
+
+== Options de montage Solaris NFS
+
+Le tableau suivant répertorie les options de montage Solaris NFS pour une seule instance.
+
+|===
+| Type de fichier | Options de montage 
+
+
+| Accueil ADR | `rw,bg,hard,[vers=3,vers=4.1], roto=tcp, timeo=600,rsize=262144,wsize=262144` 
+
+
+| Fichiers de contrôle
+Fichiers de données
+Journaux de reprise | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp, timeo=600,rsize=262144,wsize=262144, nointr,llock,suid` 
+
+
+| `ORACLE_HOME` | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp, timeo=600,rsize=262144,wsize=262144, suid` 
+|===
+L'utilisation de `llock` il a été prouvé qu'il améliorait considérablement les performances dans les environnements des clients en supprimant la latence associée à l'acquisition et au déblocage du système de stockage. Utilisez cette option avec soin dans les environnements dans lesquels de nombreux serveurs sont configurés pour monter les mêmes systèmes de fichiers et où Oracle est configuré pour monter ces bases de données. Bien qu'il s'agisse d'une configuration très inhabituelle, elle est utilisée par un petit nombre de clients. Si une instance est démarrée une seconde fois par erreur, une corruption des données peut se produire, car Oracle ne peut pas détecter les fichiers de verrouillage sur le serveur étranger. Les verrous NFS n'offrent pas de protection ; comme dans la version NFS 3, ils sont réservés à des conseils.
+
+Parce que le `llock` et `forcedirectio` les paramètres s'excluent mutuellement, il est important que `filesystemio_options=setall` est présent dans le `init.ora` classez-les de sorte que `directio` est utilisé. Sans ce paramètre, la mise en cache du tampon du système d'exploitation hôte est utilisée et les performances peuvent être affectées.
+
+Le tableau suivant répertorie les options de montage de Solaris NFS RAC.
+
+|===
+| Type de fichier | Options de montage 
+
+
+| Accueil ADR | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+noac` 
+
+
+| Fichiers de contrôle
+Fichiers de données
+Journaux de reprise | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+nointr,noac,forcedirectio` 
+
+
+| CRS/vote | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+nointr,noac,forcedirectio` 
+
+
+| Ressource dédiée `ORACLE_HOME` | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+suid` 
+
+
+| Partagée `ORACLE_HOME` | `rw,bg,hard,[vers=3,vers=4.1],proto=tcp,
+timeo=600,rsize=262144,wsize=262144,
+nointr,noac,suid` 
+|===
+La principale différence entre les options de montage à instance unique et RAC est l'ajout de `noac` et `forcedirectio` aux options de montage. Cet ajout a pour effet de désactiver la mise en cache du système d'exploitation hôte, ce qui permet à toutes les instances du cluster RAC d'avoir une vue cohérente de l'état des données. En utilisant le `init.ora` paramètre `filesystemio_options=setall` a le même effet que la désactivation de la mise en cache de l'hôte, il est toujours nécessaire de l'utiliser `noac` et `forcedirectio`.
+
+La raison `actimeo=0` est requis pour le partage `ORACLE_HOME` Les déploiements visent à faciliter la cohérence des fichiers tels que les fichiers de mots de passe Oracle et les fichiers spfiles. Si chaque instance d'un cluster RAC possède un dédié `ORACLE_HOME`, ce paramètre n'est pas requis.
+
+
+
+== Options de montage Solaris UFS
+
+NetApp recommande fortement d'utiliser l'option de montage de journalisation afin de préserver l'intégrité des données en cas de panne de l'hôte Solaris ou d'interruption de la connectivité FC. L'option de montage de la journalisation préserve également l'utilisation des sauvegardes Snapshot.
+
+
+
+== ZFS Solaris
+
+Solaris ZFS doit être installé et configuré avec soin pour offrir des performances optimales.
+
+
+
+=== mvector
+
+Solaris 11 a inclus un changement dans la façon dont il traite les opérations d'E/S importantes, ce qui peut entraîner de graves problèmes de performances sur les baies de stockage SAN. Le problème est décrit en détail dans le rapport de bogue NetApp 630173, « Solaris 11 ZFS Performance Regression ». " La solution est de changer un paramètre OS appelé `zfs_mvector_max_size`.
+
+Exécutez la commande suivante en tant que root :
+
+....
+[root@host1 ~]# echo "zfs_mvector_max_size/W 0t131072" |mdb -kw
+....
+En cas de problème inattendu résultant de cette modification, vous pouvez facilement l'inverser en exécutant la commande suivante en tant que root :
+
+....
+[root@host1 ~]# echo "zfs_mvector_max_size/W 0t1048576" |mdb -kw
+....
+
+
+== Noyau
+
+Pour des performances ZFS fiables, un noyau Solaris est nécessaire pour résoudre les problèmes d'alignement des LUN. Le correctif a été introduit avec le correctif 147440-19 dans Solaris 10 et avec SRU 10.5 pour Solaris 11. Utilisez uniquement Solaris 10 et versions ultérieures avec ZFS.
+
+
+
+== Configuration du LUN
+
+Pour configurer une LUN, effectuez les opérations suivantes :
+
+. Créer une LUN de type `solaris`.
+. Installez le kit d'utilitaire hôte (HUK) approprié spécifié par le link:https://imt.netapp.com/matrix/#search["Matrice d'interopérabilité NetApp (IMT)"^].
+. Suivez les instructions du HUK exactement comme décrit. Les étapes de base sont décrites ci-dessous, mais reportez-vous au link:https://docs.netapp.com/us-en/ontap-sanhost/index.html["documentation la plus récente"^] pour connaître la procédure adéquate.
++
+.. Exécutez le `host_config` utilitaire de mise à jour du `sd.conf/sdd.conf` fichier. Les disques SCSI seront ainsi en mesure de détecter correctement les LUN ONTAP.
+.. Suivez les instructions fournies par le `host_config` Utilitaire permettant d'activer les entrées/sorties multivoies (MPIO).
+.. Redémarrez. Cette étape est nécessaire pour que les modifications soient reconnues dans l'ensemble du système.
+
+
+. Partitionnez les LUN et vérifiez qu'ils sont correctement alignés. Voir « Annexe B : Vérification de l'alignement WAFL » pour obtenir des instructions sur la façon de tester et de confirmer directement l'alignement.
+
+
+
+
+=== zpools
+
+Un zpool ne doit être créé qu'après les étapes de la link:solaris.html#lun-configuration["Configuration du LUN"] sont effectuées. Si la procédure n'est pas effectuée correctement, les performances risquent d'être sérieusement dégradées en raison de l'alignement des E/S. Pour des performances optimales sur ONTAP, les E/S doivent être alignées sur une limite de 4 Ko sur un disque. Les systèmes de fichiers créés sur un zpool utilisent une taille de bloc effective qui est contrôlée par un paramètre appelé `ashift`, qui peut être affiché en exécutant la commande `zdb -C`.
+
+La valeur de `ashift` la valeur par défaut est 9, ce qui signifie 2^9, ou 512 octets. Pour des performances optimales, le `ashift` La valeur doit être 12 (2^12=4K). Cette valeur est définie au moment de la création du zpool et ne peut pas être modifiée, ce qui signifie que les données dans zpools avec `ashift` une migration autre que 12 doit être effectuée en copiant les données vers un nouveau zpool.
+
+Après avoir créé un zpool, vérifiez la valeur de `ashift` avant de continuer. Si la valeur n'est pas 12, les LUN n'ont pas été détectées correctement. Détruisez le zpool, vérifiez que toutes les étapes indiquées dans la documentation des utilitaires hôtes correspondante ont été effectuées correctement et recréez le zpool.
+
+
+
+=== Zpools et LDOMS Solaris
+
+Les LDOMS Solaris créent une exigence supplémentaire pour s'assurer que l'alignement des E/S est correct. Bien qu'un LUN soit correctement découvert en tant que périphérique 4K, un périphérique virtuel vdsk sur un LDOM n'hérite pas de la configuration du domaine d'E/S. Le vdsk basé sur cette LUN revient par défaut à un bloc de 512 octets.
+
+Un fichier de configuration supplémentaire est requis. Tout d'abord, les LDOM individuels doivent être corrigés pour le bogue Oracle 15824910 afin d'activer les options de configuration supplémentaires. Ce correctif a été porté dans toutes les versions actuellement utilisées de Solaris. Une fois le logiciel LDOM corrigé, il est prêt à configurer les nouveaux LUN correctement alignés comme suit :
+
+. Identifiez la ou les LUN à utiliser dans le nouveau zpool. Dans cet exemple, il s'agit du périphérique c2d1.
++
+....
+[root@LDOM1 ~]# echo | format
+Searching for disks...done
+AVAILABLE DISK SELECTIONS:
+  0. c2d0 <Unknown-Unknown-0001-100.00GB>
+     /virtual-devices@100/channel-devices@200/disk@0
+  1. c2d1 <SUN-ZFS Storage 7330-1.0 cyl 1623 alt 2 hd 254 sec 254>
+     /virtual-devices@100/channel-devices@200/disk@1
+....
+. Récupérez l'instance vdc des systèmes à utiliser pour un pool ZFS :
++
+....
+[root@LDOM1 ~]#  cat /etc/path_to_inst
+#
+# Caution! This file contains critical kernel state
+#
+"/fcoe" 0 "fcoe"
+"/iscsi" 0 "iscsi"
+"/pseudo" 0 "pseudo"
+"/scsi_vhci" 0 "scsi_vhci"
+"/options" 0 "options"
+"/virtual-devices@100" 0 "vnex"
+"/virtual-devices@100/channel-devices@200" 0 "cnex"
+"/virtual-devices@100/channel-devices@200/disk@0" 0 "vdc"
+"/virtual-devices@100/channel-devices@200/pciv-communication@0" 0 "vpci"
+"/virtual-devices@100/channel-devices@200/network@0" 0 "vnet"
+"/virtual-devices@100/channel-devices@200/network@1" 1 "vnet"
+"/virtual-devices@100/channel-devices@200/network@2" 2 "vnet"
+"/virtual-devices@100/channel-devices@200/network@3" 3 "vnet"
+"/virtual-devices@100/channel-devices@200/disk@1" 1 "vdc" << We want this one
+....
+. Modifier `/platform/sun4v/kernel/drv/vdc.conf`:
++
+....
+block-size-list="1:4096";
+....
++
+Cela signifie que l'instance de périphérique 1 se voit attribuer une taille de bloc de 4096.
+
++
+Par exemple, supposons que les instances vdsk 1 à 6 doivent être configurées pour une taille de bloc de 4 Ko et `/etc/path_to_inst` se lit comme suit :
+
++
+....
+"/virtual-devices@100/channel-devices@200/disk@1" 1 "vdc"
+"/virtual-devices@100/channel-devices@200/disk@2" 2 "vdc"
+"/virtual-devices@100/channel-devices@200/disk@3" 3 "vdc"
+"/virtual-devices@100/channel-devices@200/disk@4" 4 "vdc"
+"/virtual-devices@100/channel-devices@200/disk@5" 5 "vdc"
+"/virtual-devices@100/channel-devices@200/disk@6" 6 "vdc"
+....
+. La finale `vdc.conf` le fichier doit contenir les éléments suivants :
++
+....
+block-size-list="1:8192","2:8192","3:8192","4:8192","5:8192","6:8192";
+....
++
+|===
+| Avertissement 
+
+
+| Le LDOM doit être redémarré après la configuration de vdc.conf et la création du vdsk. Cette étape ne peut pas être évitée. La modification de la taille de bloc n'est effective qu'après un redémarrage. Procéder à la configuration du pool de zpool et s'assurer que le module de transmission automatique est correctement réglé sur 12 comme décrit précédemment. 
+|===
+
+
+
+
+=== Journal des intentions ZFS (ZIL)
+
+En général, il n'y a aucune raison de localiser le ZFS Intent Log (ZIL) sur un autre périphérique. Le journal peut partager de l'espace avec le pool principal. L'utilisation principale d'une ZIL distincte est l'utilisation de disques physiques qui n'offrent pas les fonctionnalités de mise en cache des écritures dans les baies de stockage modernes.
+
+
+
+=== biais logique
+
+Réglez le `logbias` Paramètre sur les systèmes de fichiers ZFS hébergeant les données Oracle.
+
+....
+zfs set logbias=throughput <filesystem>
+....
+Ce paramètre réduit les niveaux d'écriture globaux. Sous les valeurs par défaut, les données écrites sont d'abord validées dans le ZIL, puis dans le pool de stockage principal. Cette approche est adaptée à une configuration utilisant une configuration de disque simple, qui inclut un périphérique ZIL SSD et un support rotatif pour le pool de stockage principal. En effet, elle permet une validation dans une seule transaction d'E/S sur le support à latence la plus faible disponible.
+
+Lorsque vous utilisez une baie de stockage moderne qui inclut sa propre capacité de mise en cache, cette approche n'est généralement pas nécessaire. Dans de rares cas, il peut être souhaitable d'effectuer une écriture avec une seule transaction dans le journal, par exemple une charge de travail composée d'écritures aléatoires hautement concentrées et sensibles à la latence. L'amplification d'écriture peut avoir des conséquences, car les données consignées sont finalement écrites dans le pool de stockage principal, ce qui double l'activité d'écriture.
+
+
+
+=== E/S directes
+
+De nombreuses applications, y compris les produits Oracle, peuvent contourner le cache du tampon hôte en activant des E/S directes Cette stratégie ne fonctionne pas comme prévu avec les systèmes de fichiers ZFS. Bien que le cache du tampon hôte soit contourné, ZFS lui-même continue à mettre en cache les données. Cette action peut entraîner des résultats trompeurs lors de l'utilisation d'outils tels que fio ou Sio pour effectuer des tests de performances. En effet, il est difficile de prévoir si les E/S atteignent le système de stockage ou si elles sont mises en cache localement au sein du système d'exploitation. Cette action rend également très difficile l'utilisation de tels tests synthétiques pour comparer les performances ZFS aux autres systèmes de fichiers. D'un point de vue pratique, les performances du système de fichiers varient considérablement, voire nulle, pour les charges de travail réelles des utilisateurs.
+
+
+
+=== Plusieurs zpools
+
+Les sauvegardes, les restaurations, les clones et l'archivage des données ZFS basés sur des snapshots doivent être effectués au niveau du zpool et requièrent généralement plusieurs zpools. Un zpool est similaire à un groupe de disques LVM et doit être configuré à l'aide des mêmes règles. Par exemple, il est probablement préférable de définir au mieux une base de données avec les fichiers de données résidant sur `zpool1` ainsi que les journaux d'archivage, les fichiers de contrôle et les journaux de reprise qui résident sur `zpool2`. Cette approche permet une sauvegarde à chaud standard dans laquelle la base de données est placée en mode de sauvegarde à chaud, suivie d'un snapshot de `zpool1`. La base de données est alors supprimée du mode de sauvegarde à chaud, l'archivage des journaux est forcé et un instantané de `zpool2` est créé. Une opération de restauration nécessite de démonter les systèmes de fichiers zfs et de mettre hors ligne le zpool dans son intégralité, après une opération de restauration SnapRestore. Le zpool peut alors être remis en ligne et la base de données récupérée.
+
+
+
+=== filesytemio_options
+
+Le paramètre Oracle `filesystemio_options` Fonctionne différemment avec ZFS. Si `setall` ou `directio` Est utilisé, les opérations d'écriture sont synchrones et contournent le cache du tampon du système d'exploitation, mais les lectures sont mises en tampon par ZFS. Cette action engendre des difficultés dans l'analyse des performances, car les E/S sont parfois interceptées et traitées par le cache ZFS, ce qui rend la latence du stockage et les E/S totales inférieures à ce qu'elles semblent être.

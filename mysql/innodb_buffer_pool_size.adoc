@@ -1,0 +1,18 @@
+---
+sidebar: sidebar 
+permalink: mysql/innodb_buffer_pool_size.html 
+keywords: MySQL,MariaDB,innodb_buffer_pool_size 
+summary: MySQL sur ONTAP 
+---
+= innodb_buffer_pool_size
+:allow-uri-read: 
+
+
+[role="lead"]
+Le pool de mémoire tampon InnoDB est la partie la plus importante de toute activité de réglage.
+
+InnoDB s'appuie fortement sur le pool de mémoire tampon pour mettre en cache les index et ramer les données, l'index de hachage adaptatif, le tampon d'insertion et de nombreuses autres structures de données utilisées en interne. Le pool de mémoire tampon met également en mémoire tampon les modifications apportées aux données afin que les opérations d'écriture n'aient pas à être exécutées immédiatement sur le stockage, ce qui améliore les performances. Le pool de mémoire tampon fait partie intégrante d'InnoDB et sa taille doit être ajustée en conséquence. Tenez compte des facteurs suivants lors de la définition de la taille du pool de mémoire tampon :
+
+* Pour une machine dédiée uniquement InnoDB, définissez la taille du pool de mémoire tampon sur 80 % ou plus de la mémoire RAM disponible.
+* S'il ne s'agit pas d'un serveur dédié MySQL, définissez la taille sur 50 % de RAM.
+

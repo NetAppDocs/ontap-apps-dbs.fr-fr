@@ -1,0 +1,51 @@
+---
+sidebar: sidebar 
+permalink: oracle/dr/metrocluster/oracle-failover-on-metrocluster.html 
+keywords: Metrocluster, mcc, MCC-IP 
+summary: Oracle avec MetroCluster 
+---
+= Basculement Oracle avec MetroCluster
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../../../media/
+
+
+[role="lead"]
+L'utilisation de MetroCluster n'apporte pas nécessairement de modifications aux meilleures pratiques en matière d'exploitation de bases de données et d'applications d'entreprise.
+
+Les bonnes pratiques habituelles s'appliquent toujours. Si vos besoins requièrent uniquement une protection des données avec un objectif de point de récupération de 0, MetroCluster répond à ce besoin. Cependant, la plupart des clients utilisent MetroCluster non seulement pour la protection des données avec un objectif de point de récupération de 0, mais aussi pour améliorer l'objectif de délai de restauration en cas d'incident et fournir un basculement transparent dans le cadre des activités de maintenance du site.
+
+
+
+== Basculement avec un système d'exploitation préconfiguré
+
+SyncMirror livre une copie synchrone des données au niveau du site de reprise d'activité. La mise à disposition des données requiert un système d'exploitation et les applications associées. L'automatisation de base peut considérablement améliorer le délai de basculement de l'environnement global. Les produits Clusterware tels qu'Oracle RAC, Veritas Cluster Server (VCS) ou VMware HA sont souvent utilisés pour créer un cluster sur les sites et, dans la plupart des cas, le processus de basculement peut être piloté avec de simples scripts.
+
+En cas de perte des nœuds principaux, le cluster (ou les scripts) est configuré de manière à mettre les applications en ligne sur le site secondaire. Une option consiste à créer des serveurs de secours préconfigurés pour les ressources NFS ou SAN qui constituent l'application. En cas de défaillance du site principal, le logiciel de mise en cluster ou l'alternative scriptée effectue une séquence d'actions similaires à celles décrites ci-dessous :
+
+. Forçage du basculement MetroCluster
+. Découverte de LUN FC (SAN uniquement)
+. Montage de systèmes de fichiers
+. Démarrage de l'application
+
+
+Cette approche doit avant tout se passer d'un système d'exploitation en cours d'exécution sur le site distant. Il doit être préconfiguré avec des binaires d'application, ce qui signifie également que des tâches telles que l'application de correctifs doivent être effectuées sur les sites principal et de secours. Les binaires d'application peuvent également être mis en miroir vers le site distant et montés en cas d'incident.
+
+La procédure d'activation réelle est simple. Les commandes telles que la découverte de LUN ne nécessitent que quelques commandes par port FC. Le montage du système de fichiers n'est rien de plus qu'un `mount` Et les bases de données et ASM peuvent être démarrés et arrêtés sur l'interface de ligne de commande à l'aide d'une seule commande. Si les volumes et les systèmes de fichiers ne sont pas utilisés sur le site de reprise d'activité avant le basculement, il n'est pas nécessaire de les définir `dr-force- nvfail` sur les volumes.
+
+
+
+== Basculement avec un système d'exploitation virtualisé
+
+Le basculement des environnements de base de données peut être étendu pour inclure le système d'exploitation lui-même. En théorie, ce basculement peut être effectué avec des LUN de démarrage, mais le plus souvent avec un système d'exploitation virtualisé. La procédure est similaire aux étapes suivantes :
+
+. Forçage du basculement MetroCluster
+. Montage des datastores hébergeant les machines virtuelles du serveur de base de données
+. Démarrage des machines virtuelles
+. Démarrage manuel des bases de données ou configuration des machines virtuelles pour démarrer automatiquement les bases de données
+
+
+Par exemple, un cluster ESX peut couvrir des sites. En cas d'incident, les machines virtuelles peuvent être mises en ligne sur le site de reprise après incident après le basculement. Tant que les datastores hébergeant les serveurs de base de données virtualisés ne sont pas utilisés au moment de l'incident, il n'est pas nécessaire de les définir `dr-force- nvfail` sur les volumes associés.

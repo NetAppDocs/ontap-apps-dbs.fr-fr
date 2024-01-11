@@ -1,0 +1,12 @@
+---
+permalink: mysql/tiering.html 
+sidebar: sidebar 
+keywords: tiering, fabricpool 
+summary: Présentation de FabricPool 
+---
+= Tiering MySQL avec FabricPool
+:allow-uri-read: 
+
+
+[role="lead"]
+Pour comprendre l'impact du Tiering FabricPool sur les applications et les bases de données, il est nécessaire de connaître l'architecture FabricPool de bas niveau.

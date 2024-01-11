@@ -1,0 +1,50 @@
+---
+section: mysql
+title: MySQL
+entries:
+- title: Présentation
+  url: "/mysql/overview.html"
+- title: Configuration ONTAP
+  url: "/mysql/ontap.html"
+- title: Configuration de la base de données
+  entries:
+  - title: Structure de fichier
+    url: "/mysql/file-structure.html"
+  - title: Présentation de la configuration
+    url: "/mysql/configuration.html"
+  - title: taille_fichier_log_innodb
+    url: "/mysql/innodb_log_file_size.html"
+  - title: innodb_flush_log_at_trx_commit
+    url: "/mysql/innodb_flush_log_at_trx_commit.html"
+  - title: innodb_doublewrite
+    url: "/mysql/innodb_doublewrite.html"
+  - title: innodb_buffer_pool_size
+    url: "/mysql/innodb_buffer_pool_size.html"
+  - title: innodb_flush_method
+    url: "/mysql/innodb_flush_method.html"
+  - title: innodb_io_capacity
+    url: "/mysql/innodb_io_capacity.html"
+  - title: innodb_lru_scan_depth
+    url: "/mysql/innodb_lru_scan_depth.html"
+  - title: open_file_limits
+    url: "/mysql/open_file_limits.html"
+- title: Configuration de l'hôte
+  entries:
+  - title: Conteneurisation
+    url: "/mysql/containers.html"
+  - title: Tables de rainures
+    url: "/mysql/slot-tables.html"
+  - title: Planificateurs d'E/S.
+    url: "/mysql/schedulers.html"
+  - title: Descripteurs de fichier
+    url: "/mysql/file-descriptors.html"
+- title: Configuration de stockage sous-jacente
+  entries:
+  - title: Configuration générale du stockage
+    url: "/mysql/storage.html"
+  - title: MySQL sur NFS
+    url: "/mysql/mysql-over-nfs.html"
+  - title: MySQL sur SAN
+    url: "/mysql/mysql-over-san.html"
+  - title: Tiering MySQL avec FabricPool
+    url: "/mysql/tiering.html"

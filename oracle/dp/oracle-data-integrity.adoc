@@ -1,0 +1,135 @@
+---
+sidebar: sidebar 
+permalink: oracle/dp/oracle-data-integrity.html 
+keywords: checksums, data integrity 
+summary: Checksums et protection des données Oracle 
+---
+= Checksums et intégrité des données Oracle
+:allow-uri-read: 
+
+
+[role="lead"]
+Une question couramment adressée à NetApp est de savoir comment sécuriser l'intégrité des données d'une base de données Oracle.
+
+La protection logique des données dans ONTAP comprend trois exigences clés :
+
+* Les données doivent être protégées contre la corruption.
+* Les données doivent être protégées contre les pannes disques.
+* Les modifications de données doivent être protégées contre la perte.
+
+
+Ces trois besoins sont abordés dans les sections suivantes.
+
+
+
+== Corruption du réseau : checksums
+
+Le niveau de protection de données le plus élémentaire est la somme de contrôle, qui est un code spécial de détection d'erreur stocké avec les données. La corruption des données lors de la transmission du réseau est détectée grâce à l'utilisation d'un checksum et, dans certains cas, de multiples checksums.
+
+Par exemple, une trame FC inclut une forme de somme de contrôle appelée contrôle de redondance cyclique (CRC) pour s'assurer que la charge utile n'est pas corrompue en transit. L'émetteur envoie les données et le CRC des données. Le récepteur d'une trame FC recalcule le CRC des données reçues pour s'assurer qu'il correspond au CRC transmis. Si le nouveau CRC calculé ne correspond pas au CRC joint à la trame, les données sont corrompues et la trame FC est supprimée ou rejetée. Une opération d'E/S iSCSI comprend des checksums au niveau des couches TCP/IP et Ethernet. Pour une protection supplémentaire, elle peut également inclure la protection CRC facultative au niveau de la couche SCSI. Toute corruption de bit sur le fil est détectée par la couche TCP ou la couche IP, ce qui entraîne la retransmission du paquet. Comme avec FC, les erreurs dans le CRC SCSI entraînent une suppression ou un rejet de l'opération.
+
+
+
+== Corruption de disque : checksums
+
+Des checksums sont également utilisés pour vérifier l'intégrité des données stockées sur les disques. Les blocs de données écrits sur les disques sont stockés avec une fonction de checksum qui génère un nombre imprévisible lié aux données d'origine. Lorsque les données sont lues à partir du lecteur, la somme de contrôle est recalculée et comparée à la somme de contrôle stockée. Si elle ne correspond pas, les données sont corrompues et doivent être restaurées par la couche RAID.
+
+
+
+== Corruption des données : écritures perdues
+
+L'un des types de corruption les plus difficiles à détecter est une écriture perdue ou mal placée. Lorsqu'une écriture est reconnue, elle doit être écrite sur le support à l'emplacement correct. La corruption des données sur place est relativement facile à détecter à l'aide d'une simple somme de contrôle stockée avec les données. Cependant, si l'écriture est simplement perdue, alors la version précédente des données peut toujours exister et le total de contrôle serait correct. Si l'écriture est placée au mauvais emplacement physique, la somme de contrôle associée sera à nouveau valide pour les données stockées, même si l'écriture a détruit d'autres données.
+
+La solution à ce défi est la suivante :
+
+* Une opération d'écriture doit inclure des métadonnées indiquant l'emplacement où l'écriture est attendue.
+* Une opération d'écriture doit inclure une sorte d'identifiant de version.
+
+
+Lorsque ONTAP écrit un bloc, il inclut les données à l'emplacement où ce bloc appartient. Si une lecture ultérieure identifie un bloc, mais que les métadonnées indiquent qu'il appartient à l'emplacement 123 lorsqu'il a été trouvé à l'emplacement 456, l'écriture a été déplacée.
+
+Il est plus difficile de détecter une écriture entièrement perdue. L'explication est très complexe, mais ONTAP stocke les métadonnées de façon à ce qu'une opération d'écriture entraîne des mises à jour vers deux emplacements différents sur les disques. En cas de perte d'une écriture, une lecture ultérieure des données et des métadonnées associées affiche deux identités de version différentes. Cela indique que l'écriture n'a pas été effectuée par le lecteur.
+
+La corruption des écritures perdues ou déplacées est extrêmement rare. Cependant, avec la croissance continue des disques et l'expansion des jeux de données en exaoctets, le risque augmente. La détection des pertes en écriture doit être incluse dans tout système de stockage prenant en charge les charges de travail de la base de données.
+
+
+
+== Panne de disque : RAID, RAID DP et RAID-TEC
+
+Si un bloc de données sur un disque est détecté comme étant corrompu, ou si l'ensemble du disque tombe en panne et est totalement indisponible, les données doivent être reconstituées. Cette opération est réalisée dans ONTAP à l'aide de disques de parité. Les données sont réparties sur plusieurs disques, puis des données de parité sont générées. Ces données sont stockées séparément des données d'origine.
+
+ONTAP utilisait à l'origine RAID 4, qui utilise un seul lecteur de parité pour chaque groupe de lecteurs de données. Le résultat a été qu'un disque du groupe pouvait tomber en panne sans entraîner de perte de données. En cas de panne du disque de parité, aucune donnée n'a été endommagée et un nouveau disque de parité a pu être construit. En cas de panne d'un seul lecteur de données, les lecteurs restants peuvent être utilisés avec le lecteur de parité pour régénérer les données manquantes.
+
+Lorsque les disques étaient petits, le risque statistique de défaillance simultanée de deux disques était négligeable. Avec l'augmentation des capacités des disques, la reconstruction des données suite à une panne disque s'est également accompagnée d'un temps considérable. Cela a augmenté la fenêtre au cours de laquelle une panne de second disque entraînerait la perte de données. De plus, le processus de reconstruction crée une grande quantité d'E/S supplémentaires sur les disques survivants. Au fur et à mesure du vieillissement des disques, le risque d'une charge supplémentaire entraînant une panne de second disque augmente également. Enfin, même si le risque de perte de données n'augmente pas avec l'utilisation continue de RAID 4, les conséquences de la perte de données deviendront plus graves. Plus la perte de données en cas de panne d'un groupe RAID est importante, plus la restauration des données est longue, ce qui entraîne une interruption de l'activité prolongée.
+
+Ces problèmes ont conduit NetApp à développer la technologie NetApp RAID DP, une variante de RAID 6. Cette solution comprend deux disques de parité, ce qui signifie que deux disques d'un groupe RAID peuvent tomber en panne sans générer de perte de données. Les disques ont continué de croître en taille, ce qui a conduit NetApp à développer la technologie NetApp RAID-TEC, qui introduit un troisième disque de parité.
+
+Certaines meilleures pratiques en matière de bases de données historiques recommandent l'utilisation de RAID-10, également appelée mise en miroir par bandes. Cela offre une protection des données inférieure à celle de RAID DP, car il existe plusieurs scénarios de défaillance de deux disques, alors que dans RAID DP, il n'en existe aucune.
+
+Par ailleurs, certaines bonnes pratiques en matière d'historique de bases de données indiquent que RAID-10 est préféré aux options RAID-4/5/6 en raison de problèmes de performances. Ces recommandations font parfois référence à une pénalité RAID. Bien que ces recommandations soient généralement correctes, elles ne s'appliquent pas aux implémentations de RAID dans ONTAP. Le problème de performances est lié à la régénération de parité. Dans les implémentations RAID traditionnelles, le traitement des écritures aléatoires de routine effectuées par une base de données nécessite plusieurs lectures de disque pour régénérer les données de parité et terminer l'écriture. La pénalité est définie comme les IOPS de lecture supplémentaires requises pour exécuter les opérations d'écriture.
+
+ONTAP n'engendre pas de pénalité RAID, car les écritures sont placées dans la mémoire où la parité est générée, puis écrites sur le disque sous la forme d'une seule bande RAID. Aucune lecture n'est requise pour terminer l'opération d'écriture.
+
+En résumé, par rapport à RAID 10, les systèmes RAID DP et RAID-TEC fournissent une capacité utilisable nettement plus importante, une meilleure protection contre les pannes disque et sans sacrifier les performances.
+
+
+
+== Protection contre les pannes matérielles : NVRAM
+
+Toute baie de stockage servant de charge de travail de base de données doit traiter les opérations d'écriture le plus rapidement possible. En outre, une opération d'écriture doit être protégée contre la perte d'un événement inattendu tel qu'une coupure de courant. Cela signifie que toute opération d'écriture doit être stockée en toute sécurité dans au moins deux emplacements.
+
+Les systèmes AFF et FAS utilisent la mémoire NVRAM pour répondre à ces exigences. Le processus d'écriture fonctionne comme suit :
+
+. Les données d'écriture entrantes sont stockées dans la mémoire RAM.
+. Les modifications à apporter aux données du disque sont journalisées dans la mémoire NVRAM sur le nœud local et le nœud partenaire. La mémoire NVRAM n'est pas un cache d'écriture. Il s'agit plutôt d'un journal similaire à un redo log de base de données. Dans des conditions normales, il n'est pas lu. Il est utilisé uniquement pour la restauration, par exemple après une coupure de courant pendant le traitement des E/S.
+. L'écriture est alors validée par l'hôte.
+
+
+À ce stade, le processus d'écriture est complet du point de vue de l'application. Les données sont protégées contre les pertes, car elles sont stockées dans deux emplacements différents. Finalement, les modifications sont écrites sur le disque, mais ce processus est hors bande du point de vue de l'application, car il se produit après l'acquittement de l'écriture et n'affecte donc pas la latence. Ce processus est une fois de plus similaire à la journalisation de la base de données. Une modification de la base de données est enregistrée dans les journaux de reprise aussi rapidement que possible, et la modification est alors reconnue comme validée. Les mises à jour des fichiers de données sont effectuées beaucoup plus tard et n'affectent pas directement la vitesse de traitement.
+
+En cas de panne de contrôleur, le contrôleur partenaire prend possession des disques requis et lit à nouveau les données consignées dans la mémoire NVRAM pour récupérer toutes les opérations d'E/S en cours de fonctionnement au moment de la défaillance.
+
+
+
+== Protection contre les défaillances matérielles : NVFAIL
+
+Comme nous l'avons vu précédemment, une écriture n'est pas validée tant qu'elle n'a pas été connectée à la NVRAM et à la NVRAM locales sur au moins un autre contrôleur. Cette approche évite toute panne matérielle ou de courant qui entraîne une perte des E/S à la volée En cas de panne de la mémoire NVRAM locale ou de la connectivité au partenaire de haute disponibilité, ces données à la volée ne seront plus mises en miroir.
+
+Si la mémoire NVRAM locale signale une erreur, le nœud s'arrête. Cet arrêt entraîne le basculement vers un contrôleur partenaire de haute disponibilité. Aucune donnée n'est perdue parce que le contrôleur qui connaît la défaillance n'a pas acquitté l'opération d'écriture.
+
+ONTAP n'autorise pas le basculement lorsque les données sont désynchronisées, sauf si le basculement est forcé. Le fait de forcer une modification des conditions de cette manière reconnaît que les données peuvent être laissées pour compte dans le contrôleur d'origine et que la perte de données est acceptable.
+
+Les bases de données sont particulièrement vulnérables à la corruption en cas de basculement forcé, car elles conservent de grands caches internes de données sur disque. En cas de basculement forcé, les modifications précédemment reconnues sont effectivement supprimées. Le contenu de la baie de stockage recule dans le temps et l'état du cache de la base de données ne reflète plus l'état des données sur le disque.
+
+Afin de protéger les données de cette situation, ONTAP permet de configurer les volumes pour une protection spéciale contre les défaillances de mémoire NVRAM. Lorsqu'il est déclenché, ce mécanisme de protection entraîne l'entrée d'un volume dans un état appelé NVFAIL. Cet état entraîne des erreurs d'E/S qui entraînent l'arrêt d'une application et n'utilisent donc pas de données obsolètes. Les données ne doivent pas être perdues car une écriture reconnue doit être présente sur la matrice de stockage.
+
+Les étapes suivantes habituelles sont qu'un administrateur arrête complètement les hôtes avant de remettre manuellement en ligne les LUN et les volumes. Bien que ces étapes puissent impliquer un certain travail, cette approche est le moyen le plus sûr d'assurer l'intégrité des données. Toutes les données n'ont pas besoin de cette protection. C'est pourquoi NVFAIL peut être configuré volume par volume.
+
+
+
+== Protection contre les pannes de site et de tiroir : SyncMirror et plexes
+
+SyncMirror est une technologie de mise en miroir qui améliore, mais ne remplace pas, RAID DP ou RAID-TEC. Il met en miroir le contenu de deux groupes RAID indépendants. La configuration logique est la suivante :
+
+* Les disques sont configurés en deux pools en fonction de leur emplacement. Un pool est composé de tous les disques du site A et le second est composé de tous les disques du site B.
+* Un pool de stockage commun, appelé agrégat, est ensuite créé à partir de jeux en miroir de groupes RAID. Un nombre égal de lecteurs est tiré de chaque site. Par exemple, un agrégat SyncMirror de 20 disques se compose de 10 disques du site A et de 10 disques du site B.
+* Chaque jeu de disques d'un site donné est automatiquement configuré comme un ou plusieurs groupes RAID-DP ou RAID-TEC entièrement redondants, indépendamment de l'utilisation de la mise en miroir. Les données sont ainsi protégées en permanence, même après la perte d'un site.
+
+
+image:syncmirror.png["Erreur : image graphique manquante"]
+
+La figure ci-dessus illustre un exemple de configuration SyncMirror. Un agrégat de 24 disques a été créé sur le contrôleur avec 12 disques à partir d'un tiroir alloué sur le site A et 12 disques à partir d'un tiroir alloué sur le site B. Les disques ont été regroupés en deux groupes RAID en miroir. Le groupe RAID 0 comprend un plex de 6 disques sur le site A mis en miroir sur un plex de 6 disques sur le site B. De même, RAID Group 1 inclut un plex de 6 disques sur le site A mis en miroir sur un plex de 6 disques sur le site B.
+
+SyncMirror est généralement utilisé pour assurer la mise en miroir à distance avec les systèmes MetroCluster, avec une copie des données sur chaque site. Il a parfois été utilisé pour fournir un niveau supplémentaire de redondance dans un seul système. Il assure en particulier la redondance au niveau du tiroir. Un tiroir disque contient déjà deux blocs d'alimentation et contrôleurs. Dans l'ensemble, il ne s'agit pas d'une simple tôlerie, mais dans certains cas, une protection supplémentaire peut être garantie. Par exemple, un client NetApp a déployé SyncMirror sur une plateforme mobile d'analytique en temps réel utilisée lors des tests automobiles. Le système a été séparé en deux racks physiques alimentés par des alimentations indépendantes provenant de systèmes UPS indépendants.
+
+==sommes de contrôle
+
+Le thème des checksums est particulièrement intéressant pour les administrateurs de bases de données habitués à l'utilisation de sauvegardes en continu Oracle RMAN qui migrent vers des sauvegardes basées sur des snapshots. RMAN permet notamment de procéder à des contrôles d'intégrité lors des opérations de sauvegarde. Bien que cette fonctionnalité présente un certain intérêt, son principal avantage est une base de données qui n'est pas utilisée sur une baie de stockage moderne. Lorsque des disques physiques sont utilisés pour une base de données Oracle, il est presque certain que la corruption finit par se produire lorsque les disques vieillissent, un problème qui est résolu par les checksums basés sur les baies dans les baies de stockage réelles.
+
+Avec une baie de stockage réelle, l'intégrité des données est protégée par des checksums à plusieurs niveaux. Si les données sont corrompues dans un réseau IP, la couche TCP (transmission Control Protocol) rejette les données de paquets et demande la retransmission. Le protocole FC inclut des checksums, tout comme les données SCSI encapsulées. Une fois sur la matrice, ONTAP dispose d'une protection RAID et checksum. Une corruption peut se produire, mais, comme dans la plupart des baies d'entreprise, elle est détectée et corrigée. En général, un disque entier tombe en panne, ce qui invite à une reconstruction RAID et l'intégrité de la base de données n'est pas affectée. Moins souvent, ONTAP détecte une erreur de somme de contrôle, ce qui signifie que les données du disque sont endommagées. Le disque est ensuite mis hors service et la reconstruction RAID démarre. Là encore, l'intégrité des données n'est pas affectée.
+
+L'architecture des fichiers de données et des redo log Oracle est également conçue pour offrir le plus haut niveau possible d'intégrité des données, même dans des circonstances extrêmes. Au niveau le plus élémentaire, les blocs Oracle incluent un checksum et des contrôles logiques de base avec presque toutes les E/S. Si Oracle ne s'est pas écrasé ou n'a pas mis un tablespace hors ligne, les données sont intactes. Le degré de vérification de l'intégrité des données est réglable et Oracle peut également être configuré pour confirmer les écritures. Par conséquent, la quasi-totalité des scénarios de panne et de panne peuvent être restaurés, et dans le cas extrêmement rare d'une situation irrécupérable, la corruption est rapidement détectée.
+
+La plupart des clients NetApp qui utilisent des bases de données Oracle cessent d'utiliser RMAN et d'autres produits de sauvegarde après la migration vers des sauvegardes snapshot. Il existe encore des options permettant d'utiliser RMAN pour effectuer une restauration au niveau des blocs avec SnapCenter. Toutefois, au quotidien, RMAN, NetBackup et d'autres produits ne sont utilisés qu'occasionnellement pour créer des copies d'archivage mensuelles ou trimestrielles.
+
+Certains clients choisissent d'exécuter `dbv` périodiquement pour effectuer des contrôles d'intégrité sur leurs bases de données existantes. NetApp déconseille cette pratique, car elle entraîne une charge d'E/S inutile. Comme indiqué ci-dessus, si la base de données ne rencontrait pas de problèmes auparavant, le risque de `dbv` La détection d'un problème est proche de zéro et cet utilitaire entraîne une charge d'E/S séquentielles très élevée sur le réseau et le système de stockage. À moins qu'il n'y ait de raison de croire qu'il existe une corruption, comme l'exposition à un bogue connu d'Oracle, il n'y a aucune raison de s'exécuter `dbv`.

@@ -1,0 +1,20 @@
+= Stratégies
+:allow-uri-read: 
+
+
+Ceci est courant avec les bases de données. Les bases de données qui contiennent des blocs inactifs sont également candidates au Tiering FabricPool. Par exemple, une base de données de gestion de la chaîne logistique peut contenir des informations historiques qui doivent être disponibles si nécessaire, mais qui ne sont pas accessibles pendant les opérations normales. FabricPool peut être utilisé pour déplacer de manière sélective les blocs inactifs.
+
+Par exemple, les fichiers de données s'exécutant sur un volume FabricPool avec un `tiering-minimum-cooling-days` la période de 90 jours permet de conserver les blocs auxquels le tier de performance accède au cours des 90 jours précédents. Toutefois, tout élément non utilisé pendant 90 jours est transféré vers le niveau de capacité. Dans d'autres cas, l'activité normale de l'application préserve les blocs corrects du niveau approprié. Par exemple, si une base de données est normalement utilisée pour traiter les 60 jours précédents de données sur une base régulière, c'est beaucoup moins `tiering-minimum-cooling-days` la période peut être définie car l'activité naturelle de l'application s'assure que les blocs ne sont pas déplacés prématurément.
+
+Le `auto` la politique doit être utilisée avec soin pour les bases de données. De nombreuses bases de données ont des activités périodiques, comme le processus de fin de trimestre ou les opérations de réindexation. Si la période de ces opérations est supérieure à `tiering-minimum-cooling-days` des problèmes de performances peuvent se produire. Par exemple, si le traitement de fin de trimestre nécessite 1 To de données qui n'étaient pas modifiées, ces données peuvent maintenant être présentes sur le niveau de capacité. Les lectures à partir du niveau de capacité sont souvent extrêmement rapides et ne provoquent pas de problèmes de performance, mais les résultats exacts dépendent de la configuration du magasin d'objets.
+
+
+
+== Stratégies
+
+Le `tiering-minimum-cooling-days` la règle doit être définie de manière suffisamment élevée pour conserver les fichiers qui peuvent être requis sur le niveau de performance. Par exemple, une base de données dans laquelle les 60 derniers jours de données peuvent être requis avec des performances optimales justifierait de définir le `tiering-minimum-cooling-days` période à 60 jours. Des résultats similaires pourraient également être obtenus en fonction des modèles d'accès aux fichiers. Par exemple, si les 90 derniers jours de données sont requis et que l'application accède à cette période de 90 jours, les données restent sur le Tier de performance. Réglage du `tiering-minimum-cooling-days` une période de 2 jours permettrait de hiérarchiser les données rapidement lorsque celles-ci deviennent moins actives.
+
+Le `auto` la règle est requise pour la hiérarchisation de ces blocs, car uniquement le système `auto` la règle affecte les blocs qui se trouvent dans le système de fichiers actif.
+
+
+NOTE: Tout type d'accès aux données réinitialise les données de la carte thermique. Par conséquent, les analyses de la table complète des bases de données, et même les opérations de sauvegarde qui lisent les fichiers source, empêchent le Tiering, car nécessaire `tiering-minimum-cooling-days` le seuil n'est jamais atteint.

@@ -1,0 +1,94 @@
+---
+sidebar: sidebar 
+permalink: oracle/dp/oracle-data-protection-slas.html 
+keywords: SLA, data protection, RPO, RTO 
+summary: SLA de protection des données Oracle 
+---
+= Objectif de délai de restauration, objectif de point de récupération et accords de niveau de service
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Une stratégie de protection des données doit être définie par les exigences de l'entreprise.
+
+Ces exigences comprennent des facteurs tels que la vitesse de restauration, la perte de données maximale autorisée et les besoins de conservation des sauvegardes. Le plan de protection des données doit également tenir compte de diverses exigences réglementaires en matière de conservation et de restauration des données. Enfin, différents scénarios de restauration des données doivent être pris en compte, allant de la restauration classique et prévisible résultant d'erreurs d'utilisateurs ou d'applications à des scénarios de reprise sur incident incluant la perte complète d'un site.
+
+Les modifications mineures apportées aux règles de protection et de restauration des données peuvent avoir un impact significatif sur l'architecture globale du stockage, de la sauvegarde et de la restauration. Il est essentiel de définir et de documenter des normes avant de commencer le travail de conception afin d'éviter de compliquer une architecture de protection des données. Des fonctions ou des niveaux de protection inutiles entraînent des coûts et des frais de gestion inutiles. Par ailleurs, une exigence initialement négligée peut conduire un projet dans la mauvaise direction ou nécessiter des modifications de conception de dernière minute.
+
+
+
+== Objectif de délai de restauration
+
+L'objectif de délai de restauration (RTO) définit le temps maximal autorisé pour la restauration d'un service. Par exemple, une base de données de ressources humaines peut atteindre un objectif de délai de restauration de 24 heures. En effet, même s'il ne serait pas très pratique de perdre l'accès à ces données pendant les jours de travail, l'entreprise peut tout de même fonctionner. En revanche, une base de données prenant en charge le grand livre d'une banque aurait un RTO mesuré en minutes, voire en secondes. Un objectif RTO de zéro n'est pas possible, car il doit y avoir un moyen de faire la différence entre une panne de service réelle et un événement de routine tel qu'un paquet réseau perdu. Toutefois, un objectif RTO quasi nul est généralement requis.
+
+
+
+== Objectif de point de récupération
+
+L'objectif de point de récupération (RPO) définit la perte de données maximale tolérable. Dans de nombreux cas, l'objectif de point de récupération est uniquement déterminé par la fréquence des copies Snapshot ou des mises à jour snapmirror.
+
+Dans certains cas, le RPO peut être rendu plus agressif, car il permet de protéger certaines données de manière sélective plus fréquemment. Dans un contexte de base de données, le RPO correspond généralement à la quantité de données perdues dans un journal spécifique. Dans un scénario de restauration typique dans lequel une base de données est endommagée en raison d'un bogue de produit ou d'une erreur utilisateur, le RPO doit être égal à zéro, ce qui signifie qu'il ne doit pas y avoir de perte de données. La procédure de restauration implique la restauration d'une copie antérieure des fichiers de base de données, puis la relecture des fichiers journaux pour ramener l'état de la base de données au point dans le temps souhaité. Les fichiers journaux requis pour cette opération doivent déjà être en place à l'emplacement d'origine.
+
+Dans des scénarios inhabituels, les données des journaux peuvent être perdues. Par exemple, un accident ou un acte malveillant `rm -rf *` des fichiers de base de données peuvent entraîner la suppression de toutes les données. La seule option serait de restaurer des données à partir de sauvegardes, y compris des fichiers journaux, et certaines seraient inévitablement perdues. Dans un environnement de sauvegarde classique, la seule option permettant d'améliorer le RPO consiste à effectuer des sauvegardes répétées des données du journal. Cela a toutefois ses limites en raison du déplacement constant des données et de la difficulté à maintenir un système de sauvegarde en tant que service en continu. L'un des avantages des systèmes de stockage avancés est la capacité à protéger les données contre les dommages accidentels ou malveillants aux fichiers et à fournir ainsi un meilleur RPO sans déplacement des données.
+
+
+
+== Reprise après incident
+
+La reprise après incident comprend l'architecture INFORMATIQUE, les règles et les procédures requises pour restaurer un service en cas d'incident physique. Cela peut inclure les inondations, les incendies ou les personnes agissant avec une intention malveillante ou négligente.
+
+La reprise sur incident est bien plus qu'un ensemble de procédures de restauration. Il s'agit du processus complet d'identification des différents risques, de définition des exigences en matière de restauration des données et de continuité des services, et de mise à disposition de l'architecture appropriée avec les procédures associées.
+
+Lors de l'établissement des exigences de protection des données, il est essentiel de faire la différence entre les objectifs RPO et RTO types et les exigences RPO et RTO requises pour la reprise après incident. Pour les situations de perte de données, allant d'une erreur utilisateur relativement normale à un incendie qui détruit un data Center, certains environnements applicatifs nécessitent un RPO nul et un RTO quasi nul. Cependant, il y a des conséquences administratives et des coûts pour ces niveaux élevés de protection.
+
+En général, les exigences de restauration des données non liées aux incidents doivent être strictes pour deux raisons. Tout d'abord, les bogues d'application et les erreurs d'utilisateur qui endommagent les données sont prévisibles au point qu'ils sont presque inévitables. Deuxièmement, il n'est pas difficile de concevoir une stratégie de sauvegarde capable de fournir un RPO nul et un RTO faible tant que le système de stockage n'est pas détruit. Il n'y a aucune raison de ne pas traiter un risque important facilement résolu. C'est pourquoi les objectifs RPO et RTO pour la reprise locale doivent être agressifs.
+
+Les exigences en termes de RTO et de RPO pour la reprise d'activité varient plus largement en fonction du risque d'incident et des conséquences de la perte de données ou de l'interruption pour une entreprise. Les exigences en matière de RPO et de RTO doivent être basées sur les besoins réels de l'entreprise et non sur des principes généraux. Ils doivent prendre en compte plusieurs scénarios de catastrophe physique et logique.
+
+
+
+=== Incidents logiques
+
+Les incidents logiques incluent la corruption des données provoquée par les utilisateurs, les bogues des applications ou du système d'exploitation et les dysfonctionnements logiciels. Les incidents logiques peuvent également inclure des attaques malveillantes de tiers contenant des virus ou des vers, ou encore en exploitant les vulnérabilités des applications. Dans ces cas, l'infrastructure physique n'est pas endommagée, mais les données sous-jacentes ne sont plus valides.
+
+Les ransomwares sont un type de catastrophe logique de plus en plus courant qui sert à chiffrer les données à l'aide d'un vecteur d'attaque. Le chiffrement n'endommage pas les données, mais il les rend indisponibles jusqu'à ce que le paiement soit effectué à un tiers. De plus en plus d'entreprises sont spécifiquement la cible de piratage. Face à cette menace, NetApp propose des snapshots inviolables où même l'administrateur du stockage ne peut pas modifier les données protégées avant la date d'expiration configurée.
+
+
+
+=== Incidents physiques
+
+Les incidents physiques incluent la défaillance de composants d'une infrastructure qui dépasse ses capacités de redondance et entraînent une perte de données ou une perte de service prolongée. Par exemple, la protection RAID assure la redondance des disques durs et l'utilisation de HBA assure la redondance des ports FC et des câbles FC. Les pannes matérielles de ces composants sont prévisibles et n'ont pas d'incidence sur la disponibilité.
+
+Dans un environnement d'entreprise, il est généralement possible de protéger l'infrastructure d'un site entier avec des composants redondants au point où le seul scénario de catastrophe physique prévisible est la perte complète du site. La planification de la reprise d'activité dépend alors de la réplication de site à site.
+
+
+
+=== Protection des données synchrone et asynchrone
+
+Dans l'idéal, toutes les données seraient répliquées de manière synchrone sur des sites dispersés géographiquement. Une telle réplication n'est pas toujours possible, voire possible pour plusieurs raisons :
+
+* La réplication synchrone entraîne inévitablement une augmentation de la latence d'écriture, car toutes les modifications doivent être répliquées vers les deux emplacements avant que l'application/la base de données ne puisse poursuivre le traitement. L'effet de performance qui en résulte est parfois inacceptable, excluant l'utilisation de la mise en miroir synchrone.
+* En raison de l'adoption accrue de 100 % de stockage SSD, il est plus probable que l'on remarque une latence d'écriture supplémentaire, car les attentes en termes de performances comprennent des centaines de milliers d'IOPS et une latence inférieure à la milliseconde. Pour tirer pleinement parti de l'utilisation de 100 % des SSD, il peut être nécessaire de revoir la stratégie de reprise sur incident.
+* La croissance des datasets en octets continue, ce qui engendre des défis en garantissant une bande passante suffisante pour soutenir la réplication synchrone.
+* La croissance des datasets s'accompagne également de défis liés à la gestion de la réplication synchrone à grande échelle.
+* Les stratégies basées sur le cloud impliquent souvent des distances de réplication et une latence plus importantes, ce qui exclut davantage l'utilisation de la mise en miroir synchrone.
+
+
+NetApp propose des solutions qui incluent à la fois la réplication synchrone pour satisfaire les besoins les plus exigeants en matière de restauration des données et des solutions asynchrones qui assurent des performances et une flexibilité accrues. De plus, la technologie NetApp s'intègre en toute transparence à de nombreuses solutions de réplication tierces, telles qu'Oracle DataGuard
+
+
+
+== Durée de conservation
+
+Le dernier aspect d'une stratégie de protection des données est la durée de conservation des données, qui peut varier considérablement.
+
+* Il est généralement nécessaire d'effectuer 14 jours de sauvegardes nocturnes sur le site principal et 90 jours de sauvegardes sur un site secondaire.
+* De nombreux clients créent des archives trimestrielles autonomes stockées sur différents supports.
+* Une base de données constamment mise à jour n'a peut-être pas besoin de données historiques, et les sauvegardes ne doivent être conservées que pendant quelques jours.
+* Pour des raisons réglementaires, une capacité de restauration peut être nécessaire au point de toute transaction arbitraire dans une fenêtre de 365 jours.
+

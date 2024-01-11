@@ -1,0 +1,60 @@
+---
+section: vmware
+title: VMware
+entries:
+- title: VMware vSphere avec ONTAP
+  entries:
+  - title: Présentation
+    url: "/vmware/vsphere/overview.html"
+  - title: Le stockage unifié
+    url: "/vmware/vsphere/unified.html"
+  - title: Outils de virtualisation
+    url: "/vmware/vsphere/vtools.html"
+  - title: Gestion basée sur des règles de stockage et des volumes virtuels
+    url: "/vmware/vsphere/vvols_and_spbm.html"
+  - title: Datastores et protocoles
+    url: "/vmware/vsphere/datastores.html"
+  - title: Configuration du réseau
+    url: "/vmware/vsphere/network.html"
+  - title: Clonage
+    url: "/vmware/vsphere/cloning.html"
+  - title: Protection des données
+    url: "/vmware/vsphere/dp.html"
+  - title: La QoS
+    url: "/vmware/vsphere/qos.html"
+  - title: Gestion basée sur des règles de stockage
+    url: "/vmware/vsphere/policy-and-vvols.html"
+  - title: Planificateur de ressources distribué de stockage VMware
+    url: "/vmware/vsphere/sdrs.html"
+  - title: Paramètres recommandés
+    url: "/vmware/vsphere/settings.html"
+- title: Volumes virtuels (vVols) avec ONTAP
+  entries:
+  - title: Présentation
+    url: "/vmware/vvols/overview.html"
+  - title: Utilisation de vVols avec ONTAP
+    url: "/vmware/vvols/ontap.html"
+  - title: Déploiement du stockage vVols
+    url: "/vmware/vvols/deploy.html"
+  - title: Protection des vVols
+    url: "/vmware/vvols/protect.html"
+  - title: Dépannage
+    url: "/vmware/vvols/resources.html"
+- title: VMware site Recovery Manager et ONTAP
+  entries:
+  - title: Présentation
+    url: "/vmware/srm/overview.html"
+  - title: Bonnes pratiques de déploiement
+    url: "/vmware/srm/deployment_best_practices.html"
+  - title: Meilleures pratiques opérationnelles
+    url: "/vmware/srm/operational_best_practices.html"
+  - title: Topologies de réplication
+    url: "/vmware/srm/replication_topologies.html"
+  - title: Dépannage de SRM lors de l'utilisation de la réplication de vvols
+    url: "/vmware/srm/appendix_a__troubleshooting_srm_when_using_vvols_replication.html"
+- title: Sécurité des produits
+  entries:
+  - title: Les outils ONTAP pour VMware vSphere
+    url: "/vmware/security/tools.html"
+  - title: Plug-in SnapCenter pour VMware vSphere
+    url: "/vmware/security/snapcenter.html"

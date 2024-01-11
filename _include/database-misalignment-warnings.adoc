@@ -1,0 +1,9 @@
+= 
+:allow-uri-read: 
+
+
+La journalisation des opérations de reprise et des transactions de la base de données génère normalement des E/S non alignées qui peuvent entraîner des avertissements erronés concernant les LUN mal alignées sur ONTAP.
+
+La journalisation effectue une écriture séquentielle du fichier journal avec des écritures de taille variable. Une opération d'écriture de journal qui ne s'aligne pas sur les limites de 4 Ko ne provoque généralement pas de problèmes de performances, car l'opération d'écriture de journal suivante termine le bloc. ONTAP est ainsi en mesure de traiter la quasi-totalité des écritures sous forme de blocs complets de 4 Ko, même si les données de blocs de 4 Ko ont été écrites dans deux opérations distinctes.
+
+Vérifiez l'alignement à l'aide d'utilitaires tels que `sio` ou `dd` Qui peuvent générer des E/S à une taille de bloc définie. Les statistiques d'alignement des E/S sur le système de stockage peuvent être affichées à l'aide du `stats` commande. Voir link:../notes/wafl_alignment_verification.html["Vérification de l'alignement WAFL"] pour en savoir plus.

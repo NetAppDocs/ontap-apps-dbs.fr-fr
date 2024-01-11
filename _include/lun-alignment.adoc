@@ -1,0 +1,9 @@
+= 
+:allow-uri-read: 
+
+
+Sur un système ONTAP, le stockage est organisé en unités de 4 Ko. Un bloc de 8 Ko de base de données ou de système de fichiers doit être mappé à exactement deux blocs de 4 Ko. Si une erreur de configuration de LUN déplace l'alignement de 1 Ko dans les deux sens, chaque bloc de 8 Ko existerait sur trois blocs de stockage de 4 Ko différents au lieu de deux. Cette configuration entraîne une augmentation de la latence et des E/S supplémentaires au sein du système de stockage.
+
+L'alignement affecte également les architectures LVM. Si un volume physique au sein d'un groupe de volumes logiques est défini sur l'unité entière (aucune partition n'est créée), le premier bloc de 4 Ko de la LUN s'aligne sur le premier bloc de 4 Ko du système de stockage. Il s'agit d'un alignement correct. Des problèmes surviennent avec les partitions car elles déplacent l'emplacement de départ où le système d'exploitation utilise le LUN. Tant que le décalage est décalé en unités entières de 4 Ko, la LUN est alignée.
+
+Dans les environnements Linux, créez des groupes de volumes logiques sur l'ensemble de l'unité de disque. Lorsqu'une partition est requise, vérifiez l'alignement en exécutant `fdisk –u` et vérifier que le début de chaque partition est un multiple de huit. Cela signifie que la partition démarre à un multiple de huit secteurs de 512 octets, soit 4 Ko.

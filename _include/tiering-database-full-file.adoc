@@ -1,0 +1,16 @@
+= Stratégies
+:allow-uri-read: 
+
+
+De nombreux jeux de données d'applications sont organisés par date, et ces données sont généralement moins susceptibles d'être accessibles au fur et à mesure du vieillissement. Par exemple, une banque peut disposer d'un référentiel de fichiers PDF contenant cinq années de relevés clients, mais seuls les derniers mois sont actifs. FabricPool peut être utilisé pour déplacer d'anciens fichiers de données vers le Tier de capacité. Une période de refroidissement de 14 jours permettrait de conserver les fichiers PDF de 14 jours les plus récents sur le niveau de performance. En outre, les fichiers lus au moins tous les 14 jours resteraient fortement sollicités et resteraient donc sur le Tier de performance.
+
+
+
+== Stratégies
+
+Pour mettre en œuvre une approche de hiérarchisation basée sur des fichiers, vous devez avoir des fichiers écrits et non modifiés par la suite. Le `tiering-minimum-cooling-days` la règle doit être définie suffisamment haut pour que les fichiers dont vous avez besoin restent sur le tier de performance. Par exemple, un jeu de données pour lequel les 60 derniers jours de données sont requis avec des performances optimales garantit le paramétrage du `tiering-minimum-cooling-days` période jusqu'en 60. Des résultats similaires peuvent également être obtenus en fonction des modèles d'accès aux fichiers. Par exemple, si les 90 derniers jours de données sont requis et que l'application accède à cette période de 90 jours, les données restent sur le Tier de performance. En réglant le `tiering-minimum-cooling-days` sur 2, le tiering s'affiche rapidement une fois les données moins actives.
+
+Le `auto` la règle est requise pour la hiérarchisation de ces blocs, car uniquement le système `auto` la règle affecte les blocs qui se trouvent dans le système de fichiers actif.
+
+
+NOTE: Tout type d'accès aux données réinitialise les données de la carte thermique. L'analyse antivirus, l'indexation et même l'activité de sauvegarde qui lit les fichiers source empêchent le Tiering, car les besoins sont importants `tiering-minimum-cooling-days` le seuil n'est jamais atteint.

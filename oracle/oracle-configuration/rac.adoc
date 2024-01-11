@@ -1,0 +1,59 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-configuration/rac.html 
+keywords: oracle, database, ontap, rac, disktimeout, misscount 
+summary: Paramètres Oracle RAC avec stockage en réseau 
+---
+= Oracle Real application clusters (RAC)
+:allow-uri-read: 
+
+
+[role="lead"]
+Oracle RAC est un produit clusterware qui comporte plusieurs types de processus de pulsation internes qui contrôlent l'intégrité du cluster.
+
+
+NOTE: Les informations dans le link:#misscount["misscount"] La section contient des informations essentielles pour les environnements RAC Oracle utilisant un stockage en réseau. Dans la plupart des cas, les paramètres RAC Oracle par défaut devront être modifiés pour garantir que le cluster RAC résiste aux modifications de chemin réseau et aux opérations de basculement/basculement du stockage.
+
+
+
+== disktimeout
+
+Le paramètre RAC principal lié au stockage est `disktimeout`. Ce paramètre contrôle le seuil au sein duquel les E/S du fichier de vote doivent être terminées. Si le `disktimeout` Le paramètre est dépassé, puis le nœud RAC est supprimé du cluster. La valeur par défaut de ce paramètre est 200. Cette valeur doit être suffisante pour les procédures standard de Takeover et and Giveback du stockage.
+
+NetApp recommande fortement de tester soigneusement les configurations RAC avant de les mettre en production, car de nombreux facteurs affectent un basculement ou un rétablissement. Outre le temps nécessaire au basculement du stockage, la propagation des modifications du protocole LACP (Link Aggregation Control Protocol) nécessite également du temps supplémentaire. En outre, le logiciel de chemins d'accès multiples SAN doit détecter un délai d'expiration d'E/S et réessayer sur un autre chemin. Si une base de données est extrêmement active, une grande quantité d'E/S doit être mise en file d'attente et relancée avant le traitement des E/S du disque de vote.
+
+En l'absence d'un basculement ou d'un retour de stockage réel, l'effet peut être simulé à l'aide de tests de câble Pull sur le serveur de base de données.
+
+[TIP]
+====
+*NetApp recommande* ce qui suit :
+
+* En quittant le `disktimeout` paramètre à la valeur par défaut de 200.
+* Testez toujours soigneusement une configuration RAC.
+
+
+====
+
+
+== misscount
+
+Le `misscount` Le paramètre affecte normalement uniquement la pulsation réseau entre les nœuds RAC. La valeur par défaut est 30 secondes. Si les binaires de la grille se trouvent sur une matrice de stockage ou si le disque d'amorçage du système d'exploitation n'est pas local, ce paramètre peut devenir important. Cela inclut les hôtes avec des lecteurs de démarrage situés sur un SAN FC, les systèmes d'exploitation démarrés par NFS et les lecteurs de démarrage situés sur les datastores de virtualisation, tels qu'un fichier VMDK.
+
+Si l'accès à un disque de démarrage est interrompu par un basculement ou un rétablissement du stockage, il est possible que l'emplacement binaire de la grille ou l'ensemble du système d'exploitation soit temporairement bloqué. Le temps nécessaire à ONTAP pour terminer l'opération de stockage et au système d'exploitation pour changer les chemins et reprendre les E/S peut être supérieur à `misscount` seuil. Par conséquent, un nœud est immédiatement supprimé une fois la connectivité à la LUN de démarrage ou aux binaires de la grille restaurée. Dans la plupart des cas, l'exclusion et le redémarrage qui s'ensuit se produisent sans message de journalisation indiquant la raison du redémarrage. Toutes les configurations ne sont pas affectées. Testez donc tout hôte de démarrage SAN, de démarrage NFS ou basé sur un datastore dans un environnement RAC afin que RAC reste stable si la communication avec le lecteur de démarrage est interrompue.
+
+Dans le cas de lecteurs de démarrage non locaux ou d'un système de fichiers non local hébergeant `grid` binaires, le `misscount` devra être modifié pour correspondre `disktimeout`. Si ce paramètre est modifié, effectuez des tests supplémentaires pour identifier également les effets sur le comportement du RAC, tels que le temps de basculement du nœud.
+
+[TIP]
+====
+*NetApp recommande* ce qui suit :
+
+* Quittez le `misscount` paramètre à la valeur par défaut de 30, sauf si l'une des conditions suivantes s'applique :
++
+** `grid` Les fichiers binaires sont situés sur un disque connecté au réseau, y compris les disques basés sur NFS, iSCSI, FC et les datastores.
+** Le système d'exploitation est démarré sur un SAN.
+
+
+* Dans de tels cas, évaluez l'effet des interruptions de réseau qui affectent l'accès au système d'exploitation ou `GRID_HOME` systèmes de fichiers. Dans certains cas, de telles interruptions provoquent le blocage des démons RAC Oracle, ce qui peut conduire à un `misscount`délai d'expiration et suppression basés sur. Le délai par défaut est de 27 secondes, soit la valeur de `misscount` moins `reboottime`. Dans de tels cas, augmenter `misscount` à 200 pour correspondre `disktimeout`.
+
+
+====

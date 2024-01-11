@@ -1,0 +1,41 @@
+= Valeur par défaut
+:allow-uri-read: 
+
+
+
+
+== Valeur par défaut
+
+Tous les volumes FabricPool sont initialement définis sur `default`, ce qui signifie que le comportement est contrôlé par la `cloud-retrieval-policy. `le comportement exact dépend de la règle de hiérarchisation utilisée.
+
+* `auto`– ne récupérer que les données lues de façon aléatoire
+* `snapshot-only`– récupérer toutes les données lues de manière séquentielle ou aléatoire
+* `none`– récupérer toutes les données lues de manière séquentielle ou aléatoire
+* `all`– ne récupérez pas les données du niveau de capacité
+
+
+
+
+== En lecture
+
+Réglage `cloud-retrieval-policy` la lecture remplace le comportement par défaut, de sorte qu'une lecture de toutes les données hiérarchisées entraîne le renvoi de ces données vers le niveau de performance.
+
+Par exemple, un volume peut avoir été légèrement utilisé pendant une longue période sous le `auto` la règle de tiering et la plupart des blocs sont désormais hiérarchisés.
+
+Si une modification inattendue des besoins de l'entreprise nécessitait l'analyse répétée de certaines données pour préparer un rapport spécifique, il peut être souhaitable de modifier le `cloud-retrieval-policy` à `on-read` pour garantir que toutes les données lues sont renvoyées au niveau de performances, y compris les données lues de manière séquentielle et aléatoire. Cela améliorerait les performances des E/S séquentielles par rapport au volume.
+
+
+
+== Promouvoir
+
+Le comportement de la règle de promotion dépend de la règle de hiérarchisation. Si la règle de hiérarchisation est `auto`, puis réglage du `cloud-retrieval-policy `to `promote` ramène tous les blocs du tier de capacité à l'analyse de tiering suivante.
+
+Si la règle de hiérarchisation est `snapshot-only`, les seuls blocs renvoyés sont les blocs associés au système de fichiers actif. Normalement, cela n'aurait aucun effet car les seuls blocs placés sous le sont `snapshot-only` la règle serait les blocs associés exclusivement aux snapshots. Il n'y aurait pas de blocs hiérarchisés dans le système de fichiers actif.
+
+Toutefois, si une SnapRestore de volume ou une opération de clonage de fichiers a été effectuée pour restaurer les données d'un volume à partir d'un snapshot, le système de fichiers actif peut désormais avoir besoin de certains blocs qui ont été hiérarchisés, car ils n'étaient associés qu'à des snapshots. Il peut être souhaitable de modifier temporairement le `cloud-retrieval-policy` règle à `promote` pour récupérer rapidement tous les blocs localement requis.
+
+
+
+== Jamais
+
+Ne récupérez pas les blocs du niveau de capacité.

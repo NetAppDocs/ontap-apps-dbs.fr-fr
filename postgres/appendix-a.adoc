@@ -1,0 +1,23 @@
+---
+sidebar: sidebar 
+permalink: postgres/appendix-a.html 
+keywords: PostgreSQL,database,postgres 
+summary: Bases de données PostgreSQL sur ONTAP 
+---
+= Annexe A : configuration de l'hôte
+:allow-uri-read: 
+
+
+[role="lead"]
+Contenu de l'annexe :
+
+* Vérifiez que les adaptateurs de bus hôte (HBA) FC de l'hôte ESX fonctionnent avec les pilotes, le micrologiciel et la version correcte du BIOS.
+* Installez les utilitaires d'hôtes NetApp sur l'hôte pour afficher les chemins directs et indirects d'une LUN donnée. Le kit fournit également des informations détaillées sur le SVM LUN.
+* Utilisez toujours un script de nouvelle analyse de bus SCSI sur l'hôte pour :
+* Rechercher de nouvelles LUN
+* Mettez les LUN obsolètes au rebut
+* Mettez à jour les nouveaux chemins vers les LUN
+* Pour établir plusieurs voies vers le stockage en cas de défaillance du chemin, installez et configurez le logiciel de chemins d'accès multiples sur le système d'exploitation hôte.
+* Si vous n'utilisez pas de logiciel de chemins d'accès multiples, vous devez limiter chaque LUN à un chemin unique.
+* Le noyau Linux permet un contrôle de bas niveau sur la planification des E/S pour bloquer les périphériques. Les valeurs par défaut dans les versions Linux peuvent varier considérablement. De manière générale, les clients NetApp et les tests internes montrent de meilleurs résultats avec le planificateur NoOps pour les bases de données. Vous devez réaliser des bancs d'essai pour déterminer quels planificateurs d'E/S sont les mieux adaptés à votre cas d'utilisation.
+
