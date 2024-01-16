@@ -10,7 +10,7 @@ summary: Bases de données Oracle et locations et verrouillages NFS
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

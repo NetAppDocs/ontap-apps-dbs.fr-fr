@@ -23,6 +23,8 @@ Si les fichiers de données sont encapsulés dans des volumes dédiés, la quest
 
 La disposition la plus simple est illustrée dans la figure suivante.
 
+image:2-volume.png["Erreur : image graphique manquante"]
+
 C'est l'approche la plus courante. Du point de vue de l'administrateur de bases de données, il peut sembler inhabituel de colocaliser toutes les copies des journaux de reprise et d'archivage sur le même volume. Toutefois, la séparation n'offre pas une protection supplémentaire importante si les fichiers et les LUN se trouvent toujours sur le même jeu de disques sous-jacent.
 
 
@@ -30,6 +32,8 @@ C'est l'approche la plus courante. Du point de vue de l'administrateur de bases 
 == Disposition à trois volumes
 
 Il peut arriver qu'une séparation des journaux de reprise soit nécessaire en raison de problèmes de protection des données ou de la nécessité de distribuer les E/S des journaux de reprise entre les contrôleurs. Si c'est le cas, la disposition à trois volumes décrite dans la figure ci-dessous est utilisée pour la réplication, tout en évitant toute nécessité d'effectuer une restauration incomplète ou de s'appuyer sur des fichiers de contrôle de sauvegarde.
+
+image:3-volume.png["Erreur : image graphique manquante"]
 
 Cela permet d'entrelacer les journaux de reprise et les fichiers de contrôle sur des ensembles indépendants de piles de disques et de contrôleurs de la source. Toutefois, les journaux d'archivage et un ensemble de fichiers de contrôle et de fichiers de reprise peuvent toujours être répliqués dans un état synchronisé avec les journaux d'archivage.
 

@@ -10,11 +10,14 @@ summary: 'SnapCenter vous permet de créer des règles de sauvegarde qui peuvent
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
+:firstname: [.lead]
+:author: [.lead]
+:authorinitials: [
+:authors: [.lead]
+:revnumber: 
+:revdate: or entire SVMs.
 
-
-[role="lead"]
-Les systèmes qui exécutent le logiciel ONTAP peuvent utiliser la fonctionnalité de QoS du stockage de ONTAP pour limiter le débit en Mbit/s et/ou E/S par seconde (IOPS) pour différents objets de stockage tels que des fichiers, des LUN, des volumes, ou des SVM entiers.
 
 Les limites de débit sont utiles pour contrôler les charges de travail inconnues ou de test avant le déploiement afin de s'assurer qu'elles n'affectent pas les autres charges de travail. Elles peuvent également être utilisées pour contraindre une charge de travail dominante après son identification. Des niveaux minimaux de service basés sur des IOPS sont également pris en charge pour assurer des performances prévisibles pour les objets SAN d'ONTAP 9.2 et pour les objets NAS d'ONTAP 9.3.
 

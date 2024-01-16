@@ -10,7 +10,7 @@ summary: Outils de sauvegarde Oracle et NetApp
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

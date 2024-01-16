@@ -11,7 +11,7 @@ summary: Structure de fichier MySQL
 [role="lead"]
 InnoDB agit comme la couche intermédiaire entre le stockage et le serveur MySQL, il stocke les données sur les lecteurs.
 
-image:./media/file-structure1.png["Erreur : image graphique introuvable"]
+image:mysql-file-structure1.png["Erreur : image graphique introuvable"]
 
 Les E/S MySQL sont classées en deux types :
 
@@ -19,7 +19,7 @@ Les E/S MySQL sont classées en deux types :
 * E/S séquentielles de fichiers
 
 
-image:./media/file-structure2.png["Erreur : image graphique introuvable"]
+image:mysql-file-structure2.png["Erreur : image graphique introuvable"]
 
 Les fichiers de données sont lus et écrasés de manière aléatoire, ce qui entraîne un nombre élevé d'IOPS. Un stockage SSD est donc recommandé.
 

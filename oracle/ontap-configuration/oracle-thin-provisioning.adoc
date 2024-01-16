@@ -10,7 +10,7 @@ summary: Provisionnement fin Oracle et ONTAP
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

@@ -10,12 +10,13 @@ summary: 'Si possible, utilisez toujours les outils ONTAP pour provisionner les 
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
+:firstname: [.lead]
+:author: [.lead]
+:authorinitials: [
+:authors: [.lead]
+:revdate: == Datastores and protocols
 
-
-
-
-== Datastores et protocoles
 
 Si possible, utilisez toujours les outils ONTAP pour provisionner les datastores et les volumes. Cela vérifie que les volumes, les chemins de jonction, les LUN, les igroups, les règles d'exportation, et d'autres paramètres sont configurés de manière compatible.
 

@@ -10,7 +10,7 @@ summary: Bases de données de mise en cache des attributs NFS
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

@@ -10,7 +10,7 @@ summary: 'Accès à la base de données pendant les interruptions d"accès au ma
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

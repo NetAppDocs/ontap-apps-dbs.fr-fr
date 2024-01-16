@@ -10,7 +10,7 @@ summary: 'SnapCenter vous permet de créer des règles de sauvegarde qui peuvent
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

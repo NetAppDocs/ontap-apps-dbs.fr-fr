@@ -10,7 +10,7 @@ summary: 'Le flux de travail de SRM est significativement différent lors de l"u
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

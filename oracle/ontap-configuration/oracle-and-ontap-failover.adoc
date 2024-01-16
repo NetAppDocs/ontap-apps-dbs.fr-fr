@@ -10,7 +10,7 @@ summary: 'Il est nécessaire de bien comprendre les fonctions de basculement et 
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

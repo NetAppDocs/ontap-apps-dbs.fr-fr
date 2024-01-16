@@ -10,7 +10,7 @@ summary: Configuration réseau FC pour les bases de données Oracle
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

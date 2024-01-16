@@ -6,6 +6,7 @@ summary: Microsoft SQL Server sur ONTAP
 ---
 = Fichiers de base de données et groupes de fichiers Microsoft SQL Server
 :allow-uri-read: 
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -19,7 +20,7 @@ Chaque base de données possède un fichier de données primaire, qui, par défa
 
 Tous les fichiers de base de données sont regroupés en groupes de fichiers. Un groupe de fichiers est l'unité logique, qui simplifie l'administration de la base de données. Ils permettent de séparer le placement d'objets logiques des fichiers de base de données physiques. Lorsque vous créez les tables d'objets de base de données, vous spécifiez dans quel groupe de fichiers elles doivent être placées sans vous soucier de la configuration du fichier de données sous-jacent.
 
-image:./media/filegroups.png["Erreur : image graphique manquante"]
+image:mssql-filegroups.png["Erreur : image graphique manquante"]
 
 La possibilité de placer plusieurs fichiers de données dans le groupe de fichiers vous permet de répartir la charge entre les différents périphériques de stockage, ce qui contribue à améliorer les performances d'E/S du système. En revanche, le journal de transactions ne bénéficie pas des multiples fichiers car SQL Server écrit dans le journal de transactions de manière séquentielle.
 
@@ -41,7 +42,7 @@ Un petit risque de sécurité est associé à l'initialisation instantanée des 
 
 Vous pouvez activer l'initialisation instantanée des fichiers en ajoutant l'autorisation sa_MANAGE_VOLUME_NAME, également appelée « effectuer une tâche de maintenance de volume » au compte de démarrage SQL Server. Vous pouvez le faire sous l'application de gestion des stratégies de sécurité locales (secpol.msc), comme indiqué dans la figure suivante. Ouvrez les propriétés de l'autorisation "effectuer une tâche de maintenance de volume" et ajoutez le compte de démarrage SQL Server à la liste des utilisateurs.
 
-image:./media/security-policy.png["Erreur : image graphique manquante"]
+image:mssql-security-policy.png["Erreur : image graphique manquante"]
 
 Pour vérifier si l'autorisation est activée, vous pouvez utiliser le code de l'exemple suivant. Ce code définit deux indicateurs de suivi qui forcent SQL Server à écrire des informations supplémentaires dans le journal d'erreurs, à créer une petite base de données et à lire le contenu du journal.
 
@@ -68,10 +69,10 @@ GO
 ....
 Lorsque l'initialisation instantanée des fichiers n'est pas activée, le journal d'erreurs SQL Server indique que SQL Server met à zéro le fichier de données mdf en plus de mettre à zéro le fichier journal ldf, comme indiqué dans l'exemple suivant. Lorsque l'initialisation instantanée des fichiers est activée, elle affiche uniquement la remise à zéro du fichier journal.
 
-image:./media/zeroing.png["Erreur : image graphique manquante"]
+image:mssql-zeroing.png["Erreur : image graphique manquante"]
 
 La tâche de maintenance du volume Perform est simplifiée dans SQL Server 2016 et est fournie ultérieurement en option lors du processus d'installation. Cette figure affiche l'option permettant d'accorder au service du moteur de base de données SQL Server le privilège d'effectuer la tâche de maintenance du volume.
 
-image:./media/maintenance.png["Erreur : image graphique manquante"]
+image:mssql-maintenance.png["Erreur : image graphique manquante"]
 
 Une autre option de base de données importante qui contrôle la taille des fichiers de base de données est la fonction de transmission automatique. Lorsque cette option est activée, SQL Server réduit régulièrement les fichiers de base de données, réduit leur taille et libère de l'espace dans le système d'exploitation. Cette opération consomme beaucoup de ressources et est rarement utile car les fichiers de base de données augmentent à nouveau après l'arrivée de nouvelles données dans le système. Autohrink ne doit jamais être activé sur la base de données.

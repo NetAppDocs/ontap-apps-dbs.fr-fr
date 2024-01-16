@@ -10,7 +10,7 @@ summary: Pour en savoir plus sur les informations données dans ce livre blanc, 
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

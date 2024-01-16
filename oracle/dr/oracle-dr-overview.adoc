@@ -10,7 +10,7 @@ summary: Reprise après incident Oracle avec ONTAP
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

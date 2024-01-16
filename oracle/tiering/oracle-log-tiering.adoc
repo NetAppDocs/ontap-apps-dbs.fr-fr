@@ -9,7 +9,7 @@ summary: 'Tiering des journaux d"archivage Oracle'
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

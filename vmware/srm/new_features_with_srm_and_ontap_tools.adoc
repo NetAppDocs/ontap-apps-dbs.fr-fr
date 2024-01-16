@@ -10,7 +10,7 @@ summary: 'Avec la transition de l"appliance virtuelle existante, les outils ONTA
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

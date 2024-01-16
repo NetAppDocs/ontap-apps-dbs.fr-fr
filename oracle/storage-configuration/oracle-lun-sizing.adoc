@@ -10,7 +10,7 @@ summary: Instructions relatives au dimensionnement des LUN de la base de donnée
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

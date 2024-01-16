@@ -10,7 +10,7 @@ summary: Alignement des LUN avec les bases de données Oracle
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]
@@ -22,7 +22,7 @@ L'alignement affecte également les architectures LVM. Si un volume physique au 
 
 Dans les environnements Linux, créez des groupes de volumes logiques sur l'ensemble de l'unité de disque. Lorsqu'une partition est requise, vérifiez l'alignement en exécutant `fdisk –u` et vérifier que le début de chaque partition est un multiple de huit. Cela signifie que la partition démarre à un multiple de huit secteurs de 512 octets, soit 4 Ko.
 
-Voir également la discussion sur l'alignement des blocs de compression dans la section link:/oracle/ontap-configuration/oracle-efficiency.html["Efficacité"]. Toute disposition alignée avec les limites des blocs de compression de 8 Ko est également alignée avec les limites de 4 Ko.
+Voir également la discussion sur l'alignement des blocs de compression dans la section link:../ontap-configuration/oracle-efficiency.html["Efficacité"]. Toute disposition alignée avec les limites des blocs de compression de 8 Ko est également alignée avec les limites de 4 Ko.
 
 
 

@@ -10,7 +10,7 @@ summary: 'Cette page décrit les meilleures pratiques relatives à l"implémenta
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 

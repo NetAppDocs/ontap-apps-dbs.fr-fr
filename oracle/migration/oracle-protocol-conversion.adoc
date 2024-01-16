@@ -10,7 +10,7 @@ summary: Modification du protocole SAN après migration FLI
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

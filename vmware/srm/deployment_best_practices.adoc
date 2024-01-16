@@ -10,7 +10,7 @@ summary: 'Avec ONTAP, le concept de machine virtuelle de stockage (SVM) offre un
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 

@@ -10,7 +10,7 @@ summary: Configuration Oracle et TCP/IP et ethernet.
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

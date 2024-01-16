@@ -10,7 +10,7 @@ summary: 'ONTAP prend en charge tous les principaux protocoles de stockage utili
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

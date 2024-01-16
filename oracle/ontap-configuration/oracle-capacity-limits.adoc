@@ -10,7 +10,7 @@ summary: Capacité de stockage et espace libre pour les bases de données et ONT
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

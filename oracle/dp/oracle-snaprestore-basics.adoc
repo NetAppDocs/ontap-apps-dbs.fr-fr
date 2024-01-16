@@ -10,7 +10,7 @@ summary: 'La technologie NetApp SnapRestore assure la restauration rapide des ba
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

@@ -10,7 +10,7 @@ summary: 'Dans ONTAP 9, les composants physiques d"un cluster sont visibles pour
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./../media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

@@ -10,7 +10,7 @@ summary: 'Migration Oracle à l"aide de la pile de stockage côté hôte'
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

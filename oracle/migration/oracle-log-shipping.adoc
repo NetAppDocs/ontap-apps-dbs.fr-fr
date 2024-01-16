@@ -10,7 +10,7 @@ summary: 'Migration Oracle via l"envoi de journaux'
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

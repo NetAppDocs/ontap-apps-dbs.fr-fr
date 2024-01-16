@@ -6,12 +6,11 @@ summary: Microsoft SQL Server sur ONTAP
 ---
 = Configuration du processeur
 :allow-uri-read: 
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
-:revdate: Modifying server and database settings can help achieve better and more efficient database performance.
+:imagesdir: ../media/
 
+
+[role="lead"]
+La modification des paramètres du serveur et de la base de données peut améliorer et optimiser les performances de la base de données.
 
 
 
@@ -29,7 +28,7 @@ Il existe deux grandes écoles de pensée lors de l'octroi de licences SQL Serve
 
 === Les entrées de journal indiquent le nombre de cœurs utilisés après le démarrage de SQL Server.
 
-image:./media/hyperthreading.png["Erreur : image graphique manquante"]
+image:mssql-hyperthreading.png["Erreur : image graphique manquante"]
 
 Par conséquent, pour utiliser tous les CPU, vous devez utiliser la licence par cœur de processeur. Pour plus d'informations sur les licences SQL Server, reportez-vous à la section link:https://www.microsoft.com/en-us/sql-server/sql-server-2022-comparison["SQL Server 2022 : une plateforme de données moderne"^].
 
@@ -72,7 +71,7 @@ La valeur par défaut est 0, ce qui permet à SQL Server de configurer automatiq
 
 Quand devez-vous configurer SQL Server pour utiliser davantage de threads de travail ? Si la longueur moyenne de la file d'attente de travail de chaque planificateur est supérieure à 1, vous pouvez bénéficier de l'ajout de threads supplémentaires au système, mais uniquement si la charge n'est pas liée au processeur ou si d'autres files d'attente importantes sont en cours. Si l'une ou l'autre de ces opérations se produit, l'ajout de threads n'est pas utile, car ils finissent par attendre les autres goulets d'étranglement du système. Pour plus d'informations sur le nombre maximal de threads de travail, reportez-vous à la section link:https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-max-worker-threads-server-configuration-option?view=sql-server-ver16&redirectedfrom=MSDN["Configurez l'option Configuration du serveur max worker threads"^].
 
-image:./media/max-worker-threads.png["Erreur : image graphique manquante"]
+image:mssql-max-worker-threads.png["Erreur : image graphique manquante"]
 
 
 

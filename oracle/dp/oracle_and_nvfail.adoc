@@ -18,5 +18,3 @@ La mise en cache peut avoir lieu au niveau des applications ou des serveurs. Par
 L'utilisation de la mise en cache est moins évidente au niveau du système de fichiers du système d'exploitation. Les blocs d'un système de fichiers NFS monté peuvent être mis en cache dans le système d'exploitation. Un système de fichiers en cluster basé sur des LUN situés sur le site principal peut également être monté sur des serveurs du site distant, et une fois encore, les données peuvent être mises en cache. Une défaillance de la mémoire NVRAM, un basculement forcé ou un basculement forcé dans ces situations peuvent entraîner une corruption du système de fichiers.
 
 ONTAP protège les bases de données et les systèmes d'exploitation de ce scénario avec NVFAIL et ses paramètres associés.
-
-Pour plus d'informations, veuillez lire link:../../common/dp/integrity.html#hardware-failure-protection-nvfail["NVFAIL avec paires HA"] et link:../../common/metrocluster/nvfail.html["NVFAIL avec MetroCluster"]

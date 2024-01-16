@@ -10,7 +10,7 @@ summary: Gestion des performances Oracle avec QoS
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

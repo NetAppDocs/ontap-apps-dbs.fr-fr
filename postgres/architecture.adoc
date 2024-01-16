@@ -11,7 +11,7 @@ summary: Bases de données PostgreSQL sur ONTAP
 [role="lead"]
 PostgreSQL est un SGBDR basé sur l'architecture client et serveur. Une instance PostgreSQL est appelée cluster de base de données, qui est une collection de bases de données par opposition à une collection de serveurs.
 
-image:architecture.png["Erreur : graphique introuvable"]
+image:postgresql-architecture.png["Erreur : graphique introuvable"]
 
 Il existe trois éléments principaux dans une base de données PostgreSQL : le postmaster, le front end (client) et le back end Le client envoie des demandes au postmaster avec des informations telles que le protocole IP et la base de données à laquelle se connecter. Le postmaster authentifie la connexion et la transmet au processus d'arrière-plan pour une communication plus poussée. Le processus back-end exécute la requête et envoie les résultats directement au frontal (client).
 

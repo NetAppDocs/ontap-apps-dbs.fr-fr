@@ -10,7 +10,7 @@ summary: Optimisation de la disponibilité avec Oracle sur ONTAP
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ./media/
+:imagesdir: ../../media/
 
 
 [role="lead"]

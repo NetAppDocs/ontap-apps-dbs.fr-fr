@@ -10,6 +10,7 @@ summary: Microsoft SQL Server sur ONTAP
 :author: [.lead]
 :authorinitials: [
 :authors: [.lead]
+:imagesdir: ../media/
 
 
 
@@ -27,7 +28,7 @@ Sur un cluster SQL Server avec plusieurs instances SQL Server, chaque instance p
 
 TIP: *NetApp recommande* de laisser au moins 4 Go à 6 Go de RAM pour le système d'exploitation afin d'éviter les problèmes de performances.
 
-image:./media/max-server-memory.png["Erreur : image graphique manquante"]
+image:mssql-max-server-memory.png["Erreur : image graphique manquante"]
 
 
 
@@ -74,7 +75,7 @@ Lorsqu'une requête est exécutée, SQL Server tente d'allouer la quantité opti
 
 Par défaut, la mémoire minimale par paramètre de requête alloue > ou = à 1024 Ko pour chaque requête à exécuter. Il est recommandé de laisser ce paramètre à la valeur par défaut 0 pour permettre à SQL Server de gérer dynamiquement la quantité de mémoire allouée aux opérations de création d'index. Cependant, si SQL Server dispose de plus de RAM que nécessaire pour fonctionner efficacement, les performances de certaines requêtes peuvent être améliorées si vous augmentez ce paramètre. Par conséquent, tant que la mémoire est disponible sur le serveur qui n'est pas utilisé par SQL Server, toute autre application ou le système d'exploitation, l'augmentation de ce paramètre peut aider à améliorer les performances globales de SQL Server. Si aucune mémoire disponible n'est disponible, l'augmentation de ce paramètre peut nuire aux performances globales.
 
-image:./media/min-memory-per-query.png["Erreur : image graphique manquante"]
+image:mssql-min-memory-per-query.png["Erreur : image graphique manquante"]
 
 
 
