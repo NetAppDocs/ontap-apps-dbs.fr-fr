@@ -1,0 +1,19 @@
+---
+sidebar: sidebar 
+permalink: mysql/mysql-innodb_doublewrite.html 
+keywords: MySQL,MariaDB,innodb_doublewrite 
+summary: MySQL sur ONTAP 
+---
+= innodb_doublewrite
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Quand `innodb_doublewrite` Est activé (valeur par défaut), InnoDB stocke toutes les données deux fois : d'abord dans le tampon de double écriture, puis dans les fichiers de données réels.
+
+Vous pouvez désactiver ce paramètre avec `--skip-innodb_doublewrite` pour les bancs d'essai ou lorsque vous êtes davantage préoccupé par les performances que par l'intégrité des données ou par les défaillances possibles. InnoDB utilise une technique de vidage de fichier appelée double écriture. Avant d'écrire des pages dans les fichiers de données, InnoDB les écrit dans une zone contiguë appelée tampon de double écriture. Une fois l'écriture et le vidage de la mémoire tampon en double écriture terminés, InnoDB écrit les pages dans leur position correcte dans le fichier de données. Si le système d'exploitation ou un processus mysqld se bloque lors d'une écriture de page, InnoDB peut plus tard trouver une bonne copie de la page à partir du tampon de double écriture pendant la récupération après panne.
+
+
+TIP: *NetApp recommande* de désactiver le tampon en double écriture. La mémoire NVRAM de ONTAP remplit la même fonction. La double mise en mémoire tampon endommagera inutilement les performances.

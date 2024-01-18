@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: mysql/mysql-overview.html 
+keywords: MySQL,MariaDB,TR-4722 
+summary: MySQL sur ONTAP 
+---
+= Bases de données MySQL sur ONTAP
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+MySQL et ses variantes, y compris MariaDB et Percona MySQL, est la base de données la plus populaire au monde.
+
+
+NOTE: Cette documentation sur ONTAP et la base de données MySQL remplace la base de données _TR-4722: Base de données MySQL sur les meilleures pratiques NetApp ONTAP._
+
+Les fonctionnalités de MySQL incluent :
+
+* *TCO réduit.* MySQL est un système de gestion de base de données puissant, gratuit et open source, disponible depuis des années. Il est très stable. Il dispose d'un support communautaire qui permet de gérer, de déboguer et d'ajouter de nouvelles fonctionnalités. Si une application Web requiert plus qu'une base de données, ou exige un équilibrage de charge ou une gestion des données, vous pouvez facilement configurer des instances de base de données avec des coûts matériels uniquement, plutôt que des bases de données commerciales qui requièrent une seule licence pour chaque instance.
+* *Fiabilité, performances et facilité d'utilisation.* l'un des atouts de MySQL est une performance et une évolutivité exceptionnelles, ce qui explique pourquoi tant d'entreprises basées sur le Web l'utilisent. MySQL utilise plusieurs points forts pour fournir des performances rapides. La concurrence étant toujours accessible par un clic de souris (ou un toucher à l'écran), il est primordial de répondre rapidement aux demandes et aux activités des clients. La base de données qui prend en charge les applications web doit fournir des performances extrêmes pour les opérations de lecture (requêtes simples et complexes) et d'écriture.
+* *Développement, conception et administration de la base de données.* MySQL Workbench fournit un environnement intégré de développement, de conception et d'administration pour rendre les développeurs et les administrateurs de bases de données plus productifs. Différents développeurs recherchent différentes fonctionnalités dans une base de données, et MySQL offre une gamme de fonctionnalités. Il peut fonctionner correctement sur un ordinateur portable comme sur un ordinateur de bureau. Il peut s'adapter facilement à l'environnement, en s'assurant qu'il n'entre pas en collision avec les serveurs Web ou les applications existants.
+* *Support transactionnel complet.* MySQL est l'un des moteurs de bases de données transactionnelles les plus robustes disponibles. Il s'agit d'une solution garantissant l'intégrité complète des données, offrant des fonctionnalités telles que la prise en charge complète des transactions atomiques, cohérentes, isolées et durables ; la prise en charge des transactions multiversions ; et verrouillage illimité au niveau des rangées. Il permet une identification instantanée des blocages grâce à l'intégrité référentielle appliquée par le serveur.
+* *Sécurité des données.* MySQL est mondialement reconnu pour être le système de gestion de base de données le plus sûr et le plus fiable utilisé dans les applications web populaires telles que WordPress, Drupal, Joomla, Facebook, Google, et Twitter. La sécurité des données et le support pour le traitement transactionnel qui accompagne la version récente de MySQL peut bénéficier à n'importe quelle entreprise, en particulier les entreprises de commerce électronique qui impliquent des transferts d'argent fréquents.
+* *Architecture enfichable.* l'architecture du moteur de stockage enfichable MySQL permet à un professionnel de base de données de sélectionner un moteur de stockage spécialisé pour un besoin d'application particulier sans avoir à gérer les exigences de codage d'application. L'architecture du serveur MySQL isole le programmeur d'application et l'administrateur de bases de données de tous les détails d'implémentation de bas niveau au niveau du stockage, fournissant ainsi un modèle d'application et une API cohérents et faciles. Bien que les différents moteurs de stockage offrent différentes capacités, l'application est protégée de ces différences.
+
+
+L'architecture efficace et modulaire de MySQL offre des avantages considérables si vous souhaitez cibler des besoins spécifiques en matière d'applications, tels que l'entreposage de données, le traitement de transactions ou la haute disponibilité, tout en utilisant des interfaces et des services indépendants de n'importe quel moteur de stockage.

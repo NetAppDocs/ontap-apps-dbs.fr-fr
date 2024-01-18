@@ -1,0 +1,103 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dp-planning.html 
+keywords: data protection, DR, snapshots, CG 
+summary: Stratégies de protection des données ONTAP 
+---
+= Planification de la protection des données
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Une architecture de protection des données d'entreprise adaptée dépend des exigences de l'entreprise concernant la conservation des données, la restauration et la tolérance aux perturbations à divers moments.
+
+Prenons l'exemple du nombre d'applications, de bases de données et de datasets importants pris en compte. Il est relativement simple d'élaborer une stratégie de sauvegarde pour un seul dataset afin d'assurer la conformité aux SLA standard, car la gestion ne comporte pas beaucoup d'objets. À mesure que le nombre de jeux de données augmente, la surveillance devient plus complexe et les administrateurs peuvent être obligés de consacrer de plus en plus de temps aux pannes de sauvegarde. Dès qu'un environnement évolue, il faut adopter une approche totalement différente.
+
+La taille des datasets affecte également la stratégie. Par exemple, le jeu de données étant si petit, de nombreuses options sont possibles pour la sauvegarde et la restauration avec une base de données de 100 Go. En général, la simple copie des données à partir du support de sauvegarde avec des outils classiques permet d'atteindre un RTO suffisant pour la restauration. Une base de données de 100 To a généralement besoin d'une stratégie totalement différente, sauf si le RTO autorise une panne de plusieurs jours. Dans ce cas, une procédure classique de sauvegarde et de restauration basée sur des copies peut être acceptable.
+
+Enfin, il y a des facteurs en dehors du processus de sauvegarde et de restauration lui-même. Par exemple, existe-t-il des bases de données qui prennent en charge les activités de production stratégiques, faisant de la restauration un événement rare uniquement effectué par des administrateurs de bases de données qualifiés ? Ou bien, les bases de données font-elles partie d'un vaste environnement de développement dans lequel la restauration est fréquente et gérée par une équipe INFORMATIQUE généraliste ?
+
+
+
+== Un snapshot est-il une sauvegarde ?
+
+L'une des objections les plus fréquentes à l'utilisation des snapshots en tant que stratégie de protection des données est le fait que les « vraies » données et les données de snapshot se trouvent sur les mêmes disques. La perte de ces disques entraînerait la perte des données primaires et de la sauvegarde.
+
+Ce problème est valide. Les snapshots locaux sont utilisés pour les besoins quotidiens de sauvegarde et de restauration, et dans ce sens, le snapshot est une sauvegarde. Dans les environnements NetApp, près de 99 % des scénarios de restauration s'appuient sur des copies Snapshot pour répondre aux exigences de RTO les plus strictes.
+
+Toutefois, les snapshots locaux ne doivent jamais être la seule stratégie de sauvegarde. C'est pourquoi NetApp propose des technologies telles que la réplication SnapMirror pour répliquer rapidement et efficacement des copies Snapshot sur un ensemble indépendant de disques. Dans une solution bien conçue avec des snapshots et une réplication Snapshot, l'utilisation des bandes peut être réduite au minimum, voire même à une archive trimestrielle, ou totalement éliminée.
+
+
+
+== Sauvegardes de groupes de cohérence
+
+La sauvegarde d'un groupe de cohérence implique de capturer l'état d'un jeu de données (ou de plusieurs jeux de données) à un point atomique unique dans le temps. Comme exemple de base de données, cela inclut tous les composants de la base de données, tels que les fichiers de données, les fichiers journaux et les autres fichiers directement associés à la base de données. Cela fonctionne avec presque tous les produits de base de données relationnelle, comme Oracle RDBMS, Microsoft SQL Server, SAP HANA, PostgreSQL, MySQL et MariaDB. La protection d'une configuration VMware avec une sauvegarde de groupe de cohérence serait similaire, en capturant tous les datastores et potentiellement les LUN de démarrage ESX à un seul point atomique dans le temps.
+
+La création d'un Snapshot de groupe de cohérence de ce type simule une panne. C'est pourquoi ces sauvegardes sont souvent appelées sauvegardes cohérentes après panne. La prise en charge des scénarios de restauration pose parfois des problèmes, mais il est important de comprendre qu'aucune procédure de restauration n'est généralement nécessaire. Lorsque l'application démarre après la restauration d'une sauvegarde de groupe de cohérence, elle exécute les processus de restauration de journaux habituels, les relectures du journal du système de fichiers et d'autres tâches pour relire toute E/S en cours au point de la sauvegarde. L'application démarre alors comme d'habitude.
+
+Pour l'essentiel, toute application pouvant résister à une panne de courant ou à une panne de serveur sans corruption des données peut être protégée de cette façon. Le fait que cela fonctionne peut également être démontré par le grand nombre d'applications protégées par des produits de mise en miroir synchrone et asynchrone de nombreux fournisseurs différents. Si un incident frappe soudainement le site principal, le site de réplica contient une image cohérente de l'environnement d'origine au moment où l'incident s'est produit. Une fois de plus, aucune procédure de récupération spéciale n'est requise.
+
+Le RPO de cette approche est généralement limité au point de sauvegarde. En règle générale, le RPO minimal pour les copies Snapshot à un seul volume est d'une heure. Par exemple, 48 snapshots par heure et 30 autres snapshots par nuit sont raisonnables et ne nécessitent pas la conservation d'un nombre excessif de snapshots. Il devient plus difficile d'atteindre un objectif de point de récupération inférieur à une heure. Il n'est donc pas recommandé de consulter au préalable les services professionnels NetApp pour comprendre les exigences en matière d'environnement, d'évolutivité et de protection des données.
+
+Le RTO se mesure généralement en secondes. A une application est arrêtée, les volumes sont restaurés et l'application redémarrée.
+
+La méthode la plus simple consiste à placer tous les fichiers ou LUN dans un groupe de cohérence de volume unique. Ainsi, la création de Snapshot peut être planifiée directement dans ONTAP. Lorsqu'un dataset doit couvrir des volumes, un Snapshot de groupe de cohérence (cg-snapshot) est nécessaire. Vous pouvez les configurer à l'aide de System Manager ou d'appels d'API RESTful. De plus, SnapCenter est capable de créer un snapshot de groupe de cohérence simple sur une liste définie de volumes.
+
+
+
+== Architecture de réplication et de reprise après incident
+
+Cette section traite de la protection des données à distance, pour laquelle les données sont répliquées vers un site distant à des fins de stockage hors site sécurisé et de reprise sur incident. Notez que ces tableaux ne traitent pas de la protection des données de mise en miroir synchrone. Pour cette condition, consultez la documentation de NetApp MetroCluster, y compris link:../metrocluster/overview.html["MetroCluster"] et link:../smbc/overview.html["Continuité de l'activité SnapMirror"]
+
+Le RPO de reprise sur incident est limité par la bande passante réseau disponible et la taille totale des données protégées. Une fois le transfert de base initial créé, les mises à jour sont uniquement basées sur les données modifiées, ce qui représente généralement un faible pourcentage de l'empreinte totale des données, même si des exceptions existent.
+
+Par exemple, une base de données de 10 To avec un taux de modification hebdomadaire de 10 % représente en moyenne 6 Go de modifications totales par heure. Avec une connectivité de 10 Gb, ce transfert de base de données prend environ 6 minutes. Le taux de modification varie en fonction des fluctuations du taux de modification de la base de données, mais dans l'ensemble, un intervalle de mise à jour de 15 minutes et un objectif de point de récupération de 15 minutes doivent être atteints. S'il existe 100 bases de données de ce type, 600 minutes sont nécessaires pour transférer les données. Par conséquent, un objectif RPO d'une heure n'est pas possible. De même, une réplique d'une seule base de données de 100 To avec un taux de modification hebdomadaire de 10 % ne peut pas être mise à jour de manière fiable en une heure.
+
+D'autres facteurs peuvent avoir une incidence sur la réplication, comme la surcharge liée à la réplication et la limitation du nombre d'opérations de réplication simultanées. Cependant, la planification globale d'une stratégie de réplication à volume unique peut reposer sur la bande passante disponible et un RPO de réplication d'une heure est généralement réalisable. Un RPO inférieur à une heure devient plus difficile à atteindre et ne doit être réalisé qu'après consultation des services professionnels de NetApp. Dans certains cas, 15 minutes sont possibles avec une très bonne connectivité réseau site à site. Cependant, dans l'ensemble, lorsqu'un objectif RPO inférieur à une heure est requis, l'architecture de relecture des journaux multivolumes produit de meilleurs résultats.
+
+Dans un scénario de reprise d'activité, le RTO avec réplication de groupe de cohérence est excellent, généralement mesuré en secondes du point de vue du stockage. L'approche la plus simple est de mettre simplement en miroir et la base de données est prête à être démarrée. Le temps de démarrage de la base de données est généralement d'environ 10 secondes, mais les bases de données très volumineuses qui génèrent un grand nombre de transactions consignées peuvent prendre quelques minutes.
+
+Le facteur le plus important pour déterminer l'objectif de durée de restauration n'est pas le système de stockage, mais l'application et le système d'exploitation hôte sur lesquels il s'exécute. Par exemple, les données répliquées peuvent être disponibles en une ou deux secondes, mais elles ne représentent que les données. Il doit également y avoir un système d'exploitation correctement configuré avec des binaires d'application disponibles pour utiliser les données.
+
+Dans certains cas, les clients ont préparé des instances de reprise après incident à l'avance, avec le stockage prédécouvert sur les systèmes d'exploitation. Dans ce cas, l'activation du scénario de reprise d'activité ne peut nécessiter que la rupture d'un miroir et le démarrage de l'application. Dans d'autres cas, le système d'exploitation et les applications associées peuvent être mis en miroir avec la base de données en tant que disque de machine virtuelle ESX (VMDK). Dans ce cas, le RPO est déterminé par la quantité investie par un client dans l'automatisation pour démarrer rapidement le VMDK afin de pouvoir démarrer les applications.
+
+Le temps de rétention est contrôlé en partie par la limite de snapshot. Par exemple, les volumes dans ONTAP ont une limite de 1024 snapshots. Dans certains cas, les clients disposent d'une réplication multiplexée pour augmenter la limite. Par exemple, si 2000 jours de sauvegardes sont requis, une source peut être répliquée sur deux volumes avec des mises à jour effectuées sur d'autres jours. L'espace initial nécessaire doit être augmenté, mais l'approche reste bien plus efficace qu'un système de sauvegarde traditionnel qui implique plusieurs sauvegardes complètes.
+
+
+
+=== Groupe de cohérence à volume unique
+
+La méthode la plus simple consiste à placer tous les fichiers ou LUN dans un groupe de cohérence de volume unique. Ainsi, les mises à jour SnapMirror et SnapVault peuvent être planifiées directement sur le système de stockage. Aucun logiciel externe n'est requis.
+
+
+
+=== Groupe de cohérence multivolume
+
+Lorsqu'une base de données doit couvrir plusieurs volumes, un Snapshot de groupe de cohérence (cg-snapshot) est nécessaire. Comme mentionné précédemment, cette configuration peut être effectuée à l'aide de System Manager ou d'appels d'API RESTful. De plus, SnapCenter est capable de créer un snapshot de groupe de cohérence simple sur une liste définie de volumes.
+
+Il est également nécessaire de prendre en compte un autre facteur concernant l'utilisation de copies Snapshot cohérentes à plusieurs volumes à des fins de reprise après incident. Lors de la mise à jour de plusieurs volumes, il est possible qu'un incident se produise pendant le transfert. Il en résulte un ensemble de volumes qui ne sont pas cohérents les uns avec les autres. Si c'est le cas, certains volumes doivent être restaurés à un état de snapshot antérieur pour fournir une image de base de données cohérente après panne et prête à être utilisée.
+
+
+
+== Reprise après incident : activation
+
+
+
+=== NFS
+
+Le processus d'activation de la copie de reprise sur incident dépend du type de stockage. Avec NFS, les systèmes de fichiers peuvent être prémontés sur le serveur de reprise après incident. Ils sont en lecture seule et deviennent en lecture-écriture lorsque le miroir est cassé. Le RPO est ainsi extrêmement faible, et le processus global de reprise sur incident est plus fiable, car la gestion comporte moins de pièces.
+
+
+
+=== SAN
+
+L'activation des configurations SAN en cas de reprise après incident devient plus complexe. L'option la plus simple consiste généralement à interrompre temporairement les miroirs et à monter les ressources SAN, notamment à découvrir la configuration LVM (y compris les fonctionnalités spécifiques à l'application telles qu'Oracle Automatic Storage Management [ASM]) et à ajouter des entrées à /etc/fstab.
+
+Le résultat est que les chemins du périphérique LUN, les noms des groupes de volumes et les autres chemins de périphériques sont connus du serveur cible. Ces ressources peuvent ensuite être désactivées, puis les miroirs peuvent être restaurés. Le résultat est un serveur qui est dans un état qui peut rapidement mettre l'application en ligne. Les étapes permettant d'activer des groupes de volumes, de monter des systèmes de fichiers ou de démarrer des bases de données et des applications sont facilement automatisables.
+
+Il faut veiller à ce que l'environnement de reprise d'activité soit à jour. Par exemple, de nouvelles LUN sont susceptibles d'être ajoutées au serveur source, ce qui signifie que les nouvelles LUN doivent être prédécouvertes sur la destination pour s'assurer que le plan de reprise sur incident fonctionne comme prévu.

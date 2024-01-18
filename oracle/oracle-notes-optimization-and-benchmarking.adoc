@@ -1,0 +1,103 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-notes-optimization-and-benchmarking.html 
+keywords: oracle, database, ontap, performance, hammerdb, swingbench, calibrate_io, slob2, orion, slob, benchmarking, benchmark 
+summary: Tests de performances Oracle 
+---
+= Optimisation des performances et banc d'essai Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il est extrêmement compliqué de tester précisément les performances du stockage des bases de données. Il faut comprendre les problèmes suivants :
+
+* IOPS et débit
+* Différence entre les opérations d'E/S au premier plan et en arrière-plan
+* Effet de la latence sur la base de données
+* Nombreux paramètres du système d'exploitation et du réseau qui affectent également les performances du stockage
+
+
+En outre, il faut tenir compte des tâches qui ne relèvent pas du domaine du stockage dans les bases de données. L'optimisation de la performance du stockage ne présente plus d'avantages, car la performance du stockage n'est plus un facteur limitant.
+
+La majorité des clients de base de données choisissent désormais des baies 100 % Flash, ce qui entraîne d'autres considérations. Prenons l'exemple des tests de performances sur un système AFF8080 à deux nœuds :
+
+* Avec un ratio de lecture/écriture de 75/25, deux nœuds AFF8080 peuvent fournir plus de 300 000 IOPS aléatoires de bases de données, avant même que la latence ne dépasse le millième de seconde. Au-delà des exigences de performance actuelles de la plupart des bases de données, il est difficile de prévoir l'amélioration attendue. Le stockage serait largement effacé comme un goulot d'étranglement.
+* La bande passante réseau est une source de plus en plus courante de limites de performances. Par exemple, les solutions sur disque mécanique constituent souvent des goulots d'étranglement pour les performances des bases de données, car la latence d'E/S est très élevée. Lorsque les limites de latence sont éliminées par un système 100 % Flash, le obstacle est fréquemment basculer vers le réseau. Ceci est particulièrement notable dans les environnements virtualisés et les systèmes lames où la véritable connectivité réseau est difficile à visualiser. Les tests de performances peuvent ainsi être plus complexes si le système de stockage lui-même ne peut pas être pleinement utilisé en raison des limitations de bande passante.
+* Il est généralement impossible de comparer les performances d'une baie 100 % Flash à celles d'une baie contenant des disques rotatifs en raison de la latence considérablement améliorée des baies 100 % Flash. Les résultats des tests ne sont généralement pas significatifs.
+* Généralement, comparer les pics de performance d'IOPS avec un système 100 % Flash n'est pas utile, car les bases de données ne sont pas limitées par les E/S de stockage Supposons par exemple qu'une baie peut supporter 500 000 IOPS aléatoires, tandis qu'une autre peut supporter 300 000. La différence n'est pas pertinente en situation réelle si une base de données consacre 99 % de son temps au traitement du processeur. Ces charges de travail n'exploitent jamais toutes les capacités de la baie de stockage. À l'inverse, les pics d'activité d'E/S par seconde peuvent s'avérer critiques pour une plateforme de consolidation sur laquelle la baie de stockage doit être chargée au maximum de ses capacités.
+* Lors de tout test de stockage, la latence et les IOPS sont systématiquement prises en compte. De nombreuses baies de stockage sur le marché revendiquant des niveaux extrêmes d'IOPS, mais avec la latence, ces IOPS deviennent inutiles à de tels niveaux. La cible type avec des baies 100 % Flash est le millième de seconde, Une meilleure approche lors de ces tests n'est pas de mesurer les IOPS maximales mais de déterminer le nombre d'IOPS qu'une baie de stockage peut supporter avant que la latence moyenne ne soit supérieure à 1 ms.
+
+
+
+
+== Référentiel automatique de workloads Oracle et banc d'essai
+
+Pour les comparaisons de performances Oracle, il est référence dans le rapport Oracle Automatic Workload Repository (AWR).
+
+Il existe plusieurs types de rapports AWR. Du point de vue du stockage, un rapport généré par l'exécution de `awrrpt.sql` La commande est la plus complète et la plus utile, car elle cible une instance de base de données spécifique et inclut des histogrammes détaillés qui décomposent les événements d'E/S de stockage en fonction de la latence.
+
+Dans l'idéal, comparer deux baies de performances implique d'exécuter la même charge de travail sur chaque baie et de produire un rapport AWR qui cible précisément la charge de travail. Dans le cas d'une charge de travail très longue, il est possible d'utiliser un seul rapport AWR avec un temps écoulé couvrant le temps de début et de fin, mais il est préférable de séparer les données AWR sous forme de plusieurs rapports. Par exemple, si une tâche par lots s'est exécutée de minuit à 6 h, créez une série de rapports AWR d'une heure de minuit à 1 h, de 1 h à 2 h, etc.
+
+Dans d'autres cas, une requête très courte doit être optimisée. La meilleure option est un rapport AWR basé sur un instantané AWR créé au début de la requête et un deuxième instantané AWR créé à la fin de la requête. Le serveur de base de données doit être silencieux pour réduire au minimum l'activité en arrière-plan qui pourrait masquer l'activité de la requête en cours d'analyse.
+
+
+NOTE: Lorsque les rapports AWR ne sont pas disponibles, les rapports Oracle statspack constituent une bonne alternative. Ils contiennent la plupart des mêmes statistiques d'E/S qu'un rapport AWR.
+
+
+
+== Oracle AWR et dépannage
+
+Un rapport AWR est également l'outil le plus important pour analyser un problème de performances.
+
+Comme pour les bancs d'essai, la résolution des problèmes de performances nécessite que vous mesuriez précisément une charge de travail particulière. Dans la mesure du possible, fournissez des données AWR lorsque vous signalez un problème de performance au centre de support NetApp ou lorsque vous travaillez avec une équipe NetApp ou un partenaire responsable de compte concernant une nouvelle solution.
+
+Lorsque vous fournissez des données AWR, tenez compte des exigences suivantes :
+
+* Exécutez le `awrrpt.sql` pour générer le rapport. La sortie peut être texte ou HTML.
+* Si Oracle Real application clusters (RAC) est utilisé, générez des rapports AWR pour chaque instance du cluster.
+* Cibler l'heure précise à laquelle le problème a existé. La durée maximale acceptable d'un rapport AWR est généralement d'une heure. Si un problème persiste pendant plusieurs heures ou implique une opération sur plusieurs heures, par exemple un traitement par lots, fournissez plusieurs rapports AWR d'une heure qui couvrent l'ensemble de la période à analyser.
+* Si possible, réglez l'intervalle d'instantané AWR sur 15 minutes. Ce paramètre permet d'effectuer une analyse plus détaillée. Cela nécessite également des exécutions supplémentaires de `awrrpt.sql` fournir un rapport pour chaque intervalle de 15 minutes.
+* Si le problème est une requête en cours très courte, fournissez un rapport AWR basé sur un instantané AWR créé au début de l'opération et un second instantané AWR créé à la fin de l'opération. Le serveur de base de données doit être silencieux pour minimiser l'activité en arrière-plan qui pourrait masquer l'activité de l'opération en cours d'analyse.
+* Si un problème de performance est signalé à certains moments mais pas à d'autres, fournissez des données AWR supplémentaires qui démontrent de bonnes performances pour la comparaison.
+
+
+
+
+== etalonnez_io
+
+Le `calibrate_io` command ne doit jamais être utilisé pour tester, comparer ou tester les systèmes de stockage. Comme indiqué dans la documentation Oracle, cette procédure permet d'étalonner les capacités d'E/S du stockage.
+
+L'étalonnage n'est pas le même que l'étalonnage. L'objectif de cette commande est d'émettre des E/S pour aider à étalonner les opérations de la base de données et améliorer leur efficacité en optimisant le niveau d'E/S émis pour l'hôte. Car le type d'E/S effectué par le `calibrate_io` Le fonctionnement ne représente pas les E/S réelles de l'utilisateur de la base de données, les résultats ne sont pas prévisibles et ne sont souvent même pas reproductibles.
+
+
+
+== SLOB2
+
+SLOB2, le très petit banc d'essai Oracle, est devenu l'outil privilégié pour évaluer les performances des bases de données. Il a été développé par Kevin Closson et est disponible à l'adresse link:https://kevinclosson.net/slob/["https://kevinclosson.net/slob/"^]. L'installation et la configuration ne prennent que quelques minutes et une base de données Oracle génère des modèles d'E/S sur un espace de table définissable par l'utilisateur. Il s'agit de l'une des rares options de test disponibles permettant de saturer une baie 100 % Flash par E/S. Il est également utile de générer des niveaux d'E/S beaucoup plus bas pour simuler des charges de travail de stockage qui font partie des IOPS faibles, mais qui sont sensibles à la latence.
+
+
+
+== Swingbench
+
+Swingbench peut être utile pour tester les performances des bases de données, mais il est extrêmement difficile d'utiliser Swingbench sous un contrainte de stockage. NetApp n'a constaté aucun test de Swingbench ayant produit suffisamment d'E/S pour être une charge significative sur n'importe quelle baie AFF. Dans certains cas limités, le test OET (Order Entry Test) peut être utilisé pour évaluer le stockage du point de vue de la latence. Cela peut s'avérer utile lorsqu'une base de données a une dépendance connue en termes de latence pour des requêtes particulières. Assurez-vous que l'hôte et le réseau sont correctement configurés pour atteindre les potentiels de latence d'une baie 100 % Flash.
+
+
+
+== HammerDB
+
+HammerDB est un outil de test de base de données qui simule les bancs d'essai TPC-C et TPC-H, entre autres. La construction d'un jeu de données suffisamment volumineux pour exécuter correctement un test peut prendre beaucoup de temps, mais elle peut constituer un outil efficace pour évaluer les performances des applications OLTP et d'entrepôt de données.
+
+
+
+== Orion
+
+L'outil Oracle Orion a été couramment utilisé avec Oracle 9, mais il n'a pas été maintenu pour assurer la compatibilité avec les modifications apportées aux différents systèmes d'exploitation hôtes. Il est rarement utilisé avec Oracle 10 ou Oracle 11 en raison d'incompatibilités avec le système d'exploitation et la configuration du stockage.
+
+Oracle a réécrit l'outil, qui est installé par défaut dans Oracle 12c. Bien que ce produit ait été amélioré et utilise la plupart des appels qu'une véritable base de données Oracle utilise, il n'utilise pas exactement le même chemin de code ou le même comportement d'E/S que celui utilisé par Oracle. Par exemple, la plupart des E/S Oracle sont exécutées de manière synchrone, ce qui signifie que la base de données s'arrête jusqu'à ce que les E/S soient terminées lorsque l'opération d'E/S se termine au premier plan. Le simple fait d'inonder un système de stockage d'E/S aléatoires n'est pas une reproduction de véritables E/S Oracle et n'offre pas de méthode directe pour comparer les baies de stockage ou mesurer l'impact des modifications de configuration.
+
+Cela étant, Orion est souvent associé à des cas d'usage, comme l'évaluation générale des performances maximales d'une configuration de stockage hôte-réseau ou encore l'évaluation de l'état d'un système de stockage. Grâce à des tests rigoureux, nous pouvons concevoir des tests Orion exploitables afin de comparer les baies de stockage ou d'évaluer l'effet d'une modification de la configuration, dans la mesure où les paramètres tiennent compte des IOPS, du débit et de la latence, et tenter de répliquer fidèlement une charge de travail réaliste.

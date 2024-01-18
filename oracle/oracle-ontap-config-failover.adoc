@@ -1,0 +1,50 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-ontap-config-failover.html 
+keywords: failover, switchover 
+summary: 'Il est nécessaire de bien comprendre les fonctions de basculement et de basculement du stockage pour s"assurer que les opérations de la base de données Oracle ne sont pas interrompues par ces opérations. En outre, les arguments utilisés par les opérations de basculement et de basculement peuvent affecter l"intégrité des données en cas d"utilisation incorrecte.' 
+---
+= Basculement/basculement du contrôleur Oracle et ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il est nécessaire de bien comprendre les fonctions de basculement et de basculement du stockage pour s'assurer que les opérations de la base de données Oracle ne sont pas interrompues par ces opérations. En outre, les arguments utilisés par les opérations de basculement et de basculement peuvent affecter l'intégrité des données en cas d'utilisation incorrecte.
+
+* Dans des conditions normales, les écritures entrantes sur un contrôleur donné sont mises en miroir de manière synchrone sur son partenaire. Dans un environnement NetApp MetroCluster, les écritures sont également mises en miroir sur un contrôleur distant. Tant qu'une écriture n'est pas stockée sur un support non volatile dans tous les emplacements, elle n'est pas validée par l'application hôte.
+* Le support qui stocke les données d'écriture est appelé mémoire non volatile ou NVMEM. Elle est également parfois appelée mémoire NVRAM, et peut être considérée comme un cache d'écriture, même si elle fonctionne comme un journal. En fonctionnement normal, les données de NVMEM ne sont pas lues ; elles sont uniquement utilisées pour protéger les données en cas de défaillance logicielle ou matérielle. Lors de l'écriture des données sur les disques, les données sont transférées de la mémoire RAM du système, et non de NVMEM.
+* Lors d'une opération de basculement, un nœud d'une paire haute disponibilité reprend les opérations de son partenaire. Un basculement est quasiment identique, mais s'applique aux configurations MetroCluster dans lesquelles un nœud distant prend le relais par rapport à un nœud local.
+
+
+Lors des opérations de maintenance de routine, un basculement du stockage ou un basculement doivent être transparents, sauf en cas de brève pause potentielle dans les opérations en cas de changement des chemins réseau. La mise en réseau peut toutefois être complexe et il est facile d'y faire des erreurs. NetApp recommande donc de tester minutieusement les opérations de basculement et de basculement avant de mettre en production un système de stockage. C'est la seule façon de s'assurer que tous les chemins réseau sont correctement configurés. Dans un environnement SAN, vérifiez soigneusement le résultat de la commande `sanlun lun show -p` pour vous assurer que tous les chemins principaux et secondaires attendus sont disponibles.
+
+Il convient de faire attention lors d'un basculement forcé ou d'un basculement forcé. Forcer une modification de la configuration du stockage avec ces options signifie que l'état du contrôleur propriétaire des disques est ignoré et que le nœud alternatif prend le contrôle des disques. Une force de basculement incorrecte peut entraîner une perte ou une corruption des données. En effet, un basculement forcé ou un basculement forcé peut rejeter le contenu de la NVMEM. Une fois le basculement ou le basculement effectué, la perte de ces données signifie que les données stockées sur les disques peuvent revenir à un état plus ancien du point de vue de la base de données.
+
+Un basculement forcé avec une paire haute disponibilité normale devrait rarement être nécessaire. Dans la plupart des scénarios de défaillance, un nœud s'arrête et informe le partenaire qu'un basculement automatique a lieu. Il existe certains cas à la périphérie, par exemple une panne de déploiement où l'interconnexion entre les nœuds est perdue puis un contrôleur est perdu, dans lequel un basculement forcé est nécessaire. Dans ce cas, la mise en miroir entre les nœuds est perdue avant la panne du contrôleur, ce qui signifie que le contrôleur survivant n'aurait plus de copie des écritures en cours. Le basculement doit ensuite être forcé, ce qui signifie que des données peuvent être perdues.
+
+La même logique s'applique à un basculement MetroCluster. Dans des conditions normales, le basculement est presque transparent. Toutefois, un incident peut entraîner une perte de connectivité entre le site survivant et le site de reprise sur incident. Du point de vue du site survivant, le problème ne pourrait être rien de plus qu'une interruption de la connectivité entre les sites, et le site d'origine pourrait encore traiter les données. Si un nœud ne peut pas vérifier l'état du contrôleur principal, seul un basculement forcé est possible.
+
+[TIP]
+====
+*NetApp recommande* de prendre les précautions suivantes :
+
+* Veillez à ne pas forcer accidentellement un basculement ou un basculement. En règle générale, il n'est pas nécessaire de forcer et le fait de forcer la modification peut entraîner la perte de données.
+* Si un basculement ou un basculement forcé s'avère nécessaire, assurez-vous que les applications sont arrêtées, que tous les systèmes de fichiers sont démontés et que les groupes de volumes LVM (Logical Volume Manager) sont proposés en mode Variyoffed. Les groupes de disques ASM doivent être démontés.
+* En cas de basculement forcé du MetroCluster, vous pouvez isoler le nœud défaillant de toutes les ressources de stockage restantes. Pour plus d'informations, consultez le Guide de gestion et de reprise sur incident de MetroCluster correspondant à la version appropriée de ONTAP.
+
+
+====
+
+
+== MetroCluster et plusieurs agrégats
+
+MetroCluster est une technologie de réplication synchrone qui passe en mode asynchrone en cas d'interruption de la connectivité. Cette demande est la plus courante de la part des clients, car une réplication synchrone garantie signifie que l'interruption de la connectivité du site entraîne un blocage complet des E/S de la base de données, ce qui la met hors service.
+
+Avec MetroCluster, les agrégats sont rapidement resynchronisés une fois la connectivité restaurée. Contrairement à d'autres technologies de stockage, MetroCluster ne devrait jamais nécessiter de mise en miroir complète après une panne de site. Seules les modifications delta doivent être expédiées.
+
+Dans les jeux de données qui couvrent les agrégats, le risque est faible de nécessiter des étapes supplémentaires de restauration des données en cas de sinistre en cas de déploiement. En particulier, si (a) la connectivité entre les sites est interrompue, (b) la connectivité est restaurée, (c) les agrégats atteignent un état dans lequel certains sont synchronisés et d'autres ne le sont pas, puis (d) le site primaire est perdu, le site survivant dans lequel les agrégats ne sont pas synchronisés. Dans ce cas, une partie du dataset est synchronisée et il est impossible d'ouvrir des applications, des bases de données ou des datastores sans restauration. Si un dataset compte plusieurs agrégats, NetApp recommande vivement d'utiliser des sauvegardes basées sur des snapshots avec l'un des nombreux outils disponibles pour vérifier la restauration rapide dans ce scénario inhabituel.

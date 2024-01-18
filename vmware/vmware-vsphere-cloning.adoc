@@ -1,0 +1,42 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-vsphere-cloning.html 
+keywords: Data protection, Space reclamation, VM and datastore cloning, Storage efficiency, thin provisioning, QoS, SIOC, Storage Distributed Resource Scheduler, DRS, Active IQ Unified Manager, Encryption 
+summary: 'SnapCenter vous permet de créer des règles de sauvegarde qui peuvent être appliquées à plusieurs tâches. Ces règles peuvent définir des fonctionnalités de planification, de conservation, de réplication et autres. Ils continuent d"autoriser la sélection facultative de snapshots cohérents avec les machines virtuelles, ce qui exploite la capacité de l"hyperviseur à suspendre les E/S avant de prendre un snapshot VMware.' 
+---
+= Clonage des VM et des datastores
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+:firstname: [.lead]
+:author: [.lead]
+:authorinitials: [
+:authors: [.lead]
+:revnumber: 
+:revdate: and so on.
+
+
+Dans vSphere, vous pouvez cloner une machine virtuelle, un disque virtuel, un volume virtuel ou un datastore. Une fois cloné, l'objet peut être davantage personnalisé, souvent par le biais d'un processus automatisé. VSphere prend en charge les clones de copie complète ainsi que les clones liés, pour assurer le suivi séparé des modifications apportées à l'objet d'origine.
+
+Les clones liés permettent un gain d'espace considérable, mais ils augmentent la quantité d'E/S que vSphere gère pour la machine virtuelle, ce qui affecte les performances de cette machine virtuelle, et peut-être de l'hôte dans son ensemble. C'est pourquoi les clients NetApp utilisent souvent des clones basés sur des systèmes de stockage pour profiter d'un double avantage : une utilisation efficace du stockage et des performances supérieures.
+
+La figure suivante représente le clonage ONTAP.
+
+image:vsphere_ontap_image5.png["Erreur : image graphique manquante"]
+
+Le clonage peut être déchargé sur les systèmes qui exécutent le logiciel ONTAP via plusieurs mécanismes, en général au niveau de la machine virtuelle, du volume ou du datastore. Ces champs d'application incluent :
+
+* Vvols avec le fournisseur NetApp vSphere APIs for Storage Awareness (VASA).  Les clones ONTAP sont utilisés pour prendre en charge les snapshots vVol gérés par vCenter. Ces snapshots sont peu encombrants avec un impact E/S minimal en termes de création et de suppression.  Les machines virtuelles peuvent également être clonées via vCenter, qui sont également déchargées vers ONTAP, que ce soit dans un datastore/volume unique ou entre les datastores/volumes.
+* Clonage et migration de vSphere à l'aide des API vSphere – intégration de baies (VAAI). Les opérations de clonage de VM peuvent être déchargées sur ONTAP dans les environnements SAN et NAS (NetApp fournit un plug-in ESXi pour que VAAI for NFS).  VSphere ne décharge les opérations sur les machines virtuelles inactives (désactivées) dans un datastore NAS, tandis que les opérations sur les machines virtuelles fortement sollicitées (clonage et stockage vMotion) sont également déchargées pour le système SAN. ONTAP utilise l'approche la plus efficace selon la source, la destination et les licences des produits installés. Cette fonctionnalité est également utilisée par VMware Horizon View.
+* SRA (utilisé avec VMware site Recovery Manager). Ici, des clones sont utilisés pour tester la restauration de la réplique de reprise après incident sans interruption.
+* Sauvegarde et restauration à l'aide d'outils NetApp tels que SnapCenter. Les clones de machine virtuelle sont utilisés pour vérifier les opérations de sauvegarde ainsi que pour monter une sauvegarde de machine virtuelle, de sorte que les fichiers individuels puissent être copiés.
+
+
+Le clonage ONTAP Offloaded peut être appelé par les outils VMware, NetApp et tiers. Les clones déchargés sur ONTAP présentent plusieurs avantages. Elles sont peu gourmandes en espace dans la plupart des cas, et n'ont besoin que de systèmes de stockage pour modifier les objets. Cela n'a aucun impact supplémentaire sur les performances en lecture et en écriture. Dans certains cas, le partage des blocs dans des caches haute vitesse améliore les performances. Ils délester également le serveur ESXi de la charge des cycles CPU et des E/S réseau. Il est possible de décharger des copies dans un data store traditionnel grâce à un volume FlexVol, de manière rapide et efficace avec une licence FlexClone, mais les copies entre volumes FlexVol peuvent être plus lentes. Si vous maintenez les modèles de machine virtuelle comme source de clones, envisagez de les placer dans le volume du datastore (utilisez les dossiers ou les bibliothèques de contenu pour les organiser) afin de créer des clones rapides et compacts.
+
+Vous pouvez également cloner un volume ou une LUN directement au sein de ONTAP afin de cloner un datastore. Grâce aux datastores NFS, la technologie FlexClone peut cloner un volume entier. Le clone peut être exporté depuis ONTAP et monté par ESXi en tant qu'autre datastore. Pour les datastores VMFS, ONTAP peut cloner une LUN au sein d'un volume ou d'un volume complet, y compris une ou plusieurs LUN au sein de celle-ci. Une LUN contenant un VMFS doit être mappée sur un groupe d'initiateurs ESXi, puis une nouvelle signature définie par ESXi doit être montée et utilisée comme datastore standard. Pour certains cas d'utilisation temporaire, un VMFS cloné peut être monté sans nouvelle signature. Une fois le datastore cloné, les ordinateurs virtuels internes peuvent être enregistrés, reconfigurés et personnalisés comme s'ils étaient individuellement clonés.
+
+Dans certains cas, des fonctionnalités supplémentaires sous licence peuvent être utilisées pour améliorer le clonage, telles que SnapRestore pour la sauvegarde ou FlexClone. Ces licences sont souvent incluses dans les packs de licence sans frais supplémentaires. Une licence FlexClone est requise pour les opérations de clonage vVol, ainsi que pour la prise en charge des snapshots gérés d'un VVol (qui sont déchargés de l'hyperviseur vers ONTAP). Une licence FlexClone peut également améliorer certains clones VAAI lorsqu'ils sont utilisés dans un datastore/volume (création de copies instantanées et compactes à la place de copies de bloc).  Elle est également utilisée par SRA pour tester la restauration d'une réplique de reprise après incident et SnapCenter pour les opérations de clonage, et pour parcourir les copies de sauvegarde afin de restaurer des fichiers individuels.

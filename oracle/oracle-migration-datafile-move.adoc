@@ -1,0 +1,35 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-migration-datafile-move.html 
+keywords: migration, oracle, move datafile 
+summary: Migration des fichiers de données Oracle individuels 
+---
+= Déplacement du fichier de données
+:allow-uri-read: 
+
+
+[role="lead"]
+Vous pouvez déplacer individuellement les fichiers de données Oracle via une seule commande.
+
+Par exemple, la commande suivante déplace le fichier de données IOPST.dbf du système de fichiers `/oradata2` vers le système de fichiers `/oradata3`.
+
+....
+SQL> alter database move datafile  '/oradata2/NTAP/IOPS002.dbf' to '/oradata3/NTAP/IOPS002.dbf';
+Database altered.
+....
+Le déplacement d'un fichier de données avec cette méthode peut être lent, mais il ne doit normalement pas produire suffisamment d'E/S pour interférer avec les charges de travail quotidiennes des bases de données. En revanche, la migration via le rééquilibrage d'ASM peut s'exécuter beaucoup plus rapidement, mais au détriment du ralentissement de la base de données globale pendant le déplacement des données.
+
+Le temps nécessaire à la migration des fichiers de données peut être mesuré en créant un fichier de données de test et en le déplaçant. Le temps écoulé pour l'opération est enregistré dans les données v$session :
+
+....
+SQL> set linesize 300;
+SQL> select elapsed_seconds||':'||message from v$session_longops;
+ELAPSED_SECONDS||':'||MESSAGE
+-----------------------------------------------------------------------------------------
+351:Online data file move: data file 8: 22548578304 out of 22548578304 bytes done
+SQL> select bytes / 1024 / 1024 /1024 as GB from dba_data_files where FILE_ID = 8;
+        GB
+----------
+        21
+....
+Dans cet exemple, le fichier déplacé était le fichier de données 8, dont la taille était de 21 Go et dont la migration nécessitait environ 6 minutes. Le temps nécessaire dépend évidemment des capacités du système de stockage, du réseau de stockage et de l'activité globale de la base de données au moment de la migration.

@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: postgres/postgres-architecture.html 
+keywords: PostgreSQL,database,postgres 
+summary: Bases de données PostgreSQL sur ONTAP 
+---
+= Architecture PostgreSQL
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+PostgreSQL est un SGBDR basé sur l'architecture client et serveur. Une instance PostgreSQL est appelée cluster de base de données, qui est une collection de bases de données par opposition à une collection de serveurs.
+
+image:postgresql-architecture.png["Erreur : graphique introuvable"]
+
+Il existe trois éléments principaux dans une base de données PostgreSQL : le postmaster, le front end (client) et le back end Le client envoie des demandes au postmaster avec des informations telles que le protocole IP et la base de données à laquelle se connecter. Le postmaster authentifie la connexion et la transmet au processus d'arrière-plan pour une communication plus poussée. Le processus back-end exécute la requête et envoie les résultats directement au frontal (client).
+
+Une instance PostgreSQL est basée sur un modèle multiprocessus au lieu d'un modèle multithread. Il génère plusieurs processus pour différents travaux, et chaque processus possède sa propre fonctionnalité. Les principaux processus incluent le processus client, le processus WAL writer, le processus Background writer et le processus checkpointer :
+
+* Lorsqu'un processus client (premier plan) envoie des demandes de lecture ou d'écriture à l'instance PostgreSQL, il ne lit pas ou n'écrit pas les données directement sur le disque. Il met d'abord en mémoire tampon les données dans des tampons partagés et des tampons WAL (Write-Ahead Logging).
+* Un processus WAL writer manipule le contenu des tampons partagés et des tampons WAL pour écrire dans les journaux WAL. Les journaux WAL sont généralement des journaux de transaction de PostgreSQL et sont écrits de manière séquentielle. Par conséquent, pour améliorer le temps de réponse de la base de données, PostgreSQL écrit d'abord dans les journaux de transactions et reconnaît le client.
+* Pour mettre la base de données dans un état cohérent, le processus de l'enregistreur d'arrière-plan vérifie périodiquement la présence de pages sales dans le tampon partagé. Il purge ensuite les données sur les fichiers de données stockés sur des volumes NetApp ou des LUN.
+* Le processus CheckPointer s'exécute également périodiquement (moins fréquemment que le processus d'arrière-plan) et empêche toute modification des tampons. Il signale au processus d'écriture WAL d'écrire et de vider l'enregistrement de point de contrôle à la fin des journaux WAL stockés sur le disque NetApp. Il signale également au processus d'écriture d'arrière-plan d'écrire et de vider toutes les pages sales sur le disque.
+

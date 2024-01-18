@@ -1,0 +1,20 @@
+---
+sidebar: sidebar 
+permalink: mysql/mysql-schedulers.html 
+keywords: MySQL,MariaDB,schedulers 
+summary: MySQL sur ONTAP 
+---
+= Planificateurs d'E/S.
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le noyau Linux permet un contrôle de bas niveau sur la façon dont les E/S sont planifiées pour bloquer les périphériques.
+
+Les valeurs par défaut sur les différentes distributions de Linux varient considérablement. MySQL vous recommande d'utiliser `NOOP` ou un `deadline` Planificateur d'E/S avec E/S asynchrones natives (AIO) sous Linux. De manière générale, les clients NetApp et les tests internes montrent de meilleurs résultats avec NoOps.
+
+Le moteur de stockage InnoDB de MySQL utilise le sous-système d'E/S asynchrone (AIO natif) sur Linux pour effectuer des demandes de lecture et d'écriture pour les pages de fichiers de données. Ce comportement est contrôlé par le `innodb_use_native_aio` option de configuration, activée par défaut. Avec le tout-en-un natif, le type de planificateur d'E/S a une plus grande influence sur les performances E/S. Menez des bancs d'essai pour déterminer quel planificateur d'E/S offre les meilleurs résultats pour votre charge de travail et votre environnement.
+
+Consultez la documentation Linux et MySQL appropriée pour obtenir des instructions sur la configuration du planificateur d'E/S.

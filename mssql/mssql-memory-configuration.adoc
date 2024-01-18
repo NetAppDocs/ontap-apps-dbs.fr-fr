@@ -1,0 +1,122 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-memory-configuration.html 
+keywords: MS-SQL,mssql,SQL Server 
+summary: Microsoft SQL Server sur ONTAP 
+---
+= Configuration de la mémoire Microsoft SQL Server
+:allow-uri-read: 
+:firstname: [.lead]
+:author: [.lead]
+:authorinitials: [
+:authors: [.lead]
+:imagesdir: ../media/
+
+
+
+
+== Mémoire maximale du serveur
+
+L'option max. De mémoire du serveur définit la quantité maximale de mémoire que l'instance SQL Server peut utiliser.
+
+Il est généralement utilisé si plusieurs applications s'exécutent sur le même serveur que SQL Server et que vous voulez vous assurer que ces applications disposent de suffisamment de mémoire pour fonctionner correctement.
+
+Certaines applications utilisent uniquement la mémoire disponible au démarrage et ne demandent pas plus, même si nécessaire. C'est là que le paramètre de mémoire maximale du serveur entre en jeu.
+
+Sur un cluster SQL Server avec plusieurs instances SQL Server, chaque instance peut être en concurrence pour des ressources. La définition d'une limite de mémoire pour chaque instance de SQL Server peut aider à garantir les meilleures performances pour chaque instance.
+
+
+TIP: *NetApp recommande* de laisser au moins 4 Go à 6 Go de RAM pour le système d'exploitation afin d'éviter les problèmes de performances.
+
+image:mssql-max-server-memory.png["Erreur : image graphique manquante"]
+
+
+
+=== Réglage de la mémoire minimale et maximale du serveur à l'aide de SQL Server Management Studio.
+
+L'utilisation de SQL Server Management Studio pour ajuster la mémoire minimale ou maximale du serveur nécessite un redémarrage du service SQL Server. Vous pouvez ajuster la mémoire du serveur à l'aide de Trantransaction SQL (T-SQL) à l'aide du code suivant :
+
+....
+EXECUTE sp_configure 'show advanced options', 1
+
+GO
+
+EXECUTE sp_configure 'min server memory (MB)', 2048
+
+GO
+
+EXEC sp_configure 'max server memory (MB)', 120832
+
+GO
+
+RECONFIGURE WITH OVERRIDE
+....
+
+
+== Accès à la mémoire non uniforme
+
+L'accès à la mémoire non uniforme (NUMA) est une méthode d'optimisation de l'accès à la mémoire qui permet d'augmenter la vitesse du processeur sans augmenter la charge sur le bus du processeur.
+
+Si NUMA est configuré sur le serveur sur lequel SQL Server est installé, aucune configuration supplémentaire n'est requise car SQL Server est conscient de NUMA et fonctionne bien sur le matériel NUMA.
+
+
+
+== Mémoire de création d'index
+
+L'option index create memory est une autre option avancée que vous ne devez généralement pas modifier.
+
+Il contrôle la quantité maximale de RAM initialement allouée pour la création d'index. La valeur par défaut de cette option est 0, ce qui signifie qu'elle est gérée automatiquement par SQL Server. Cependant, si vous rencontrez des difficultés à créer des index, envisagez d'augmenter la valeur de cette option.
+
+
+
+== Mémoire min. Par requête
+
+Lorsqu'une requête est exécutée, SQL Server tente d'allouer la quantité optimale de mémoire pour qu'elle s'exécute efficacement.
+
+Par défaut, la mémoire minimale par paramètre de requête alloue > ou = à 1024 Ko pour chaque requête à exécuter. Il est recommandé de laisser ce paramètre à la valeur par défaut 0 pour permettre à SQL Server de gérer dynamiquement la quantité de mémoire allouée aux opérations de création d'index. Cependant, si SQL Server dispose de plus de RAM que nécessaire pour fonctionner efficacement, les performances de certaines requêtes peuvent être améliorées si vous augmentez ce paramètre. Par conséquent, tant que la mémoire est disponible sur le serveur qui n'est pas utilisé par SQL Server, toute autre application ou le système d'exploitation, l'augmentation de ce paramètre peut aider à améliorer les performances globales de SQL Server. Si aucune mémoire disponible n'est disponible, l'augmentation de ce paramètre peut nuire aux performances globales.
+
+image:mssql-min-memory-per-query.png["Erreur : image graphique manquante"]
+
+
+
+== Extensions de pool de mémoire tampon
+
+L'extension du pool de mémoire tampon assure l'intégration transparente d'une extension NVRAM au pool de mémoire tampon du moteur de base de données afin d'améliorer considérablement le débit d'E/S.
+
+L'extension de pool de mémoire tampon n'est pas disponible dans chaque édition de SQL Server. Il est disponible uniquement avec les éditions 64 bits SQL Server Standard, Business Intelligence et Enterprise.
+
+La fonctionnalité d'extension du pool de tampons étend le cache du pool de tampons à l'aide d'un stockage non volatile (généralement des disques SSD). L'extension permet au pool de mémoire tampon de prendre en charge un jeu de travail de base de données plus important, ce qui force la pagination des E/S entre la RAM et les disques SSD et décharge efficacement les petites E/S aléatoires des disques mécaniques vers les disques SSD. En raison de la faible latence et de l'amélioration des performances d'E/S aléatoires des disques SSD, l'extension du pool de tampons améliore considérablement le débit d'E/S.
+
+La fonction d'extension de pool de mémoire tampon offre les avantages suivants :
+
+* Augmentation du débit d'E/S aléatoires
+* Latence d'E/S réduite
+* Augmentation du débit de transaction
+* Meilleures performances de lecture grâce à un pool de tampons hybride plus important
+* Une architecture de mise en cache qui peut tirer parti de la mémoire économique existante et future
+
+
+[TIP]
+====
+*NetApp recommande* de configurer les extensions de pool de mémoire tampon pour :
+
+* Assurez-vous qu'une LUN à disques SSD (telle que NetApp AFF) est présentée à l'hôte SQL Server de manière à ce qu'elle puisse être utilisée comme disque cible d'extension de pool tampon.
+* Le fichier d'extension doit être de la même taille ou plus grand que le pool de mémoire tampon.
+
+
+====
+L'exemple suivant montre une commande T-SQL pour configurer une extension de pool de mémoire tampon de 32 Go.
+
+....
+USE master
+
+GO
+
+ALTER SERVER CONFIGURATION
+
+SET BUFFER POOL EXTENSION ON
+
+  (FILENAME = ‘P:\BUFFER POOL EXTENSION\SQLServerCache.BUFFER POOL EXTENSION', SIZE = 32 GB);
+
+GO
+....

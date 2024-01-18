@@ -1,0 +1,68 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-tempdb.html 
+keywords: MS-SQL,mssql,SQL Server 
+summary: Microsoft SQL Server sur ONTAP 
+---
+= Fichiers tempdb Microsoft SQL Server
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp recommande de gonfler de manière proactive les fichiers tempdb à leur pleine taille pour éviter la fragmentation du disque.
+
+Les conflits de pages peuvent se produire sur les pages GAM (Global allocation map), SGAM (Global allocation map) ou PFS (page Free Space) lorsque SQL Server doit écrire sur des pages système spéciales pour allouer de nouveaux objets. Les loquets protègent (verrouillent) ces pages en mémoire. Sur une instance SQL Server occupée, l'obtention d'un verrou sur une page système dans tempdb peut prendre un certain temps. Cela ralentit les temps d'exécution des requêtes et est appelé conflit de type LATCH. Consultez les meilleures pratiques suivantes pour la création de fichiers de données tempdb :
+
+* Pour < ou = jusqu'à 8 cœurs : fichiers de données tempdb = nombre de cœurs
+* Pour plus de 8 cœurs : 8 fichiers de données tempdb
+
+
+L'exemple de script suivant modifie tempdb en créant huit fichiers tempdb et en déplaçant tempdb vers le point de montage `C:\MSSQL\tempdb` Pour SQL Server 2012 et versions ultérieures.
+
+....
+use master
+
+go
+
+-- Change logical tempdb file name first since SQL Server shipped with logical file name called tempdev
+
+alter database tempdb modify file (name = 'tempdev', newname = 'tempdev01');
+
+
+
+-- Change location of tempdev01 and log file
+
+alter database tempdb modify file (name = 'tempdev01', filename = 'C:\MSSQL\tempdb\tempdev01.mdf');
+
+alter database tempdb modify file (name = 'templog', filename = 'C:\MSSQL\tempdb\templog.ldf');
+
+GO
+
+-- Assign proper size for tempdev01
+
+ALTER DATABASE [tempdb] MODIFY FILE ( NAME = N'tempdev01', SIZE = 10GB );
+
+ALTER DATABASE [tempdb] MODIFY FILE ( NAME = N'templog', SIZE = 10GB );
+
+GO
+
+-- Add more tempdb files
+
+ALTER DATABASE [tempdb] ADD FILE ( NAME = N'tempdev02', FILENAME = N'C:\MSSQL\tempdb\tempdev02.ndf' , SIZE = 10GB , FILEGROWTH = 10%);
+
+ALTER DATABASE [tempdb] ADD FILE ( NAME = N'tempdev03', FILENAME = N'C:\MSSQL\tempdb\tempdev03.ndf' , SIZE = 10GB , FILEGROWTH = 10%);
+
+ALTER DATABASE [tempdb] ADD FILE ( NAME = N'tempdev04', FILENAME = N'C:\MSSQL\tempdb\tempdev04.ndf' , SIZE = 10GB , FILEGROWTH = 10%);
+
+ALTER DATABASE [tempdb] ADD FILE ( NAME = N'tempdev05', FILENAME = N'C:\MSSQL\tempdb\tempdev05.ndf' , SIZE = 10GB , FILEGROWTH = 10%);
+
+ALTER DATABASE [tempdb] ADD FILE ( NAME = N'tempdev06', FILENAME = N'C:\MSSQL\tempdb\tempdev06.ndf' , SIZE = 10GB , FILEGROWTH = 10%);
+
+ALTER DATABASE [tempdb] ADD FILE ( NAME = N'tempdev07', FILENAME = N'C:\MSSQL\tempdb\tempdev07.ndf' , SIZE = 10GB , FILEGROWTH = 10%);
+
+ALTER DATABASE [tempdb] ADD FILE ( NAME = N'tempdev08', FILENAME = N'C:\MSSQL\tempdb\tempdev08.ndf' , SIZE = 10GB , FILEGROWTH = 10%);
+
+GO
+....
+À partir de SQL Server 2016, le nombre de cœurs de CPU visibles par le système d'exploitation est automatiquement détecté lors de l'installation et, en fonction de ce nombre, SQL Server calcule et configure le nombre de fichiers tempdb requis pour des performances optimales.

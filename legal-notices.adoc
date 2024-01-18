@@ -16,9 +16,6 @@ summary:
 [role="lead"]
 Les mentions légales donnent accès aux déclarations de copyright, aux marques, aux brevets, etc.
 
-[role="lead"]
-Les mentions légales donnent accès aux déclarations de copyright, aux marques, aux brevets, etc.
-
 
 
 == Droits d'auteur
@@ -55,7 +52,7 @@ Les fichiers de notification fournissent des informations sur les droits d'auteu
 
 
 
-=== ONTAP
+== ONTAP
 
 link:https://library.netapp.com/ecm/ecm_download_file/ECMLP2885801["Avis pour ONTAP 9.13.1"^]
 link:https://library.netapp.com/ecm/ecm_download_file/ECMLP2884813["Notification relative à ONTAP 9.12.1"^]
@@ -75,7 +72,7 @@ link:https://library.netapp.com/ecm/ecm_download_file/ECMLP2516795["Avis pour ON
 
 
 
-=== Mediator ONTAP pour MCC IP
+== Mediator ONTAP pour MCC IP
 
 link:https://library.netapp.com/ecm/ecm_download_file/ECMLP2870521["9.9.1 Avis pour le médiateur ONTAP pour MCC IP"^]
 link:https://library.netapp.com/ecm/ecm_download_file/ECMLP2870521["9.8 Avis pour le médiateur ONTAP pour MCC IP"^]

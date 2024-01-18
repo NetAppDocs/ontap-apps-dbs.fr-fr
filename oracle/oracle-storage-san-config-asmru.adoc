@@ -1,0 +1,21 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-storage-san-config-asmru.html 
+keywords: ontap, thin provisioning 
+summary: Utilitaire de récupération ASM avec ONTAP 
+---
+= Utilitaire de récupération ASM et détection de blocs zéro
+:allow-uri-read: 
+
+
+[role="lead"]
+ONTAP supprime efficacement les blocs nuls écrits sur un fichier ou une LUN lorsque la compression à la volée est activée. Des utilitaires tels que l'utilitaire ASRU (Oracle ASM Reclamation Utility) sont utilisés en écrivant des zéros dans les extensions ASM inutilisées.
+
+Cela permet aux administrateurs de bases de données de récupérer de l'espace sur la baie de stockage après la suppression des données. ONTAP intercepte les zéros et désalloue l'espace de la LUN. Le processus de récupération est extrêmement rapide, car aucune donnée n'est écrite dans le système de stockage.
+
+Du point de vue de la base de données, le groupe de disques ASM contient des zéros et la lecture de ces régions des LUN entraîne un flux de zéros, mais ONTAP ne stocke pas les zéros sur les disques. Des modifications simples des métadonnées sont effectuées en interne pour marquer les régions mises à zéro de la LUN comme vides de toutes les données.
+
+Pour des raisons similaires, le test de performance impliquant des données mises à zéro n'est pas valide, car les blocs de zéros ne sont pas réellement traités comme des écritures dans la baie de stockage.
+
+
+NOTE: Lorsque vous utilisez ASRU, assurez-vous que tous les correctifs recommandés par Oracle sont installés.

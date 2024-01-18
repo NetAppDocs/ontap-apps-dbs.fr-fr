@@ -1,0 +1,34 @@
+---
+sidebar: sidebar 
+permalink: mysql/mysql-innodb_flush_method.html 
+keywords: MySQL,MariaDB,innodb_flush_method 
+summary: MySQL sur ONTAP 
+---
+= innodb_flush_method
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le paramètre innodb_flush_method indique comment InnoDB ouvre et vide les fichiers journaux et de données.
+
+
+
+== Optimisations
+
+Dans l'optimisation InnoDB, la définition de ce paramètre permet de régler les performances de la base de données, le cas échéant.
+
+Les options suivantes permettent de vider les fichiers via InnoDB :
+
+* `fsync`. InnoDB utilise le `fsync()` appel système pour vider les fichiers de données et les fichiers journaux. Cette option est le paramètre par défaut.
+*  `O_DSYNC`. InnoDB utilise le `O_DSYNC` option permettant d'ouvrir et de vider les fichiers journaux et fsync() pour vider les fichiers de données. InnoDB n'utilise pas `O_DSYNC` Directement, parce qu'il y a eu des problèmes avec elle sur de nombreuses variétés d'UNIX.
+*  `O_DIRECT`. InnoDB utilise le `O_DIRECT` option (ou `directio()` Sous Solaris) pour ouvrir les fichiers de données et les utilise `fsync()` pour vider les fichiers de données et les fichiers journaux. Cette option est disponible sur certaines versions de GNU/Linux, FreeBSD et Solaris.
+* `O_DIRECT_NO_FSYNC`. InnoDB utilise le `O_DIRECT` Option pendant le vidage des E/S ; cependant, il ignore le `fsync()` appel système par la suite. Cette option n'est pas adaptée à certains types de systèmes de fichiers (par exemple, XFS). Si vous n'êtes pas sûr que votre système de fichiers nécessite un `fsync()` l'appel système, par exemple pour conserver toutes les métadonnées de fichier, utilise le `O_DIRECT` à la place.
+
+
+
+
+== Observation
+
+Dans les tests de laboratoire NetApp, le `fsync` L'option par défaut a été utilisée sur NFS et SAN, et il s'agissait d'un outil d'amélioration des performances par rapport à `O_DIRECT`. Lors de l'utilisation de la méthode de rinçage comme `O_DIRECT` Avec ONTAP, nous avons observé que le client écrit beaucoup d'écritures sur un seul octet à la frontière du bloc 4096 en série. Ces écritures ont augmenté la latence sur le réseau et dégradé les performances.

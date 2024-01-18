@@ -1,0 +1,37 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-mcc-syncmirror.html 
+keywords: metrocluster, syncmirror 
+summary: Oracle et SyncMirror 
+---
+= SyncMirror - Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le socle de la protection des données Oracle avec un système MetroCluster est SyncMirror, une technologie de mise en miroir synchrone scale-out aux performances maximales.
+
+
+
+== Protection des données avec SyncMirror
+
+Au niveau le plus simple, la réplication synchrone implique que toute modification doit être apportée des deux côtés du stockage en miroir avant d'être reconnue. Par exemple, si une base de données écrit un journal ou si un invité VMware est en cours de correction, une écriture ne doit jamais être perdue. Au niveau du protocole, le système de stockage ne doit pas accuser réception de l'écriture tant qu'il n'a pas été validé sur un support non volatile des deux sites. Ce n'est qu'à cette condition qu'il est possible de continuer sans risque de perte de données.
+
+L'utilisation d'une technologie de réplication synchrone est la première étape de la conception et de la gestion d'une solution de réplication synchrone. Il est important de comprendre ce qui pourrait se passer lors de divers scénarios de défaillance planifiés ou non. Les solutions de réplication synchrone offrent toutes des fonctionnalités différentes. Si vous avez besoin d'une solution avec un objectif de point de récupération de zéro, c'est-à-dire sans perte de données, tous les scénarios de défaillance doivent être pris en compte. En particulier, quel est le résultat escompté lorsque la réplication est impossible en raison d'une perte de connectivité entre les sites ?
+
+
+
+== Disponibilité des données SyncMirror
+
+La réplication MetroCluster repose sur la technologie NetApp SyncMirror, conçue pour basculer efficacement en mode synchrone et en sortir. Cette fonctionnalité répond aux exigences des clients qui demandent une réplication synchrone, mais qui ont également besoin d'une haute disponibilité pour leurs services de données. Par exemple, si la connectivité à un site distant est coupée, il est généralement préférable que le système de stockage continue de fonctionner dans un état non répliqué.
+
+De nombreuses solutions de réplication synchrone ne peuvent fonctionner qu'en mode synchrone. Ce type de réplication « tout ou rien » est parfois appelé mode domino. Ces systèmes de stockage cessent d'accéder aux données au lieu d'interrompre la synchronisation des copies locales et distantes des données. Si la réplication est forcée, la resynchronisation peut prendre beaucoup de temps et laisser un client exposé à des pertes de données complètes pendant la période de rétablissement de la mise en miroir.
+
+Non seulement SyncMirror peut basculer en mode synchrone sans interruption si le site distant est inaccessible, mais il peut également rapidement resynchroniser vers un état RPO = 0 une fois la connectivité restaurée. La copie obsolète des données sur le site distant peut également être conservée dans un état utilisable lors de la resynchronisation, garantissant la présence à tout moment de copies locales et distantes des données.
+
+Si le mode domino est requis, NetApp propose SnapMirror synchrone (SM-S). Des options au niveau de l'application existent également, telles qu'Oracle DataGuard ou des délais d'expiration étendus pour la mise en miroir des disques côté hôte. Pour plus d'informations et d'options, consultez votre équipe de compte NetApp ou partenaire.

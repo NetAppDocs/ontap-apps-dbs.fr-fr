@@ -1,0 +1,31 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dp-overview.html 
+keywords: oracle, database, ontap 
+summary: Présentation de la protection des données Oracle 
+---
+= Protection des données Oracle avec ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+Les bases de données constituent les données les plus stratégiques.
+
+Une entreprise ne peut pas fonctionner sans accéder à ses données, et parfois l'activité repose sur les données. Ces données doivent être protégées, mais la protection ne se limite pas à garantir une sauvegarde utilisable. Elle consiste également à effectuer des sauvegardes rapidement et de manière fiable en plus de les stocker en toute sécurité.
+
+L'autre côté de la protection des données est la restauration des données. Lorsque les données ne sont pas accessibles, l'entreprise est affectée et peut ne pas fonctionner tant qu'elle n'est pas restaurée. Ce processus doit être rapide et fiable. Enfin, la plupart des bases de données doivent être protégées contre les incidents, ce qui signifie maintenir une réplique de la base de données. La réplique doit être suffisamment à jour. Il doit également être rapide et simple de faire de la réplique une base de données entièrement opérationnelle.
+
+
+NOTE: Cette documentation remplace le rapport technique _TR-4591 : protection des données Oracle : sauvegarde, restauration et réplication._
+
+
+
+== Planification
+
+Une architecture de protection des données d'entreprise adaptée dépend des exigences de l'entreprise concernant la conservation des données, la restauration et la tolérance aux perturbations à divers moments.
+
+Prenons l'exemple du nombre d'applications, de bases de données et de datasets importants pris en compte. Il est relativement simple d'élaborer une stratégie de sauvegarde pour un seul dataset afin d'assurer la conformité aux SLA standard, car la gestion ne comporte pas beaucoup d'objets. À mesure que le nombre de jeux de données augmente, la surveillance devient plus complexe et les administrateurs peuvent être obligés de consacrer de plus en plus de temps aux pannes de sauvegarde. Dès qu'un environnement évolue, il faut adopter une approche totalement différente.
+
+La taille des datasets affecte également la stratégie. Par exemple, le jeu de données étant si petit, de nombreuses options sont possibles pour la sauvegarde et la restauration avec une base de données de 100 Go. En général, la simple copie des données à partir du support de sauvegarde avec des outils classiques permet d'atteindre un RTO suffisant pour la restauration. Une base de données de 100 To a généralement besoin d'une stratégie totalement différente, sauf si le RTO autorise une panne de plusieurs jours. Dans ce cas, une procédure classique de sauvegarde et de restauration basée sur des copies peut être acceptable.
+
+Enfin, il y a des facteurs en dehors du processus de sauvegarde et de restauration lui-même. Par exemple, existe-t-il des bases de données qui prennent en charge les activités de production stratégiques, faisant de la restauration un événement rare uniquement effectué par des administrateurs de bases de données qualifiés ? Ou bien, les bases de données font-elles partie d'un vaste environnement de développement dans lequel la restauration est fréquente et gérée par une équipe INFORMATIQUE généraliste ?

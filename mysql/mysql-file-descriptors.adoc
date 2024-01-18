@@ -1,0 +1,30 @@
+---
+sidebar: sidebar 
+permalink: mysql/mysql-file-descriptors.html 
+keywords: MySQL,MariaDB,TR-4722 
+summary: MySQL sur ONTAP 
+---
+= Descripteurs de fichier
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Pour s'exécuter, le serveur MySQL a besoin de descripteurs de fichier.
+
+Il les utilise pour ouvrir de nouvelles connexions, stocker des tables dans le cache, créer des tables temporaires pour résoudre des requêtes complexes et accéder à des requêtes persistantes. Si mysqld n'est pas en mesure d'ouvrir de nouveaux fichiers lorsque cela est nécessaire, il peut arrêter de fonctionner correctement. Un symptôme courant de ce problème est l'erreur 24, "trop de fichiers ouverts". Le nombre de descripteurs de fichier que mysqld peut ouvrir simultanément est défini par le `open_files_limit` option définie dans le fichier de configuration (`/etc/my.cnf`). Mais `open_files_limit` dépend également des limites du système d'exploitation. Cette dépendance complique la définition de la variable.
+
+MySQL ne peut pas définir son `open_files_limit` option supérieure à celle spécifiée sous `ulimit 'open files'`. Par conséquent, vous devez définir explicitement ces limites au niveau du système d'exploitation pour permettre à MySQL d'ouvrir des fichiers si nécessaire. Il existe deux façons de vérifier la limite de fichiers sous Linux :
+
+* Le `ulimit` commande vous donne rapidement une description détaillée des paramètres autorisés ou verrouillés. Les modifications apportées par l'exécution de cette commande ne sont pas permanentes et seront effacées après un redémarrage du système.
+* Modifications apportées au `/etc/security/limit.conf` les fichiers sont permanents et ne sont pas affectés par un redémarrage du système.
+
+
+Assurez-vous de modifier les limites matérielles et logicielles de l'utilisateur mysql. Les extraits suivants sont issus de la configuration :
+
+....
+mysql hard nofile 65535
+mysql soft nofile 65353
+....
+En parallèle, mettez à jour la même configuration dans `my.cnf` pour utiliser pleinement les limites de fichiers ouverts.

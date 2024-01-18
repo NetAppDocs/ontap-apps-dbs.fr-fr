@@ -1,0 +1,14 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-links-nva-1129-deploy.html 
+keywords: deploy, HCI, computing, vmware, cloud 
+summary: 'L"end-user computing VMware avec NetApp HCI est une architecture de data Center prévalidée et conforme aux bonnes pratiques, conçue pour déployer des workloads de postes de travail virtuels à l"échelle de l"entreprise.' 
+---
+= NVA-1129-DEPLOY : end-user computing VMware avec NetApp HCI et processeurs graphiques NVIDIA
+:allow-uri-read: 
+
+
+[role="lead"]
+L'end-user computing VMware avec NetApp HCI est une architecture de data Center prévalidée, conforme aux meilleures pratiques, qui permet de déployer des charges de travail de postes de travail virtuels à l'échelle de l'entreprise. Ce document explique comment déployer la solution à l'échelle de la production de manière fiable et sans risque
+
+link:https://www.netapp.com/pdf.html?item=/media/7124-nva-1129-deploy.pdf["NVA-1129-DEPLOY : end-user computing VMware avec NetApp HCI et processeurs graphiques NVIDIA"^]

@@ -1,0 +1,64 @@
+---
+sidebar: sidebar 
+permalink: mysql/mysql-mysql-over-san.html 
+keywords: MySQL,MariaDB,SAN 
+summary: MySQL sur ONTAP 
+---
+= MySQL sur SAN
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+Il existe deux options pour configurer MySQL avec SAN à l'aide du modèle à deux volumes habituel.
+
+Les bases de données plus petites peuvent être placées sur une paire de LUN standard tant que les besoins en E/S et en capacité se situent dans les limites d'un seul système de fichiers LUN. Par exemple, une base de données qui nécessite environ 2 000 IOPS aléatoires peut être hébergée sur un système de fichiers unique sur une seule LUN. De même, une base de données de 100 Go seulement serait prise en charge sur une seule LUN sans problème de gestion.
+
+Les bases de données plus grandes nécessitent plusieurs LUN. Par exemple, une base de données qui nécessite 100 000 IOPS aurait probablement besoin d'au moins huit LUN. Un seul LUN deviendrait un goulot d'étranglement en raison du nombre insuffisant de canaux SCSI vers les disques. Une base de données de 10 To serait tout aussi difficile à gérer sur un seul LUN de 10 To. Les gestionnaires de volumes logiques sont conçus pour lier les performances et les capacités de plusieurs LUN afin d'améliorer les performances et la gestion.
+
+Dans les deux cas, une paire de volumes ONTAP doit suffire. Dans une configuration simple, le LUN du fichier de données serait placé dans un volume dédié, tout comme le LUN du journal. Avec une configuration de gestionnaire de volumes logique, toutes les LUN du groupe de volumes de fichiers de données se trouvent dans un volume dédié, et les LUN du groupe de volumes de logs se trouvent dans un second volume dédié.
+
+[TIP]
+====
+*NetApp recommande* l'utilisation de deux systèmes de fichiers pour les déploiements MySQL sur SAN :
+
+* Le premier système de fichiers stocke toutes les données MySQL, y compris l'espace table, les données et l'index.
+* Le second système de fichiers stocke tous les journaux (journaux binaires, journaux lents et journaux des transactions).
+
+
+Il existe plusieurs raisons de séparer les données de cette manière :
+
+* Les modèles d'E/S des fichiers de données et des fichiers journaux diffèrent. De les séparer, on disposerait d'un plus grand nombre d'options avec les contrôles de QoS.
+* Pour optimiser l'utilisation de la technologie Snapshot, vous devez pouvoir restaurer les fichiers de données de manière indépendante. La connexion de fichiers de données avec des fichiers journaux interfère avec la restauration des fichiers de données.
+* La technologie SnapMirror de NetApp peut être utilisée pour fournir une fonctionnalité de reprise d'activité simple à faible RPO pour une base de données. Toutefois, le planning de réplication des fichiers de données et des journaux doit être différent.
+
+
+====
+
+NOTE: Utilisez cette disposition de base à deux volumes pour pérenniser votre solution et utiliser toutes les fonctionnalités ONTAP si nécessaire.
+
+[TIP]
+====
+*NetApp recommande* de formater votre lecteur avec le système de fichiers ext4 en raison des fonctionnalités suivantes :
+
+* Approche étendue des fonctions de gestion des blocs utilisées dans le système de fichiers de journalisation (JFS) et fonctions d'allocation différée du système de fichiers étendu (XFS).
+* Ext4 autorise des systèmes de fichiers allant jusqu'à 1 exbioctet (2^60 octets) et des fichiers allant jusqu'à 16 tébioctets (16 * 2^40 octets). En revanche, le système de fichiers ext3 ne prend en charge qu'une taille de système de fichiers maximale de 16 To et une taille de fichier maximale de 2 To.
+* Dans les systèmes de fichiers ext4, l'allocation multi-blocs (mballoc) alloue plusieurs blocs pour un fichier en une seule opération, au lieu de les allouer un par un, comme dans ext3. Cette configuration réduit la surcharge liée à l'appel de l'ALlocator de bloc plusieurs fois et optimise l'allocation de mémoire.
+* Bien que XFS soit la valeur par défaut pour de nombreuses distributions Linux, il gère les métadonnées différemment et ne convient pas à certaines configurations MySQL.
+
+
+====
+[TIP]
+====
+*NetApp recommande* d'utiliser les options de taille de bloc de 4 ko avec l'utilitaire mkfs pour l'aligner avec la taille de LUN de bloc existante.
+
+`mkfs.ext4 -b 4096`
+
+====
+Les LUN NetApp stockent les données dans des blocs physiques de 4 Ko, ce qui produit huit blocs logiques de 512 octets.
+
+Si vous ne configurez pas la même taille de bloc, les E/S ne seront pas alignées avec les blocs physiques correctement et pourraient écrire sur deux disques différents dans un groupe RAID, ce qui entraîne une latence.
+
+
+NOTE: Il est important d'aligner les E/S pour que les opérations de lecture/écriture soient fluides. Cependant, lorsque les E/S commencent au niveau d'un bloc logique qui n'est pas au début d'un bloc physique, les E/S sont mal alignées. Les opérations d'E/S ne sont alignées que lorsqu'elles commencent au niveau d'un bloc logique, le premier bloc logique d'un bloc physique.

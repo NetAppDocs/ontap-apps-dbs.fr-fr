@@ -1,0 +1,37 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-ontap-config-capacity-limits.html 
+keywords: capacity 
+summary: Capacité de stockage et espace libre pour les bases de données et ONTAP 
+---
+= Oracle et la gestion de la capacité de stockage
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La gestion d'une base de données ou d'une autre application d'entreprise avec un stockage d'entreprise prévisible, gérable et haute performance requiert de l'espace libre sur les disques pour la gestion des données et des métadonnées. La quantité d'espace libre requise dépend du type de disque utilisé et des processus métier.
+
+L'espace libre est défini comme tout espace qui n'est pas utilisé pour les données réelles et inclut l'espace non alloué sur l'agrégat lui-même et l'espace inutilisé au sein des volumes constitutifs. Le provisionnement fin doit également être envisagé. Par exemple, un volume peut contenir une LUN de 1 To, dont seulement 50 % sont utilisés par des données réelles. Dans un environnement à provisionnement fin, cet espace semble être consommé de 500 Go. Toutefois, dans un environnement entièrement provisionné, la capacité totale de 1 To semble être utilisée. Les 500 Go d'espace non alloué sont masqués. Cet espace n'est pas utilisé par les données réelles et doit donc être inclus dans le calcul de l'espace libre total.
+
+Les recommandations de NetApp pour les systèmes de stockage utilisés pour les applications d'entreprise sont les suivantes :
+
+
+
+== Des agrégats SSD, y compris les systèmes AFF
+
+
+TIP: *NetApp recommande* un minimum de 10% d'espace libre. Cela inclut tout l'espace inutilisé, y compris l'espace libre au sein de l'agrégat ou d'un volume, ainsi que tout espace libre alloué en raison de l'utilisation du provisionnement complet, mais qui n'est pas utilisé par les données réelles. L'espace logique n'est pas important, la question est de savoir quelle quantité d'espace physique réellement disponible pour le stockage des données.
+
+La recommandation de 10 % d'espace libre est très prudente. Les agrégats SSD peuvent prendre en charge des charges de travail à des niveaux d'utilisation encore plus élevés, sans affecter les performances. Cependant, à mesure que l'utilisation de l'agrégat augmente, le risque de manquer d'espace augmente également si l'utilisation n'est pas surveillée de près. De plus, même si vous utilisez un système à 99 % de capacité, les performances risquent d'être moins élevées, mais vous devrez probablement interrompre la gestion pour l'empêcher de se remplir complètement lors de la commande de matériel supplémentaire. L'acquisition et l'installation de disques supplémentaires peuvent prendre un certain temps.
+
+
+
+== Les agrégats HDD, y compris les agrégats Flash Pool
+
+
+TIP: *NetApp recommande* un minimum de 15 % d'espace libre lorsque des disques rotatifs sont utilisés. Cela inclut tout l'espace inutilisé, y compris l'espace libre au sein de l'agrégat ou d'un volume, ainsi que tout espace libre alloué en raison de l'utilisation du provisionnement complet, mais qui n'est pas utilisé par les données réelles. Les performances seront affectées aux approches de la liberté d'expression de 10 %.

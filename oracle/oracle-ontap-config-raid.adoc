@@ -1,0 +1,25 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-ontap-config-raid.html 
+keywords: oracle,raid,mirroring 
+summary: RAID et les bases de données Oracle 
+---
+= Configuration Oracle RAID requise
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+RAID désigne l'utilisation de la redondance pour protéger les données contre la perte d'un disque.
+
+Des questions se posent parfois au sujet des niveaux RAID dans la configuration du stockage NetApp utilisé pour les bases de données Oracle et d'autres applications d'entreprise. De nombreuses meilleures pratiques Oracle en matière de configuration de baie de stockage contiennent des avertissements concernant l'utilisation de la mise en miroir RAID et/ou l'évitement de certains types de RAID. Bien qu'elles soulèvent des points valides, ces sources ne s'appliquent pas au RAID 4 et aux technologies NetApp RAID DP et RAID-TEC utilisées dans ONTAP.
+
+RAID 4, RAID 5, RAID 6, RAID DP et RAID-TEC utilisent tous la parité pour s'assurer qu'une panne de disque n'entraîne pas de perte de données. Ces options RAID offrent une meilleure utilisation du stockage que la mise en miroir, mais la plupart des implémentations RAID présentent des inconvénients pour les opérations d'écriture. La réalisation d'une opération d'écriture sur d'autres implémentations RAID peut nécessiter plusieurs lectures de disque pour régénérer les données de parité, un processus communément appelé la pénalité RAID.
+
+Cependant, ONTAP n'entraîne pas cette pénalité RAID. Cela est dû à l'intégration de NetApp WAFL (Write Anywhere File Layout) à la couche RAID. Les opérations d'écriture sont fusionnées dans la mémoire RAM et préparées sous la forme d'une couche RAID complète, y compris la génération de la parité. ONTAP n'a pas besoin d'effectuer de lecture pour effectuer une écriture, ce qui signifie que ONTAP et WAFL évitent la pénalité RAID. Les performances des opérations stratégiques pour la latence, telles que la journalisation de reprise, sont assurées sans aucun obstacle. Les écritures aléatoires des fichiers de données n'entraînent aucune pénalité RAID résultant de la régénération de la parité.
+
+En ce qui concerne la fiabilité statistique, même RAID DP offre une meilleure protection que la mise en miroir RAID. Le problème principal est la demande sur disques lors de la reconstruction RAID. Avec une configuration RAID en miroir, le risque de perte de données en cas de défaillance d'un disque pendant la reconstruction vers son partenaire dans la configuration RAID est bien plus grand que le risque de défaillance simultanée de trois disques dans une configuration RAID DP.

@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: mysql/mysql-innodb_flush_log_at_trx_commit.html 
+keywords: MySQL,MariaDB,innodb_doublewrite 
+summary: MySQL sur ONTAP 
+---
+= innodb_flush_log_at_trx_commit
+:allow-uri-read: 
+:icons: font
+:imagesdir: ../media/
+
+
+[role="lead"]
+En cas de modification des données, celles-ci ne sont pas immédiatement écrites sur le support de stockage.
+
+À la place, les données sont enregistrées dans une mémoire tampon, qui est une partie de la mémoire allouée par InnoDB aux modifications de mémoire tampon enregistrées dans le fichier journal. InnoDB vide le tampon dans le fichier journal lorsqu'une transaction est validée, lorsque le tampon est plein ou une fois par seconde, quel que soit l'événement qui se produit en premier. La variable de configuration qui contrôle ce processus est innodb_flush_log_at_trx_commit. Les options de valeur comprennent :
+
+* Lorsque vous réglez `innodb_flush_log_trx_at_commit=0`, InnoDB écrit les données modifiées (dans le pool de mémoire tampon InnoDB) dans le fichier journal (ib_logfile) et purge le fichier journal (écriture dans le stockage) toutes les secondes. Cependant, elle ne fait rien lorsque la transaction est validée. En cas de panne de courant ou de panne du système, aucune des données non rincées n'est récupérable car elles ne sont pas écrites sur le fichier journal ou les lecteurs.
+* Lorsque vous réglez `innodb_flush_log_trx_commit=1`, InnoDB écrit la mémoire tampon du journal dans le journal de transactions et vide jusqu'à un stockage durable pour chaque transaction. Par exemple, pour toutes les validations de transactions, InnoDB écrit dans le journal, puis écrit dans le stockage. Un stockage plus lent affecte négativement les performances. Par exemple, le nombre de transactions InnoDB par seconde est réduit.
+* Lorsque vous réglez `innodb_flush_log_trx_commit=2`, InnoDB écrit la mémoire tampon du journal dans le fichier journal à chaque validation ; cependant, il n'écrit pas de données dans le stockage. InnoDB vide les données une fois par seconde. Même en cas de panne de courant ou de panne du système, les données de l'option 2 sont disponibles dans le fichier journal et peuvent être récupérées.
+
+
+Si la performance est l'objectif principal, définissez la valeur sur 2. Comme InnoDB écrit sur les disques une fois par seconde, pas pour chaque validation de transaction, les performances s'améliorent considérablement. En cas de panne de courant ou de panne de courant, les données peuvent être récupérées à partir du journal de transactions.
+
+Si la sécurité des données est l'objectif principal, définissez la valeur sur 1 afin que, pour chaque validation de transaction, InnoDB vide les lecteurs. Cependant, les performances peuvent être affectées.
+
+
+TIP: *NetApp recommande* de définir la valeur innodb_flush_log_trx_commit sur 2 pour de meilleures performances.

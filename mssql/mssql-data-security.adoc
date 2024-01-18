@@ -1,0 +1,24 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-data-security.html 
+keywords: MS-SQL,mssql,SQL Server, securing database, security 
+summary: Microsoft SQL Server sur ONTAP 
+---
+= Sécurité de la base de données
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La sécurisation de la base de données est toujours prioritaire et l'administrateur de bases de données et l'organisation appliquent des points de contrôle de renforcement pour autoriser uniquement l'utilisateur à accéder au serveur et à la base de données. La sécurisation de l'écosystème d'entreprise s'étend de la correction régulière du serveur à la configuration du pare-feu, à la suppression d'un accès invité générique ou public et à l'octroi d'autorisations minimales aux utilisateurs limités pour l'exécution d'applications ou l'exécution de requêtes de rapports ad hoc.
+
+Alors que les ransomwares ou les menaces internes sont de plus en plus nombreux, les données et les sauvegardes de l'entreprise doivent être protégées et doivent pouvoir restaurer rapidement les données dans un ordre cohérent suite à des attaques malveillantes. Les attaquants peuvent encore trouver des moyens de détourner les données.
+ONTAP offre de nombreuses fonctionnalités pour sécuriser les données sur NAS et SAN.
+
+ONTAP permet de sauvegarder des volumes flexibles sur un volume SnapLock Enterprise ou SnapLock Compliance en créant une relation SnapMirror entre un volume FlexVol en tant que source et un volume SnapLock en tant que destination.les copies Snapshot sauvegardées sur un stockage secondaire ne peuvent pas être modifiées ou supprimées jusqu'à leur date de conservation à l'aide de la technologie SnapLock.Ceci est basé sur la technologie sur la règle SnapMirror associée à la relation avec laquelle le nombre de copies Snapshot est défini pour une étiquette snapmirror conservée sur le volume SnapLock de destination.pour restaurer un snapshot contenant des données LUN, il est possible de le faire sur un volume non SnapLock via l'opération de restauration snapmirror. Dans ONTAP 9.13.1, la copie FlexClone peut être créée en spécifiant le type de SnapLock non snaplock. Pour plus d'informations sur SnapLock, voir link:https://docs.netapp.com/us-en/ontap/snaplock/["ici"].
+
+image:mssql-snap_snaplock.png["Erreur : image graphique manquante"]
+
+Copies Snapshot inviolables ou verrouillage des copies Snapshot : les copies Snapshot sont un moyen rapide de protéger et de restaurer la base de données. Un attaquant pourrait supprimer des copies Snapshot qui auraient pu être la dernière option permettant de restaurer une base de données en cas de corruption des données. L'activation de copies Snapshot inviolables verrouille la copie Snapshot sur un système ONTAP principal ou secondaire pour empêcher l'administrateur de la chaîne ou un administrateur non approuvé de supprimer des snapshots pendant une période spécifiée. La fonction de copie Snapshot inviolable est disponible auprès de ONTAP 9.12.1 et nécessite la licence SnapLock et l'initialisation de l'horloge de conformité.
+
+ONTAP dispose d'une fonctionnalité de vérification multiadministrateur, ce qui signifie qu'aucun administrateur ne dispose des privilèges nécessaires pour supprimer des copies Snapshot ou modifier des volumes. Cette solution de sécurité supplémentaire permet d'éviter que des volumes ou des copies Snapshot ne soient à nouveau falsifiés par des administrateurs non approuvés.

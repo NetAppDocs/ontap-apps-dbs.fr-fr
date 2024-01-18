@@ -1,0 +1,38 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-ontap-config-svm.html 
+keywords: svm 
+summary: Provisionnement SVM pour les bases de données Oracle 
+---
+= Bases de données Oracle et machines virtuelles de stockage
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La gestion du stockage des bases de données Oracle est centralisée sur un SVM (Storage Virtual machine)
+
+Un SVM, connu sous le nom de vserver sur l'interface de ligne de commandes ONTAP, est une unité fonctionnelle de base du stockage. Il est utile de comparer un SVM à un invité sur un serveur VMware ESX.
+
+Lors de l'installation initiale, ESX ne dispose pas de fonctionnalités préconfigurées, telles que l'hébergement d'un système d'exploitation invité ou la prise en charge d'une application utilisateur. Il s'agit d'un conteneur vide jusqu'à ce qu'une machine virtuelle (VM) soit définie. ONTAP fonctionne de manière similaire : Lors de la première installation de ONTAP, aucune fonctionnalité de service des données n'est disponible tant qu'un SVM n'est pas créé. Pour configurer les services de données.
+
+À l'instar des autres aspects de l'architecture de stockage, les meilleures options pour la conception des SVM et de l'interface logique (LIF) dépendent largement des exigences d'évolutivité et des besoins de l'entreprise.
+
+
+
+== SVM
+
+Il n'existe aucune bonne pratique officielle de provisionnement des SVM pour ONTAP. La bonne approche dépend des exigences en matière de gestion et de sécurité.
+
+La plupart des clients utilisent un SVM principal pour la plupart de leurs besoins quotidiens, mais ils en créent un petit pour des besoins particuliers. Par exemple, vous pouvez créer :
+
+* SVM d'une base de données stratégique gérée par une équipe de spécialistes
+* SVM pour un groupe de développement auquel un contrôle administratif complet a été attribué afin de pouvoir gérer leur propre stockage indépendamment
+* SVM pour les données sensibles de l'entreprise, telles que les données de rapports financiers ou de ressources humaines, pour lesquelles l'équipe administrative doit être limitée
+
+
+Dans un environnement mutualisé, chaque locataire peut se voir attribuer une SVM dédiée. La limite du nombre de SVM et de LIF par cluster, paire HA et nœud dépend du protocole utilisé, du modèle de nœud et de la version de ONTAP.  Consulter le link:https://hwu.netapp.com/["NetApp Hardware Universe"^] pour ces limites.

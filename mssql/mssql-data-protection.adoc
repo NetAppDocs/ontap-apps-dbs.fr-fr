@@ -1,0 +1,44 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-data-protection.html 
+keywords: MS-SQL,mssql,SQL Server, SnapCenter, data protection 
+summary: Protection des données Microsoft SQL Server avec ONTAP 
+---
+= Protection des données Microsoft SQL Server avec ONTAP
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La protection des bases de données est essentielle pour toute entreprise. Plus la taille et le nombre de bases de données ont augmenté, plus il est essentiel de maintenir l'objectif de délai de restauration (RTO) et l'objectif de point de récupération (RPO).
+
+La principale considération pour la sauvegarde de base de données est d'exploiter la technologie NetApp Snapshot. La sauvegarde cohérente avec les applications et la disposition de la base de données sont d'autres éléments clés à prendre en compte pour atteindre les objectifs RTO et RPO, qui peuvent être orchestrés par NetApp SnapCenter.
+
+
+
+== SnapCenter
+
+SnapCenter est le logiciel NetApp de protection des données pour les applications d'entreprise.les bases de données SQL Server peuvent être rapidement et facilement protégées à l'aide du logiciel NetApp SnapCenter avec le plug-in pour SQL Server et le plug-in pour Microsoft Windows.
+
+Ce produit permet la sauvegarde cohérente avec les applications, le clonage automatisé, ainsi que la restauration et la restauration de bases de données SQL Server, d'instances ou de groupes de disponibilité.
+
+
+TIP: *NetApp recommande* d'utiliser SnapCenter pour créer des copies Snapshot.
+
+Pour plus d'informations sur le plug-in SQL Server pour SnapCenter, reportez-vous à la section link:https://www.netapp.com/pdf.html?item=/media/12400-tr4714.pdf["Tr-4714 : guide des meilleures pratiques pour SQL Server avec NetApp SnapCenter"^].
+
+
+
+== Protection de la base de données à l'aide de snapshots T-SQL
+
+Dans SQL Server 2022, Microsoft a introduit les snapshots T-SQL qui offrent un avantage intégré par rapport à la méthode traditionnelle, qui n'a pas été facilement consommée par l'administrateur de base de données. À l'aide des API REST de ONTAP, vous pouvez appeler des commandes vers des volumes Snapshot.
+
+Voici un exemple de flux de travail de sauvegarde :
+
+. Figez une base de données à l'aide de la commande ALTER, afin d'effectuer un snapshot cohérent sur le stockage sous-jacent. Ensuite, vous pouvez dégeler la base de données et enregistrer le snapshot avec la commande BACKUP.
+. Réalisez des instantanés de plusieurs bases de données sur les volumes de stockage simultanément avec les nouvelles commandes de GROUPE DE SAUVEGARDE et de SERVEUR DE SAUVEGARDE.
+. Effectuer des sauvegardes COMPLÈTES ou des sauvegardes COMPLÈTES COPY_ONLY. Ces sauvegardes sont également enregistrées dans msdb.
+. Effectuez une restauration instantanée à l'aide de sauvegardes de journaux effectuées avec l'approche de streaming standard après la sauvegarde COMPLÈTE des snapshots. Les sauvegardes différentielles en continu sont également prises en charge si nécessaire.
+
+
+Pour en savoir plus, voir link:https://learn.microsoft.com/en-us/sql/relational-databases/databases/create-a-database-snapshot-transact-sql?view=sql-server-ver16["Documentation Microsoft à connaître sur les snapshots T-SQL"^].

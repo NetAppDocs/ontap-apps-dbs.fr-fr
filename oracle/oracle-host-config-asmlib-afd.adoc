@@ -1,0 +1,67 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-host-config-asmlib-afd.html 
+keywords: oracle, database, ontap, asmlib, block size, oracleasm, multipath, afd 
+summary: 'Oracle sur ONTAP à l"aide de Linux et du pilote de filtre ASMlib/ASM' 
+---
+= Pilote de filtre ASMlib et ASM
+:allow-uri-read: 
+
+
+[role="lead"]
+Rubriques de configuration spécifiques au système d'exploitation Linux utilisant AFD et ASMlib
+
+
+
+== Tailles de bloc ASMlib
+
+ASMlib est une bibliothèque de gestion ASM facultative et des utilitaires associés. Sa valeur principale est la capacité de tamponner un LUN ou un fichier NFS en tant que ressource ASM avec une étiquette lisible par l'utilisateur.
+
+Les versions récentes d'ASMlib détectent un paramètre LUN appelé blocs logiques par exposant de bloc physique (LBPPBE). Cette valeur n'a été signalée que récemment par la cible SCSI ONTAP. Elle renvoie désormais une valeur qui indique qu'une taille de bloc de 4 Ko est recommandée. Il ne s'agit pas d'une définition de la taille de bloc, mais il est un indice pour toute application utilisant LBPPBE que les E/S d'une certaine taille peuvent être gérées plus efficacement. Cependant, ASMlib interprète LBPPBE comme une taille de bloc et estampille constamment l'en-tête ASM lors de la création du périphérique ASM.
+
+Ce processus peut causer des problèmes avec les mises à niveau et les migrations de différentes manières, tous en fonction de l'incapacité à mélanger des périphériques ASMlib avec des tailles de bloc différentes dans le même groupe de disques ASM.
+
+Par exemple, des tableaux plus anciens ont généralement signalé une valeur LBPPBE de 0 ou n'ont pas signalé cette valeur du tout. ASMlib l'interprète comme une taille de bloc de 512 octets. Pour les baies plus récentes, la taille de bloc est de 4 Ko. Il n'est pas possible de mélanger des périphériques de 512 octets et de 4 Ko dans le même groupe de disques ASM. Cela empêche un utilisateur d'augmenter la taille du groupe de disques ASM en utilisant des LUN de deux baies ou en utilisant ASM comme outil de migration. Dans d'autres cas, RMAN pourrait ne pas permettre la copie de fichiers entre un groupe de disques ASM avec une taille de bloc de 512 octets et un groupe de disques ASM avec une taille de bloc de 4 Ko.
+
+La solution préférée est de corriger ASMlib. L'ID de bug Oracle est 13999609 et le correctif est présent dans oracleasm-support-2.1.8-1 et versions ultérieures. Ce correctif permet à un utilisateur de définir le paramètre `ORACLEASM_USE_LOGICAL_BLOCK_SIZE` à `true` dans le `/etc/sysconfig/oracleasm` fichier de configuration. Cela empêche ASMlib d'utiliser le paramètre LBPPBE, ce qui signifie que les LUN de la nouvelle baie sont maintenant reconnues comme des périphériques de bloc de 512 octets.
+
+
+NOTE: L'option ne modifie pas la taille de bloc sur les LUN précédemment estampées par ASMlib. Par exemple, si un groupe de disques ASM avec des blocs de 512 octets doit être migré vers un nouveau système de stockage qui signale un bloc de 4 Ko, l'option `ORACLEASM_USE_LOGICAL_BLOCK_SIZE` Doit être défini avant que les nouvelles LUN soient estampées avec ASMlib.  Si les périphériques ont déjà été estampillés par oracleasm, ils doivent être reformatés avant d'être repoussées avec une nouvelle taille de bloc. Commencez par déconfigurer le périphérique avec `oracleasm deletedisk`, Puis effacez le premier 1 Go du périphérique avec `dd if=/dev/zero of=/dev/mapper/device bs=1048576 count=1024`. Enfin, si le périphérique a déjà été partitionné, utilisez le `kpartx` Commande permettant de supprimer les partitions obsolètes ou de simplement redémarrer le système d'exploitation.
+
+Si ASMlib ne peut pas être corrigé, ASMlib peut être supprimé de la configuration. Ce changement est perturbateur et nécessite le démarquage des disques ASM et s'assurer que le `asm_diskstring` le paramètre est défini correctement. Toutefois, cette modification ne nécessite pas la migration des données.
+
+
+
+== Tailles de bloc d'entraînement de filtre ASM (AFD)
+
+AFD est une bibliothèque de gestion ASM facultative qui remplace ASMlib. Du point de vue du stockage, il est très similaire à ASMlib, mais il inclut des fonctionnalités supplémentaires telles que la capacité de bloquer les E/S non-Oracle afin de réduire les risques d'erreurs d'utilisateur ou d'application susceptibles de corrompre les données.
+
+
+
+=== Tailles des blocs de périphériques
+
+Comme ASMlib, AFD lit également le paramètre LUN blocs logiques par exposant de bloc physique (LBPPBE) et utilise par défaut la taille de bloc physique, et non la taille de bloc logique.
+
+Cela peut créer un problème si l'AFD est ajouté à une configuration existante où les périphériques ASM sont déjà formatés comme des périphériques de bloc de 512 octets. Le pilote AFD reconnaîtrait le LUN comme un périphérique 4K et l'incompatibilité entre l'étiquette ASM et le périphérique physique empêcherait l'accès. De même, les migrations seraient affectées, car il n'est pas possible de combiner des périphériques de 512 octets et de 4 Ko dans le même groupe de disques ASM. Cela empêche un utilisateur d'augmenter la taille du groupe de disques ASM en utilisant des LUN de deux baies ou en utilisant ASM comme outil de migration. Dans d'autres cas, RMAN pourrait ne pas permettre la copie de fichiers entre un groupe de disques ASM avec une taille de bloc de 512 octets et un groupe de disques ASM avec une taille de bloc de 4 Ko.
+
+La solution est simple - AFD inclut un paramètre pour contrôler si elle utilise les tailles de bloc logiques ou physiques. Il s'agit d'un paramètre global affectant tous les périphériques du système. Pour forcer AFD à utiliser la taille de bloc logique, définissez `options oracleafd oracleafd_use_logical_block_size=1` dans le `/etc/modprobe.d/oracleafd.conf` fichier.
+
+
+
+=== Tailles de transfert multivoie
+
+Les modifications récentes du noyau linux appliquent des restrictions de taille d'E/S envoyées aux périphériques à chemins d'accès multiples, et AFD ne respecte pas ces restrictions. Les E/S sont ensuite rejetées, ce qui entraîne la mise hors ligne du chemin d'accès à la LUN. Il en résulte une incapacité à installer Oracle Grid, à configurer ASM ou à créer une base de données.
+
+La solution consiste à spécifier manuellement la longueur de transfert maximale dans le fichier multipath.conf pour les LUN ONTAP :
+
+....
+devices {
+            device {
+                vendor "NETAPP"
+                product "LUN.*"
+                max_sectors_kb 4096
+        }
+    }
+....
+
+CAUTION: Même si aucun problème n'existe actuellement, ce paramètre doit être défini si l'AFD est utilisé pour garantir qu'une future mise à niveau de linux ne provoque pas de problèmes inattendus.

@@ -1,0 +1,165 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-vsphere-settings.html 
+keywords:  
+summary:  
+---
+= Hôte ESXi recommandé et autres paramètres ONTAP recommandés
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp a développé un ensemble de paramètres de chemins d'accès multiples de l'hôte ESXi et de délai d'expiration de la carte HBA afin que son comportement soit correct avec ONTAP suite à des tests effectués par NetApp. Ils sont facilement configurés à l'aide des outils ONTAP pour VMware vSphere. Dans le tableau de bord Résumé, cliquez sur Modifier les paramètres dans le portlet systèmes hôtes ou cliquez avec le bouton droit de la souris sur l'hôte dans vCenter, puis accédez aux outils ONTAP > définir les valeurs recommandées. Voici les paramètres d'hôte actuellement recommandés avec la version 9.8.
+
+|===
+
+
+| *Paramètres hôte* | *Valeur recommandée par NetApp* | *Redémarrer requis* 
+
+
+3+| *Configuration avancée ESXi* 
+
+
+| VMFS3.HardwareAccélérationde la localisation | Conserver la valeur par défaut (1) | Non 
+
+
+| VMFS3.EnableBlockDelete | Conservez la valeur par défaut (0), mais vous pouvez la modifier si nécessaire.
+Pour plus d'informations, voir link:https://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=2007427["VMware KB 2007427"] | Non 
+
+
+| VMFS3.EnableVMFS6Unmap | Conserver la valeur par défaut (1)
+Pour plus d'informations, voir link:https://core.vmware.com/resource/vmware-vsphere-apis-array-integration-vaai#sec9426-sub4["API VMware vSphere : intégration des baies (VAAI)"] | Non 
+
+
+3+| *Paramètres NFS* 
+
+
+| Net.TcpipeHeapSize | VSphere 6.0 ou version ultérieure, défini sur 32.
+Toutes les autres configurations NFS, définies sur 30 | Oui. 
+
+
+| Net.TcpipeHeapMax | Défini sur 512 Mo pour la plupart des versions vSphere 6.X.
+Défini sur 1024 Mo pour 6.5U3, 6.7U3 et 7.0 ou version ultérieure. | Oui. 
+
+
+| NFS.MaxVolumes | VSphere 6.0 ou version ultérieure, défini sur 256
+Toutes les autres configurations NFS, définies sur 64. | Non 
+
+
+| NFS41.Maxvolumes | VSphere 6.0 ou version ultérieure, défini sur 256. | Non 
+
+
+| NFS.MaxQueueDepth^1^ | VSphere 6.0 ou version ultérieure, défini sur 128 | Oui. 
+
+
+| NFS.HeartbeatMaxFailures | Définissez sur 10 pour l'ensemble des configurations NFS | Non 
+
+
+| NFS.HeartbeatFrequency | Définissez la valeur 12 pour toutes les configurations NFS | Non 
+
+
+| NFS.HeartbeatTimeout | Définissez sur 5 pour l'ensemble des configurations NFS. | Non 
+
+
+| Sunrpc.MaxConnPerIP | VSphere 7.0 ou version ultérieure, défini sur 128. | Non 
+
+
+3+| *Paramètres FC/FCoE* 
+
+
+| Stratégie de sélection de chemin | Définissez-le sur RR (Round Robin) lorsque des chemins FC avec ALUA sont utilisés. Défini sur FIXE pour toutes les autres configurations.
+La définition de cette valeur sur RR permet d'équilibrer la charge sur l'ensemble des chemins actifs/optimisés.
+La valeur FIXÉE est pour les anciennes configurations non ALUA et contribue à empêcher les E/S proxy En d'autres termes, il contribue à empêcher les E/S de se diriger vers l'autre nœud d'une paire haute disponibilité dans un environnement doté de Data ONTAP 7-mode | Non 
+
+
+| Disk.QFullSampleSize | Définissez sur 32 pour toutes les configurations.
+La définition de cette valeur permet d'éviter les erreurs d'E/S. | Non 
+
+
+| Disk.QFullThreshold | Réglez à 8 pour toutes les configurations.
+La définition de cette valeur permet d'éviter les erreurs d'E/S. | Non 
+
+
+| Délais d'expiration de la carte HBA FC Emulex | Utilisez la valeur par défaut. | Non 
+
+
+| Délais de connexion HBA FC QLogic | Utilisez la valeur par défaut. | Non 
+
+
+3+| *Paramètres iSCSI* 
+
+
+| Stratégie de sélection de chemin | Définissez à RR (Round Robin) pour tous les chemins iSCSI.
+La définition de cette valeur sur RR permet d'équilibrer la charge sur l'ensemble des chemins actifs/optimisés. | Non 
+
+
+| Disk.QFullSampleSize | Définissez sur 32 pour toutes les configurations.
+La définition de cette valeur permet d'éviter les erreurs d'E/S. | Non 
+
+
+| Disk.QFullThreshold | Réglez à 8 pour toutes les configurations.
+La définition de cette valeur permet d'éviter les erreurs d'E/S. | Non 
+|===
+
+NOTE: 1 : l'option de configuration avancée NFS MaxQueueDepth peut ne pas fonctionner comme prévu avec VMware vSphere ESXi 7.0.1 et VMware vSphere ESXi 7.0.2. Veuillez vous reporter à link:https://kb.vmware.com/s/article/86331?lang=en_US["VMware KB 86331"] pour en savoir plus.
+
+Lors de la création de volumes et de LUN ONTAP FlexVol, les outils ONTAP permettent également de spécifier certains paramètres par défaut :
+
+|===
+
+
+| *Outil ONTAP* | *Paramètre par défaut* 
+
+
+| Réserve Snapshot (-percent-snapshot-space) | 0 
+
+
+| Réserve fractionnaire (-réserve fractionnaire) | 0 
+
+
+| Mise à jour de l'heure d'accès (-atime-update) | Faux 
+
+
+| Lecture minimum (-min-lecture anticipée) | Faux 
+
+
+| Snapshots planifiés | Aucune 
+
+
+| Efficacité du stockage | Activé 
+
+
+| Garantie de volume | Aucune (provisionnement fin) 
+
+
+| Taille automatique du volume | augmenter_réduire 
+
+
+| Réservation d'espace par LUN | Désactivé 
+
+
+| Allocation d'espace de la LUN | Activé 
+|===
+
+
+== Paramètres de chemins d'accès multiples pour les performances
+
+Bien qu'il ne soit pas actuellement configuré par les outils ONTAP disponibles, NetApp suggère les options de configuration suivantes :
+
+* Dans les environnements hautes performances ou lors des tests de performances avec un seul datastore LUN, envisagez de modifier le paramètre d'équilibrage de charge de la règle de sélection de chemin Round-Robin (VMW_PSP_RR) entre la valeur de 1000 IOPS par défaut et la valeur de 1. Voir VMware KB https://kb.vmware.com/s/article/2069356["2069356"^] pour en savoir plus.
+* Dans vSphere 6.7 mise à jour 1, VMware a introduit un nouveau mécanisme d'équilibrage de la charge de latence pour la PSP Round Robin. La nouvelle option prend en compte la bande passante d'E/S et la latence de chemin lors de la sélection du chemin optimal pour les E/S. Il peut être bénéfique de l'utiliser dans des environnements dotés d'une connectivité de chemin non équivalente, comme les cas où il y a plus de sauts réseau sur un chemin que l'autre ou lors de l'utilisation d'un système de baie SAN de NetApp. Voir https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.storage.doc/GUID-B7AD0CA0-CBE2-4DB4-A22C-AD323226A257.html?hWord=N4IghgNiBcIA4Gc4AIJgC4FMB2BjAniAL5A["Plug-ins et règles de sélection de chemin"^] pour en savoir plus.
+
+
+
+
+== Documentation complémentaire
+
+Pour plus d'informations sur FCP et iSCSI avec vSphere 7, consultez la page https://docs.netapp.com/us-en/ontap-sanhost/hu_vsphere_7.html["Utilisez VMware vSphere 7.x avec ONTAP"^]
+Pour plus d'informations sur FCP et iSCSI avec vSphere 8, consultez la page https://docs.netapp.com/us-en/ontap-sanhost/hu_vsphere_8.html["Utilisez VMware vSphere 8.x avec ONTAP"^]
+Pour plus d'informations sur la spécification NVMe-of avec vSphere 7, rendez-vous sur la page https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_7.html["Pour plus de détails sur NVMe-of, consultez la page Configuration d'hôte NVMe-of pour ESXi 7.x avec ONTAP"^]
+Pour plus d'informations sur la spécification NVMe-of avec vSphere 8, rendez-vous sur la page https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_8.html["Pour plus de détails sur NVMe-of, consultez la page Configuration d'hôte NVMe-of pour ESXi 8.x avec ONTAP"^]
