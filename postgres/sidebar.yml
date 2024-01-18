@@ -18,8 +18,10 @@ entries:
 - title: Configuration de stockage sous-jacente
   pdf-filename: Configuration du stockage pour PostgreSQL
   entries:
-  - title: Configuration du système de fichiers
-    url: "/postgres/postgres-filesystems.html"
+  - title: NFS
+    url: "/postgres/postgres-nfs-filesystems.html"
+  - title: SAN
+    url: "/postgres/postgres-san-filesystems.html"
 - title: Protection des données
   pdf-filename: Protection des données pour PostgreSQL
   entries:

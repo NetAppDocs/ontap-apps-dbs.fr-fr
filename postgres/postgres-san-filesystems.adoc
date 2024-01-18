@@ -1,10 +1,10 @@
 ---
 sidebar: sidebar 
-permalink: postgres/postgres-filesystems.html 
+permalink: postgres/postgres-san-filesystems.html 
 keywords: PostgreSQL,database,postgres 
-summary: Bases de données PostgreSQL sur ONTAP 
+summary: Bases de données PostgreSQL avec SAN sur ONTAP 
 ---
-= Systèmes de fichiers
+= PostgreSQL avec systèmes de fichiers SAN
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,50 +14,13 @@ summary: Bases de données PostgreSQL sur ONTAP
 
 
 [role="lead"]
-PostgreSQL peut être hébergé sur des systèmes de fichiers NFS ou SAN.
+Les bases de données PostgreSQL avec SAN sont généralement hébergées sur des systèmes de fichiers xfs, mais d'autres peuvent être utilisées si elles sont prises en charge par le fournisseur du système d'exploitation
+
+Même si un seul LUN peut généralement prendre en charge jusqu'à 100 000 IOPS, les bases de données exigeantes en E/S nécessitent généralement l'utilisation de LVM avec répartition.
 
 
 
-== NFS
-
-
-TIP: *NetApp recommande* d'utiliser NFSv4.1 si les fonctionnalités NFSv4 sont requises. Certaines améliorations fonctionnelles du protocole NFSv4 dans NFSv4.1 améliorent la résilience dans certains cas à la périphérie.
-
-Utilisez l'option de montage suivante lors du montage d'un système de fichiers NFS :
-
-....
-nfs4 rw, hard,nointr,bg,vers=4,sync,proto=tcp,noatime,rsize=65536,wsize=65536
-....
-
-
-=== Tailles de transfert NFS
-
-Par défaut, ONTAP limite la taille des E/S NFS à 64 Ko.
-
-Par défaut, ONTAP limite la taille des E/S NFS à 64 Ko.
-
-Les E/S aléatoires utilisent la plupart des applications et bases de données une taille de bloc bien inférieure à la taille maximale de 64 Ko. Les E/S de blocs volumineux sont généralement parallélisées de sorte que le maximum de 64 Ko ne limite pas non plus l'obtention d'une bande passante maximale.
-
-Dans certains cas, le maximum de 64 000 charges de travail entraîne une limitation. En particulier, les opérations à thread unique, telles que les opérations de sauvegarde ou de restauration, ou encore les analyses de table complète de base de données s'exécutent plus rapidement et plus efficacement si la base de données peut exécuter moins d'E/S, mais plus volumineuses. La taille optimale de gestion des E/S pour ONTAP est de 256 Ko.
-
-La taille maximale de transfert pour un SVM ONTAP donné peut être modifiée comme suit :
-
-....
-Cluster01::> set advanced
-Warning: These advanced commands are potentially dangerous; use them only when directed to do so by NetApp personnel.
-Do you want to continue? {y|n}: y
-Cluster01::*> nfs server modify -vserver vserver1 -tcp-max-xfer-size 262144
-Cluster01::*>
-....
-|===
-| Avertissement 
-
-
-| Ne réduisez jamais la taille de transfert maximale autorisée sur ONTAP en dessous de la valeur de rsize/wsize des systèmes de fichiers NFS actuellement montés. Cela peut provoquer des blocages ou même une corruption des données avec certains systèmes d'exploitation. Par exemple, si les clients NFS sont actuellement définis sur une taille rsize/wsize de 65536, la taille maximale du transfert ONTAP peut être ajustée entre 65536 et 1048576 sans effet car les clients eux-mêmes sont limités. Réduire la taille de transfert maximale en dessous de 65536 peut endommager la disponibilité ou les données. 
-|===
-
-
-== SAN
+== Marquage LVM
 
 Avant l'ère des disques Flash, la répartition était utilisée pour surmonter les limites de performances des disques rotatifs. Par exemple, si un système d'exploitation doit effectuer une opération de lecture de 1 Mo, la lecture de ce 1 Mo de données à partir d'un seul disque demande beaucoup de tête de lecture lorsque le transfert des 1 Mo est lent. Si ce 1 Mo de données a été réparti sur 8 LUN, le système d'exploitation pourrait exécuter huit opérations de lecture de 128 K en parallèle et réduire le temps nécessaire au transfert de 1 Mo.
 

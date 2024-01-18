@@ -1,0 +1,86 @@
+---
+sidebar: sidebar 
+permalink: postgres/postgres-nfs-filesystems.html 
+keywords: PostgreSQL,database,postgres 
+summary: PostgreSQL bases de données NFS avec ONTAP 
+---
+= PostgreSQL avec systèmes de fichiers NFS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Les bases de données PostgreSQL peuvent être hébergées sur les systèmes de fichiers NFSv3 ou NFSv4. La meilleure option dépend de facteurs extérieurs à la base de données.
+
+Par exemple, le comportement de verrouillage NFSv4 peut être préférable dans certains environnements en cluster. (Voir link:../oracle/oracle-notes-stale-nfs-locks.html["ici"] pour plus d'informations)
+
+Dans le cas contraire, les fonctionnalités de la base de données doivent être proches des mêmes, y compris les performances. La seule exigence est l'utilisation du `hard` option de montage. Ceci est nécessaire pour garantir que les délais d'expiration ne produisent pas d'erreurs d'E/S irrécupérables.
+
+Si NFSv4 est choisi en tant que protocole, NetApp recommande d'utiliser NFSv4.1. Certaines améliorations fonctionnelles du protocole NFSv4 dans NFSv4.1 améliorent la résilience sur NFSv4.0.
+
+Utilisez les options de montage suivantes pour les charges de travail de base de données générales :
+
+....
+rw, hard,nointr,bg,vers=[3|4],proto=tcp,rsize=65536,wsize=65536
+....
+Si des E/S séquentielles importantes sont attendues, la taille du transfert NFS peut être augmentée.
+
+
+
+== Tailles de transfert NFS
+
+Par défaut, ONTAP limite la taille des E/S NFS à 64 Ko.
+
+Les E/S aléatoires utilisent la plupart des applications et bases de données une taille de bloc bien inférieure à la taille maximale de 64 Ko. Les E/S de blocs volumineux sont généralement parallélisées de sorte que le maximum de 64 Ko ne limite pas non plus l'obtention d'une bande passante maximale.
+
+Dans certains cas, le maximum de 64 000 charges de travail entraîne une limitation. En particulier, les opérations à thread unique, telles que les opérations de sauvegarde ou de restauration, ou encore les analyses de table complète de base de données s'exécutent plus rapidement et plus efficacement si la base de données peut exécuter moins d'E/S, mais plus volumineuses. La taille optimale de gestion des E/S pour ONTAP est de 256 Ko.
+
+La taille maximale de transfert pour un SVM ONTAP donné peut être modifiée comme suit :
+
+....
+Cluster01::> set advanced
+Warning: These advanced commands are potentially dangerous; use them only when directed to do so by NetApp personnel.
+Do you want to continue? {y|n}: y
+Cluster01::*> nfs server modify -vserver vserver1 -tcp-max-xfer-size 262144
+Cluster01::*>
+....
+|===
+| Avertissement 
+
+
+| Ne réduisez jamais la taille de transfert maximale autorisée sur ONTAP en dessous de la valeur de rsize/wsize des systèmes de fichiers NFS actuellement montés. Cela peut provoquer des blocages ou même une corruption des données avec certains systèmes d'exploitation. Par exemple, si les clients NFS sont actuellement définis sur une taille rsize/wsize de 65536, la taille maximale du transfert ONTAP peut être ajustée entre 65536 et 1048576 sans effet car les clients eux-mêmes sont limités. Réduire la taille de transfert maximale en dessous de 65536 peut endommager la disponibilité ou les données. 
+|===
+Une fois la taille de transfert augmentée au niveau ONTAP, les options de montage suivantes sont utilisées :
+
+....
+rw, hard,nointr,bg,vers=[3|4],proto=tcp,rsize=262144,wsize=262144
+....
+
+
+== Tables d'emplacements TCP NFSv3
+
+Si NFSv3 est utilisé avec Linux, il est essentiel de définir correctement les tables d'emplacements TCP.
+
+Les tables d'emplacements TCP sont l'équivalent NFSv3 de la profondeur de file d'attente de l'adaptateur de bus hôte (HBA). Ces tableaux contrôlent le nombre d'opérations NFS qui peuvent être en attente à la fois. La valeur par défaut est généralement 16, un chiffre bien trop faible pour assurer des performances optimales. Le problème inverse se produit sur les noyaux Linux plus récents : la limite de la table des emplacements TCP augmente automatiquement par envoi de demandes, jusqu'à atteindre le niveau de saturation du serveur NFS.
+
+Pour des performances optimales et pour éviter les problèmes de performances, ajustez les paramètres du noyau qui contrôlent les tables d'emplacements TCP.
+
+Exécutez le `sysctl -a | grep tcp.*.slot_table` et observez les paramètres suivants :
+
+....
+# sysctl -a | grep tcp.*.slot_table
+sunrpc.tcp_max_slot_table_entries = 128
+sunrpc.tcp_slot_table_entries = 128
+....
+Tous les systèmes Linux doivent inclure `sunrpc.tcp_slot_table_entries`, mais seulement certains incluent `sunrpc.tcp_max_slot_table_entries`. Ils doivent tous deux être réglés sur 128.
+
+|===
+| Avertissement 
+
+
+| Si vous ne définissez pas ces paramètres, vous risquez d'avoir des effets importants sur les performances. Dans certains cas, les performances sont limitées car le système d'exploitation linux n'émet pas suffisamment d'E/S. Dans d'autres cas, les latences d'E/S augmentent à mesure que le système d'exploitation linux tente d'émettre plus d'E/S que ce qui peut être traité. 
+|===
