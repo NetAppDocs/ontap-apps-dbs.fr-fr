@@ -13,7 +13,7 @@ summary: Microsoft SQL Server sur ONTAP
 SQL Server constitue le socle de la plateforme de données Microsoft. Il apporte les performances stratégiques grâce aux technologies in-memory et permet d'obtenir plus rapidement des informations sur toutes les données, qu'elles soient sur site ou dans le cloud.
 
 
-NOTE: Cette documentation remplace les rapports techniques publiés précédemment _TR-4590: Guide des meilleures pratiques pour Microsoft SQL Server avec ONTAP_
+NOTE: Cette documentation remplace le rapport technique _TR-4590 : guide des meilleures pratiques pour Microsoft SQL Server avec ONTAP_
 
 Microsoft SQL Server s'appuie sur les fonctionnalités stratégiques des versions précédentes pour offrir des performances, une disponibilité et une gestion exceptionnelles pour les applications stratégiques. Le système de stockage joue un rôle clé dans les performances globales d'une base de données SQL Server. NetApp propose plusieurs produits qui permettent à votre base de données SQL Server de fournir des performances d'entreprise tout en fournissant des outils de pointe pour la gestion de votre environnement.
 

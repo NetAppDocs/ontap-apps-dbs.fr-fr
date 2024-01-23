@@ -18,30 +18,30 @@ summary: 'Si possible, utilisez toujours les outils ONTAP pour provisionner les 
 :revdate: == Datastores and protocols
 
 
-Si possible, utilisez toujours les outils ONTAP pour provisionner les datastores et les volumes. Cela vérifie que les volumes, les chemins de jonction, les LUN, les igroups, les règles d'exportation, et d'autres paramètres sont configurés de manière compatible.
+* Si possible, utilisez toujours les outils ONTAP pour provisionner les datastores et les volumes. Cela vérifie que les volumes, les chemins de jonction, les LUN, les igroups, les règles d'exportation, et d'autres paramètres sont configurés de manière compatible.
+* SRM prend en charge iSCSI, Fibre Channel et NFS version 3 avec ONTAP 9 lors de l'utilisation d'une réplication basée sur les baies via SRA. SRM ne prend pas en charge la réplication basée sur la baie pour NFS version 4.1 avec des datastores traditionnels ou vvols.
+* Pour confirmer la connectivité, vérifiez toujours que vous pouvez monter et démonter un nouveau datastore test sur le site de reprise sur incident à partir du cluster ONTAP de destination. Testez chaque protocole que vous envisagez d'utiliser pour la connectivité du datastore. L'une des meilleures pratiques est d'utiliser les outils ONTAP pour créer votre datastore de test, car elle effectue toutes les automatisations du datastore telles que dirigées par SRM.
+* Les protocoles SAN doivent être homogènes pour chaque site. Vous pouvez combiner les protocoles NFS et SAN, mais les protocoles SAN ne doivent pas être combinés dans un même site. Par exemple, vous pouvez utiliser FCP sur le site A et iSCSI sur le site B. Vous ne devez pas utiliser FCP et iSCSI sur le site A. La raison en est que SRA ne crée pas de groupes initiateurs mixtes sur le site de reprise et SRM ne filtre pas la liste des initiateurs donnée à SRA.
+* Les guides précédents ont recommandé de créer la LIF pour la localisation des données. C'est-à-dire toujours monter un datastore à l'aide d'une LIF située sur le nœud qui détient physiquement le volume. Ce n'est plus une exigence dans les versions modernes de ONTAP 9. Dans la mesure du possible, et si des informations d'identification avec périmètre du cluster sont fournies, les outils ONTAP choisissent toujours d'équilibrer la charge entre les LIF locales aux données, mais il ne s'agit pas d'une exigence de haute disponibilité ou de performance.
+* NetApp ONTAP 9 peut être configuré pour supprimer automatiquement les snapshots afin de préserver la disponibilité en cas de manque d'espace lorsque la taille automatique ne peut pas fournir une capacité d'urgence suffisante. Le paramètre par défaut de cette fonctionnalité ne supprime pas automatiquement les snapshots créés par SnapMirror. Si des snapshots SnapMirror sont supprimés, NetApp SRA ne peut pas inverser et resynchroniser la réplication pour le volume affecté. Pour empêcher ONTAP de supprimer des snapshots SnapMirror, configurez la fonctionnalité de suppression automatique de snapshots.
 
-SRM prend en charge iSCSI, Fibre Channel et NFS version 3 avec ONTAP 9 lors de l'utilisation d'une réplication basée sur les baies via SRA. SRM ne prend pas en charge la réplication basée sur la baie pour NFS version 4.1 avec des datastores traditionnels ou vvols.
-
-Pour confirmer la connectivité, vérifiez toujours que vous pouvez monter et démonter un nouveau datastore test sur le site de reprise sur incident à partir du cluster ONTAP de destination. Testez chaque protocole que vous envisagez d'utiliser pour la connectivité du datastore. L'une des meilleures pratiques est d'utiliser les outils ONTAP pour créer votre datastore de test, car elle effectue toutes les automatisations du datastore telles que dirigées par SRM.
-
-Les protocoles SAN doivent être homogènes pour chaque site. Vous pouvez combiner les protocoles NFS et SAN, mais les protocoles SAN ne doivent pas être combinés dans un même site. Par exemple, vous pouvez utiliser FCP sur le site A et iSCSI sur le site B. Vous ne devez pas utiliser FCP et iSCSI sur le site A. La raison en est que SRA ne crée pas de groupes initiateurs mixtes sur le site de reprise et SRM ne filtre pas la liste des initiateurs donnée à SRA.
-
-Il a été recommandé aux guides précédents de créer la LIF vers la localisation des données. C'est-à-dire toujours monter un datastore à l'aide d'une LIF située sur le nœud qui détient physiquement le volume. Ce n'est plus une exigence dans les versions modernes de ONTAP 9. Dans la mesure du possible, et si des informations d'identification du cluster sont fournies, les outils ONTAP choisissent toujours d'équilibrer la charge entre les LIF locales des données, mais ils ne doivent pas garantir de haute disponibilité ou de performances élevées.
-
-NetApp ONTAP 9 peut être configuré pour supprimer automatiquement les snapshots afin de préserver la disponibilité en cas de manque d'espace lorsque la taille automatique ne peut pas fournir une capacité d'urgence suffisante. Le paramètre par défaut de cette fonctionnalité ne supprime pas automatiquement les snapshots créés par SnapMirror. Si des snapshots SnapMirror sont supprimés, NetApp SRA ne peut pas inverser et resynchroniser la réplication pour le volume affecté. Pour empêcher ONTAP de supprimer des snapshots SnapMirror, configurez la fonctionnalité de suppression automatique de snapshots.
 
 ....
 snap autodelete modify -volume -commitment try
 ....
-La taille automatique du volume doit être définie sur `grow` Pour les volumes contenant les datastores SAN et `grow_shrink` Pour les datastores NFS. En savoir plus sur link:https://docs.netapp.com/us-en/ontap/flexgroup/configure-automatic-grow-shrink-task.html["configuration des volumes pour l'extension ou la réduction automatique"^].
+* La taille automatique du volume doit être définie sur `grow` Pour les volumes contenant les datastores SAN et `grow_shrink` Pour les datastores NFS. En savoir plus sur link:https://docs.netapp.com/us-en/ontap/flexgroup/configure-automatic-grow-shrink-task.html["configuration des volumes pour l'extension ou la réduction automatique"^].
+* SRM fonctionne mieux lorsque le nombre de datastores et donc les groupes de protection sont limités dans vos plans de reprise d'activité. Par conséquent, vous devez envisager d'optimiser la densité des machines virtuelles dans les environnements protégés par SRM où le RTO est essentiel.
+* Utilisez Distributed Resource Scheduler (DRS) pour équilibrer la charge sur vos clusters ESXi protégés et de récupération. N'oubliez pas que si vous prévoyez de revenir en arrière, lorsque vous exécutez une reprotection, les clusters précédemment protégés deviennent les nouveaux clusters de récupération. Le DRS contribue à équilibrer le placement dans les deux sens.
+* Dans la mesure du possible, évitez d'utiliser la personnalisation IP avec SRM car cela peut augmenter votre RTO.
+
 
 
 
 == Gestion basée sur des règles de stockage (SPBM) et vVols
 
-Depuis SRM 8.3, la protection des machines virtuelles à l'aide de datastores vvols est prise en charge. Les planifications SnapMirror sont exposées aux règles de stockage de VM par le VASA Provider lorsque la réplication de vvols est activée dans le menu des paramètres des outils ONTAP, comme indiqué dans les captures d'écran suivantes.
+À partir de SRM 8.3, la protection des machines virtuelles à l'aide des datastores vVols est prise en charge. Les planifications SnapMirror sont exposées aux règles de stockage de VM par le VASA Provider lorsque la réplication de vvols est activée dans le menu des paramètres des outils ONTAP, comme indiqué dans les captures d'écran suivantes.
 
-L'exemple suivant montre l'activation de la réplication vvols.
+L'exemple suivant montre l'activation de la réplication vVols.
 
 image:vsrm-ontap9_image2.png["Erreur : image graphique manquante"]
 
@@ -57,9 +57,9 @@ image:vsrm-ontap9_image4.png["Erreur : image graphique manquante"]
 
 == Créez des volumes répliqués pour les datastores vvols
 
-À la différence des précédents datastores vvols, les datastores vvols répliqués doivent être créés dès le début avec une réplication activée, et ils doivent utiliser des volumes pré-créés sur les systèmes ONTAP avec des relations SnapMirror. Cela nécessite de pré-configurer des éléments tels que le peering de cluster et de SVM. Ces activités doivent être réalisées par votre administrateur ONTAP, car elles permettent de séparer très facilement les responsabilités qui gèrent les systèmes ONTAP sur plusieurs sites et celles qui sont principalement responsables des opérations vSphere.
+À la différence des précédents datastores vvols, les datastores vvols répliqués doivent être créés dès le début avec une réplication activée, et ils doivent utiliser des volumes pré-créés sur les systèmes ONTAP avec des relations SnapMirror. Cela nécessite de pré-configurer des éléments tels que le peering de cluster et de SVM. Ces activités doivent être réalisées par votre administrateur ONTAP, car elles permettent une séparation stricte des responsabilités entre ceux qui gèrent les systèmes ONTAP sur plusieurs sites et ceux qui sont principalement responsables des opérations vSphere.
 
-Cette exigence est nouvelle pour le compte de l'administrateur vSphere. Les volumes étant créés hors du cadre des outils ONTAP, il n'est pas tenu de suivre les modifications apportées par votre administrateur ONTAP tant que la période de redécouverte planifiée n'est pas au moment de la prochaine découverte. C'est pourquoi il est recommandé de toujours exécuter la redécouverte chaque fois que vous créez un volume ou une relation SnapMirror à utiliser avec vvols. Il vous suffit de cliquer avec le bouton droit sur l'hôte ou le cluster et de sélectionner les outils NetApp ONTAP > mettre à jour les données hôte et de stockage, comme indiqué dans la capture d'écran ci-dessous.
+Cette exigence est nouvelle pour le compte de l'administrateur vSphere. Les volumes étant créés hors du cadre des outils ONTAP, il n'est pas tenu de suivre les modifications apportées par votre administrateur ONTAP tant que la période de redécouverte planifiée n'est pas au moment de la prochaine découverte. C'est pourquoi il est recommandé de toujours exécuter la redécouverte chaque fois que vous créez un volume ou une relation SnapMirror à utiliser avec vvols. Il vous suffit de cliquer avec le bouton droit de la souris sur l'hôte ou le cluster et de sélectionner Outils NetApp ONTAP > mettre à jour les données d'hôte et de stockage, comme illustré dans la capture d'écran suivante.
 
 image:vsrm-ontap9_image5.png["Erreur : image graphique manquante"]
 
@@ -69,7 +69,7 @@ Il faut faire preuve de prudence lorsqu'il s'agit de vVvols et SRM. Ne mélangez
 
 == À propos des paires de baies
 
-Un gestionnaire de matrices est créé pour chaque paire de matrices. Avec les outils SRM et ONTAP, chaque association de baie s'effectue au sein d'un SVM, même si vous utilisez les identifiants du cluster. Vous pouvez ainsi segmenter les flux de travail de reprise après incident entre des locataires, en fonction des SVM qu'ils ont affectés à la gestion. Vous pouvez créer plusieurs gestionnaires de baies pour un cluster donné, et ils peuvent être de nature asymétrique. Vous pouvez « Fan-Out » ou « Fan-In » sur différents clusters ONTAP 9. Par exemple, il peut y avoir des SVM-A et SVM-B dans le Cluster-1 en cours de réplication vers SVM-C dans le Cluster-2, SVM-D dans le Cluster-3 ou vice-versa.
+Un gestionnaire de matrices est créé pour chaque paire de matrices. Avec les outils SRM et ONTAP, chaque association de baie s'effectue au sein d'un SVM, même si vous utilisez les identifiants du cluster. Vous pouvez ainsi segmenter les flux de travail de reprise après incident entre des locataires, en fonction des SVM qu'ils ont affectés à la gestion. Vous pouvez créer plusieurs gestionnaires de baies pour un cluster donné, qui peuvent être asymétriques. Vous pouvez « Fan-Out » ou « Fan-In » sur différents clusters ONTAP 9. Par exemple, il peut y avoir des SVM-A et SVM-B dans le Cluster-1 en cours de réplication vers SVM-C dans le Cluster-2, SVM-D dans le Cluster-3 ou vice-versa.
 
 Lors de la configuration des paires de baies dans SRM, vous devez toujours les ajouter à SRM de la même manière que vous les avez ajoutés à ONTAP Tools : autrement dit, ils doivent utiliser le même nom d'utilisateur, mot de passe et LIF de gestion. Cette exigence garantit que SRA communique correctement avec la baie. La copie d'écran suivante montre comment un cluster peut s'afficher dans les outils ONTAP et comment il peut être ajouté à un gestionnaire de baies.
 
@@ -81,7 +81,7 @@ image:vsrm-ontap9_image6.jpg["Erreur : image graphique manquante"]
 
 Les groupes de réplication contiennent des ensembles logiques de machines virtuelles qui sont restaurées ensemble. Le fournisseur VASA, un outil de ONTAP, crée automatiquement des groupes de réplication pour vous. Étant donné que la réplication SnapMirror de ONTAP se produit au niveau du volume, toutes les machines virtuelles d'un volume se trouvent dans le même groupe de réplication.
 
-Il existe plusieurs facteurs à prendre en compte dans les groupes de réplication et dans la manière dont vous distribuez les machines virtuelles sur les volumes FlexVol. Le regroupement d'ordinateurs virtuels similaires dans un même volume peut augmenter l'efficacité du stockage avec les anciens systèmes ONTAP qui n'offrent pas de déduplication au niveau des agrégats, mais le regroupement augmente la taille du volume et réduit la simultanéité des E/S du volume. Le meilleur équilibre entre performances et efficacité du stockage peut être obtenu dans les systèmes ONTAP modernes en distribuant les machines virtuelles aux volumes FlexVol du même agrégat, exploitant ainsi la déduplication au niveau de l'agrégat et une mise en parallèle des E/S plus importante sur plusieurs volumes. Vous pouvez restaurer des VM dans les volumes simultanément, car un groupe de protection (voir ci-dessous) peut contenir plusieurs groupes de réplication. L'inconvénient de cette disposition est que les blocs peuvent être transmis plusieurs fois sur le réseau, car SnapMirror volume ne prend pas en compte la déduplication dans l'agrégat.
+Il existe plusieurs facteurs à prendre en compte dans les groupes de réplication et dans la manière dont vous distribuez les machines virtuelles sur les volumes FlexVol. Le regroupement de machines virtuelles similaires dans un même volume peut améliorer l'efficacité du stockage avec les systèmes ONTAP plus anciens qui n'offrent pas de déduplication au niveau de l'agrégat. Cependant, ce regroupement augmente la taille du volume et réduit la simultanéité E/S du volume. Les systèmes ONTAP modernes offrent un équilibre parfait entre performance et efficacité du stockage en distribuant les machines virtuelles entre les volumes FlexVol au sein d'un même agrégat. La déduplication au niveau de l'agrégat améliore la parallélisation des E/S sur plusieurs volumes. Vous pouvez restaurer des VM dans les volumes simultanément, car un groupe de protection (voir ci-dessous) peut contenir plusieurs groupes de réplication. L'inconvénient de cette disposition est que les blocs peuvent être transmis plusieurs fois sur le réseau, car SnapMirror volume ne prend pas en compte la déduplication dans l'agrégat.
 
 Dernier point à prendre en compte pour les groupes de réplication : chacun d'entre eux est, par nature, un groupe de cohérence logique (à ne pas confondre avec les groupes de cohérence SRM). En effet, toutes les machines virtuelles du volume sont transférées ensemble à l'aide du même snapshot. Ainsi, si vous disposez de machines virtuelles qui doivent être cohérentes les unes avec les autres, envisagez de les stocker dans le même FlexVol.
 
@@ -99,7 +99,7 @@ Les plans de reprise définissent les groupes de protection qui sont restaurés 
 
 Les plans de restauration permettent aux administrateurs SRM de définir les flux de travail de restauration en affectant des VM à un groupe de priorité compris entre 1 (le plus élevé) et 5 (le plus faible), dont la valeur par défaut est 3 (moyen). Au sein d'un groupe de priorités, les VM peuvent être configurés pour les dépendances.
 
-Par exemple, votre entreprise peut disposer d'une application stratégique de niveau 1 qui repose sur un serveur Microsoft SQL pour sa base de données. Vous décidez donc de placer vos machines virtuelles dans le groupe de priorité 1. Au sein du groupe de priorité 1, vous commencez à planifier la commande afin d'obtenir des services. Vous devez probablement démarrer votre contrôleur de domaine Microsoft Windows avant votre serveur Microsoft SQL, qui devra être en ligne avant votre serveur d'applications, etc. Vous ajouterez toutes ces machines virtuelles au groupe de priorités, puis définissez les dépendances, car les dépendances s'appliquent uniquement à un groupe de priorités donné.
+Par exemple, votre entreprise peut disposer d'une application stratégique de niveau 1 qui repose sur un serveur Microsoft SQL pour sa base de données. Vous décidez donc de placer vos machines virtuelles dans le groupe de priorité 1. Au sein du groupe de priorité 1, vous commencez à planifier la commande afin d'obtenir des services. Vous devez probablement démarrer votre contrôleur de domaine Microsoft Windows avant votre serveur Microsoft SQL, qui devra être en ligne avant votre serveur d'applications, etc. Vous devez ajouter toutes ces machines virtuelles au groupe de priorité, puis définir les dépendances, car elles ne s'appliquent qu'à un groupe de priorité donné.
 
 NetApp recommande fortement de travailler avec vos équipes en charge des applications pour comprendre l'ordre des opérations requises dans un scénario de basculement et pour élaborer vos plans de reprise en conséquence.
 
@@ -107,7 +107,7 @@ NetApp recommande fortement de travailler avec vos équipes en charge des applic
 
 == Tester le basculement
 
-Il est recommandé de toujours effectuer un basculement de test dès que la configuration d'un stockage protégé d'ordinateurs virtuels modifie. Ainsi, en cas d'incident, vous pouvez vous assurer que site Recovery Manager peut restaurer les services avec la cible RTO prévue.
+Il est recommandé de toujours effectuer un basculement de test dès que la configuration d'un stockage protégé d'ordinateurs virtuels modifie. Ainsi, en cas d'incident, vous avez l'assurance que site Recovery Manager peut restaurer les services au sein de la cible de délai de restauration prévue.
 
 NetApp recommande également de confirmer occasionnellement les fonctionnalités des applications chez l'invité, en particulier après la reconfiguration du stockage des machines virtuelles.
 
@@ -125,7 +125,7 @@ Vous devrez peut-être résoudre ce problème en tenant compte des différences 
 
 VMware offre plusieurs moyens de résoudre ce problème. Pour la première, des technologies de virtualisation de réseau comme VMware NSX-T Data Center extraient la pile réseau des couches 2 à 7 de l'environnement d'exploitation, afin d'offrir des solutions plus portables. En savoir plus sur link:https://docs.vmware.com/en/Site-Recovery-Manager/8.4/com.vmware.srm.admin.doc/GUID-89402F1B-1AFB-42CD-B7D5-9535AF32435D.html["Options NSX-T avec SRM"^].
 
-SRM vous permet également de modifier la configuration réseau d'une machine virtuelle lors de sa restauration. Cette reconfiguration inclut des paramètres tels que les adresses IP, l'adresse de passerelle et les paramètres du serveur DNS. Différents paramètres réseau, qui sont appliqués aux machines virtuelles individuelles au fur et à mesure qu'elles sont restaurées, peuvent être spécifiés dans les paramètres de propriété d'une machine virtuelle dans le plan de reprise.
+SRM vous permet également de modifier la configuration réseau d'une machine virtuelle lors de sa restauration. Cette reconfiguration inclut des paramètres tels que les adresses IP, les adresses de passerelle et les paramètres du serveur DNS. Différents paramètres réseau, qui sont appliqués aux machines virtuelles individuelles au fur et à mesure qu'elles sont restaurées, peuvent être spécifiés dans les paramètres de propriété d'une machine virtuelle dans le plan de reprise.
 
 Pour configurer SRM de façon à appliquer différents paramètres réseau à plusieurs machines virtuelles sans devoir modifier les propriétés de chacune d'entre elles dans le plan de reprise, VMware fournit un outil appelé dr-ip-customizer. Pour savoir comment utiliser cet utilitaire, reportez-vous à la section link:https://docs.vmware.com/en/Site-Recovery-Manager/8.4/com.vmware.srm.admin.doc/GUID-2B7E2B25-2B82-4BC4-876B-2FE0A3D71B84.html["Documentation de VMware"^].
 
@@ -147,6 +147,6 @@ Une autre meilleure pratique de restauration consiste à toujours effectuer un b
 
 == Reprotéger le site d'origine
 
-Après le retour arrière, vous devez confirmer auprès de tous les détenteurs de parts que leurs services ont été rendus normaux avant d'exécuter à nouveau la reprotection,
+Après la restauration, vous devez confirmer auprès de toutes les parties prenantes que leurs services ont été renvoyés à la normale avant d'exécuter à nouveau reprotéger.
 
 La reprotection après le retour arrière reprend l'état où il était au début, avec la réplication SnapMirror à nouveau en cours d'exécution depuis le site de production vers le site de reprise.

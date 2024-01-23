@@ -25,9 +25,9 @@ Si NFSv4 est choisi en tant que protocole, NetApp recommande d'utiliser NFSv4.1.
 Utilisez les options de montage suivantes pour les charges de travail de base de données générales :
 
 ....
-rw, hard,nointr,bg,vers=[3|4],proto=tcp,rsize=65536,wsize=65536
+rw,hard,nointr,bg,vers=[3|4],proto=tcp,rsize=65536,wsize=65536
 ....
-Si des E/S séquentielles importantes sont attendues, la taille du transfert NFS peut être augmentée.
+Si des E/S séquentielles lourdes sont attendues, la taille du transfert NFS peut être augmentée comme décrit dans la section suivante.
 
 
 
@@ -57,7 +57,7 @@ Cluster01::*>
 Une fois la taille de transfert augmentée au niveau ONTAP, les options de montage suivantes sont utilisées :
 
 ....
-rw, hard,nointr,bg,vers=[3|4],proto=tcp,rsize=262144,wsize=262144
+rw,hard,nointr,bg,vers=[3|4],proto=tcp,rsize=262144,wsize=262144
 ....
 
 

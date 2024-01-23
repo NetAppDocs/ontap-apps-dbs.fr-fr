@@ -139,10 +139,6 @@ En revanche, l'architecture IP MetroCluster achemine toutes les E/S exclusivemen
 
 
 
-=== Commutateur automatique sans surveillance du médiateur (MAUSO)
-
-
-
 === Troisième site virtuel avec ClusterLion
 
 ClusterLion est un dispositif de surveillance MetroCluster avancé qui fonctionne comme un troisième site virtuel. Cette approche permet de déployer MetroCluster en toute sécurité dans une configuration à deux sites avec une fonctionnalité de basculement entièrement automatisée. De plus, ClusterLion peut effectuer un moniteur de niveau réseau supplémentaire et exécuter des opérations de post-basculement. La documentation complète est disponible auprès de ProLion.

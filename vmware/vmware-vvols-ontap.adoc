@@ -77,7 +77,7 @@ https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere/index.html["Pour consul
 
 Outre la documentation produit, des articles de la base de connaissances de support peuvent être utiles.
 
-* https://kb.netapp.com/app/answers/answer_view/a_id/1031261["Comment effectuer une reprise d'activité d'un fournisseur VASA"^]
+* https://kb.netapp.com/mgmt/OTV/NetApp_VASA_Provider/How_to_perform_a_VASA_Provider_Disaster_Recovery_-_Resolution_Guide["Guide de résolution des incidents VASA Provider"^]
 
 
 
