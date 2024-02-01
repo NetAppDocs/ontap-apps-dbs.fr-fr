@@ -4,7 +4,7 @@ permalink: oracle/oracle-notes-optimization-and-benchmarking.html
 keywords: oracle, database, ontap, performance, hammerdb, swingbench, calibrate_io, slob2, orion, slob, benchmarking, benchmark 
 summary: Tests de performances Oracle 
 ---
-= Optimisation des performances et banc d'essai Oracle
+= Procédures d'optimisation des performances Oracle et de benchmarking
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -24,9 +24,9 @@ Il est extrêmement compliqué de tester précisément les performances du stock
 
 En outre, il faut tenir compte des tâches qui ne relèvent pas du domaine du stockage dans les bases de données. L'optimisation de la performance du stockage ne présente plus d'avantages, car la performance du stockage n'est plus un facteur limitant.
 
-La majorité des clients de base de données choisissent désormais des baies 100 % Flash, ce qui entraîne d'autres considérations. Prenons l'exemple des tests de performances sur un système AFF8080 à deux nœuds :
+La majorité des clients de base de données choisissent désormais des baies 100 % Flash, ce qui entraîne d'autres considérations. Prenons l'exemple des tests de performances sur un système AFF A900 à deux nœuds :
 
-* Avec un ratio de lecture/écriture de 75/25, deux nœuds AFF8080 peuvent fournir plus de 300 000 IOPS aléatoires de bases de données, avant même que la latence ne dépasse le millième de seconde. Au-delà des exigences de performance actuelles de la plupart des bases de données, il est difficile de prévoir l'amélioration attendue. Le stockage serait largement effacé comme un goulot d'étranglement.
+* Avec un ratio de lecture/écriture de 80/20, deux nœuds A900 peuvent fournir plus de 1 million d'IOPS de base de données aléatoires avant que la latence ne dépasse même le seuil de 150 µs. Au-delà des exigences de performance actuelles de la plupart des bases de données, il est difficile de prévoir l'amélioration attendue. Le stockage serait largement effacé comme un goulot d'étranglement.
 * La bande passante réseau est une source de plus en plus courante de limites de performances. Par exemple, les solutions sur disque mécanique constituent souvent des goulots d'étranglement pour les performances des bases de données, car la latence d'E/S est très élevée. Lorsque les limites de latence sont éliminées par un système 100 % Flash, le obstacle est fréquemment basculer vers le réseau. Ceci est particulièrement notable dans les environnements virtualisés et les systèmes lames où la véritable connectivité réseau est difficile à visualiser. Les tests de performances peuvent ainsi être plus complexes si le système de stockage lui-même ne peut pas être pleinement utilisé en raison des limitations de bande passante.
 * Il est généralement impossible de comparer les performances d'une baie 100 % Flash à celles d'une baie contenant des disques rotatifs en raison de la latence considérablement améliorée des baies 100 % Flash. Les résultats des tests ne sont généralement pas significatifs.
 * Généralement, comparer les pics de performance d'IOPS avec un système 100 % Flash n'est pas utile, car les bases de données ne sont pas limitées par les E/S de stockage Supposons par exemple qu'une baie peut supporter 500 000 IOPS aléatoires, tandis qu'une autre peut supporter 300 000. La différence n'est pas pertinente en situation réelle si une base de données consacre 99 % de son temps au traitement du processeur. Ces charges de travail n'exploitent jamais toutes les capacités de la baie de stockage. À l'inverse, les pics d'activité d'E/S par seconde peuvent s'avérer critiques pour une plateforme de consolidation sur laquelle la baie de stockage doit être chargée au maximum de ses capacités.

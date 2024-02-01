@@ -2,16 +2,16 @@
 sidebar: sidebar 
 permalink: mysql/mysql-slot-tables.html 
 keywords: MySQL,MariaDB,TR-4722 
-summary: MySQL sur ONTAP 
+summary: 'Tables d"emplacements MySQL et NFSv3' 
 ---
-= Tables de rainures
+= Tables d'emplacements MySQL et NFSv3
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/
 
 
 [role="lead"]
-Les performances NFS sous Linux dépendent d'un paramètre appelé `tcp_max_slot_table_entries`.
+Les performances de NFSv3 sous Linux dépendent d'un paramètre appelé `tcp_max_slot_table_entries`.
 
 Les tables d'emplacements TCP sont l'équivalent NFSv3 de la profondeur de file d'attente de l'adaptateur de bus hôte (HBA). Ces tableaux contrôlent le nombre d'opérations NFS qui peuvent être en attente à la fois. La valeur par défaut est généralement 16, un chiffre bien trop faible pour assurer des performances optimales. Le problème inverse se produit sur les noyaux Linux plus récents : la limite de la table des emplacements TCP augmente automatiquement par envoi de demandes, jusqu'à atteindre le niveau de saturation du serveur NFS.
 

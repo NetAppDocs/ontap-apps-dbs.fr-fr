@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: postgres/postgres-native-dp.html 
 keywords: PostgreSQL,database,postgres 
-summary: Bases de données PostgreSQL sur ONTAP 
+summary: Protection des données PostgreSQL P 
 ---
-= Protection native des données
+= Protection des données PostgreSQL
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

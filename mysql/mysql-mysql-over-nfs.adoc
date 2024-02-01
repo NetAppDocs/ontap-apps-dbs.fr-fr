@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: mysql/mysql-mysql-over-nfs.html 
 keywords: MySQL,MariaDB,NFS 
-summary: MySQL sur ONTAP 
+summary: MySQL avec NFS 
 ---
-= MySQL sur NFS
+= MySQL avec NFS
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/
