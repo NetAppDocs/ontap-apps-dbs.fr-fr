@@ -55,6 +55,8 @@ entries:
     url: "/oracle/oracle-network-config-ethernet.html"
   - title: Configuration FC SAN
     url: "/oracle/oracle-network-config-fc.html"
+  - title: Réseau à connexion directe
+    url: "/oracle/oracle-network-config-direct-connect.html"
 - title: Configuration de stockage sous-jacente
   pdf-filename: Configuration du stockage pour Oracle Database
   entries:
