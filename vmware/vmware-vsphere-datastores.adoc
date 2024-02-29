@@ -4,20 +4,15 @@ permalink: vmware/vmware-vsphere-datastores.html
 keywords: vSphere, datastore, VMFS, FC, FCoE, NVMe/FC, iSCSI, NFS, vVols 
 summary: 'Cette page décrit les meilleures pratiques relatives à l"implémentation d"une solution de stockage NetApp ONTAP dans un environnement VMware vSphere.' 
 ---
-= Datastores et protocoles
-:hardbreaks:
+= Fonctionnalités du datastore et du protocole vSphere
 :allow-uri-read: 
-:nofooter: 
-:icons: font
-:linkattrs: 
-:imagesdir: ../media/
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
-:revdate: == vSphere datastore and protocol features
 
 
+
+
+== Fonctionnalités du datastore et du protocole vSphere
+
+[role="lead"]
 Sept protocoles sont utilisés pour connecter VMware vSphere aux datastores sur un système exécutant le logiciel ONTAP :
 
 * FCP
@@ -86,7 +81,7 @@ Le tableau suivant répertorie les fonctionnalités de stockage VMware prises en
 Ce paramètre est le paramètre par défaut pour toutes les machines virtuelles sur NFS lorsqu'elles n'utilisent pas VAAI. 
 
 
-| Chemins d'accès multiples natifs VMware | Oui. | Oui. | Oui, en utilisant le nouveau plug-in haute performance (HPP) | S/O 
+| Chemins d'accès multiples natifs VMware | Oui. | Oui. | Oui, en utilisant le nouveau plug-in haute performance (HPP) | L'agrégation de sessions NFS v4.1 requiert ONTAP 9.14.1 et versions ultérieures 
 |===
 Le tableau suivant répertorie les fonctionnalités de gestion du stockage ONTAP prises en charge.
 
@@ -189,7 +184,7 @@ Lors de l'utilisation de vSphere avec des systèmes exécutant le logiciel ONTAP
 
 Le plug-in permet également d'utiliser d'autres outils ONTAP dans les environnements vSphere. Il vous permet d'installer le plug-in NFS pour VMware VAAI, ce qui permet d'alléger la copie vers ONTAP pour les opérations de clonage de machines virtuelles, de réserver de l'espace pour les fichiers de disques virtuels lourds et de décharger les snapshots ONTAP.
 
-Le plug-in est également l'interface de gestion de nombreuses fonctions du VASA Provider pour ONTAP, prenant en charge la gestion basée sur des règles de stockage avec vVols. Une fois les outils ONTAP pour VMware vSphere enregistrés, utilisez-le pour créer des profils de capacité de stockage, les mapper au stockage, et assurez-vous que le datastore est conforme aux profils au fil du temps. Vasa Provider fournit également une interface pour créer et gérer les datastores vvol.
+Le plug-in est également l'interface de gestion de nombreuses fonctions de VASA Provider pour ONTAP, prenant en charge la gestion basée sur des règles de stockage avec vvols. Une fois les outils ONTAP pour VMware vSphere enregistrés, utilisez-le pour créer des profils de capacité de stockage, les mapper au stockage, et assurez-vous que le datastore est conforme aux profils au fil du temps. Vasa Provider fournit également une interface pour créer et gérer les datastores vvol.
 
 En règle générale, NetApp recommande d'utiliser les outils ONTAP pour l'interface VMware vSphere dans vCenter afin de provisionner les datastores classiques et vvols pour garantir le respect de bonnes pratiques.
 
@@ -199,7 +194,7 @@ En règle générale, NetApp recommande d'utiliser les outils ONTAP pour l'inter
 
 La configuration des paramètres réseau lors de l'utilisation de vSphere avec des systèmes exécutant le logiciel ONTAP est simple et similaire à celle d'autres configurations réseau. Voici quelques points à prendre en compte :
 
-* Trafic du réseau de stockage séparé des autres réseaux Un réseau distinct peut être obtenu à l'aide d'un VLAN dédié ou de commutateurs distincts pour le stockage. Si le réseau de stockage partage des chemins physiques, tels que des liaisons ascendantes, vous pouvez avoir besoin de la qualité de service ou de ports supplémentaires pour garantir une bande passante suffisante. Ne connectez pas les hôtes directement au stockage ; utilisez les commutateurs pour disposer de chemins redondants et permettez à VMware HA de fonctionner sans intervention. Voir link:vmware-vsphere-network.html#direct-connect-networking["Réseau à connexion directe"] pour plus d'informations.
+* Trafic du réseau de stockage séparé des autres réseaux Un réseau distinct peut être obtenu à l'aide d'un VLAN dédié ou de commutateurs distincts pour le stockage. Si le réseau de stockage partage des chemins physiques, tels que des liaisons ascendantes, vous pouvez avoir besoin de la qualité de service ou de ports supplémentaires pour garantir une bande passante suffisante. Ne connectez pas les hôtes directement au stockage ; utilisez les commutateurs pour disposer de chemins redondants et permettez à VMware HA de fonctionner sans intervention. Voir link:vmware-vsphere-network.html["Connexion directe au réseau"] pour plus d'informations.
 * Les trames Jumbo peuvent être utilisées si vous le souhaitez et prises en charge par votre réseau, en particulier lors de l'utilisation d'iSCSI. Si elles sont utilisées, assurez-vous qu'elles sont configurées de manière identique sur tous les périphériques réseau, VLAN, etc. Dans le chemin entre le stockage et l'hôte ESXi. Vous pourriez voir des problèmes de performances ou de connexion. La MTU doit également être définie de manière identique sur le switch virtuel ESXi, le port VMkernel et également sur les ports physiques ou les groupes d'interface de chaque nœud ONTAP.
 * NetApp recommande uniquement la désactivation du contrôle de flux réseau sur les ports réseau du cluster dans un cluster ONTAP. NetApp ne recommande pas d'autres recommandations sur les meilleures pratiques pour les ports réseau restants utilisés pour le trafic de données. Vous devez activer ou désactiver si nécessaire. Voir http://www.netapp.com/us/media/tr-4182.pdf["TR-4182"^] pour plus d'informations sur le contrôle de flux.
 * Lorsque les baies de stockage ESXi et ONTAP sont connectées aux réseaux de stockage Ethernet, NetApp recommande de configurer les ports Ethernet auxquels ces systèmes se connectent en tant que ports de périphérie RSTP (Rapid Spanning Tree Protocol) ou en utilisant la fonctionnalité Cisco PortFast. NetApp recommande d'activer la fonction de jonction Spanning-Tree PortFast dans les environnements qui utilisent la fonction Cisco PortFast et dont le agrégation VLAN 802.1Q est activée soit au serveur ESXi, soit aux baies de stockage ONTAP.
@@ -371,7 +366,7 @@ Le tableau suivant répertorie les versions NFS et les fonctionnalités prises e
 | Authentification Kerberos | Non | Oui (optimisé avec vSphere 6.5 et versions ultérieures pour prendre en charge AES et krb5i) 
 
 
-| Prise en charge des chemins d'accès | Non | Non 
+| Prise en charge des chemins d'accès | Non | Oui. 
 |===
 
 
@@ -402,7 +397,7 @@ Voici quelques meilleures pratiques supplémentaires que NetApp a développées 
 * Utilisez les valeurs par défaut de provisionnement du volume FlexGroup. Les outils ONTAP pour VMware vSphere sont recommandés, car ils créent et montés FlexGroup dans vSphere, mais ONTAP System Manager ou la ligne de commandes peuvent être utilisés pour des besoins particuliers. Même ensuite, utilisez les valeurs par défaut, telles que le nombre de membres constituants par nœud, car c'est ce qui a été le plus testé avec vSphere. Cela dit, les paramètres non par défaut, tels que la modification du nombre ou le placement des composants, sont toujours pris en charge.
 * Lors du dimensionnement d'un datastore basé sur FlexGroup, gardez à l'esprit que le système FlexGroup se compose de plusieurs volumes FlexVol de plus petite taille qui créent un espace de noms plus grand. Par conséquent, lorsque vous utilisez un FlexGroup avec huit composants, assurez-vous que le datastore est au moins 8 fois plus volumineux que votre machine virtuelle la plus importante. Par exemple, si votre environnement contient une machine virtuelle de 6 To, sa taille FlexGroup n'est pas inférieure à 48 To.
 * Autoriser FlexGroup à gérer l'espace du datastore. La taille automatique et le dimensionnement souple ont été testés avec les datastores vSphere. Si la capacité totale du datastore est proche de celle maximale, utilisez les outils ONTAP pour VMware vSphere ou un autre outil pour redimensionner le volume FlexGroup. FlexGroup permet d'équilibrer la capacité et les inodes entre les composants, en hiérarchisant les fichiers d'un dossier (VM) vers le même composant si la capacité le permet.
-* Actuellement, VMware et NetApp ne prennent pas en charge une approche commune de mise en réseau multivoie. Pour NFSv4.1, NetApp prend en charge pNFS, tandis que VMware prend en charge l'agrégation de sessions. NFSv3 ne prend pas en charge plusieurs chemins physiques vers un volume. Pour FlexGroup avec ONTAP 9.8, il est recommandé de laisser les outils ONTAP pour VMware vSphere créer le FlexGroup, puis de le démonter et de le remonter à l'aide d'un DNS circulaire afin de répartir la charge sur le cluster. Les outils ONTAP n'utilisent qu'une seule LIF lors du montage des datastores. Après avoir remoné le datastore, vous pouvez utiliser les outils ONTAP pour le surveiller et le gérer.
+* VMware et NetApp prennent actuellement en charge la mise en circuit de session NFSv4.1 à partir de ONTAP 9.14.1. Pour plus d'informations sur les versions, reportez-vous aux notes de la matrice d'interopérabilité NetApp NFS 4.1. NFSv3 ne prend pas en charge plusieurs chemins physiques vers un volume, mais prend en charge nconnect à partir de vSphere 8.0U2. Pour FlexGroup avec ONTAP 9.8, il est recommandé de laisser les outils ONTAP pour VMware vSphere créer le FlexGroup, puis de le démonter et de le remonter à l'aide d'un DNS circulaire afin de répartir la charge sur le cluster. Les outils ONTAP n'utilisent qu'une seule LIF lors du montage des datastores. Après avoir remoné le datastore, vous pouvez utiliser les outils ONTAP pour le surveiller et le gérer.
 * La prise en charge du datastore FlexGroup vSphere a été testée jusqu'à 1500 machines virtuelles dans la version 9.8.
 * Utilisez le plug-in NFS pour VMware VAAI pour la copie auxiliaire. Notez que même si le clonage est amélioré dans un datastore FlexGroup, comme mentionné précédemment, ONTAP n'offre pas d'avantages significatifs en termes de performances par rapport à la copie hôte ESXi lors de la copie de machines virtuelles entre des volumes FlexVol et/ou FlexGroup. Prenez donc en compte vos charges de travail de clonage lorsque vous décidez d'utiliser VAAI ou FlexGroups. L'une des façons d'optimiser le clonage basé sur FlexGroup consiste à modifier le nombre de volumes constitutifs. Tout comme le réglage du délai d'expiration du cache.
 * Utilisez les outils ONTAP pour VMware vSphere 9.8 pour surveiller les performances des machines virtuelles FlexGroup à l'aide de metrics de ONTAP (tableau de bord et rapports sur les machines virtuelles), et pour gérer la qualité de service sur des machines virtuelles individuelles. Ces metrics ne sont pas encore disponibles via les commandes ou les API ONTAP.

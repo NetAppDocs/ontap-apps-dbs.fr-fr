@@ -11,13 +11,10 @@ summary: 'SnapCenter vous permet de créer des règles de sauvegarde qui peuvent
 :icons: font
 :linkattrs: 
 :imagesdir: ../media/
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
-:revnumber: 
-:revdate: and it is easy to manage this ability inside vCenter with the SnapCenter Plug-In for VMware vSphere.
 
+
+[role="lead"]
+La sauvegarde et la restauration rapide de vos machines virtuelles font partie des grands atouts de ONTAP pour vSphere. C'est facile à gérer au sein de vCenter grâce au plug-in SnapCenter pour VMware vSphere.
 
 Utilisez les snapshots pour créer des copies rapides de votre machine virtuelle ou de votre datastore sans affecter les performances, puis envoyez-les à un système secondaire à l'aide de SnapMirror pour une protection des données hors site à plus long terme. Cette approche réduit l'espace de stockage et la bande passante réseau en stockant uniquement les informations modifiées.
 

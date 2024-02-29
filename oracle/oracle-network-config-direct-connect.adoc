@@ -18,13 +18,13 @@ Les administrateurs du stockage préfèrent parfois simplifier leurs infrastruct
 
 
 
-=== ISCSI et NVMe/TCP
+== ISCSI et NVMe/TCP
 
 Un hôte utilisant iSCSI ou NVMe/TCP peut être directement connecté à un système de stockage et fonctionner normalement. La raison en est le chemin d'accès. Les connexions directes à deux contrôleurs de stockage distincts donnent lieu à deux chemins de flux de données indépendants. La perte du chemin, du port ou du contrôleur n'empêche pas l'autre chemin d'être utilisé.
 
 
 
-=== NFS
+== NFS
 
 Vous pouvez utiliser un stockage NFS à connexion directe, mais avec une limitation importante : le basculement ne fonctionnera pas sans script important, ce qui incombera au client.
 
@@ -36,6 +36,6 @@ Dans la pratique, les clients NetApp disposent d'un protocole NFS à connexion d
 
 
 
-=== Connexion directe FC
+== Connexion directe FC
 
 Il n'est pas possible de connecter directement un hôte à un système de stockage ONTAP à l'aide du protocole FC. La raison en est l'utilisation de NPIV. Le WWN qui identifie un port FC ONTAP sur le réseau FC utilise un type de virtualisation appelé NPIV. Tout périphérique connecté à un système ONTAP doit pouvoir reconnaître un WWN NPIV. Aucun fournisseur actuel de HBA ne propose de HBA pouvant être installé sur un hôte et capable de prendre en charge une cible NPIV.

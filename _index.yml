@@ -6,8 +6,8 @@ indexpage:
     Les pages suivantes fournissent des conseils sur les meilleures pratiques et les
     procédures d'implémentation pour l'infrastructure et les applications ONTAP et
     d'entreprise.
-  keywords: Oracle, SAP, HANA, SAP HANA, MSSQL, SQL Server, Postgres, postgresql,
-    mysql, mariadb
+  keywords: VMware, vSphere, Oracle, SAP, HANA, SAP HANA, MSSQL, SQL Server, Postgres,
+    postgresql, mysql, mariadb
   lead: ONTAP constitue le socle de la gestion et de la protection des données pour
     de nombreuses applications d'entreprise et technologies de base de données. Les
     pages suivantes fournissent des conseils sur les meilleures pratiques et les procédures
@@ -55,3 +55,5 @@ indexpage:
       url: "/vmware/vmware-vvols-overview.html"
     - title: VMware site Recovery Manager et ONTAP
       url: "/vmware/vmware-srm-overview.html"
+    - title: Cluster de stockage VMware vSphere Metro avec ONTAP
+      url: "/vmware/vmware_vmsc_overview.html"

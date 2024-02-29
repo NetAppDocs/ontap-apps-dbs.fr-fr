@@ -11,13 +11,10 @@ summary: 'Depuis près de vingt ans, le logiciel NetApp ONTAP est une solution d
 :icons: font
 :linkattrs: 
 :imagesdir: ../media/
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
-:revnumber: 
-:revdate: and simplify management.
 
+
+[role="lead"]
+Depuis près de vingt ans, le logiciel NetApp ONTAP est une solution de stockage leader pour les environnements VMware vSphere. Il continue d'ajouter des fonctionnalités innovantes pour simplifier la gestion, tout en réduisant les coûts. Ce document présente la solution ONTAP pour vSphere, comprenant les dernières informations sur les produits et les meilleures pratiques, afin de rationaliser le déploiement, de réduire les risques et de simplifier la gestion.
 
 
 NOTE: Cette documentation remplace les rapports techniques _TR-4597 : VMware vSphere pour ONTAP_

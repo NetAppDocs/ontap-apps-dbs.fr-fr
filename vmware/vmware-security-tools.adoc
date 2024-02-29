@@ -13,10 +13,7 @@ summary: Ce document présente les fonctions de sécurité des produits des outi
 :imagesdir: ../media/
 
 
-
-
-== Activités de développement sécurisées
-
+[role="lead"]
 L'ingénierie logicielle associée aux outils NetApp ONTAP pour VMware vSphere exploite les activités de développement sécurisées suivantes :
 
 * *Modélisation des menaces.* le but de la modélisation des menaces est de découvrir des défauts de sécurité dans une fonction, un composant ou un produit au début du cycle de vie du développement logiciel. Un modèle de menace est une représentation structurée de toutes les informations qui affectent la sécurité d'une application. En substance, c'est une vision de l'application et de son environnement par le biais du principe de sécurité.

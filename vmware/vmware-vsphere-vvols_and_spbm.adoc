@@ -13,10 +13,7 @@ summary: 'Cette page décrit les meilleures pratiques relatives à l"implémenta
 :imagesdir: ../media/
 
 
-
-
-== À propos de vVvols et SPBM
-
+[role="lead"]
 NetApp a été un partenaire de conception précoce avec VMware dans le développement de vSphere Virtual volumes (vvols), en fournissant des informations architecturales et une prise en charge précoce pour vvols et VMware vSphere API for Storage Awareness (VASA). Non seulement cette approche intègre la gestion du stockage granulaire des machines virtuelles à VMFS, mais elle prend également en charge l'automatisation du provisionnement du stockage via la gestion basée sur des règles de stockage (SPBM).
 
 Grâce à la gestion du stockage basée sur des règles, une structure sert de couche d'abstraction entre les services de stockage disponibles pour votre environnement de virtualisation et les éléments de stockage provisionnés via des règles. Cette approche permet aux architectes du stockage de concevoir des pools de stockage dont les capacités sont facilement utilisable par les administrateurs de machines virtuelles. Les administrateurs peuvent ensuite répondre aux exigences des charges de travail des machines virtuelles par rapport aux pools de stockage provisionnés, ce qui permet un contrôle granulaire des divers paramètres au niveau de chaque machine virtuelle ou disque virtuel.

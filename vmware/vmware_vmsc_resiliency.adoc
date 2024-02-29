@@ -1,0 +1,40 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware_vmsc_resiliency.html 
+keywords: VMware, Data protection, MetroCluster, SMBC, SnapMirror active sync, vMSC 
+summary: En savoir plus sur le cluster de stockage vSphere Metro avec NetApp ONTAP 
+---
+= Résilience pour les événements planifiés et non planifiés
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp MetroCluster et la synchronisation active SnapMirror sont des outils puissants qui améliorent la haute disponibilité et la continuité de l'activité du matériel NetApp et du logiciel ONTAP®.
+
+Ces outils assurent une protection à l'échelle du site pour l'ensemble de l'environnement de stockage, garantissant ainsi la disponibilité permanente de vos données. Que vous utilisiez des serveurs autonomes, des clusters à haute disponibilité, des conteneurs Docker ou des serveurs virtualisés, la technologie NetApp assure la disponibilité du stockage de manière transparente en cas de panne totale due à une coupure d'alimentation, à des problèmes de climatisation, de connectivité réseau, à l'arrêt des baies de stockage ou à une erreur de fonctionnement.
+
+La synchronisation active MetroCluster et SnapMirror propose trois méthodes de base pour la continuité des données en cas d'événements planifiés ou non :
+
+* Des composants redondants pour une protection contre les défaillances d'un seul composant
+* Basculement de haute disponibilité locale en cas d'événements affectant un contrôleur unique
+* Protection complète du site – reprise rapide du service en déplaçant le stockage et l'accès client du cluster source vers le cluster de destination
+
+
+Cela signifie que les opérations se poursuivent en toute transparence en cas de défaillance d'un seul composant et reviennent automatiquement au fonctionnement redondant lorsque le composant défectueux est remplacé.
+
+Tous les clusters ONTAP, à l'exception des clusters à un seul nœud (en général, les versions Software-defined, telles que ONTAP Select, par exemple), disposent de fonctionnalités haute disponibilité intégrées appelées Takeover et giveback. Chaque contrôleur du cluster est couplé à un autre contrôleur, formant une paire haute disponibilité. Ces paires garantissent que chaque nœud est connecté localement au stockage.
+
+Le basculement est un processus automatisé qui consiste à prendre le contrôle du stockage d'un nœud pour assurer les services de données. Le rétablissement est le processus inverse qui restaure le fonctionnement normal. Le basculement peut être planifié, par exemple lors de la maintenance matérielle ou des mises à niveau ONTAP, ou non planifié, suite à une panne matérielle ou de panique sur un nœud.
+
+Lors d'un basculement, les interfaces logiques NAS dans les configurations MetroCluster basculent automatiquement. Toutefois, les LIF SAN (Storage Area Network) ne basculent pas ; elles continuent d'utiliser le chemin direct vers les LUN (Logical Unit Numbers).
+
+Pour plus d'informations sur le basculement et le rétablissement HA, reportez-vous au https://docs.netapp.com/us-en/ontap/high-availability/index.html["Présentation de la gestion des paires HAUTE DISPONIBILITÉ"]. Notez que cette fonctionnalité n'est pas spécifique à la synchronisation active MetroCluster ou SnapMirror.
+
+Le basculement de site avec MetroCluster a lieu lorsqu'un site est hors ligne ou lors d'une activité planifiée pour la maintenance à l'échelle du site. Le site restant assume la propriété des ressources de stockage (disques et agrégats) du cluster hors ligne, et les SVM sur le site en panne sont mis en ligne et redémarrés sur le site en cas de sinistre, tout en préservant leur identité complète pour l'accès des clients et des hôtes.
+
+Avec la synchronisation active SnapMirror, dans la mesure où les deux copies sont activement utilisées simultanément, vos hôtes existants continueront de fonctionner. Le médiateur NetApp est nécessaire pour garantir que le basculement de site se produit correctement.

@@ -10,12 +10,10 @@ summary:
 :icons: font
 :linkattrs: 
 :imagesdir: ../media/
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
-:revdate: There are several troubleshooting resources available with additional information.
 
+
+[role="lead"]
+Plusieurs ressources de dépannage sont disponibles avec des informations supplémentaires.
 
 
 

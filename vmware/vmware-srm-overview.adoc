@@ -11,17 +11,15 @@ summary: 'NetApp ONTAP est une solution de stockage leader pour les environnemen
 :icons: font
 :linkattrs: 
 :imagesdir: ../media/
-:firstname: [.lead]
-:author: [.lead]
-:authorinitials: [
-:authors: [.lead]
-:revdate: == ONTAP for vSphere
 
+
+[role="lead"]
+NetApp ONTAP est une solution de stockage leader pour les environnements VMware vSphere depuis son introduction au data Center moderne en 2002. Elle continue également d'ajouter des fonctionnalités innovantes pour simplifier la gestion tout en réduisant les coûts.
+
+Ce document présente la solution ONTAP pour VMware site Recovery Manager (SRM), le logiciel de reprise après incident de pointe de VMware, qui inclut les dernières informations produit et les meilleures pratiques permettant de rationaliser le déploiement, de réduire les risques et de simplifier la gestion au quotidien.
 
 
 NOTE: Cette documentation remplace le rapport technique _TR-4900 : VMware site Recovery Manager with ONTAP_
-
-NetApp ONTAP est une solution de stockage leader pour les environnements VMware vSphere depuis son introduction au data Center moderne en 2002. Elle continue également d'ajouter des fonctionnalités innovantes pour simplifier la gestion tout en réduisant les coûts. Ce document présente la solution ONTAP pour VMware site Recovery Manager (SRM), le logiciel de reprise après incident de pointe de VMware, qui inclut les dernières informations produit et les meilleures pratiques permettant de rationaliser le déploiement, de réduire les risques et de simplifier la gestion au quotidien.
 
 Les meilleures pratiques complètent d'autres documents, tels que des guides et des outils de compatibilité. Ils sont développés en fonction de tests effectués en laboratoire et d'une vaste expérience sur le terrain par les ingénieurs et les clients NetApp. Dans certains cas, les meilleures pratiques recommandées peuvent ne pas être adaptées à votre environnement. Cependant, ce sont généralement les solutions les plus simples qui répondent aux besoins des plus clients.
 
