@@ -13,7 +13,15 @@ entries:
   - title: Gestion basée sur des règles de stockage et des volumes virtuels
     url: "/vmware/vmware-vsphere-vvols_and_spbm.html"
   - title: Datastores et protocoles
-    url: "/vmware/vmware-vsphere-datastores.html"
+    entries:
+    - title: Présentation
+      url: "/vmware/vmware-vsphere-datastores-top.html"
+    - title: SAN
+      url: "/vmware/vmware-vsphere-datastores-san.html"
+    - title: NFS
+      url: "/vmware/vmware-vsphere-datastores-nfs.html"
+    - title: Volumes FlexGroup
+      url: "/vmware/vmware-vsphere-datastores-fg.html"
   - title: Configuration du réseau
     url: "/vmware/vmware-vsphere-network.html"
   - title: Clonage
@@ -56,7 +64,7 @@ entries:
   entries:
   - title: Présentation de VMSC
     url: "/vmware/vmware_vmsc_overview.html"
-  - title: Solution haute disponibilité vSphere
+  - title: Solution vSphere HA
     url: "/vmware/vmware_vmsc_solution.html"
   - title: Conception VMSC
     url: "/vmware/vmware_vmsc_design.html"

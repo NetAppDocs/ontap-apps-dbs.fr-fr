@@ -9,52 +9,63 @@ summary: Introduction à la virtualisation de la base de données
 
 
 [role="lead"]
-La virtualisation des bases de données avec VMware ESX, Oracle OVM ou KVM est un choix de plus en plus courant pour les clients NetApp qui ont choisi la virtualisation, même pour leurs bases de données les plus stratégiques.
+La virtualisation des bases de données avec VMware, Oracle OLVM ou KVM est un choix de plus en plus courant pour les clients NetApp qui ont choisi la virtualisation, même pour leurs bases de données les plus stratégiques.
 
-Il existe de nombreuses idées fausses sur les politiques de prise en charge de la virtualisation, en particulier pour les produits VMware. En effet, il n'est pas rare d'entendre qu'Oracle ne prend en charge la virtualisation d'aucune façon. Cette notion est incorrecte et ne permet pas de bénéficier d'opportunités de virtualisation. Oracle Doc ID 249212.1 traite des problèmes connus dans un environnement Oracle et indique également la prise en charge de RAC.
 
-Il peut être demandé à un client dont le problème n'est pas connu d'Oracle de reproduire le problème sur du matériel physique. Un client Oracle exécutant une version de pointe d'un produit peut ne pas vouloir utiliser la virtualisation en raison du risque de nouvelle détection de bogues. Cependant, cette situation n'a pas été un problème dans la pratique pour les clients utilisant des versions de produit généralement disponibles.
+
+== Prise en charge
+
+Il existe de nombreuses idées fausses sur les politiques de prise en charge d'Oracle pour la virtualisation, en particulier pour les produits VMware. Il n'est pas rare d'entendre qu'Oracle ne prend pas en charge la virtualisation. Cette notion est incorrecte et ne permet pas de bénéficier de la virtualisation. Oracle Doc ID 249212.1 traite des besoins réels et est rarement considéré par les clients comme un problème.
+
+Si un problème se produit sur un serveur virtualisé et que ce problème n'est pas encore connu du support Oracle, le client peut être invité à reproduire le problème sur du matériel physique. Si un client Oracle exécute une version de pointe d'un produit, il est possible qu'il ne souhaite pas utiliser la virtualisation en raison de problèmes de prise en charge potentiels, mais cette situation n'est pas réelle pour les clients qui utilisent des versions de produits Oracle généralement disponibles.
 
 
 
 == Présentation du stockage
 
-Les clients qui envisagent de virtualiser leurs bases de données doivent baser leurs décisions de stockage sur leurs besoins métier. Bien qu'il s'agisse généralement d'une véritable déclaration pour toutes les décisions INFORMATIQUES, elle est particulièrement importante pour la virtualisation, car la taille et l'étendue des projets varient considérablement.
+Les clients qui envisagent de virtualiser leurs bases de données doivent baser leurs décisions de stockage sur leurs besoins métier. Bien qu'il s'agisse généralement d'une véritable déclaration pour toutes les décisions IT, elle est particulièrement importante pour les projets de base de données, car la taille et le champ d'application des exigences varient considérablement.
 
-Il existe quatre options de base pour la présentation du stockage :
+Il existe trois options de base pour la présentation du stockage :
 
+* LUN virtualisées sur les datastores de l'hyperviseur
 * LUN iSCSI gérées par l'initiateur iSCSI sur la machine virtuelle, pas par l'hyperviseur
-* Systèmes de fichiers NFS montés par la machine virtuelle, pas un disque de machine virtuelle (VMDK)
-* Datastores d'hyperviseur
+* Systèmes de fichiers NFS montés par la machine virtuelle (pas à partir d'un datastore basé sur NFS)
+* Mappages directs de périphériques. Les clients ne préfèrent pas les RDM VMware, mais les périphériques physiques sont souvent mappés directement avec la virtualisation KVM et OLVM.
 
 
-En règle générale, évitez d'utiliser des datastores pour les fichiers Oracle. Il y a plusieurs raisons à cette recommandation :
 
-* *Transparence.* lorsqu'une machine virtuelle possède ses systèmes de fichiers, il est plus facile pour un administrateur de base de données ou un administrateur système d'identifier la source des systèmes de fichiers pour leurs données.
-* *Performance.* les tests ont montré qu'il existe un effet sur les performances en canalisant toutes les E/S via un datastore d'hyperviseur.
-* *Gérabilité.* lorsqu'une machine virtuelle possède ses systèmes de fichiers, l'utilisation ou la non-utilisation d'une couche hyperviseur affecte la gestion. Les mêmes procédures de provisionnement, de surveillance, de protection des données, etc. Peuvent être utilisées dans l'ensemble du parc, y compris dans les environnements virtualisés et non virtualisés.
-* *Stabilité et dépannage.* lorsqu'une machine virtuelle possède ses systèmes de fichiers, les performances sont stables et les problèmes de dépannage sont beaucoup plus simples car la pile de stockage est entièrement présente sur la machine virtuelle. Le seul rôle de l'hyperviseur est de transporter des trames FC ou IP. Lorsqu'un datastore est inclus dans une configuration, il complique la configuration en introduisant un autre ensemble d'expirations de délai, de paramètres, de fichiers journaux et de bogues potentiels.
-* *Portabilité.* lorsqu'une machine virtuelle possède ses systèmes de fichiers, le processus de déplacement d'un environnement Oracle devient beaucoup plus simple. Les systèmes de fichiers peuvent facilement être déplacés entre des invités virtualisés et non virtualisés.
-* *Dépendance vis-à-vis d'un fournisseur.* une fois les données placées dans un datastore, il devient très difficile d'utiliser un hyperviseur différent ou de retirer les données de l'environnement virtualisé.
-* *Activation Snapshot.* dans certains cas, les sauvegardes dans un environnement virtualisé peuvent devenir problématiques en raison de la bande passante relativement limitée. Par exemple, un agrégat 10 GbE à quatre ports peut suffire pour répondre aux besoins quotidiens en performances de nombreuses bases de données virtualisées. Cependant, un tel agrégat ne suffit pas pour effectuer des sauvegardes à l'aide de RMAN ou d'autres produits de sauvegarde nécessitant le streaming d'une copie complète des données.
+
+=== Performance
+
+La méthode de présentation du stockage à un invité virtualisé n'a généralement pas d'incidence sur les performances. Les systèmes d'exploitation hôtes, les pilotes réseau virtualisés et les implémentations de datastores d'hyperviseurs sont tous optimisés et peuvent généralement utiliser toute la bande passante réseau FC ou IP disponible entre l'hyperviseur et le système de stockage, dans la mesure où les meilleures pratiques de base sont respectées. Dans certains cas, il peut être légèrement plus facile d'obtenir des performances optimales en utilisant une approche de présentation du stockage par rapport à une autre, mais le résultat final devrait être comparable.
+
+
+
+=== Gestion aisée
+
+Le facteur clé dans la décision de présenter le stockage à un invité virtualisé est la mangeabilité. Il n'y a pas de bonne ou de mauvaise méthode. La meilleure approche dépend des besoins, des compétences et des préférences opérationnels de l'IT.
+
+Les facteurs à prendre en compte sont les suivants :
+
+* *Transparence.* lorsqu'une machine virtuelle gère ses systèmes de fichiers, il est plus facile pour un administrateur de base de données ou un administrateur système d'identifier la source des systèmes de fichiers pour leurs données. L'accès aux systèmes de fichiers et aux LUN est différent de celui d'un serveur physique.
+* *Cohérence.* lorsqu'une machine virtuelle possède ses systèmes de fichiers, l'utilisation ou la non-utilisation d'une couche hyperviseur affecte la gestion. Les mêmes procédures de provisionnement, de surveillance, de protection des données, etc. Peuvent être utilisées dans l'ensemble du parc, y compris dans les environnements virtualisés et non virtualisés.
 +
-L'utilisation de systèmes de fichiers appartenant à des machines virtuelles facilite l'exploitation des sauvegardes et des restaurations basées sur des copies Snapshot. Un système de fichiers appartenant à une VM délègue la tâche d'exécution des sauvegardes sur le système de stockage. Il n'est pas nécessaire de surconstruire la configuration de l'hyperviseur uniquement pour prendre en charge les besoins en bande passante et en CPU dans la fenêtre de sauvegarde.
+Par contre, dans un data Center 100 % virtualisé, il peut être préférable d'utiliser un stockage basé sur un datastore pour l'ensemble de l'encombrement, selon la même logique que celle mentionnée ci-dessus. Cohérence : possibilité d'utiliser les mêmes procédures de provisionnement, de protection, de regroupement et de protection des données.
+
+* *Stabilité et dépannage.* lorsqu'une machine virtuelle possède ses systèmes de fichiers, il est plus simple de fournir des performances stables et de résoudre les problèmes car la pile de stockage complète est présente sur la machine virtuelle. Le seul rôle de l'hyperviseur est de transporter des trames FC ou IP. Lorsqu'un datastore est inclus dans une configuration, il complique la configuration en introduisant un autre ensemble d'expirations de délai, de paramètres, de fichiers journaux et de bogues potentiels.
+* *Portabilité.* lorsqu'une machine virtuelle possède ses systèmes de fichiers, le processus de déplacement d'un environnement Oracle devient beaucoup plus simple. Les systèmes de fichiers peuvent facilement être déplacés entre des invités virtualisés et non virtualisés.
+* *Dépendance vis-à-vis d'un fournisseur.* une fois les données placées dans un datastore, il devient difficile d'utiliser un hyperviseur différent ou de retirer les données de l'environnement virtualisé.
+* *Activation de Snapshot.* les procédures de sauvegarde traditionnelles dans un environnement virtualisé peuvent devenir problématiques en raison de la bande passante relativement limitée. Par exemple, un agrégat 10 GbE à quatre ports peut suffire pour répondre aux besoins quotidiens en performances de nombreuses bases de données virtualisées, mais ce trunk ne permet pas d'effectuer des sauvegardes à l'aide de RMAN ou d'autres produits de sauvegarde nécessitant le streaming d'une copie complète des données. Résultat : un environnement virtualisé de plus en plus consolidé doit effectuer des sauvegardes via des snapshots de stockage. Ainsi, il n'est pas nécessaire de surconstruire la configuration de l'hyperviseur uniquement pour prendre en charge les besoins en bande passante et en CPU dans la fenêtre de sauvegarde.
++
+L'utilisation de systèmes de fichiers détenus par les clients facilite parfois l'exploitation des sauvegardes et des restaurations basées sur des snapshots, car les objets de stockage nécessitant une protection peuvent être ciblés plus facilement. Cependant, de plus en plus de produits de protection des données de virtualisation s'intègrent bien aux datastores et aux snapshots. La stratégie de sauvegarde doit être totalement adoptée avant de décider comment présenter le stockage à un hôte virtualisé.
 
 
-
-
-TIP: *NetApp recommande* d'éviter de placer les données Oracle sur un datastore afin d'optimiser les performances et la facilité de gestion. Utilisez des systèmes de fichiers invités, tels que des systèmes de fichiers NFS ou iSCSI gérés par l'invité ou avec des RDM.
 
 
 
 == Pilotes paravirtualisés
 
 Pour des performances optimales, l'utilisation de pilotes de réseau paravirtualisés est essentielle. Lorsqu'un datastore est utilisé, un pilote SCSI paravirtualisé est requis. Un pilote de périphérique paravirtualisé permet à un invité de s'intégrer plus profondément dans l'hyperviseur, au lieu d'un pilote émulé dans lequel l'hyperviseur passe plus de temps CPU à imiter le comportement du matériel physique.
-
-Les performances de la plupart des bases de données sont limitées par le stockage. Par conséquent, la latence supplémentaire introduite par un pilote réseau ou SCSI est particulièrement notable. Le support client NetApp a rencontré de nombreuses plaintes de performances qui ont été résolues par l'installation de pilotes paravirtualisés. Au cours d'une démonstration de faisabilité effectuée par un client, les bases de données ont affiché des performances supérieures sous ESX par rapport au même matériel fonctionnant sous bare Metal. Les tests ont été très exigeants en E/S et la différence de performances a été attribuée à l'utilisation de pilotes réseau paravirtualisés ESX.
-
-
-TIP: *NetApp recommande* d'utiliser toujours des pilotes réseau paravirtualisés et des pilotes SCSI.
 
 
 
@@ -63,4 +74,19 @@ TIP: *NetApp recommande* d'utiliser toujours des pilotes réseau paravirtualisé
 La saturation de la mémoire RAM implique la configuration d'une quantité de mémoire RAM virtualisée supérieure à celle qui existe sur le matériel physique sur différents hôtes. Cela peut entraîner des problèmes de performances inattendus. Lors de la virtualisation d'une base de données, les blocs sous-jacents de la SGA d'Oracle ne doivent pas être remplacés par l'hyperviseur vers le stockage. Cela entraîne des résultats de performances très instables.
 
 
-TIP: *NetApp recommande* de ne pas configurer un hyperviseur de manière à ce que les blocs SGA Oracle puissent être échangés.
+
+== Répartition des datastores
+
+Lorsque vous utilisez des bases de données avec des datastores, un facteur critique est à prendre en compte en ce qui concerne la répartition des performances.
+
+Les technologies de datastore, telles que VMFS, peuvent couvrir plusieurs LUN, mais ne sont pas des périphériques répartis. Les LUN sont concaténées. Il peut en résulter des points sensibles de la LUN. Par exemple, une base de données Oracle standard peut disposer d'un groupe de disques ASM à 8 LUN. Les 8 LUN virtualisées pourraient être provisionnées sur un datastore VMFS de 8 LUN, mais il n'y a aucune garantie sur les LUN sur lesquelles les données résideront. La configuration résultante peut être les 8 LUN virtualisées occupant une seule LUN au sein du datastore VMFS. Cela risque d'engorgement des performances.
+
+La répartition est généralement requise. Avec certains hyperviseurs, dont KVM, il est possible de créer un datastore à l'aide de la répartition LVM, comme décrit ci-dessous link:oracle-storage-san-config-lvm-striping.html["ici"]. Avec VMware, l'architecture semble un peu différente. Chaque LUN virtualisée doit être placée sur un datastore VMFS différent.
+
+Par exemple :
+
+image:vmfs-striping.png["Erreur : image graphique manquante"]
+
+Le facteur principal de cette approche n'est pas le ONTAP. En raison de la limitation inhérente du nombre d'opérations qu'une seule machine virtuelle ou LUN d'hyperviseur peut traiter en parallèle, En règle générale, un LUN ONTAP peut prendre en charge beaucoup plus d'IOPS qu'un hôte ne peut en demander. La limite de performances d'une seule LUN est presque universellement due au système d'exploitation hôte. Ainsi, la plupart des bases de données ont besoin de 4 à 8 LUN pour répondre à leurs besoins de performance.
+
+Les architectures VMware doivent planifier soigneusement leurs architectures pour s'assurer que cette approche ne permet pas d'optimiser le datastore et/ou le chemin LUN. Par ailleurs, il n'est pas nécessaire de disposer d'un ensemble unique de datastores VMFS pour chaque base de données. Le principal besoin est de s'assurer que chaque hôte dispose d'un ensemble propre de 4-8 chemins d'E/S entre les LUN virtualisées et les LUN back-end sur le système de stockage lui-même. Dans de rares cas, des exigences de performances vraiment extrêmes peuvent se révéler bénéfiques pour encore plus de données, mais 4-8 LUN suffisent généralement pour 95 % de toutes les bases de données. Un volume ONTAP unique contenant 8 LUN peut prendre en charge jusqu'à 250,000 000 IOPS de bloc Oracle aléatoires avec une configuration type OS/ONTAP/réseau.
