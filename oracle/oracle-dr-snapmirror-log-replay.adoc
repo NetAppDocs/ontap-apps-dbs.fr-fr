@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-snapmirror-log-replay.html 
 keywords: oracle, ontap, disaster recovery, log reply, log shipping 
-summary: Procédure de reprise après incident Oracle sur ONTAP avec envoi de journaux 
+summary: 'Reprise après incident de la base de données Oracle via l"envoi de journaux' 
 ---
-= Reprise sur incident avec relecture du journal
+= Reprise après incident de la base de données Oracle via l'envoi de journaux
 :allow-uri-read: 
 
 

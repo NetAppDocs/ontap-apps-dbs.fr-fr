@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-smbc-architecture.html 
 keywords: smbc, sm-bc, oracle 
-summary: 'Oracle avec continuité de l"activité SnapMirror (SM-BC)' 
+summary: Bases de données Oracle avec synchronisation active SnapMirror 
 ---
-= Continuité de l'activité pour Oracle et SnapMirror
+= Bases de données Oracle avec synchronisation active SnapMirror
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,11 +14,11 @@ summary: 'Oracle avec continuité de l"activité SnapMirror (SM-BC)'
 
 
 [role="lead"]
-SM-BC permet une mise en miroir synchrone avec RPO=0 sélective pour les bases de données Oracle et les environnements applicatifs individuels.
+La synchronisation active SnapMirror permet une mise en miroir synchrone sélective avec un objectif de point de récupération nul pour les bases de données Oracle et les environnements applicatifs individuels.
 
-SnapMirror Business Continuity (SM-BC) est une fonctionnalité améliorée de SnapMirror pour SAN qui permet aux hôtes d'accéder à une LUN à partir du système hébergeant la LUN, ainsi que du système hébergeant sa réplique.
+La synchronisation active SnapMirror est essentiellement une fonctionnalité améliorée de SnapMirror pour SAN qui permet aux hôtes d'accéder à une LUN à partir du système hébergeant la LUN, ainsi que du système hébergeant sa réplique.
 
-SM-BC et SnapMirror Sync (SM-S) partagent un moteur de réplication. Toutefois, SM-BC inclut des fonctionnalités supplémentaires, telles que le basculement et la restauration transparents des applications pour les applications d'entreprise.
+SnapMirror Active Sync et SnapMirror Sync partagent un moteur de réplication. Toutefois, SnapMirror Active Sync comprend des fonctionnalités supplémentaires, telles que le basculement et la restauration transparents des applications pour les applications d'entreprise.
 
 En pratique, il fonctionne comme une version granulaire de MetroCluster grâce à une réplication synchrone avec RPO=0 sélective et granulaire pour des workloads individuels. Le comportement du chemin de bas niveau est très différent de MetroCluster, mais le résultat final du point de vue de l'hôte est similaire.
 
@@ -26,28 +26,28 @@ En pratique, il fonctionne comme une version granulaire de MetroCluster grâce �
 
 == Accès au chemin
 
-SM-BC rend les périphériques de stockage visibles pour les systèmes d'exploitation hôtes à partir des baies de stockage principale et distante. Les chemins sont gérés via le protocole ALUA (Asymmetric Logical Unit Access), qui est un protocole standard de l'industrie pour identifier les chemins optimisés entre un système de stockage et un hôte.
+Grâce à la synchronisation active SnapMirror, les périphériques de stockage sont visibles pour les systèmes d'exploitation hôtes à partir des baies de stockage primaire et distant. Les chemins sont gérés via le protocole ALUA (Asymmetric Logical Unit Access), qui est un protocole standard de l'industrie pour identifier les chemins optimisés entre un système de stockage et un hôte.
 
 Le chemin de périphérique le plus court pour accéder aux E/S est considéré comme des chemins actifs/optimisés et le reste des chemins sont considérés comme des chemins actifs/non optimisés.
 
-La relation SM-BC se situe entre une paire de SVM située sur différents clusters. Les deux SVM sont capables de transmettre des données, mais le protocole ALUA utilisera de préférence le SVM qui est actuellement propriétaire des disques sur lesquels résident les LUN. Les E/S vers le SVM distant seront proxys via l'interconnexion SM-BC.
+La relation de synchronisation active SnapMirror se situe entre une paire de SVM située sur différents clusters. Les deux SVM sont capables de transmettre des données, mais le protocole ALUA utilisera de préférence le SVM qui est actuellement propriétaire des disques sur lesquels résident les LUN. Les E/S vers le SVM distant seront proxys via avec l'interconnexion de synchronisation active SnapMirror.
 
-image:smbc-failover-1.png["Erreur : image graphique manquante"]
+image:smas-failover-1.png["Erreur : image graphique manquante"]
 
 
 
 == Réplication synchrone
 
-En fonctionnement normal, la copie distante est une réplique synchrone RPO=0 à tout moment, à une exception près. Si les données ne peuvent pas être répliquées, SM-BC impose de répliquer les données et de reprendre le service d'E/S. Cette option est privilégiée par les clients qui considèrent la perte de la liaison de réplication comme un quasi-incident ou qui ne souhaitent pas que les opérations de l'entreprise s'interrompent lorsque les données ne peuvent pas être répliquées.
+En fonctionnement normal, la copie distante est une réplique synchrone RPO=0 à tout moment, à une exception près. Si les données ne peuvent pas être répliquées, avec SnapMirror Active Sync impose de répliquer les données et de reprendre le service d'E/S. Cette option est privilégiée par les clients qui considèrent la perte de la liaison de réplication comme un quasi-incident ou qui ne souhaitent pas que les opérations de l'entreprise s'interrompent lorsque les données ne peuvent pas être répliquées.
 
 
 
 == Matériel de stockage
 
-Contrairement à d'autres solutions de reprise après incident de stockage, SM-BC offre une flexibilité de plateforme asymétrique. Le matériel de chaque site n'a pas besoin d'être identique. Cette fonctionnalité vous permet d'adapter la taille du matériel utilisé pour la prise en charge de SM-BC. Le système de stockage distant peut être identique au site principal s'il doit prendre en charge une charge de travail de production complète, mais si un incident entraîne une réduction des E/S, un système plus petit sur le site distant peut être plus économique.
+Contrairement à d'autres solutions de reprise après incident du stockage, la synchronisation active SnapMirror offre une flexibilité asymétrique de la plateforme. Le matériel de chaque site n'a pas besoin d'être identique. Cette fonctionnalité vous permet d'ajuster la taille du matériel utilisé pour prendre en charge la synchronisation active SnapMirror. Le système de stockage distant peut être identique au site principal s'il doit prendre en charge une charge de travail de production complète, mais si un incident entraîne une réduction des E/S, un système plus petit sur le site distant peut être plus économique.
 
 
 
 == ONTAP Médiateur
 
-Le Mediator ONTAP est une application logicielle téléchargée à partir du support NetApp. Le médiateur automatise les opérations de basculement à la fois pour le cluster de stockage du site principal et pour le cluster de stockage du site distant. Il peut être déployé sur une petite machine virtuelle hébergée sur site ou dans le cloud. Une fois configuré, il fait office de troisième site pour surveiller les scénarios de basculement des deux sites.
+Le Mediator ONTAP est une application logicielle téléchargée à partir du support NetApp. Le Mediator automatise les opérations de basculement pour le cluster de stockage de site principal et distant. Il peut être déployé sur une petite machine virtuelle hébergée sur site ou dans le cloud. Une fois configuré, il fait office de troisième site pour surveiller les scénarios de basculement des deux sites.

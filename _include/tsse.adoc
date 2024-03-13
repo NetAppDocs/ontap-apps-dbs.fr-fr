@@ -1,0 +1,9 @@
+= Efficacité du stockage sensible à la température
+:allow-uri-read: 
+
+
+
+
+=== Efficacité du stockage sensible à la température
+
+L'efficacité du stockage sensible à la température (TSSE) est disponible dans ONTAP 9.8 et versions ultérieures. Elle repose sur des cartes thermiques d'accès aux blocs pour identifier les blocs peu utilisés et les compresser avec une efficacité accrue.

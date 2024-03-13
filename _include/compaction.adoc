@@ -1,0 +1,13 @@
+= Compaction
+:allow-uri-read: 
+
+
+
+
+== Compaction
+
+La compaction est une technologie qui améliore l'efficacité de la compression. Comme indiqué précédemment, la compression adaptative à elle seule permet d'économiser 2:1 au maximum, car elle se limite au stockage d'une E/S de 8 Ko dans un bloc WAFL de 4 Ko. Les méthodes de compression avec des blocs de taille supérieure améliorent l'efficacité. Cependant, elles ne conviennent pas aux données soumises à des remplacements de blocs de petite taille. La décompression d'unités de données de 32 Ko, la mise à jour d'une partie de 8 Ko, la recompression et l'écriture sur les disques entraînent une surcharge.
+
+La compaction des données permet de stocker plusieurs blocs logiques dans des blocs physiques. Par exemple, une base de données avec des données fortement compressibles comme des blocs texte ou partiellement pleins peut être compressée de 8 Ko à 1 Ko. Sans compaction, 1 Ko de données occuperaient toujours un bloc complet de 4 Ko. La compaction des données à la volée permet de stocker 1 Ko de données compressées dans un espace physique de seulement 1 Ko, parallèlement à d'autres données compressées. Il ne s'agit pas d'une technologie de compression. Il s'agit simplement d'un moyen plus efficace d'allouer de l'espace sur les disques et, par conséquent, il ne doit pas créer d'effet détectable sur les performances.
+
+Le degré d'économie obtenu varie. En général, les données déjà compressées ou chiffrées ne peuvent pas être compressées davantage et, par conséquent, la compaction de ces datasets ne peut pas être bénéfique. À contrario, les fichiers de données récemment initialisés ne contiennent qu'un petit peu plus que des métadonnées de bloc et des zéros compressent jusqu'à 80:1.

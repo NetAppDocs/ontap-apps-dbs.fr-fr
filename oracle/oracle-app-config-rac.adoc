@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-app-config-rac.html 
 keywords: oracle, database, ontap, rac, disktimeout, misscount 
-summary: Paramètres Oracle RAC avec stockage en réseau 
+summary: 'Délais d"expiration Oracle RAC' 
 ---
-= Oracle Real application clusters (RAC)
+= Délais d'expiration Oracle RAC (Real application clusters)
 :allow-uri-read: 
 
 

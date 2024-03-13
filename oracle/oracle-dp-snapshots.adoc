@@ -2,14 +2,14 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dp-snapshots.html 
 keywords: oracle, database, ontap, snapshots 
-summary: Oracle sur ONTAP et le rôle des snapshots 
+summary: Bases de données Oracle sur ONTAP et le rôle des snapshots 
 ---
-= Sauvegardes basées sur des snapshots
+= Bases de données Oracle et sauvegardes basées sur des snapshots
 :allow-uri-read: 
 
 
 [role="lead"]
-La protection des données Oracle sur ONTAP repose sur la technologie Snapshot de NetApp.
+La technologie Snapshot de NetApp constitue le socle de la protection des données des bases de données Oracle sur ONTAP.
 
 Les valeurs clés sont les suivantes :
 

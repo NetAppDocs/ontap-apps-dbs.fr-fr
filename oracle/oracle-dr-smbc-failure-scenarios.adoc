@@ -1,10 +1,10 @@
 ---
 permalink: oracle/oracle-dr-smbc-failure-scenarios.html 
 sidebar: sidebar 
-keywords: SM-BC, smbc, failover 
-summary: 'Scénarios de défaillance d"Oracle SM-BC' 
+keywords: SnapMirror active sync, smbc, failover 
+summary: 'Scénarios d"échec de la synchronisation active des bases de données Oracle et SnapMirror' 
 ---
-= Scénarios de défaillance d'Oracle SM-BC
+= Les bases de données Oracle et les scénarios d'échec de la synchronisation active SnapMirror
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary: 'Scénarios de défaillance d"Oracle SM-BC'
 
 
 [role="lead"]
-Plusieurs scénarios de défaillance de la continuité de l'activité SnapMirror (SM-BC) ont chacun des résultats différents.
+Plusieurs scénarios de défaillance de la synchronisation active SnapMirror (SM-AS) ont chacun des résultats différents.
 
 [cols="1,1"]
 |===
@@ -43,7 +43,7 @@ Il y a une resynchronisation automatique lorsque le site est en ligne.
 | Perte de disques | Les E/S se poursuivent pendant jusqu'à trois pannes de disque consécutives. Cela fait partie de RAID-TEC. 
 
 
-| Perte de l'ensemble du site dans un déploiement typique | De toute évidence, les serveurs du site défaillant ne seront plus disponibles. Les applications qui prennent en charge la mise en cluster peuvent être configurées pour s'exécuter sur les deux sites et continuer les opérations sur un autre site. Toutefois, la plupart de ces applications nécessitent un disjoncteur d'attache de troisième site, similaire à celui utilisé par SM-BC, qui requiert un médiateur.
+| Perte de l'ensemble du site dans un déploiement typique | De toute évidence, les serveurs du site défaillant ne seront plus disponibles. Les applications qui prennent en charge la mise en cluster peuvent être configurées pour s'exécuter sur les deux sites et continuer les opérations sur un autre site. Toutefois, la plupart de ces applications nécessitent un TieBreaker de troisième site, comme SM-AS l'exige.
 
 Sans clusters au niveau des applications, les applications doivent être démarrées sur le site survivant. Cela affecterait la disponibilité, mais RPO=0 est conservé. Aucune donnée ne serait perdue. 
 |===

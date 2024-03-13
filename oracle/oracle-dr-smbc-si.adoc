@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-smbc-si.html 
 keywords: TR-4899, oracle, smbc, sm-bc 
-summary: Instance unique Oracle sur ONTAP avec SM-BC 
+summary: Bases de données Oracle à instance unique avec synchronisation active SnapMirror 
 ---
-= Oracle à instance unique avec SM-BC
+= Bases de données Oracle à instance unique avec synchronisation active SnapMirror
 :allow-uri-read: 
 
 
@@ -13,6 +13,6 @@ Le diagramme ci-dessous présente un modèle de déploiement simple dans lequel 
 
 Oracle est configuré sur le système principal uniquement. Ce modèle assure un basculement transparent du stockage en cas d'incident côté stockage, ce qui évite toute perte de données sans temps d'indisponibilité des applications. Cependant, ce modèle n'assure pas la haute disponibilité de l'environnement de base de données en cas de défaillance sur un site. Ce type d'architecture s'avère utile pour les clients qui recherchent une solution sans perte de données avec une haute disponibilité des services de stockage, mais qui acceptent qu'une perte totale du cluster de base de données nécessite une intervention manuelle.
 
-image:smbc-si.png["Erreur : image graphique manquante"]
+image:smas-si.png["Erreur : image graphique manquante"]
 
 Cette approche permet également d'économiser de l'argent sur les coûts de licence Oracle. La préconfiguration des nœuds de bases de données Oracle sur le site distant exigerait que tous les cœurs soient sous licence selon la plupart des contrats de licence Oracle. Si le délai d'installation d'un serveur de base de données Oracle et de montage de la copie restante des données est acceptable, cette conception peut s'avérer très rentable.

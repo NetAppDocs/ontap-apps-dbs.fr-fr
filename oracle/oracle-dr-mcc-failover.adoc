@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-mcc-failover.html 
 keywords: Metrocluster, mcc, MCC-IP 
-summary: Oracle avec MetroCluster 
+summary: Basculement de base de données Oracle avec MetroCluster 
 ---
-= Basculement Oracle avec MetroCluster
+= Basculement de base de données Oracle avec MetroCluster
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -13,9 +13,7 @@ summary: Oracle avec MetroCluster
 :imagesdir: ../media/
 
 
-[role="lead"]
-L'utilisation de MetroCluster n'apporte pas nécessairement de modifications aux meilleures pratiques en matière d'exploitation de bases de données et d'applications d'entreprise.
-
+ Metrocluster is an ONTAP feature that can protect your Oracle databases with RPO=0 synchronous mirroring across sites, and it scales up to support hundreds of databases on a single MetroCluster system. It's also simple to use. The use of MetroCluster does not necessarily add to or change any best practices for operating a enterprise applications and databases.
 Les bonnes pratiques habituelles s'appliquent toujours. Si vos besoins requièrent uniquement une protection des données avec un objectif de point de récupération de 0, MetroCluster répond à ce besoin. Cependant, la plupart des clients utilisent MetroCluster non seulement pour la protection des données avec un objectif de point de récupération de 0, mais aussi pour améliorer l'objectif de délai de restauration en cas d'incident et fournir un basculement transparent dans le cadre des activités de maintenance du site.
 
 

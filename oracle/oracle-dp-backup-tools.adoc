@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dp-backup-tools.html 
 keywords: ontap, data protection 
-summary: Outils de sauvegarde Oracle et NetApp 
+summary: 'Outils d"automatisation et de gestion des bases de données Oracle' 
 ---
-= SnapCenter et autres outils
+= Outils d'automatisation et de gestion des bases de données Oracle
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary: Outils de sauvegarde Oracle et NetApp
 
 
 [role="lead"]
-La valeur principale de ONTAP dans un environnement applicatif provient des principales technologies ONTAP telles que les copies Snapshot instantanées, la réplication simple de SnapMirror et la création efficace de volumes FlexClone.
+Dans un environnement de base de données Oracle, la principale valeur de ONTAP provient des principales technologies ONTAP, telles que les copies Snapshot instantanées, la réplication simple SnapMirror et la création efficace de volumes FlexClone.
 
 Dans certains cas, une configuration simple de ces fonctionnalités principales directement sur ONTAP répond aux exigences, mais les besoins plus complexes requièrent une couche d'orchestration.
 

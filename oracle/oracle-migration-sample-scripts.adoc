@@ -4,7 +4,7 @@ permalink: oracle/oracle-migration-sample-scripts.html
 keywords: oracle, Scripts 
 summary: 'Exemples de scripts pour l"automatisation des opérations de migration Oracle' 
 ---
-= Exemples de scripts
+= Exemples de scripts de procédure de migration Oracle
 :allow-uri-read: 
 
 

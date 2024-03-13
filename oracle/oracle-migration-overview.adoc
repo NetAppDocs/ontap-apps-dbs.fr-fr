@@ -4,12 +4,12 @@ permalink: oracle/oracle-migration-overview.html
 keywords: oracle, ontap, migrations, TR-4534 
 summary: Introduction à la migration du stockage Oracle 
 ---
-= Migration des bases de données Oracle vers les systèmes de stockage NetApp
+= Migration des bases de données Oracle vers des systèmes de stockage ONTAP
 :allow-uri-read: 
 
 
 [role="lead"]
-L'exploitation des capacités d'une nouvelle plateforme de stockage implique une seule nécessité : les données doivent être placées sur le nouveau système de stockage.
+L'exploitation des capacités d'une nouvelle plateforme de stockage implique une seule nécessité : les données doivent être placées sur le nouveau système de stockage. ONTAP simplifie le processus de migration, notamment les migrations et les mises à niveau de ONTAP vers ONTAP, les importations de LUN étrangères et les procédures d'utilisation directe du système d'exploitation hôte ou du logiciel de base de données Oracle.
 
 
 NOTE: Cette documentation remplace le rapport technique _TR-4534 : migration des bases de données Oracle vers des systèmes de stockage NetApp_

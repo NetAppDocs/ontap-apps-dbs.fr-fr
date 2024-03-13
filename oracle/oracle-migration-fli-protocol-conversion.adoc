@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-migration-fli-protocol-conversion.html 
 keywords: migration, oracle, FLI 
-summary: Modification du protocole SAN après migration FLI 
+summary: 'Migration Oracle avec FLI : conversion des protocoles' 
 ---
-= Conversion du protocole FLI : Oracle
+= Migration Oracle avec FLI : conversion des protocoles
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

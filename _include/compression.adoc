@@ -1,0 +1,37 @@
+= Compression
+:allow-uri-read: 
+
+
+
+
+== Compression
+
+Avant la disponibilité des systèmes de stockage 100 % Flash, la compression basée sur les baies était d'une valeur limitée, car la plupart des charges de travail exigeantes en E/S nécessitaient un très grand nombre de piles pour obtenir une performance acceptable. Les systèmes de stockage contenaient invariablement beaucoup plus de capacité que nécessaire, ce qui a pour effet d'augmenter le nombre de disques. La situation a changé avec la montée du stockage Solid-State. Il n'est plus nécessaire de surprovisionner des disques uniquement pour obtenir de bonnes performances. L'espace disque d'un système de stockage peut être adapté aux besoins réels en termes de capacité.
+
+La capacité accrue des disques SSD en termes d'IOPS permet presque toujours de réaliser des économies par rapport aux disques rotatifs. Toutefois, la compression peut réaliser davantage d'économies en augmentant la capacité effective des supports SSD.
+
+Il existe plusieurs façons de compresser les données. De nombreuses bases de données incluent leurs propres fonctionnalités de compression, mais ce phénomène est rarement observé dans les environnements clients. La raison en est généralement la réduction des performances pour un *changement* de données compressées, plus avec certaines applications, il existe des coûts de licence élevés pour la compression au niveau de la base de données. Enfin, il y a les conséquences globales sur les performances des opérations des bases de données. Il est peu judicieux de payer un coût de licence par processeur élevé pour un processeur qui effectue la compression et la décompression des données plutôt que le véritable travail de base de données. Une meilleure option consiste à décharger la tâche de compression sur le système de stockage.
+
+
+
+=== Compression adaptative
+
+La compression adaptative a été testée en profondeur avec des charges de travail exigeantes sans effet sur les performances, même dans un environnement 100 % Flash où la latence se mesure en microsecondes. Certains clients ont même signalé une augmentation des performances due à l'utilisation de la compression, car les données restent compressées dans le cache, augmentant ainsi la quantité de cache disponible dans un contrôleur.
+
+ONTAP gère les blocs physiques dans des unités de 4 Ko. La compression adaptative utilise une taille de bloc de compression par défaut de 8 Ko, ce qui signifie que les données sont compressées dans des unités de 8 Ko. La taille de bloc de 8 Ko la plus utilisée par les bases de données relationnelles est donc identique. Les algorithmes de compression deviennent plus efficaces avec la compression d'un volume croissant de données. Une taille de bloc de compression de 32 Ko serait plus compacte qu'une unité de bloc de compression de 8 Ko. Cela signifie que la compression adaptative utilisant une taille de bloc de 8 Ko par défaut entraîne des taux d'efficacité légèrement inférieurs, mais qu'une taille de bloc de compression inférieure présente également des avantages considérables. Les charges de travail de la base de données incluent une grande quantité d'activités de remplacement. Le remplacement d'un bloc de données de 32 Ko compressé de 8 Ko nécessite la lecture de l'intégralité des 32 Ko de données logiques, leur décompression, la mise à jour de la région de 8 Ko requise, la recompression, puis l'écriture de la totalité des 32 Ko sur les disques. Cette opération est très coûteuse pour un système de stockage. En effet, certaines baies de stockage concurrentes, basées sur des blocs de compression plus volumineux, affectent également considérablement les performances des charges de travail de la base de données.
+
+
+NOTE: La taille de bloc utilisée par la compression adaptative peut être augmentée jusqu'à 32 Ko. Cela peut améliorer l'efficacité du stockage et doit être envisagé pour les fichiers de repos tels que les journaux de transactions et les fichiers de sauvegarde lorsqu'une quantité importante de ces données est stockée sur la baie. Dans certains cas, les bases de données actives qui utilisent une taille de bloc de 16 ou 32 Ko peuvent également tirer parti de l'augmentation de la taille de bloc de la compression adaptative pour qu'elle corresponde. Consultez un représentant NetApp ou partenaire pour savoir si cette solution convient à votre charge de travail.
+
+
+CAUTION: Les tailles de bloc de compression supérieures à 8 Ko ne doivent pas être utilisées avec la déduplication sur les destinations de sauvegarde en streaming. Les petites modifications apportées aux données sauvegardées affectent la fenêtre de compression de 32 Ko. Si la fenêtre change, les données compressées obtenues diffèrent dans l'ensemble du fichier. La déduplication a lieu après la compression, ce qui signifie que le moteur de déduplication voit chaque sauvegarde compressée différemment. Si la déduplication des sauvegardes en continu est nécessaire, seule une compression adaptative de bloc de 8 Ko doit être utilisée. Il est préférable d'utiliser la compression adaptative, car elle fonctionne à des blocs de taille réduite sans perturber l'efficacité de la déduplication. Pour des raisons similaires, la compression côté hôte interfère également avec l'efficacité de la déduplication.
+
+
+
+=== Alignement de compression
+
+La compression adaptative dans un environnement de base de données nécessite un certain respect de l'alignement des blocs de compression. Cela ne préoccupe que les données soumises à des écrasements aléatoires de blocs très spécifiques. Cette approche est similaire à l'alignement global du système de fichiers, où le début d'un système de fichiers doit être aligné sur une limite de périphérique de 4 Ko et la taille de bloc d'un système de fichiers doit être un multiple de 4 Ko.
+
+Par exemple, une écriture de 8 Ko dans un fichier est compressée uniquement si elle s'aligne sur une limite de 8 Ko dans le système de fichiers lui-même. Ce point signifie qu'il doit figurer sur le premier 8 Ko du fichier, le deuxième 8 Ko du fichier, etc. La manière la plus simple de garantir un alignement correct est d'utiliser le type de LUN correct, toute partition créée doit avoir un décalage par rapport au début du périphérique qui est un multiple de 8K, et utiliser une taille de bloc du système de fichiers qui est un multiple de la taille de bloc de la base de données.
+
+Les données telles que les sauvegardes ou les journaux de transactions sont des opérations écrites de manière séquentielle sur plusieurs blocs, qui sont tous compressés. Par conséquent, il n'est pas nécessaire de considérer l'alignement. Le seul modèle d'E/S préoccupant est l'écrasement aléatoire des fichiers.

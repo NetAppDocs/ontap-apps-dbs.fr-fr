@@ -76,7 +76,7 @@ Pour plus d'informations, cliquez sur link:https://docs.netapp.com/us-en/ontap/a
 
 L'automatisation nécessite des appels d'API, mais tous les outils ne nécessitent pas un accès administratif complet. Pour sécuriser les systèmes d'automatisation, le RBAC est également disponible au niveau des API. Vous pouvez limiter les comptes d'utilisateur d'automatisation aux appels d'API requis. Par exemple, le logiciel de surveillance n'a pas besoin d'un accès de modification, il ne nécessite qu'un accès en lecture. Les flux de travail qui provisionnent le stockage n'ont pas besoin d'être supprimés.
 
-Pour en savoir plus, commencez link:https://docs.netapp.com/us-en/ontap-automation/rest/rbac_overview.html["ici."]
+Pour en savoir plus, démarrez la société https://docs.netapp.com/us-en/ontap-automation/rest/rbac_overview.html[here.]
 
 
 

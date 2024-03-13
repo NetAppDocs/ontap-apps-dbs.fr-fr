@@ -2,14 +2,14 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dp-storage-snapshot-optimized-backups.html 
 keywords: oracle, data protection, snapshot-optimized, crash-consistent 
-summary: Sauvegarde optimisée pour les snapshots 
+summary: Sauvegardes optimisées pour Oracle Storage Snapshot 
 ---
-= Sauvegardes optimisées pour Oracle Storage Snapshot
+= Sauvegardes optimisées pour les snapshots de stockage de bases de données Oracle
 :allow-uri-read: 
 
 
 [role="lead"]
-Dans Oracle 12c, la sauvegarde et la restauration basées sur des snapshots sont simplifiées, car il n'est pas nécessaire de placer une base de données en mode de sauvegarde à chaud. Il est possible de planifier des sauvegardes Snapshot directement sur un système de stockage et d'effectuer des restaurations complètes ou à un point dans le temps.
+La sauvegarde et la restauration basées sur des snapshots sont devenues encore plus simples au moment du lancement d'Oracle 12c. En effet, il n'est pas nécessaire de placer une base de données en mode de sauvegarde à chaud. Il est possible de planifier des sauvegardes Snapshot directement sur un système de stockage et d'effectuer des restaurations complètes ou à un point dans le temps.
 
 Les administrateurs de bases de données maîtrisent mieux la procédure de restauration à partir d'une sauvegarde à chaud, mais il est depuis longtemps possible d'utiliser des snapshots qui n'ont pas été créés pendant que la base de données était en mode de sauvegarde à chaud. Pour assurer la cohérence de la base de données, des étapes manuelles supplémentaires ont été nécessaires avec Oracle 10g et 11g. Avec Oracle 12c, `sqlplus` et `rman` contiennent la logique supplémentaire permettant de relire les journaux d'archivage sur des sauvegardes de fichiers de données qui n'étaient pas en mode de sauvegarde à chaud.
 

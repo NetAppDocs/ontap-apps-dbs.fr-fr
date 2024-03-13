@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-migration-fli-completion.html 
 keywords: migration, oracle, FLI 
-summary: 'Finalisation d"une mise en service FLI - Oracle' 
+summary: 'Migration Oracle avec FLI : exécution' 
 ---
-= Achèvement FLI - Oracle
+= Migration Oracle avec FLI : exécution
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

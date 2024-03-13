@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-snapmirror-cg.html 
 keywords: oracle, data protection, DR, CG 
-summary: Réplication de groupe de cohérence pour les bases de données Oracle 
+summary: Reprise après incident de la base de données Oracle et du groupe de cohérence 
 ---
-= Reprise d'activité par groupe de cohérence
+= Reprise après incident de la base de données Oracle et du groupe de cohérence
 :allow-uri-read: 
 
 

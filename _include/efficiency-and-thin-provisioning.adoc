@@ -1,0 +1,15 @@
+= Efficacité et provisionnement fin
+:allow-uri-read: 
+
+
+
+
+== Efficacité et provisionnement fin
+
+Les fonctions d'efficacité sont des formes de provisionnement fin. Par exemple, une LUN de 100 Go occupant un volume de 100 Go peut compresser à 50 Go. Aucune économie réelle n'est encore réalisée, car le volume est toujours de 100 Go. Le volume doit d'abord être réduit afin que l'espace économisé puisse être utilisé ailleurs sur le système. Si des modifications ultérieures de la LUN de 100 Go réduisent la taille des données compressibles, la LUN augmente et le volume pourrait se remplir.
+
+Le provisionnement fin est fortement recommandé car il simplifie la gestion tout en améliorant la capacité exploitable avec les économies associées. La raison en est simple : les environnements de base de données comportent souvent beaucoup d'espace vide, un grand nombre de volumes et de LUN, ainsi que des données compressibles. Le provisionnement fin entraîne la réservation d'espace sur le stockage pour les volumes et les LUN au cas où un jour ils se traduirait par une saturation de 100 % et contiendraient des données non compressibles à 100 %. Il est peu probable que cela se produise. Le provisionnement fin permet de récupérer et d'utiliser cet espace ailleurs. Il permet également de gérer la capacité en fonction du système de stockage lui-même, plutôt que de nombreux volumes et LUN plus petits.
+
+Certains clients préfèrent utiliser le provisionnement lourd, soit pour des charges de travail spécifiques, soit généralement en fonction de pratiques opérationnelles et d'approvisionnement établies.
+
+*Attention :* si un volume est configuré en mode lourd, il faut veiller à désactiver complètement toutes les fonctions d'efficacité de ce volume, y compris la décompression et la suppression de la déduplication à l'aide du `sis undo` commande. Le volume ne doit pas apparaître dans `volume efficiency show` sortie. Si c'est le cas, le volume est encore partiellement configuré pour les fonctions d'efficacité. Par conséquent, les garanties de remplacement fonctionnent différemment, ce qui augmente le risque que les dépassements de configuration entraînent un manque inattendu d'espace du volume, ce qui entraîne des erreurs d'E/S de la base de données.

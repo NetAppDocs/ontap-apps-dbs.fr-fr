@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-overview.html 
 keywords: metrocluster, syncmirror, oracle 
-summary: Reprise après incident Oracle avec ONTAP 
+summary: Reprise après incident de la base de données Oracle avec ONTAP 
 ---
-= Reprise après incident avec ONTAP
+= Reprise après incident de la base de données Oracle avec ONTAP
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -21,10 +21,10 @@ NOTE: Cette documentation remplace les rapports techniques _TR-4591 : Oracle Dat
 
 La reprise après incident peut être effectuée par une simple réplication des données à l'aide de SnapMirror, bien sûr, lorsque de nombreux clients mettent à jour les réplicas en miroir toutes les heures.
 
-Pour la plupart des clients, la reprise après incident ne suffit pas à posséder une copie distante des données. Il est donc nécessaire de pouvoir les exploiter rapidement. NetApp propose deux technologies pour répondre à ce besoin : MetroCluster et SnapMirror Business Continuity (SM-BC)
+Pour la plupart des clients, la reprise après incident ne suffit pas à posséder une copie distante des données. Il est donc nécessaire de pouvoir les exploiter rapidement. NetApp propose deux technologies pour répondre à ce besoin : MetroCluster et SnapMirror Active Sync
 
 MetroCluster fait référence à ONTAP dans une configuration matérielle qui inclut un stockage en miroir synchrone de faible niveau et de nombreuses fonctionnalités supplémentaires. Les solutions intégrées telles que MetroCluster simplifient les bases de données, les applications et les infrastructures de virtualisation complexes et évolutives. Elle remplace plusieurs produits et stratégies externes de protection des données par une seule baie de stockage centrale simple. Elle offre également des fonctionnalités intégrées de sauvegarde, de restauration, de reprise après incident et de haute disponibilité au sein d'un seul système de stockage en cluster.
 
-La continuité de l'activité SnapMirror (SM-BC) est basée sur la technologie SnapMirror synchrone. Avec MetroCluster, chaque contrôleur ONTAP est responsable de la réplication des données de son disque vers un emplacement distant. Avec SM-BC, vous disposez essentiellement de deux systèmes ONTAP différents qui conservent des copies indépendantes de vos données LUN, mais qui coopèrent pour présenter une seule instance de ce LUN. Du point de vue de l'hôte, il s'agit d'une entité LUN unique.
+La synchronisation active SnapMirror est basée sur SnapMirror synchrone. Avec MetroCluster, chaque contrôleur ONTAP est responsable de la réplication des données de son disque vers un emplacement distant. Avec la synchronisation active SnapMirror, deux systèmes ONTAP différents conservent des copies indépendantes de vos données LUN, mais fonctionnent ensemble pour présenter une seule instance de ce LUN. Du point de vue de l'hôte, il s'agit d'une entité LUN unique.
 
-Bien que SM-BC et MetroCluster fonctionnent très différemment en interne, le résultat est très similaire pour un hôte. La principale différence est la granularité. Si vous n'avez besoin que de workloads spécifiques pour la réplication synchrone, la solution SM-BC est la mieux adaptée. Si vous devez répliquer des environnements entiers, voire des data centers, MetroCluster est la meilleure option. Par ailleurs, SM-BC est actuellement réservé aux environnements SAN, tandis que MetroCluster est multiprotocole, y compris SAN, NFS et SMB.
+Bien que la synchronisation active SnapMirror et MetroCluster fonctionnent différemment en interne, le résultat est similaire à celui d'un hôte. La principale différence est la granularité. Si la réplication synchrone de certains workloads suffit, la synchronisation active SnapMirror est la meilleure option. Si vous devez répliquer des environnements entiers, voire des data centers, MetroCluster est la meilleure option. De plus, SnapMirror Active Sync n'est actuellement disponible que pour les environnements SAN, tandis que MetroCluster est multiprotocole, y compris SAN, NFS et SMB.

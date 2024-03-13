@@ -4,7 +4,7 @@ permalink: oracle/oracle-storage-nfs-config-leases-and-locks.html
 keywords: NFS, lease 
 summary: Bases de données Oracle et locations et verrouillages NFS 
 ---
-= Locations et verrouillages NFS - Oracle
+= Bases de données Oracle et locations et verrouillages NFS
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

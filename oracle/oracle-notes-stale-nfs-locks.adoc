@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: oracle/oracle-notes-stale-nfs-locks.html 
 keywords: oracle, database, ontap, stale, nfs, locks 
-summary: Les verrous Oracle et NFSv3 obsolètes 
+summary: Base de données Oracle et verrous NFSv3 obsolètes 
 ---
 = Les verrous NFSv3 et les bases de données Oracle obsolètes
 :hardbreaks:

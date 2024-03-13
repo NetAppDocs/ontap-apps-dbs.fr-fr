@@ -9,7 +9,7 @@ summary: Présentation de la protection des données Oracle
 
 
 [role="lead"]
-Les bases de données constituent les données les plus stratégiques.
+NetApp sait que les bases de données contient les données les plus stratégiques.
 
 Une entreprise ne peut pas fonctionner sans accéder à ses données, et parfois l'activité repose sur les données. Ces données doivent être protégées, mais la protection ne se limite pas à garantir une sauvegarde utilisable. Elle consiste également à effectuer des sauvegardes rapidement et de manière fiable en plus de les stocker en toute sécurité.
 
