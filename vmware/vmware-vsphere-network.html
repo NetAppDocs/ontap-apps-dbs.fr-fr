@@ -1,0 +1,4318 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head class="at-element-marker">
+  <title>Configuration du réseau</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
+  <meta http-equiv="language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="Configuration du réseau" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://docs.netapp.com/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+	<meta property="og:description" content="Cette page décrit les meilleures pratiques relatives à l"implémentation d"une solution de stockage NetApp ONTAP dans un environnement VMware vSphere." />
+  <meta property="og:image" content="https://docs.netapp.com/fr-fr/ontap-apps-dbs/images/logo-tophat-social.png" />
+  <meta property="og:image:alt" content="NetApp Logo" />
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="encoding" content="utf-8">
+  <meta http-equiv="nss-type" content="Product Documentation"/>
+  <meta http-equiv="nss-subtype" content="User Guide"/><meta name="description" content="Cette page décrit les meilleures pratiques relatives à l"implémentation d"une solution de stockage NetApp ONTAP dans un environnement VMware vSphere.">
+  <meta name="keywords" content=" vSphere, datastore, VMFS, FC, FCoE, NVMe/FC, iSCSI, NFS, vVols"><!-- Icons -->
+  <link rel="icon" href="/fr-fr/ontap-apps-dbs/images/favicon.ico" type="image/x-icon">
+
+  <!-- RSS Feed --><!-- CSS Definitions: NetApp CSS should be defined after generic css -->
+
+
+  <!-- Combined CSS -->
+  <link rel="stylesheet" type="text/css" href="/fr-fr/ontap-apps-dbs/css/ie-netappdocs.css">
+
+  
+  <link rel="stylesheet" href="/fr-fr/ontap-apps-dbs/css/ie-landing-page.css" type="text/css">
+  <link rel="stylesheet" href="/fr-fr/ontap-apps-dbs/css/ie-tabbed-blocks.css" type="text/css">
+  <!-- Canonical url -->
+  <link rel="canonical" href="https://docs.netapp.com/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <link rel="alternate" hreflang="x-default" href="https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <link rel="alternate" hreflang="fr" href="https://docs.netapp.com/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <link rel="alternate" hreflang="en" href="https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <link rel="alternate" hreflang="ja" href="https://docs.netapp.com/ja-jp/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <link rel="alternate" hreflang="ko" href="https://docs.netapp.com/ko-kr/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://docs.netapp.com/zh-cn/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <link rel="alternate" hreflang="zh-Hant" href="https://docs.netapp.com/zh-tw/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <link rel="alternate" hreflang="de" href="https://docs.netapp.com/de-de/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <link rel="alternate" hreflang="es" href="https://docs.netapp.com/es-es/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <link rel="alternate" hreflang="it" href="https://docs.netapp.com/it-it/ontap-apps-dbs/vmware/vmware-vsphere-network.html" />
+  <!-- Top level site integrations -->
+<script type="text/javascript" src="https://cdn.cookielaw.org/consent/72570c5c-fe30-465f-b0e0-b77f7fb4ae34/OtAutoBlock.js"></script>
+    <script type="text/javascript" src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" charset="UTF-8" data-document-language="true" data-domain-script="72570c5c-fe30-465f-b0e0-b77f7fb4ae34"></script>
+    <script type="text/javascript">function OptanonWrapper() { }</script>
+    <script type="text/plain" class="optanon-category-C0002" src="https://assets.adobedtm.com/60287eadf1ee/c284da483c83/launch-e9ff3acac59f.min.js"></script>
+    <script class="optanon-category-C0001">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.setAttributeNode(d.createAttribute('data-ot-ignore'));j.setAttribute('class','optanon-category-C0001');j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl+'';f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MD73T9M');</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  
+  <script>
+    $(document).ready(function() {
+      const MASTHEAD_OFFSET = 65;
+      const SECTIONS = $("main h2, main h3");
+      // PAGE NAV - Init
+      if (SECTIONS.length == 0) {
+        // remove if there is no elements
+        /*
+        $("#ie-right-navbar").remove();
+        $("#ie-right-navbar-collapse").remove();
+        */
+      } else {
+        $(".page-nav-title").css('display', 'block');
+        for (var i = 0; i < SECTIONS.length; i++) {
+          var sectionId = $(SECTIONS[i]).attr('id');
+          var sectionName = $(SECTIONS[i]).text();
+          var subClass = $(SECTIONS[i]).is("h3") ? ' page-nav__sublink' : '';
+          $("#page-menu").append('<li class="page-nav-item"><a href="#' + sectionId + '" class="page-nav__link' + subClass + '">' + sectionName + '</a></li>');
+        }
+      }
+    });
+  </script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+  <!-- Used for Product Family Page Sidebar Visibility --><!-- Used to import Promise for IE. Required for SearchKit -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script><script src='/fr-fr/ontap-apps-dbs/js/na-search.js'></script><script src='/fr-fr/ontap-apps-dbs/js/ie-clouddocs.js'></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><script>
+    /*
+      $(document).ready(function() {
+          $("#tg-sb-link").click(function() {
+              $("#tg-sb-sidebar").toggle();
+              $("#tg-sb-content").toggleClass('col-md-9');
+              $("#tg-sb-content").toggleClass('col-md-12');
+              $("#tg-sb-icon").toggleClass('fa-toggle-on');
+              $("#tg-sb-icon").toggleClass('fa-toggle-off');
+          });
+      });
+      */
+  </script>
+  <script src='/fr-fr/ontap-apps-dbs/js/custom-dropdown.js'></script>
+  <script src='/fr-fr/ontap-apps-dbs/js/FileSaver.min.js'></script>
+  <script src='/fr-fr/ontap-apps-dbs/js/jszip-utils.min.js'></script>
+  <script src='/fr-fr/ontap-apps-dbs/js/jszip.min.js'></script><script src='/fr-fr/ontap-apps-dbs/js/ie-pdf-ux.js'></script></head>
+
+
+  <body class role="document" data-flavor="">
+    <div class="skip-to-main">
+      <a href="#main" >Skip to main content</a>
+    </div><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MD73T9M"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><div id="page" class="">
+      <div id="ie-phone-menu" class=""></div>
+      <div id="ie-content-wrap" class="">
+        <nav id="ie-new-header">
+    <ul>
+        <li id="ie-phone-menu-button">
+            <a href="#">
+                <image id="" src="/fr-fr/ontap-apps-dbs/images/hamburger.svg" alt="menu" />
+            </a>
+        </li>
+
+        <li>
+            <a href="https://www.netapp.com/fr">
+                <image id="ie-header-logo" src="/fr-fr/ontap-apps-dbs/images/netapp_logo.svg" alt="netapp" />
+            </a>
+        </li>
+        <li id="ie-header-docs">
+            <a href="https://www.netapp.com/fr/support-and-training/documentation/">Documents</a>
+        </li>
+
+        <!-- Empty container to push header left with or without lang selector -->
+        <li id="empty-container" style="margin-left: auto">
+        </li>
+        <!-- Start Language Selector --><li id="ie-language-dropdown">
+            <div id="language-dropdown" class="custom-dropdown custom-dropdown-lang">
+                <div class="custom-dropdown-select custom-dropdown-select-lang">
+                    <img src="/fr-fr/ontap-apps-dbs/images/language_white_24dp.svg" class="n-globe__icon" />
+                    <span class="lang-name">Français</span>
+                    <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown header invisible" />
+                    <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup header" />
+                    </button>
+                </div>
+
+                <ul class="custom-dropdown-menu"><li>
+                        <a href="https://docs.netapp.com/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-network.html"
+                            target="_self"><span translate="no" class="notranslate">Français</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-network.html"
+                            target="_self"><span translate="no" class="notranslate">English</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/ja-jp/ontap-apps-dbs/vmware/vmware-vsphere-network.html"
+                            target="_self"><span translate="no" class="notranslate">日本語</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/ko-kr/ontap-apps-dbs/vmware/vmware-vsphere-network.html"
+                            target="_self"><span translate="no" class="notranslate">한국어</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/zh-cn/ontap-apps-dbs/vmware/vmware-vsphere-network.html"
+                            target="_self"><span translate="no" class="notranslate">简体中文</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/zh-tw/ontap-apps-dbs/vmware/vmware-vsphere-network.html"
+                            target="_self"><span translate="no" class="notranslate">繁體中文</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/de-de/ontap-apps-dbs/vmware/vmware-vsphere-network.html"
+                            target="_self"><span translate="no" class="notranslate">Deutsch</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/es-es/ontap-apps-dbs/vmware/vmware-vsphere-network.html"
+                            target="_self"><span translate="no" class="notranslate">Español</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/it-it/ontap-apps-dbs/vmware/vmware-vsphere-network.html"
+                            target="_self"><span translate="no" class="notranslate">Italiano</span></a>
+                    </li></ul>
+            </div>
+            </li>
+        <!-- End Language Selector -->
+
+
+        <li id="ie-allnetapp">
+            <div id="allnetapp-dropdown" class="custom-dropdown custom-dropdown-allnetapp">
+                <div class="custom-dropdown-select custom-dropdown-select-allnetapp">
+                    <img src="/fr-fr/ontap-apps-dbs/images/apps_white_24dp.svg" alt="" class="allnetapp-icon" />
+                    <span class="allnetapp-name">Tout NetApp</span>
+                    <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown header invisible" />
+                    <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup header" />
+                    </button>
+                </div>
+
+                <ul class="custom-dropdown-menu allnetapp-dropdown">
+                    <li>
+                        <a href="https://bluexp.netapp.com/fr/"
+                            target="_self"><span translate="no" class="notranslate">BlueXP</span></a>
+                    </li>
+                    <li>
+                        <a href="https://mysupport.netapp.com/site/"
+                            target="_self"><span translate="no" class="notranslate">Support</span></a>
+                    </li>
+                    <li>
+                        <a href="https://kb.netapp.com/"
+                            target="_self"><span translate="no" class="notranslate">Base de connaissances</span></a>
+                    </li>
+                    <li>
+                        <a href="https://www.netapp.com/fr/support-and-training/netapp-learning-services/"
+                            target="_self"><span translate="no" class="notranslate">Formation</span></a>
+                    </li>
+                </ul>
+            </div>
+
+        </li>
+
+    </ul>
+</nav>
+
+        <main id="n-main-content" class="n-main-content">
+          <!-- Start Documentation Content -->
+<div class="ie-main">
+
+<div id="ie-new-sidebar-collapse" style="display: none">
+    <img id="sidebar-expand" class="ie-searchbox-icon" src="/fr-fr/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+</div>
+<div id="ie-new-sidebar">
+    <div id="ie-product-identity-lockup">
+        <div id="sidebar-collapse" class="">
+            <img src="/fr-fr/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+        </div>
+        <div id="ie-breadcrumb" class="">
+  <ul class="ie-breadcrumb">
+    <li class="">
+      <a href="https://docs.netapp.com">Tous les documents</a>
+    </li>
+    
+    
+
+    
+  </ul>
+  
+  <div class="ie-product-name" >
+    <!--<a href="/fr-fr/ontap-apps-dbs/">-->
+      Enterprise applications
+    <!--</a>-->
+  </div>
+</div>
+
+            
+
+        
+        
+
+<div id="ie-searchbox" class="ie-searchbox-sidebar ">
+    <img class="ie-searchbox-icon" src="/fr-fr/ontap-apps-dbs/images/loupe.svg" alt=""/>
+    <div id="react-search" 
+        data-search-html="/fr-fr/ontap-apps-dbs/search.html" 
+        data-type="widget"
+        data-placeholder="Rechercher dans la documentation"
+        data-no-results-found="Aucun résultat trouvé pour : {query}"
+        data-did-you-mean="Rechercher {suggestion}."
+        data-no-results-found-did-you-mean="Aucun résultat n'a été trouvé pour {query}. Voulez-vous dire {suggestion} ?"
+        data-results-found="{hitCount} résultats"
+        data-error-message="Une erreur s'est produite. Merci de réessayer."
+        data-error-reset="Réinitialiser la recherche"
+        data-sk-es-pf-indexes="" 
+        data-flavor="">
+    </div>
+</div>
+        
+    </div>
+    <div id="ie-new-toc"><script>
+  let sidebarAccordion = true;
+
+  /* specific css rules for Mac */
+  if(navigator.platform.match('Mac') !== null) {
+    document.body.setAttribute('class', 'OSX');
+  }
+
+</script>
+
+<div id="ie-sidebar-container">
+  <ul id="ie-sidebar-list" ><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Les applications d'entreprise"
+      data-li-level="1#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/index.html" 
+    ><a class="ie-sidebar-menuitem-1 " href="/fr-fr/ontap-apps-dbs/index.html">
+        Les applications d'entreprise
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Microsoft SQL Server"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Microsoft SQL Server</div>-->
+         Microsoft SQL Server
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Charges de travail"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-workloads.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-workloads.html">
+        Charges de travail
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de la base de données pour Microsoft SQL Server"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de la base de données</div>-->
+         Configuration de la base de données
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Instance partagée ou instance dédiée"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-shared-vs-dedicated.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-shared-vs-dedicated.html">
+        Instance partagée ou instance dédiée
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du processeur"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-cpu-configuration.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-cpu-configuration.html">
+        Configuration du processeur
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de la mémoire"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-memory-configuration.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-memory-configuration.html">
+        Configuration de la mémoire
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du stockage pour Microsoft SQL Server"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de stockage sous-jacente</div>-->
+         Configuration de stockage sous-jacente
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Fichiers de base de données et groupes de fichiers"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-files-and-filegroups.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-files-and-filegroups.html">
+        Fichiers de base de données et groupes de fichiers
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Fichiers tempdb"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-tempdb.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-tempdb.html">
+        Fichiers tempdb
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Considérations relatives au stockage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-storage-considerations.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-storage-considerations.html">
+        Considérations relatives au stockage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Efficacité du stockage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-storage-efficiency.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-storage-efficiency.html">
+        Efficacité du stockage
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection des données"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-data-protection.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-data-protection.html">
+        Protection des données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Reprise après incident"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-disaster-recovery.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-disaster-recovery.html">
+        Reprise après incident
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sécurité des données"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mssql/mssql-data-security.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-data-security.html">
+        Sécurité des données
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MySQL"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> MySQL</div>-->
+         MySQL
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de base de données pour MySQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de la base de données</div>-->
+         Configuration de la base de données
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Structure de fichier"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-file-structure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-file-structure.html">
+        Structure de fichier
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation de la configuration"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-configuration.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-configuration.html">
+        Présentation de la configuration
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="taille_fichier_log_innodb"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-innodb_log_file_size.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_log_file_size.html">
+        taille_fichier_log_innodb
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_flush_log_at_trx_commit"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-innodb_flush_log_at_trx_commit.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_flush_log_at_trx_commit.html">
+        innodb_flush_log_at_trx_commit
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_doublewrite"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-innodb_doublewrite.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_doublewrite.html">
+        innodb_doublewrite
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_buffer_pool_size"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-innodb_buffer_pool_size.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_buffer_pool_size.html">
+        innodb_buffer_pool_size
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_flush_method"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-innodb_flush_method.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_flush_method.html">
+        innodb_flush_method
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_io_capacity"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-innodb_io_capacity.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_io_capacity.html">
+        innodb_io_capacity
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_lru_scan_depth"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-innodb_lru_scan_depth.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_lru_scan_depth.html">
+        innodb_lru_scan_depth
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="open_file_limits"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-open_file_limits.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-open_file_limits.html">
+        open_file_limits
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de l'hôte pour MySQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de l'hôte</div>-->
+         Configuration de l'hôte
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conteneurisation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-containers.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-containers.html">
+        Conteneurisation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tables de rainures"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-slot-tables.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-slot-tables.html">
+        Tables de rainures
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planificateurs d'E/S."
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-schedulers.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-schedulers.html">
+        Planificateurs d'E/S.
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Descripteurs de fichier"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-file-descriptors.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-file-descriptors.html">
+        Descripteurs de fichier
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du stockage pour MySQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de stockage sous-jacente</div>-->
+         Configuration de stockage sous-jacente
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MySQL sur NFS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-mysql-over-nfs.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-mysql-over-nfs.html">
+        MySQL sur NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MySQL sur SAN"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/mysql/mysql-mysql-over-san.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-mysql-over-san.html">
+        MySQL sur SAN
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Base de données Oracle"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Base de données Oracle</div>-->
+         Base de données Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration ONTAP</div>-->
+         Configuration ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="RAID"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-raid.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-raid.html">
+        RAID
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Limites de capacité"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-capacity-limits.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-capacity-limits.html">
+        Limites de capacité
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Ordinateurs virtuels de stockage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-svm.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-svm.html">
+        Ordinateurs virtuels de stockage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="La qualité de service (QoS)"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-qos.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-qos.html">
+        La qualité de service (QoS)
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Efficacité"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-efficiency.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-efficiency.html">
+        Efficacité
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Provisionnement fin"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-thin-provisioning.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-thin-provisioning.html">
+        Provisionnement fin
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Basculement et basculement"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-failover.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-failover.html">
+        Basculement et basculement
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de la base de données pour Oracle Database"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de la base de données</div>-->
+         Configuration de la base de données
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tailles des fichiers de données et des blocs de reprise"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-app-config-block-sizes.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-app-config-block-sizes.html">
+        Tailles des fichiers de données et des blocs de reprise
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="db_file_multibloc_read_count"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-app-config-mbr.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-app-config-mbr.html">
+        db_file_multibloc_read_count
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="filesytemio_options"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-app-config-filesystemio_options.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-app-config-filesystemio_options.html">
+        filesytemio_options
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="RAC Oracle"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-app-config-rac.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-app-config-rac.html">
+        RAC Oracle
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de l'hôte pour Oracle Database"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de l'hôte</div>-->
+         Configuration de l'hôte
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="AIX"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-host-config-aix.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-aix.html">
+        AIX
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="HP-UX"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-host-config-hp-ux.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-hp-ux.html">
+        HP-UX
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Linux"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-host-config-linux.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-linux.html">
+        Linux
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Linux avec ASMlib et AFD"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-host-config-asmlib-afd.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-asmlib-afd.html">
+        Linux avec ASMlib et AFD
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Microsoft Windows"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-host-config-windows.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-windows.html">
+        Microsoft Windows
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Solaris"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-host-config-solaris.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-solaris.html">
+        Solaris
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration réseau pour Oracle Database"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration du réseau</div>-->
+         Configuration du réseau
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Interfaces logiques"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-network-config-lifs.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-network-config-lifs.html">
+        Interfaces logiques
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration Ethernet"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-network-config-ethernet.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-network-config-ethernet.html">
+        Configuration Ethernet
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration FC SAN"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-network-config-fc.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-network-config-fc.html">
+        Configuration FC SAN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Réseau à connexion directe"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-network-config-direct-connect.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-network-config-direct-connect.html">
+        Réseau à connexion directe
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du stockage pour Oracle Database"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de stockage sous-jacente</div>-->
+         Configuration de stockage sous-jacente
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAN FC"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> SAN FC</div>-->
+         SAN FC
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Alignement LUN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lun-alignment.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-san-config-lun-alignment.html">
+        Alignement LUN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Nombre de LUN et taille de LUN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lun-sizing.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-san-config-lun-sizing.html">
+        Nombre de LUN et taille de LUN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Redimensionnement de la LUN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lun-resizing.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-san-config-lun-resizing.html">
+        Redimensionnement de la LUN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Répartition LVM"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lvm-striping.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-san-config-lvm-striping.html">
+        Répartition LVM
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NFS"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> NFS</div>-->
+         NFS
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-overview.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-nfs-config-overview.html">
+        Configuration
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle Direct NFS (dNFS)"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-dnfs.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-nfs-config-dnfs.html">
+        Oracle Direct NFS (dNFS)
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Locations et verrouillages NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-leases-and-locks.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-nfs-config-leases-and-locks.html">
+        Locations et verrouillages NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Mise en cache NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-caching.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-nfs-config-caching.html">
+        Mise en cache NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tailles de transfert NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-transfer-sizes.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-nfs-config-transfer-sizes.html">
+        Tailles de transfert NFS
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle et NVFAIL"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dp-nvfail.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-nvfail.html">
+        Oracle et NVFAIL
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Utilitaire de récupération ASM"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-asmru.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-san-config-asmru.html">
+        Utilitaire de récupération ASM
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Virtualisation"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-virtualization-introduction.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-virtualization-introduction.html">
+        Virtualisation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tiering"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Tiering</div>-->
+         Tiering
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-tiering-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Règles de hiérarchisation"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Règles de hiérarchisation</div>-->
+         Règles de hiérarchisation
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Envoi de données à un magasin d'objets"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-tiering-policies.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-policies.html">
+        Envoi de données à un magasin d'objets
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Récupération des données dans le magasin d'objets"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-tiering-retrieval-policies.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-retrieval-policies.html">
+        Récupération des données dans le magasin d'objets
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Stratégies de Tiering"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Stratégies de Tiering</div>-->
+         Stratégies de Tiering
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Fichiers entiers"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-tiering-whole-file.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-whole-file.html">
+        Fichiers entiers
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Fichiers partiels"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-tiering-partial-file.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-partial-file.html">
+        Fichiers partiels
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sélectionnez fichiers"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-tiering-logs.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-logs.html">
+        Sélectionnez fichiers
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Snapshots"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-tiering-snapshots.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-snapshots.html">
+        Snapshots
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sauvegardes"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-tiering-backups.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-backups.html">
+        Sauvegardes
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Interruptions d'accès au magasin d'objets"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-tiering-object-store-access-interruptions.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-object-store-access-interruptions.html">
+        Interruptions d'accès au magasin d'objets
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection des données Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Protection des données Oracle</div>-->
+         Protection des données Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dp-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="RPO, RTO et SLA"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dp-slas.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-slas.html">
+        RPO, RTO et SLA
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Disponibilité des données"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dp-data-availability.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-data-availability.html">
+        Disponibilité des données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Intégrité des données"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dp-data-integrity.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-data-integrity.html">
+        Intégrité des données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Notions de base sur la sauvegarde et la restauration"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Notions de base sur la sauvegarde et la restauration</div>-->
+         Notions de base sur la sauvegarde et la restauration
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Snapshots"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dp-snapshots.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-snapshots.html">
+        Snapshots
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SnapRestore"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dp-snaprestore.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-snaprestore.html">
+        SnapRestore
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sauvegardes en ligne basées sur des snapshots"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dp-online-backup.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-online-backup.html">
+        Sauvegardes en ligne basées sur des snapshots
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sauvegardes optimisées pour les snapshots de stockage"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dp-storage-snapshot-optimized-backups.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-storage-snapshot-optimized-backups.html">
+        Sauvegardes optimisées pour les snapshots de stockage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SnapCenter et autres outils"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dp-backup-tools.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-backup-tools.html">
+        SnapCenter et autres outils
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Reprise sur incident Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Reprise sur incident Oracle</div>-->
+         Reprise sur incident Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MetroCluster"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> MetroCluster</div>-->
+         MetroCluster
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architecture physique"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-physical.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-physical.html">
+        Architecture physique
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architecture logique"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-logical.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-logical.html">
+        Architecture logique
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SyncMirror"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-syncmirror.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-syncmirror.html">
+        SyncMirror
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Basculement Oracle"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-failover.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-failover.html">
+        Basculement Oracle
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NVFAIL"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-nvfail.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-nvfail.html">
+        NVFAIL
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle si sur MetroCluster"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-si.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-si.html">
+        Oracle si sur MetroCluster
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle RAC sur MetroCluster"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-rac.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-rac.html">
+        Oracle RAC sur MetroCluster
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Synchronisation active SnapMirror"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Synchronisation active SnapMirror</div>-->
+         Synchronisation active SnapMirror
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architecture"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-architecture.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-smbc-architecture.html">
+        Architecture
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Basculement"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-failover.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-smbc-failover.html">
+        Basculement
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle si avec synchronisation active SnapMirror"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-si.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-smbc-si.html">
+        Oracle si avec synchronisation active SnapMirror
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle RAC avec synchronisation active SnapMirror"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-rac.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-smbc-rac.html">
+        Oracle RAC avec synchronisation active SnapMirror
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Scénarios d'échec"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-failure-scenarios.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-smbc-failure-scenarios.html">
+        Scénarios d'échec
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Migration de la base de données Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Migration de la base de données Oracle</div>-->
+         Migration de la base de données Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planification"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-planning.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-planning.html">
+        Planification
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Procédures"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Procédures</div>-->
+         Procédures
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-procedures-overview.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-procedures-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Déplacement du fichier de données"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-datafile-move.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-datafile-move.html">
+        Déplacement du fichier de données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Envoi de journaux"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-log-shipping.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-log-shipping.html">
+        Envoi de journaux
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Copie des données de l'hôte"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-host-data-copy.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-host-data-copy.html">
+        Copie des données de l'hôte
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Importation de LUN étrangères"
+      data-li-level="4" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-4  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Importation de LUN étrangères</div>-->
+         Importation de LUN étrangères
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planification"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-planning.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-fli-planning.html">
+        Planification
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Mise en service"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-cutover.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html">
+        Mise en service
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Achèvement"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-completion.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-fli-completion.html">
+        Achèvement
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conversion de protocoles"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-protocol-conversion.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-fli-protocol-conversion.html">
+        Conversion de protocoles
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Exemples de scripts"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-migration-sample-scripts.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-sample-scripts.html">
+        Exemples de scripts
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Remarques supplémentaires"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Remarques supplémentaires</div>-->
+         Remarques supplémentaires
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Optimisation des performances et analyse comparative"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-notes-optimization-and-benchmarking.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-notes-optimization-and-benchmarking.html">
+        Optimisation des performances et analyse comparative
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Verrous NFS obsolètes"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-notes-stale-nfs-locks.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-notes-stale-nfs-locks.html">
+        Verrous NFS obsolètes
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Vérification de l'alignement WAFL"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html">
+        Vérification de l'alignement WAFL
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="PostgreSQL"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> PostgreSQL</div>-->
+         PostgreSQL
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/postgres/postgres-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de l'hôte pour PostgreSQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de la base de données</div>-->
+         Configuration de la base de données
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architecture"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/postgres/postgres-architecture.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-architecture.html">
+        Architecture
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Initialisation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/postgres/postgres-initialization.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-initialization.html">
+        Initialisation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Paramètres"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/postgres/postgres-db-config.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-db-config.html">
+        Paramètres
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Espaces de stockage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/postgres/postgres-tablespaces.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-tablespaces.html">
+        Espaces de stockage
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du stockage pour PostgreSQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de stockage sous-jacente</div>-->
+         Configuration de stockage sous-jacente
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NFS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/postgres/postgres-nfs-filesystems.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-nfs-filesystems.html">
+        NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAN"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/postgres/postgres-san-filesystems.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-san-filesystems.html">
+        SAN
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection des données pour PostgreSQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Protection des données</div>-->
+         Protection des données
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection native des données"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/postgres/postgres-native-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-native-dp.html">
+        Protection native des données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Technologie Snapshot"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/postgres/postgres-snapshot-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-snapshot-dp.html">
+        Technologie Snapshot
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Logiciels de protection des données"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/postgres/postgres-snapcenter-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-snapcenter-dp.html">
+        Logiciels de protection des données
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAP"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> SAP</div>-->
+         SAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAP HANA et AnyDB"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="sap-solutions.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/sap-solutions.html">
+        SAP HANA et AnyDB
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VMware"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> VMware</div>-->
+         VMware
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VMware vSphere avec ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> VMware vSphere avec ONTAP</div>-->
+         VMware vSphere avec ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Le stockage unifié"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-unified.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-unified.html">
+        Le stockage unifié
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Outils de virtualisation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-vtools.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-vtools.html">
+        Outils de virtualisation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestion basée sur des règles de stockage et des volumes virtuels"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-vvols_and_spbm.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-vvols_and_spbm.html">
+        Gestion basée sur des règles de stockage et des volumes virtuels
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Datastores et protocoles"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Datastores et protocoles</div>-->
+         Datastores et protocoles
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-top.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-datastores-top.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-san.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-datastores-san.html">
+        SAN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-nfs.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-datastores-nfs.html">
+        NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Volumes FlexGroup"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-fg.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-datastores-fg.html">
+        Volumes FlexGroup
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du réseau"
+      data-li-level="3#" 
+      class="  ie-sidebar-selected    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-network.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-network.html">
+        Configuration du réseau
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Clonage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-cloning.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-cloning.html">
+        Clonage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection des données"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-dp.html">
+        Protection des données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="La QoS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-qos.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-qos.html">
+        La QoS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestion basée sur des règles de stockage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-policy-and-vvols.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-policy-and-vvols.html">
+        Gestion basée sur des règles de stockage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planificateur de ressources distribué de stockage VMware"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-sdrs.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-sdrs.html">
+        Planificateur de ressources distribué de stockage VMware
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Paramètres recommandés"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vsphere-settings.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-settings.html">
+        Paramètres recommandés
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Volumes virtuels (vVols) avec ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Volumes virtuels (vVols) avec ONTAP</div>-->
+         Volumes virtuels (vVols) avec ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vvols-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vvols-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Utilisation de vVols avec ONTAP"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vvols-ontap.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vvols-ontap.html">
+        Utilisation de vVols avec ONTAP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Déploiement du stockage vVols"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vvols-deploy.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vvols-deploy.html">
+        Déploiement du stockage vVols
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection des vVols"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vvols-protect.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vvols-protect.html">
+        Protection des vVols
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Dépannage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-vvols-resources.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vvols-resources.html">
+        Dépannage
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VMware site Recovery Manager et ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> VMware site Recovery Manager et ONTAP</div>-->
+         VMware site Recovery Manager et ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-srm-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-srm-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Bonnes pratiques de déploiement"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-srm-deployment_best_practices.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-srm-deployment_best_practices.html">
+        Bonnes pratiques de déploiement
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Meilleures pratiques opérationnelles"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-srm-operational_best_practices.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-srm-operational_best_practices.html">
+        Meilleures pratiques opérationnelles
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Topologies de réplication"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-srm-replication_topologies.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-srm-replication_topologies.html">
+        Topologies de réplication
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Dépannage de SRM lors de l'utilisation de la réplication de vvols"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-srm-vvol-troubleshooting.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-srm-vvol-troubleshooting.html">
+        Dépannage de SRM lors de l'utilisation de la réplication de vvols
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cluster de stockage vSphere Metro avec ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Cluster de stockage vSphere Metro avec ONTAP</div>-->
+         Cluster de stockage vSphere Metro avec ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation de VMSC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware_vmsc_overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware_vmsc_overview.html">
+        Présentation de VMSC
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Solution vSphere HA"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware_vmsc_solution.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware_vmsc_solution.html">
+        Solution vSphere HA
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conception VMSC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware_vmsc_design.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware_vmsc_design.html">
+        Conception VMSC
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Résilience VMSC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware_vmsc_resiliency.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware_vmsc_resiliency.html">
+        Résilience VMSC
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Scénarios VMSC avec MCC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware_vmsc_scen_mcc.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware_vmsc_scen_mcc.html">
+        Scénarios VMSC avec MCC
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sécurité des produits"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Sécurité des produits</div>-->
+         Sécurité des produits
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Les outils ONTAP pour VMware vSphere"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-security-tools.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-security-tools.html">
+        Les outils ONTAP pour VMware vSphere
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Plug-in SnapCenter pour VMware vSphere"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/vmware/vmware-security-snapcenter.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-security-snapcenter.html">
+        Plug-in SnapCenter pour VMware vSphere
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Mentions légales"
+      data-li-level="1#" 
+      class="   "
+      dale-page-url="/vmware/vmware-vsphere-network.html" 
+      dale-entry-url="/legal-notices.html" 
+    ><a class="ie-sidebar-menuitem-1 " href="/fr-fr/ontap-apps-dbs/legal-notices.html">
+        Mentions légales
+      </a></li></ul>
+</div>
+<script>
+
+  $(".ie-sidebar-button").click(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    expandedLI = $('li.ie-sidebar-expand')
+
+    const li = $(this).closest("li");
+
+    const parentsLI = $(li).parents('li');
+
+    expandedLI.map(element => {
+      if (sidebarAccordion && !li.hasClass('ie-sidebar-expand') && jQuery.inArray(expandedLI[element], parentsLI) == -1) {
+        $(expandedLI[element]).toggleClass('ie-sidebar-expand');
+        $(expandedLI[element]).children("ul").animate({ height: 'toggle' }, 400, function () {
+          $(li).children("ul").toggleClass('ie-sidebar-open');
+
+        })
+      }
+
+    })
+
+    $(li).toggleClass('ie-sidebar-expand');
+    $(li).children("ul").animate({ height: 'toggle' }, 400, function () {
+      $(li).children("ul").toggleClass('ie-sidebar-open');
+    })
+  });
+
+
+  
+    $("li.ie-sidebar-selected").parents('ul').toggleClass("ie-sidebar-open");
+    $("li.ie-sidebar-selected").toggleClass("ie-sidebar-expand")
+    $("ul.ie-sidebar-open").parent().toggleClass("ie-sidebar-expand");
+    $("li.ie-sidebar-selected").children('ul').toggleClass("ie-sidebar-open")
+  
+  
+</script>
+    </div>
+</div>
+<script>
+
+    
+    let sidebarScrollTopPosition = 0;
+    $("#ie-new-toc").on("scroll", function () {
+        if (sidebarScrollTopPosition == 0) {
+            $.cookie("sidebarScroll", $("#ie-new-toc").scrollTop(), {
+                path: "/fr-fr/ontap-apps-dbs"
+            });
+        }
+
+        if ($("#ie-new-toc").scrollTop() > 0) {
+            $('#ie-product-identity-lockup').addClass('ie-addShadow');
+        } else {
+            $('#ie-product-identity-lockup').removeClass('ie-addShadow');
+        }
+    });
+
+    $(function () {
+        if ($.cookie("sidebarScroll")) {
+            $("#ie-new-toc").scrollTop($.cookie("sidebarScroll"));
+        }
+    });
+
+    function setSidebarBottom() {
+        const footerGap = PXinViewport($(".n-footer"));
+        document.getElementById("ie-new-sidebar").style.bottom = Math.max(0, footerGap) + "px";
+    }
+
+    window.onscroll = () => {
+        setSidebarBottom();
+    };
+
+    $("#sidebar-collapse").click(function (e) {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        e.preventDefault();
+        const width = $(".ie-content-pane").width();
+        const marginLeft = parseInt($(".ie-content-pane").css('marginLeft'));
+
+        if ($.cookie("sidebarScroll")) {
+            sidebarScrollTopPosition = $.cookie("sidebarScroll");
+        }
+
+        $("#ie-new-sidebar").animate({ width: 'toggle' }, 350, function () {
+            $("#ie-new-sidebar-collapse").show();
+            $("#ie-new-sidebar").removeClass("open")
+            $("#ie-new-sidebar").addClass("close")
+            $("#ie-new-sidebar").removeAttr("style")
+        });
+        $(".ie-content-pane").animate({ width: (width + sidebarWidth), marginLeft: (marginLeft - sidebarWidth) }, 350, function () {
+            resizeContent()
+        })
+
+    });
+    $("#sidebar-expand").click(function (e) {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        e.preventDefault();
+        const width = $(".ie-content-pane").width();
+        const marginLeft = parseInt($(".ie-content-pane").css('marginLeft'));
+
+        $("#ie-new-sidebar").animate({ width: 'toggle' }, 250, function () {
+            $('#ie-new-sidebar').css('display', 'flex');
+            $("#ie-new-sidebar-collapse").hide();
+            $("#ie-new-sidebar").removeClass("close")
+            $("#ie-new-sidebar").addClass("open")
+            setSidebarBottom();
+
+            if (sidebarScrollTopPosition != 0) {
+                $.cookie("sidebarScroll", sidebarScrollTopPosition, {
+                    path: "/fr-fr/ontap-apps-dbs"
+                })
+                $("#ie-new-toc").scrollTop(sidebarScrollTopPosition);
+                sidebarScrollTopPosition = 0;
+            }
+        });
+        $(".ie-content-pane").animate({ width: (width - sidebarWidth), 'marginLeft': (marginLeft + sidebarWidth) }, 250, function () {
+            resizeContent()
+        })
+    });
+    function resizeContent() {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        const rightNavbarVisible =  $("#ie-right-navbar").css('display') && $("#ie-right-navbar").css('display') != 'none';
+        const sidebarVisible = $("#ie-new-sidebar").css('display') != 'none';
+        const rightNavbarWidth = $("#ie-right-navbar").width();
+        const rightNavbarCollapseWidth = $("#ie-right-navbar-collapse").width();
+        const rightNavbarCollapseVisible = $("#ie-right-navbar-collapse").css('display') && $("#ie-right-navbar-collapse").css('display') != 'none';
+        
+        if (rightNavbarVisible && sidebarVisible) {
+            $(".ie-content-pane").width(`calc(100% - ${sidebarWidth + rightNavbarWidth}px)`)
+            $(".ie-content-pane").css('marginLeft', `${sidebarWidth}px`)
+        } else if (sidebarVisible) {
+            $(".ie-content-pane").css('marginLeft', `${sidebarWidth}px`)
+            if (rightNavbarCollapseVisible) {
+                $(".ie-content-pane").width(`calc(100% - ${sidebarWidth + rightNavbarCollapseWidth}px)`)
+            } else {
+                $(".ie-content-pane").width(`calc(100% - ${$("#ie-new-sidebar").width()}px)`)
+            }
+
+        } else if (rightNavbarVisible) {
+            $(".ie-content-pane").css('marginLeft', `${$("#ie-new-sidebar-collapse").width()}px`)
+            $(".ie-content-pane").width(`calc(100% - ${rightNavbarWidth}px)`)
+        } else {
+            $(".ie-content-pane").css('marginLeft', `${$("#ie-new-sidebar-collapse").width()}px`)
+            if (rightNavbarCollapseVisible) {
+                $(".ie-content-pane").width(`calc(100% - ${rightNavbarCollapseWidth}px)`);
+            } else {
+                $(".ie-content-pane").width(`calc(100% - ${$("#ie-new-sidebar-collapse").width()}px) `);
+            }
+            
+        }
+    }
+    $(window).on("resize load", function () {
+        setSidebarBottom();
+        resizeContent()
+    });
+
+
+</script>
+
+<div class="ie-content-pane ie-component-detail-content ie-component-detail-content--show-code">
+    <!-- Begin of page container --><article class="page-content" id="main">
+      <!-- include utility.html -->
+      <div class="ie-info-disclaimer">
+    <span>
+      <div class="ie-info-disclaimer-container">
+        <div class="ie-info-disclaimer-icon">
+          <img src="/fr-fr/ontap-apps-dbs/images/notification-icons.svg" class="luci-icon" alt="" />
+        </div>
+        <div class="ie-info-disclaimer-content">
+          <span> La version française est une traduction automatique. La version anglaise prévaut sur la française en cas de divergence. </span>
+        </div>
+        <div style="clear:both;"></div>
+      </div>
+    </span>
+  </div><div class="ie-component-detail-heading-wrap">
+  <h1 class="ie-component-detail-heading">Configuration du réseau</h1>
+</div>
+
+<div id="ie-byline">
+  
+<div class="page-details">
+    
+        
+            <time datetime="2024-03-07 03:00:36 +0000">03/07/2024</time>
+        
+    
+    
+        <span>Contributeurs
+        </span>
+    
+    
+</div>
+<div class="page-controls">
+    <div id="contribute-dropdown" class="custom-dropdown custom-dropdown-contrib" >
+        <div class="custom-dropdown-select custom-dropdown-select-contrib">
+        <span class="contrib-name"><img src="/fr-fr/ontap-apps-dbs/images/discuss-sm.svg" alt="" class="github-icon" />Suggérer des modifications</span>
+        <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown invisible" />
+        <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup" />
+        </div>
+        <ul class="custom-dropdown-menu suggested-changes-dropdown"><li>
+                <a target="_blank" href="https://github.com/NetAppDocs/ontap-apps-dbs.fr-fr/issues/new?template=new-from-page.yml&page-url=https://docs.netapp.com/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-network.html&page-title=Configuration du réseau" class="page-nav-contribute-link" role="button">Demander des modifications de la documentation</a>
+            </li><li> 
+                <a target="_blank" href="https://github.com/NetAppDocs/ontap-apps-dbs/blob/main/vmware/vmware-vsphere-network.adoc" class="page-nav-contribute-link" role="button">Modifier cette page</a>
+            </li><li><a target="_blank" href="https://docs.netapp.com/us-en/contribute/" class="page-nav-contribute-link"  >En savoir plus sur les contributions</a></li>
+        </ul>
+    </div>
+    <div id="pdf-control-container">
+        <div class="n-pdf-header">
+            <a id="toggleButtonPdf" class="n-pdf-button" type="button">
+                <img class="adobe-icon" src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>PDF<img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" class="custom-icon" alt="" />
+            </a>
+        </div>
+        <div class="n-pdf-body-container">
+            <ul id="toggleContainerPdf" class="n-pdf-body" style="display:none;"><li class="pdf-ux-container">
+                    
+                    
+                    
+                    <a target="_blank" class="pdf-download-link" href="/fr-fr/ontap-apps-dbs/pdfs/fullsite-sidebar/ONTAP_et_applications_d_entreprise.pdf" >
+                    <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>Un fichier PDF de toute la documentation</a>
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Microsoft_SQL_Server.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Microsoft SQL Server
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_la_base_de_données_pour_Microsoft_SQL_Server.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de la base de données
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_du_stockage_pour_Microsoft_SQL_Server.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de stockage sous-jacente
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/MySQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            MySQL
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_base_de_données_pour_MySQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de la base de données
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_l_hôte_pour_MySQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de l'hôte
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_du_stockage_pour_MySQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de stockage sous-jacente
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Base_de_données_Oracle.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Base de données Oracle
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_ONTAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_la_base_de_données_pour_Oracle_Database.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de la base de données
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_l_hôte_pour_Oracle_Database.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de l'hôte
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_réseau_pour_Oracle_Database.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration du réseau
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_du_stockage_pour_Oracle_Database.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de stockage sous-jacente
+          </a>
+          
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/SAN_FC.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            SAN FC
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/NFS.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            NFS
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Tiering.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Tiering
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Règles_de_hiérarchisation.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Règles de hiérarchisation
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Stratégies_de_Tiering.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Stratégies de Tiering
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Protection_des_données_Oracle.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Protection des données Oracle
+          </a>
+          
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Notions_de_base_sur_la_sauvegarde_et_la_restauration.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Notions de base sur la sauvegarde et la restauration
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Reprise_sur_incident_Oracle.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Reprise sur incident Oracle
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/MetroCluster.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            MetroCluster
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Synchronisation_active_SnapMirror.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Synchronisation active SnapMirror
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Migration_de_la_base_de_données_Oracle.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Migration de la base de données Oracle
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Procédures.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Procédures
+          </a>
+          
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Importation_de_LUN_étrangères.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Importation de LUN étrangères
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Remarques_supplémentaires.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Remarques supplémentaires
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/PostgreSQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            PostgreSQL
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_l_hôte_pour_PostgreSQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de la base de données
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_du_stockage_pour_PostgreSQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de stockage sous-jacente
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Protection_des_données_pour_PostgreSQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Protection des données
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/SAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            SAP
+          </a>
+          
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/VMware.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            VMware
+          </a>
+          
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/VMware_vSphere_avec_ONTAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            VMware vSphere avec ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Datastores_et_protocoles.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Datastores et protocoles
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+    <ul class="subfolders" id="pdf-remove" style="display:none;"><li class="active"></li></ul>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Volumes_virtuels__vVols__avec_ONTAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Volumes virtuels (vVols) avec ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/VMware_site_Recovery_Manager_et_ONTAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            VMware site Recovery Manager et ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Cluster_de_stockage_vSphere_Metro_avec_ONTAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Cluster de stockage vSphere Metro avec ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Sécurité_des_produits.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Sécurité des produits
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+</li></ul>
+            <div class="zip-pdf-link-container" style="display: none;">   
+                <a href="#" id="zipPdf">
+                <img src="/fr-fr/ontap-apps-dbs/images/pdf-zip.png" alt="" width="16" height="16"/>
+                <pre>Plusieurs fichiers PDF<span class="zip-size"></span></pre>
+                </a><div id="zip-link-popup" class="hide">
+    <div class="inner-modal">
+        <div class="downloading-progress">
+            <div class="spinner"></div>
+            <h1>Creating your file...</h1>
+            <div>This may take a few minutes. Thanks for your patience.</div>
+            <button class="cancel-download-btn" type="button">Cancel</button>
+        </div>
+        <div class="download-complete hide">
+            <div class="done-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+            </div>
+            <div>Your file is ready</div>
+            <button class="cancel-download-btn" type="button">OK</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(".cancel-download-btn").click(function(){
+        $("#zip-link-popup").addClass("hide");
+        $("#zip-link-popup .downloading-progress").removeClass("hide");
+        $("#zip-link-popup .download-complete").addClass("hide");
+    });
+</script></div>
+        </div>
+    </div>        
+<script>
+$("#toggleContainerPdf li.active:last-child").parents('ul.subfolders').toggle('display');
+$("#toggleButtonPdf").on('click', function(e){ 
+    e.stopPropagation();
+    $("#toggleContainerPdf").toggle('display');
+    $(".n-pdf-body-container .zip-pdf-link-container").toggle('display');
+});
+
+//hide is by clicking outside pdfcontainer
+$(document).on('click', function (e) {
+    if ($('#toggleContainerPdf').is(':visible') && !$('.n-pdf-body-container').is(e.target) && !$('.n-pdf-body-container').has(e.target).length)  {
+        
+        $("#toggleContainerPdf").toggle('display');
+        $(".n-pdf-body-container .zip-pdf-link-container").toggle('display');
+        $("#toggleButtonPdf").removeClass("active");
+    }
+});
+</script>
+<script>
+    function getPdfLocation() {
+        const pdfLocation = window.scrollX + document.querySelector('#pdf-control-container').getBoundingClientRect().left
+        if (pdfLocation < 450) {
+            $(".n-pdf-body-container").addClass("block")
+        } else {
+            $(".n-pdf-body-container").removeClass("block")
+        }
+    
+    }
+    $( window ).on( "resize", function() {
+        getPdfLocation()
+} );
+</script>
+<script>
+    const pdfButtonWidth =  $(".n-pdf-header").width();
+    const pdfMenuWidth = $(".n-pdf-body-container").width();
+    $(".n-pdf-body-container").css('margin-left', `calc(${pdfButtonWidth - pdfMenuWidth}px)`);
+</script>
+</div>
+
+    
+
+</div>
+
+
+
+
+<div class="content-to-index">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph lead">
+<p>La configuration des paramètres réseau lors de l'utilisation de vSphere avec des systèmes exécutant le logiciel ONTAP est simple et similaire à celle d'autres configurations réseau.</p>
+</div>
+<div class="paragraph">
+<p>Voici quelques points à prendre en compte :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Trafic du réseau de stockage séparé des autres réseaux Un réseau distinct peut être obtenu à l'aide d'un VLAN dédié ou de commutateurs distincts pour le stockage. Si le réseau de stockage partage des chemins physiques, tels que des liaisons ascendantes, vous pouvez avoir besoin de la qualité de service ou de ports supplémentaires pour garantir une bande passante suffisante. Ne connectez pas les hôtes directement au stockage ; utilisez les commutateurs pour disposer de chemins redondants et permettez à VMware HA de fonctionner sans intervention. Voir <a href="vmware-vsphere-network.html">"Connexion directe au réseau"</a> pour plus d'informations.</p>
+</li>
+<li>
+<p>Les trames Jumbo peuvent être utilisées si vous le souhaitez et prises en charge par votre réseau, en particulier lors de l'utilisation d'iSCSI. Si elles sont utilisées, assurez-vous qu'elles sont configurées de manière identique sur tous les périphériques réseau, VLAN, etc. Dans le chemin entre le stockage et l'hôte ESXi. Vous pourriez voir des problèmes de performances ou de connexion. La MTU doit également être définie de manière identique sur le switch virtuel ESXi, le port VMkernel et également sur les ports physiques ou les groupes d'interface de chaque nœud ONTAP.</p>
+</li>
+<li>
+<p>NetApp recommande uniquement la désactivation du contrôle de flux réseau sur les ports réseau du cluster dans un cluster ONTAP. NetApp ne recommande pas d'autres recommandations sur les meilleures pratiques pour les ports réseau restants utilisés pour le trafic de données. Vous devez activer ou désactiver si nécessaire. Voir <a href="http://www.netapp.com/us/media/tr-4182.pdf" target="_blank" rel="noopener">"TR-4182"</a> pour plus d'informations sur le contrôle de flux.</p>
+</li>
+<li>
+<p>Lorsque les baies de stockage ESXi et ONTAP sont connectées aux réseaux de stockage Ethernet, NetApp recommande de configurer les ports Ethernet auxquels ces systèmes se connectent en tant que ports de périphérie RSTP (Rapid Spanning Tree Protocol) ou en utilisant la fonctionnalité Cisco PortFast. NetApp recommande d'activer la fonction de jonction Spanning-Tree PortFast dans les environnements qui utilisent la fonction Cisco PortFast et dont le agrégation VLAN 802.1Q est activée soit au serveur ESXi, soit aux baies de stockage ONTAP.</p>
+</li>
+<li>
+<p>NetApp recommande les meilleures pratiques suivantes pour l'agrégation de liens :</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Utilisez des commutateurs qui prennent en charge l'agrégation de liens des ports sur deux châssis de commutateurs distincts grâce à une approche de groupe d'agrégation de liens multichâssis, telle que Virtual PortChannel (VPC) de Cisco.</p>
+</li>
+<li>
+<p>Désactiver LACP pour les ports de switch connectés à ESXi, sauf si vous utilisez dvswitches 5.1 ou version ultérieure avec LACP configuré.</p>
+</li>
+<li>
+<p>Utilisez LACP pour créer des agrégats de liens pour les systèmes de stockage ONTAP avec des groupes d'interface multimode dynamiques avec un hachage IP.</p>
+</li>
+<li>
+<p>Utilisez une stratégie de regroupement de hachage IP sur ESXi.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Le tableau suivant fournit un récapitulatif des éléments de configuration réseau et indique l'emplacement d'application des paramètres.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Élément</th>
+<th class="tableblock halign-left valign-top">VMware ESXi</th>
+<th class="tableblock halign-left valign-top">Commutateur</th>
+<th class="tableblock halign-left valign-top">Nœud</th>
+<th class="tableblock halign-left valign-top">SVM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Adresse IP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VMkernel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non**</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Agrégation de liens</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Commutateur virtuel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non*</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VLAN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Groupes de ports VMKernel et VM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non*</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Contrôle de flux</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NIC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non*</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Spanning Tree</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MTU (pour les trames jumbo)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Commutateur virtuel et port VMkernel (9000)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui (défini sur max)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui (9000)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non*</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Groupes de basculement</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui (créer)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui (sélectionner)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>*Les LIF SVM se connectent aux ports, aux groupes d'interface ou aux interfaces VLAN dotés de VLAN, MTU et d'autres paramètres. Cependant, les paramètres ne sont pas gérés au niveau de la SVM.</p>
+</div>
+<div class="paragraph">
+<p>**Ces périphériques ont leur propre adresse IP pour la gestion, mais ces adresses ne sont pas utilisées dans le contexte du réseau de stockage VMware ESXi.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="san-fc-fcoe-nvmefc-iscsi-rdm">SAN (FC, FCoE, NVMe/FC, iSCSI), RDM</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dans vSphere, il existe trois façons d'utiliser les LUN de stockage bloc :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Avec les datastores VMFS</p>
+</li>
+<li>
+<p>Avec mappage de périphériques bruts (RDM)</p>
+</li>
+<li>
+<p>En tant que LUN accessible et contrôlée par un initiateur logiciel à partir d'un système d'exploitation invité de machine virtuelle</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>VMFS est un système de fichiers en cluster hautes performances qui fournit des datastores sous forme de pools de stockage partagés. Les datastores VMFS peuvent être configurés avec des LUN accessibles via des espaces de noms FC, iSCSI, FCoE ou NVMe accessibles via le protocole NVMe/FC. VMFS permet d'accéder simultanément aux LUN classiques par chaque serveur ESX d'un cluster. La taille de LUN maximale du ONTAP est généralement de 16 To. Par conséquent, un datastore VMFS 5 de 64 To (voir le premier tableau de cette section) est créé avec quatre LUN de 16 To (tous les systèmes SAN prennent en charge la taille de LUN VMFS de 64 To maximum). Dans la mesure où l'architecture LUN ONTAP ne dispose pas de petites profondeurs de files d'attente individuelles, les datastores VMFS en ONTAP peuvent évoluer plus largement qu'avec les architectures de baies traditionnelles de manière relativement simple.</p>
+</div>
+<div class="paragraph">
+<p>VSphere inclut la prise en charge intégrée de plusieurs chemins d'accès aux périphériques de stockage, appelés chemins d'accès multiples natifs (NMP). NMP peut détecter le type de stockage pour les systèmes de stockage pris en charge et configure automatiquement la pile NMP afin de prendre en charge les capacités du système de stockage utilisé.</p>
+</div>
+<div class="paragraph">
+<p>Les protocoles NMP et ONTAP prennent en charge le protocole ALUA (Asymmetric Logical Unit Access) pour négocier des chemins optimisés et non optimisés. Dans ONTAP, un chemin optimisé pour le protocole ALUA suit un chemin d'accès direct aux données, utilisant un port cible sur le nœud qui héberge la LUN accédée. ALUA est activé par défaut dans vSphere et ONTAP. Le NMP reconnaît le cluster ONTAP en tant que ALUA, et il utilise le plug-in ALUA de type baie de stockage (<code>VMW_SATP_ALUA</code>) et sélectionne le plug-in de sélection de chemin de tourniquet (<code>VMW_PSP_RR</code>).</p>
+</div>
+<div class="paragraph">
+<p>ESXi 6 prend en charge jusqu'à 256 LUN et jusqu'à 1,024 chemins d'accès aux LUN au total. Les LUN et les chemins au-delà de ces limites ne sont pas visibles par ESXi. En supposant un nombre maximum de LUN, la limite de chemin autorise quatre chemins par LUN. Dans un cluster ONTAP plus grand, il est possible d'atteindre la limite de chemin avant la limite de LUN. Pour résoudre cette limitation, ONTAP prend en charge le mappage de LUN sélectif (SLM) dans la version 8.3 et les versions ultérieures.</p>
+</div>
+<div class="paragraph">
+<p>SLM limite les nœuds qui annoncent les chemins vers une LUN donnée. Il est recommandé à NetApp d'utiliser au moins une LIF par nœud par SVM et SLM pour limiter les chemins annoncés vers le nœud hébergeant la LUN et son partenaire de haute disponibilité. Bien que d'autres chemins existent, ils ne sont pas annoncés par défaut. Il est possible de modifier les chemins annoncés avec les arguments de noeud de rapport ajouter et supprimer dans SLM. Notez que les LUN créées dans les versions antérieures à 8.3 annoncent tous les chemins et doivent être modifiés uniquement pour annoncer les chemins vers la paire HA d'hébergement. Pour plus d'informations sur SLM, consultez la section 5.9 de <a href="http://www.netapp.com/us/media/tr-4080.pdf" target="_blank" rel="noopener">"TR-4080"</a>. La méthode précédente de ensembles de ports peut également être utilisée pour réduire davantage les chemins disponibles pour une LUN. Les jeux de ports permettent de réduire le nombre de chemins visibles via lesquels les initiateurs d'un groupe initiateur peuvent voir les LUN.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SLM est activé par défaut. Sauf si vous utilisez des ensembles de ports, aucune configuration supplémentaire n'est requise.</p>
+</li>
+<li>
+<p>Pour les LUN créées avant Data ONTAP 8.3, appliquez manuellement SLM en exécutant le <code>lun mapping remove-reporting-nodes</code> Commande permettant de supprimer les nœuds présentant les rapports LUN et de limiter l'accès des LUN au nœud propriétaire de la LUN et à son partenaire haute disponibilité.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Des protocoles de bloc (iSCSI, FC et FCoE) accèdent aux LUN à l'aide d'identifiants de LUN, de numéros de série et de noms uniques. Les protocoles FC et FCoE utilisent des noms mondiaux (WWN et WWPN) et iSCSI utilise les noms qualifiés iSCSI (IQN). Le chemin vers les LUN à l'intérieur du stockage n'a aucun sens avec les protocoles de bloc et n'est pas présenté au niveau du protocole. Par conséquent, un volume contenant uniquement des LUN n'a pas besoin d'être monté en interne et un chemin de jonction n'est pas nécessaire pour les volumes contenant les LUN utilisées dans les datastores. Le sous-système NVMe dans ONTAP fonctionne de la même manière.</p>
+</div>
+<div class="paragraph">
+<p>D'autres meilleures pratiques à prendre en compte :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Vérifier qu'une interface logique (LIF) est créée pour chaque SVM sur chaque nœud du cluster ONTAP pour optimiser la disponibilité et la mobilité. La meilleure pratique du SAN de ONTAP est d'utiliser deux ports physiques et LIF par nœud, un pour chaque structure. ALUA sert à analyser les chemins et à identifier les chemins (directs) optimisés actifs/actifs au lieu de chemins non optimisés actifs. ALUA est utilisé pour FC, FCoE et iSCSI.</p>
+</li>
+<li>
+<p>Pour les réseaux iSCSI, utilisez plusieurs interfaces réseau VMkernel sur différents sous-réseaux du réseau avec le regroupement de cartes réseau lorsque plusieurs commutateurs virtuels sont présents. Vous pouvez également utiliser plusieurs cartes réseau physiques connectées à plusieurs commutateurs physiques pour fournir la haute disponibilité et un débit accru. La figure suivante fournit un exemple de connectivité multivoie. Dans ONTAP, configurez soit un groupe d'interface en mode unique pour basculement avec deux liaisons ou plus connectées à deux ou plusieurs switchs, soit au moyen de LACP ou d'une autre technologie d'agrégation de liens avec des groupes d'interfaces multimode afin d'assurer la haute disponibilité et les avantages de l'agrégation de liens.</p>
+</li>
+<li>
+<p>Si le protocole CHAP (Challenge-Handshake Authentication Protocol) est utilisé dans ESXi pour l'authentification de la cible, il doit également être configuré dans ONTAP à l'aide de l'interface de ligne de commande (<code>vserver iscsi security create</code>) Ou avec System Manager (modifier la sécurité de l'initiateur sous Storage &gt; SVM &gt; SVM Settings &gt; protocoles &gt; iSCSI).</p>
+</li>
+<li>
+<p>Utilisez les outils ONTAP pour VMware vSphere pour créer et gérer des LUN et des igroups. Le plug-in détermine automatiquement les WWPN des serveurs et crée les igroups appropriés. Il configure également les LUN en fonction des meilleures pratiques et les mappe avec les groupes initiateurs appropriés.</p>
+</li>
+<li>
+<p>Utilisez les RDM avec soin car ils peuvent être plus difficiles à gérer et ils utilisent également des chemins, qui sont limités comme décrit précédemment. Les LUN ONTAP prennent en charge les deux <a href="https://kb.vmware.com/s/article/2009226" target="_blank" rel="noopener">"mode de compatibilité physique et virtuelle"</a> RDM.</p>
+</li>
+<li>
+<p>Pour en savoir plus sur l'utilisation de NVMe/FC avec vSphere 7.0, consultez cette <a href="https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_7.html" target="_blank" rel="noopener">"Guide de configuration d'hôte NVMe/FC de ONTAP"</a> et <a href="http://www.netapp.com/us/media/tr-4684.pdf" target="_blank" rel="noopener">"TR-4684"</a>La figure suivante décrit la connectivité multivoie d'un hôte vSphere vers un LUN ONTAP.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="../media/vsphere_ontap_image2.png" alt="Erreur : image graphique manquante"></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="nfs">NFS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>VSphere permet aux clients d'utiliser des baies NFS de classe entreprise pour fournir un accès simultané aux datastores à tous les nœuds d'un cluster ESXi. Comme mentionné dans la section datastore, la facilité d'utilisation et la visibilité sur l'efficacité du stockage présentent des avantages avec NFS avec vSphere.</p>
+</div>
+<div class="paragraph">
+<p>Nous vous recommandons les meilleures pratiques suivantes lorsque vous utilisez ONTAP NFS avec vSphere :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Utiliser une interface logique (LIF) unique pour chaque SVM sur chaque nœud du cluster ONTAP. Les recommandations précédentes d'une LIF par datastore ne sont plus nécessaires. L'accès direct (LIF et datastore sur le même nœud) est idéal, mais ne vous inquiétez pas pour l'accès indirect, car l'effet de performance est généralement minimal (microsecondes).</p>
+</li>
+<li>
+<p>Toutes les versions de VMware vSphere actuellement prises en charge peuvent utiliser NFS v3 et v4.1. La prise en charge officielle de nconnect a été ajoutée à vSphere 8.0 mise à jour 2 pour NFS v3. Pour NFS v4.1, vSphere continue à prendre en charge l'agrégation de sessions, l'authentification Kerberos et l'authentification Kerberos avec intégrité. Il est important de noter que l'agrégation de session nécessite ONTAP 9.14.1 ou une version ultérieure.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Notez que NFS v3 et NFS v4.1 utilisent différents mécanismes de verrouillage. NFS v3 utilise un verrouillage côté client, tandis que NFS v4.1 utilise un verrouillage côté serveur. Bien qu'un volume ONTAP puisse être exporté via les deux protocoles, ESXi ne peut monter qu'un datastore via un protocole. Cependant, cela ne signifie pas que d'autres hôtes ESXi ne peuvent pas monter le même datastore via une version différente. Pour éviter tout problème, il est essentiel de spécifier la version du protocole à utiliser lors du montage, en veillant à ce que tous les hôtes utilisent la même version et, par conséquent, le même style de verrouillage. Il est essentiel d'éviter de mélanger les versions NFS entre les hôtes. Si possible, utilisez les profils hôtes pour vérifier la conformité.<br>
+<strong> Comme il n'y a pas de conversion automatique des datastores entre NFSv3 et NFSv4.1, créez un nouveau datastore NFSv4.1 et utilisez Storage vMotion pour migrer les machines virtuelles vers le nouveau datastore.<br>
+</strong> Reportez-vous aux notes du tableau interopérabilité NFS v4.1 dans le <a href="https://mysupport.netapp.com/matrix/" target="_blank" rel="noopener">"Matrice d'interopérabilité NetApp"</a> Pour les niveaux de correctifs VMware ESXi spécifiques requis pour la prise en charge.<br>
+* Les règles d'exportation NFS sont utilisées pour contrôler l'accès par les hôtes vSphere. Vous pouvez utiliser une seule règle avec plusieurs volumes (datastores). Avec NFSv3, ESXi utilise le style de sécurité sys (UNIX) et requiert l'option de montage root pour exécuter les VM. Dans ONTAP, cette option est appelée superutilisateur et, lorsque l'option superutilisateur est utilisée, il n'est pas nécessaire de spécifier l'ID utilisateur anonyme. Notez que l'export-policy rules avec des valeurs différentes de <code>-anon</code> et <code>-allow-suid</code> Peut entraîner des problèmes de découverte des SVM à l'aide des outils ONTAP. Voici un exemple de politique :<br>
+<strong> Protocole d'accès : nfs3<br>
+</strong> Client Match Spec : 192.168.42.21<br>
+<strong> Règle d'accès RO : sys<br>
+</strong> RW règle d'accès : sys<br>
+<strong> UID anonyme<br>
+</strong> Superutilisateur : sys<br>
+* Si le plug-in NetApp NFS pour VMware VAAI est utilisé, le protocole doit être défini comme <code>nfs</code> lorsque la règle export-policy est créée ou modifiée. Le protocole NFSv4 est requis pour que le déchargement des copies VAAI fonctionne et que vous spécifiez le protocole comme <code>nfs</code> Inclut automatiquement les versions NFSv3 et NFSv4.<br>
+* Les volumes de datastore NFS sont reliés par jonction au volume root du SVM ; par conséquent, ESXi doit également avoir accès au volume root pour naviguer et monter les volumes de datastore. La export policy pour le volume root, et pour tout autre volume dans lequel la jonction du volume de datastore est imbriquée, doit inclure une règle ou des règles pour les serveurs ESXi leur accordant un accès en lecture seule. Voici un exemple de règle pour le volume racine, également à l'aide du plug-in VAAI :<br>
+<strong> Protocole d'accès : nfs (qui inclut nfs3 et nfs4)<br>
+</strong> Client Match Spec : 192.168.42.21<br>
+<strong> Règle d'accès RO : sys<br>
+</strong> RW Access Rule: Never (meilleure sécurité pour le volume root)<br>
+<strong> UID anonyme<br>
+</strong> Superuser : sys (également requis pour le volume root avec VAAI)<br>
+* Utilisez les outils ONTAP pour VMware vSphere (meilleure pratique la plus importante) :<br>
+<strong> Utiliser les outils ONTAP pour VMware vSphere pour provisionner les datastores car cela simplifie automatiquement la gestion des règles d'exportation.<br>
+</strong> Lors de la création de datastores pour clusters VMware avec le plug-in, sélectionnez le cluster plutôt qu'un seul serveur ESX. Ce choix permet de monter automatiquement le datastore sur tous les hôtes du cluster.<br>
+<strong> Utilisez la fonction de montage du plug-in pour appliquer les datastores existants aux nouveaux serveurs.<br>
+</strong> Lorsque vous n'utilisez pas les outils ONTAP pour VMware vSphere, utilisez une règle d'exportation unique pour tous les serveurs ou pour chaque cluster de serveurs pour lesquels un contrôle d'accès supplémentaire est nécessaire.<br>
+* Bien que ONTAP offre une structure d'espace de noms de volume flexible pour organiser les volumes dans une arborescence à l'aide de jonctions, cette approche n'a pas de valeur pour vSphere. Il crée un répertoire pour chaque machine virtuelle à la racine du datastore, quelle que soit la hiérarchie de l'espace de noms du stockage. Il est donc recommandé de simplement monter le Junction path pour les volumes pour vSphere au volume root du SVM, c'est-à-dire comment les outils ONTAP pour VMware vSphere provisionne les datastores. Sans chemins de jonction imbriqués, aucun volume ne dépend d'aucun volume autre que le volume root et que mettre un volume hors ligne ou le détruire, même intentionnellement, n'affecte pas le chemin d'accès aux autres volumes.<br>
+* Une taille de bloc de 4 Ko convient pour les partitions NTFS sur les datastores NFS. La figure suivante décrit la connectivité d'un hôte vSphere vers un datastore NFS ONTAP.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="../media/vsphere_ontap_image3.png" alt="Erreur : image graphique manquante"></span></p>
+</div>
+<div class="paragraph">
+<p>Le tableau suivant répertorie les versions NFS et les fonctionnalités prises en charge.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Fonctionnalités de vSphere</th>
+<th class="tableblock halign-left valign-top">NFSv3</th>
+<th class="tableblock halign-left valign-top">NFSv4.1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VMotion et Storage vMotion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Haute disponibilité</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tolérance aux pannes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DRS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Profils hôtes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DRS de stockage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Contrôle des E/S du stockage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SRM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Volumes virtuels</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accélération matérielle (VAAI)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Authentification Kerberos</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui (optimisé avec vSphere 6.5 et versions ultérieures pour prendre en charge AES et krb5i)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prise en charge des chemins d'accès</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Non</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oui (ONTAP 9.14.1)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="connexion-directe-au-réseau">Connexion directe au réseau</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Les administrateurs du stockage préfèrent parfois simplifier leurs infrastructures en supprimant les commutateurs réseau de la configuration. Cela peut être pris en charge dans certains scénarios.</p>
+</div>
+<div class="sect2">
+<h3 id="iscsi-et-nvmetcp">ISCSI et NVMe/TCP</h3>
+<div class="paragraph">
+<p>Un hôte utilisant iSCSI ou NVMe/TCP peut être directement connecté à un système de stockage et fonctionner normalement. La raison en est le chemin d'accès. Les connexions directes à deux contrôleurs de stockage distincts donnent lieu à deux chemins de flux de données indépendants. La perte du chemin, du port ou du contrôleur n'empêche pas l'autre chemin d'être utilisé.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="nfs-2">NFS</h3>
+<div class="paragraph">
+<p>Vous pouvez utiliser un stockage NFS à connexion directe, mais avec une limitation importante : le basculement ne fonctionnera pas sans script important, ce qui incombera au client.</p>
+</div>
+<div class="paragraph">
+<p>Ce qui complique la reprise après incident avec un stockage NFS à connexion directe, c'est le routage qui se produit sur le système d'exploitation local. Par exemple, supposons qu'un hôte a une adresse IP 192.168.1.1/24 et qu'il est directement connecté à un contrôleur ONTAP avec une adresse IP 192.168.1.50/24. Lors du basculement, cette adresse 192.168.1.50 peut basculer vers l'autre contrôleur et sera disponible pour l'hôte, mais comment l'hôte peut-il détecter sa présence ? L'adresse 192.168.1.1 d'origine existe toujours sur la carte réseau hôte qui ne se connecte plus à un système opérationnel. Le trafic destiné à 192.168.1.50 continuerait d'être envoyé à un port réseau inutilisable.</p>
+</div>
+<div class="paragraph">
+<p>Le second NIC du système d'exploitation peut être configuré sur 19 2.168.1.2 et serait capable de communiquer avec l'adresse en panne sur 192.168.1.50, mais les tables de routage locales auraient par défaut l'utilisation d'une adresse <strong>et d'une seule adresse</strong> pour communiquer avec le sous-réseau 192.168.1.0/24. Un administrateur système pourrait créer un framework de scripts qui détecterait une connexion réseau défaillante et modifierait les tables de routage locales ou rendrait les interfaces « up and down ». La procédure exacte dépend du système d'exploitation utilisé.</p>
+</div>
+<div class="paragraph">
+<p>Dans la pratique, les clients NetApp disposent d'un protocole NFS à connexion directe, mais généralement uniquement pour les charges de travail où une pause des E/S est acceptable pendant les basculements. Lorsque des montages durs sont utilisés, aucune erreur d'E/S ne doit se produire lors de ces pauses. L'E/S doit se bloquer jusqu'à ce que les services soient restaurés, soit par un retour arrière, soit par une intervention manuelle pour déplacer les adresses IP entre les cartes réseau de l'hôte.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="connexion-directe-fc">Connexion directe FC</h3>
+<div class="paragraph">
+<p>Il n'est pas possible de connecter directement un hôte à un système de stockage ONTAP à l'aide du protocole FC. La raison en est l'utilisation de NPIV. Le WWN qui identifie un port FC ONTAP sur le réseau FC utilise un type de virtualisation appelé NPIV. Tout périphérique connecté à un système ONTAP doit pouvoir reconnaître un WWN NPIV. Aucun fournisseur actuel de HBA ne propose de HBA pouvant être installé sur un hôte et capable de prendre en charge une cible NPIV.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+    </article>
+    <!-- Page Container -->
+  </div>
+
+  
+  <!-- Start Page Toolbar -->
+<div id="ie-right-navbar-collapse" class="close">
+  <img id="navbar-expand" class="ie-searchbox-icon" src="/fr-fr/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+</div>
+<div id="ie-right-navbar" class="open">
+  <div id="right-navbar-collapse">
+    <img src="/fr-fr/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+  </div>
+  <div class="page-nav-container">
+    <nav class="page-nav-fixed">
+      <div class="page-nav-title">Sur cette page</div>
+      <div class="page-nav-links">
+        <ul class="page-nav-inner" id="page-menu"></ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+<script>
+  resizeContent();
+  function setRightBarHeight() {
+    var h = 0;
+
+    // header 1
+    h += PXinViewport($('.n-footer'));
+    h += PXinViewport($('#ie-new-header'));
+
+    if ($('#ie-right-navbar').length) {
+      $('#ie-right-navbar').css({ height: `calc(100vh - ${h}px)` });
+    }
+    if ($('.page-nav-links').length) {
+      h += 98;
+      $('.page-nav-links').css({ height: `calc(100vh - ${h}px)` });
+    }
+  }
+
+  $(document).ready(function () {
+    // PAGE NAV - Click
+    const MASTHEAD_OFFSET = 65;
+    const SECTIONS = $("main h2, main h3");
+    let calculateActiveSection = false;
+    setTimeout(() => {
+      calculateActiveSection = true;
+    }, 100)
+
+    $(".page-nav__link").click(function (event) {
+      calculateActiveSection = false;
+      $(".page-nav__link").removeClass('page-nav__link--active');
+      var target = $(event.target);
+      target.addClass('page-nav__link--active');
+      location.hash = event.target.hash;
+      setTimeout(() => {
+        calculateActiveSection = true;
+      }, 100)
+
+    });
+
+    // PAGE NAV - Scroll
+    $(window).on('resize scroll', function () {
+      if (calculateActiveSection) {
+        var activeSection = getActiveSection(SECTIONS, MASTHEAD_OFFSET);
+        if (activeSection) {
+          var activeHref = $(activeSection).attr('id');
+          $(".page-nav__link").removeClass('page-nav__link--active');
+          $("#page-menu a[href=#" + activeHref + "]").addClass('page-nav__link--active');
+          if (location.hash != "#" + activeHref) {
+            if (history.replaceState) {
+              history.replaceState(null, null, "#" + activeHref);
+            }
+          }
+        }
+      }
+    });
+
+    $(".n-pdf-button").click(function () {
+      $(this).toggleClass("active");
+    });
+
+    $.fn.isVisibleAndInViewport = function () {
+      var elementTop = $(this).offset().top;
+      var elementBottom = elementTop + $(this).outerHeight();
+
+      var viewportTop = $(window).scrollTop();
+      var viewportBottom = viewportTop + $(window).height();
+
+      return elementBottom > viewportTop && elementTop < viewportBottom && $(this).is(":visible");
+    };
+
+
+    $(window).on('resize scroll', function () {
+      setRightBarHeight();
+    });
+
+    $(window).trigger('resize');
+
+
+  });
+
+  $("#right-navbar-collapse").click(function (e) {
+    const rightNavbarWidth = $("#ie-right-navbar").width() - $("#ie-right-navbar-collapse").width();
+    e.preventDefault();
+    const width = $(".ie-content-pane").width();
+
+    $("#ie-right-navbar").animate({ width: 'toggle' }, 350, function () {
+      $("#ie-right-navbar-collapse").removeClass("close")
+      $("#ie-right-navbar-collapse").addClass("open")
+      $("#ie-right-navbar").removeClass("open")
+      $("#ie-right-navbar").addClass("close")
+    });
+    $(".ie-content-pane").animate({ width: (width + rightNavbarWidth) }, 350, function () {
+      resizeContent()
+      setSidebarBottom();
+    })
+
+  });
+  $("#navbar-expand").click(function (e) {
+    const rightNavbarWidth = $("#ie-right-navbar").width() - $("#ie-right-navbar-collapse").width();
+    e.preventDefault();
+    const width = $(".ie-content-pane").width();
+    $("#ie-right-navbar").animate({ width: 'toggle' }, 250, function () {
+      $("#ie-right-navbar-collapse").removeClass("open")
+      $("#ie-right-navbar-collapse").addClass("close")
+      $("#ie-right-navbar").removeClass("close")
+      $("#ie-right-navbar").addClass("open")
+      setRightBarHeight();
+      setSidebarBottom();
+    });
+    $(".ie-content-pane").animate({ width: (width - rightNavbarWidth) }, 250, function () {
+      resizeContent()
+    })
+  });
+
+  function navbarResize() {
+    const rightNavbarResized = $("#ie-right-navbar-collapse").hasClass('resized');
+    if (window.innerWidth < 1024) {
+      $("#ie-right-navbar").removeClass("open")
+      $("#ie-right-navbar").addClass("close")
+      $("#ie-right-navbar").removeAttr("style")
+      $("#ie-right-navbar-collapse").removeClass("close")
+      $("#ie-right-navbar-collapse").addClass("open")
+      $("#ie-right-navbar-collapse").addClass("resized")
+    } else {
+      if (rightNavbarResized) {
+        $('#ie-right-navbar').removeClass('close');
+        $('#ie-right-navbar').addClass('open');
+        $("#ie-right-navbar-collapse").removeClass("resized")
+        $("#ie-right-navbar-collapse").removeClass("open")
+        $("#ie-right-navbar-collapse").addClass("close")
+      }
+    }
+    resizeContent()
+  }
+  navbarResize();
+  $(window).on('resize load', function () {
+    navbarResize()
+  });
+
+  function getActiveSection(sections, offset) {
+    var scrollPosition = $(window).scrollTop() + offset + 5;
+    var activeSection;
+    for (var i = 0; i < sections.length; i++) {
+      var el = $(sections[i]);
+      var activePosition = el.offset().top;
+      if (activePosition > scrollPosition) {
+        break;
+      }
+
+      activeSection = sections[i];
+    }
+
+    return activeSection;
+  }
+
+  $("a[href*=#]:not([href=#])").click(function () {
+    setTimeout(() => {
+      $(window).trigger('scroll');
+    }, 105)
+  })
+
+  const hashOnLoad = location.href.split("#")[1];
+  setTimeout(function () {
+    if (hashOnLoad) {
+      $(".page-nav__link").removeClass('page-nav__link--active');
+      $("#page-menu a[href=#" + hashOnLoad + "]").addClass('page-nav__link--active');
+    }
+  }, 100)
+
+</script>
+
+
+  <div style="clear: both"></div><!-- Main needs to have height --></div>
+
+        </main>
+
+        <footer class="n-footer">
+  <div class="n-footer__bottom">
+    <div class="n-container">
+        <div class="n-footer__left">
+          <li class="n-footer__copyright-link">
+                    <a href="https://www.netapp.com/company/legal/copyright/">© 2024 NetApp, Inc.</a>
+          </li>
+        </div>
+        <div class="n-footer__center">
+          <ul class="n-footer__copyright-list">
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/terms-of-use/">Conditions d'utilisation</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/privacy-policy/">Déclaration de confidentialité</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/cookie-policy/">Déclaration sur les cookies</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a class="ot-sdk-show-settings">Paramètres des cookies</a>
+            </li>
+          </ul>
+       </div>
+        <div class="n-footer__right">
+              <li class="n-footer__copyright-link">
+                <a target="_self" href="javascript:netapp_mailto()">Envoyer des commentaires à propos de cette page</a>
+              </li>
+        </div>
+     </div>
+  </div>
+</footer>
+
+      </div><!-- Elasticsearch JS -->
+      <script type="text/javascript" src='/fr-fr/ontap-apps-dbs/js/bundle.js'></script>
+
+      <!-- Syntax Highlighting -->
+      <script type="text/javascript" src='/fr-fr/ontap-apps-dbs/js/prism.js'></script>
+      <script type="text/javascript" src='/fr-fr/ontap-apps-dbs/js/prism-curl.js'></script>
+    </div>
+    <script>
+      document.body.offsetWidth=1903;
+      cookieLaw = {}
+      cookieLaw.euCountry = "US";
+      cookieLaw.invoke = function(){return false;}
+    </script>
+    <script src='/fr-fr/ontap-apps-dbs/js/ie-tabbed-blocks.js'></script>
+    <script src='/fr-fr/ontap-apps-dbs/js/ie-sidebar.js'></script>
+  </body>
+
+</html>

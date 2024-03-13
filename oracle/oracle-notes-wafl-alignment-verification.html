@@ -1,0 +1,4201 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head class="at-element-marker">
+  <title>Vérification de l'alignement WAFL pour les bases de données Oracle</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge,chrome=1">
+  <meta http-equiv="language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="Vérification de l'alignement WAFL pour les bases de données Oracle" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://docs.netapp.com/fr-fr/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+	<meta property="og:description" content="Alignement WAFL pour bases de données Oracle" />
+  <meta property="og:image" content="https://docs.netapp.com/fr-fr/ontap-apps-dbs/images/logo-tophat-social.png" />
+  <meta property="og:image:alt" content="NetApp Logo" />
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="encoding" content="utf-8">
+  <meta http-equiv="nss-type" content="Product Documentation"/>
+  <meta http-equiv="nss-subtype" content="User Guide"/><meta name="description" content="Alignement WAFL pour bases de données Oracle">
+  <meta name="keywords" content=" oracle, database, ontap, wafl, alignment"><!-- Icons -->
+  <link rel="icon" href="/fr-fr/ontap-apps-dbs/images/favicon.ico" type="image/x-icon">
+
+  <!-- RSS Feed --><!-- CSS Definitions: NetApp CSS should be defined after generic css -->
+
+
+  <!-- Combined CSS -->
+  <link rel="stylesheet" type="text/css" href="/fr-fr/ontap-apps-dbs/css/ie-netappdocs.css">
+
+  
+  <link rel="stylesheet" href="/fr-fr/ontap-apps-dbs/css/ie-landing-page.css" type="text/css">
+  <link rel="stylesheet" href="/fr-fr/ontap-apps-dbs/css/ie-tabbed-blocks.css" type="text/css">
+  <!-- Canonical url -->
+  <link rel="canonical" href="https://docs.netapp.com/fr-fr/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <link rel="alternate" hreflang="x-default" href="https://docs.netapp.com/us-en/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <link rel="alternate" hreflang="fr" href="https://docs.netapp.com/fr-fr/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <link rel="alternate" hreflang="en" href="https://docs.netapp.com/us-en/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <link rel="alternate" hreflang="ja" href="https://docs.netapp.com/ja-jp/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <link rel="alternate" hreflang="ko" href="https://docs.netapp.com/ko-kr/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://docs.netapp.com/zh-cn/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <link rel="alternate" hreflang="zh-Hant" href="https://docs.netapp.com/zh-tw/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <link rel="alternate" hreflang="de" href="https://docs.netapp.com/de-de/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <link rel="alternate" hreflang="es" href="https://docs.netapp.com/es-es/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <link rel="alternate" hreflang="it" href="https://docs.netapp.com/it-it/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html" />
+  <!-- Top level site integrations -->
+<script type="text/javascript" src="https://cdn.cookielaw.org/consent/72570c5c-fe30-465f-b0e0-b77f7fb4ae34/OtAutoBlock.js"></script>
+    <script type="text/javascript" src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" charset="UTF-8" data-document-language="true" data-domain-script="72570c5c-fe30-465f-b0e0-b77f7fb4ae34"></script>
+    <script type="text/javascript">function OptanonWrapper() { }</script>
+    <script type="text/plain" class="optanon-category-C0002" src="https://assets.adobedtm.com/60287eadf1ee/c284da483c83/launch-e9ff3acac59f.min.js"></script>
+    <script class="optanon-category-C0001">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.setAttributeNode(d.createAttribute('data-ot-ignore'));j.setAttribute('class','optanon-category-C0001');j.async=true;
+        j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl+'';f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-MD73T9M');</script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  
+  <script>
+    $(document).ready(function() {
+      const MASTHEAD_OFFSET = 65;
+      const SECTIONS = $("main h2, main h3");
+      // PAGE NAV - Init
+      if (SECTIONS.length == 0) {
+        // remove if there is no elements
+        /*
+        $("#ie-right-navbar").remove();
+        $("#ie-right-navbar-collapse").remove();
+        */
+      } else {
+        $(".page-nav-title").css('display', 'block');
+        for (var i = 0; i < SECTIONS.length; i++) {
+          var sectionId = $(SECTIONS[i]).attr('id');
+          var sectionName = $(SECTIONS[i]).text();
+          var subClass = $(SECTIONS[i]).is("h3") ? ' page-nav__sublink' : '';
+          $("#page-menu").append('<li class="page-nav-item"><a href="#' + sectionId + '" class="page-nav__link' + subClass + '">' + sectionName + '</a></li>');
+        }
+      }
+    });
+  </script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+  <!-- Used for Product Family Page Sidebar Visibility --><!-- Used to import Promise for IE. Required for SearchKit -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.5/bluebird.min.js"></script><script src='/fr-fr/ontap-apps-dbs/js/na-search.js'></script><script src='/fr-fr/ontap-apps-dbs/js/ie-clouddocs.js'></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><script>
+    /*
+      $(document).ready(function() {
+          $("#tg-sb-link").click(function() {
+              $("#tg-sb-sidebar").toggle();
+              $("#tg-sb-content").toggleClass('col-md-9');
+              $("#tg-sb-content").toggleClass('col-md-12');
+              $("#tg-sb-icon").toggleClass('fa-toggle-on');
+              $("#tg-sb-icon").toggleClass('fa-toggle-off');
+          });
+      });
+      */
+  </script>
+  <script src='/fr-fr/ontap-apps-dbs/js/custom-dropdown.js'></script>
+  <script src='/fr-fr/ontap-apps-dbs/js/FileSaver.min.js'></script>
+  <script src='/fr-fr/ontap-apps-dbs/js/jszip-utils.min.js'></script>
+  <script src='/fr-fr/ontap-apps-dbs/js/jszip.min.js'></script><script src='/fr-fr/ontap-apps-dbs/js/ie-pdf-ux.js'></script></head>
+
+
+  <body class role="document" data-flavor="">
+    <div class="skip-to-main">
+      <a href="#main" >Skip to main content</a>
+    </div><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MD73T9M"
+      height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><div id="page" class="">
+      <div id="ie-phone-menu" class=""></div>
+      <div id="ie-content-wrap" class="">
+        <nav id="ie-new-header">
+    <ul>
+        <li id="ie-phone-menu-button">
+            <a href="#">
+                <image id="" src="/fr-fr/ontap-apps-dbs/images/hamburger.svg" alt="menu" />
+            </a>
+        </li>
+
+        <li>
+            <a href="https://www.netapp.com/fr">
+                <image id="ie-header-logo" src="/fr-fr/ontap-apps-dbs/images/netapp_logo.svg" alt="netapp" />
+            </a>
+        </li>
+        <li id="ie-header-docs">
+            <a href="https://www.netapp.com/fr/support-and-training/documentation/">Documents</a>
+        </li>
+
+        <!-- Empty container to push header left with or without lang selector -->
+        <li id="empty-container" style="margin-left: auto">
+        </li>
+        <!-- Start Language Selector --><li id="ie-language-dropdown">
+            <div id="language-dropdown" class="custom-dropdown custom-dropdown-lang">
+                <div class="custom-dropdown-select custom-dropdown-select-lang">
+                    <img src="/fr-fr/ontap-apps-dbs/images/language_white_24dp.svg" class="n-globe__icon" />
+                    <span class="lang-name">Français</span>
+                    <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown header invisible" />
+                    <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup header" />
+                    </button>
+                </div>
+
+                <ul class="custom-dropdown-menu"><li>
+                        <a href="https://docs.netapp.com/fr-fr/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html"
+                            target="_self"><span translate="no" class="notranslate">Français</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/us-en/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html"
+                            target="_self"><span translate="no" class="notranslate">English</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/ja-jp/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html"
+                            target="_self"><span translate="no" class="notranslate">日本語</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/ko-kr/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html"
+                            target="_self"><span translate="no" class="notranslate">한국어</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/zh-cn/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html"
+                            target="_self"><span translate="no" class="notranslate">简体中文</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/zh-tw/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html"
+                            target="_self"><span translate="no" class="notranslate">繁體中文</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/de-de/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html"
+                            target="_self"><span translate="no" class="notranslate">Deutsch</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/es-es/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html"
+                            target="_self"><span translate="no" class="notranslate">Español</span></a>
+                    </li><li>
+                        <a href="https://docs.netapp.com/it-it/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html"
+                            target="_self"><span translate="no" class="notranslate">Italiano</span></a>
+                    </li></ul>
+            </div>
+            </li>
+        <!-- End Language Selector -->
+
+
+        <li id="ie-allnetapp">
+            <div id="allnetapp-dropdown" class="custom-dropdown custom-dropdown-allnetapp">
+                <div class="custom-dropdown-select custom-dropdown-select-allnetapp">
+                    <img src="/fr-fr/ontap-apps-dbs/images/apps_white_24dp.svg" alt="" class="allnetapp-icon" />
+                    <span class="allnetapp-name">Tout NetApp</span>
+                    <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown header invisible" />
+                    <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup header" />
+                    </button>
+                </div>
+
+                <ul class="custom-dropdown-menu allnetapp-dropdown">
+                    <li>
+                        <a href="https://bluexp.netapp.com/fr/"
+                            target="_self"><span translate="no" class="notranslate">BlueXP</span></a>
+                    </li>
+                    <li>
+                        <a href="https://mysupport.netapp.com/site/"
+                            target="_self"><span translate="no" class="notranslate">Support</span></a>
+                    </li>
+                    <li>
+                        <a href="https://kb.netapp.com/"
+                            target="_self"><span translate="no" class="notranslate">Base de connaissances</span></a>
+                    </li>
+                    <li>
+                        <a href="https://www.netapp.com/fr/support-and-training/netapp-learning-services/"
+                            target="_self"><span translate="no" class="notranslate">Formation</span></a>
+                    </li>
+                </ul>
+            </div>
+
+        </li>
+
+    </ul>
+</nav>
+
+        <main id="n-main-content" class="n-main-content">
+          <!-- Start Documentation Content -->
+<div class="ie-main">
+
+<div id="ie-new-sidebar-collapse" style="display: none">
+    <img id="sidebar-expand" class="ie-searchbox-icon" src="/fr-fr/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+</div>
+<div id="ie-new-sidebar">
+    <div id="ie-product-identity-lockup">
+        <div id="sidebar-collapse" class="">
+            <img src="/fr-fr/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+        </div>
+        <div id="ie-breadcrumb" class="">
+  <ul class="ie-breadcrumb">
+    <li class="">
+      <a href="https://docs.netapp.com">Tous les documents</a>
+    </li>
+    
+    
+
+    
+  </ul>
+  
+  <div class="ie-product-name" >
+    <!--<a href="/fr-fr/ontap-apps-dbs/">-->
+      Enterprise applications
+    <!--</a>-->
+  </div>
+</div>
+
+            
+
+        
+        
+
+<div id="ie-searchbox" class="ie-searchbox-sidebar ">
+    <img class="ie-searchbox-icon" src="/fr-fr/ontap-apps-dbs/images/loupe.svg" alt=""/>
+    <div id="react-search" 
+        data-search-html="/fr-fr/ontap-apps-dbs/search.html" 
+        data-type="widget"
+        data-placeholder="Rechercher dans la documentation"
+        data-no-results-found="Aucun résultat trouvé pour : {query}"
+        data-did-you-mean="Rechercher {suggestion}."
+        data-no-results-found-did-you-mean="Aucun résultat n'a été trouvé pour {query}. Voulez-vous dire {suggestion} ?"
+        data-results-found="{hitCount} résultats"
+        data-error-message="Une erreur s'est produite. Merci de réessayer."
+        data-error-reset="Réinitialiser la recherche"
+        data-sk-es-pf-indexes="" 
+        data-flavor="">
+    </div>
+</div>
+        
+    </div>
+    <div id="ie-new-toc"><script>
+  let sidebarAccordion = true;
+
+  /* specific css rules for Mac */
+  if(navigator.platform.match('Mac') !== null) {
+    document.body.setAttribute('class', 'OSX');
+  }
+
+</script>
+
+<div id="ie-sidebar-container">
+  <ul id="ie-sidebar-list" ><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Les applications d'entreprise"
+      data-li-level="1#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/index.html" 
+    ><a class="ie-sidebar-menuitem-1 " href="/fr-fr/ontap-apps-dbs/index.html">
+        Les applications d'entreprise
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Microsoft SQL Server"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Microsoft SQL Server</div>-->
+         Microsoft SQL Server
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Charges de travail"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-workloads.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-workloads.html">
+        Charges de travail
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de la base de données pour Microsoft SQL Server"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de la base de données</div>-->
+         Configuration de la base de données
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Instance partagée ou instance dédiée"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-shared-vs-dedicated.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-shared-vs-dedicated.html">
+        Instance partagée ou instance dédiée
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du processeur"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-cpu-configuration.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-cpu-configuration.html">
+        Configuration du processeur
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de la mémoire"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-memory-configuration.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-memory-configuration.html">
+        Configuration de la mémoire
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du stockage pour Microsoft SQL Server"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de stockage sous-jacente</div>-->
+         Configuration de stockage sous-jacente
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Fichiers de base de données et groupes de fichiers"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-files-and-filegroups.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-files-and-filegroups.html">
+        Fichiers de base de données et groupes de fichiers
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Fichiers tempdb"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-tempdb.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-tempdb.html">
+        Fichiers tempdb
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Considérations relatives au stockage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-storage-considerations.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-storage-considerations.html">
+        Considérations relatives au stockage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Efficacité du stockage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-storage-efficiency.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-storage-efficiency.html">
+        Efficacité du stockage
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection des données"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-data-protection.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-data-protection.html">
+        Protection des données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Reprise après incident"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-disaster-recovery.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-disaster-recovery.html">
+        Reprise après incident
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sécurité des données"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mssql/mssql-data-security.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mssql/mssql-data-security.html">
+        Sécurité des données
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MySQL"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> MySQL</div>-->
+         MySQL
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de base de données pour MySQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de la base de données</div>-->
+         Configuration de la base de données
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Structure de fichier"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-file-structure.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-file-structure.html">
+        Structure de fichier
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation de la configuration"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-configuration.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-configuration.html">
+        Présentation de la configuration
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="taille_fichier_log_innodb"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-innodb_log_file_size.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_log_file_size.html">
+        taille_fichier_log_innodb
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_flush_log_at_trx_commit"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-innodb_flush_log_at_trx_commit.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_flush_log_at_trx_commit.html">
+        innodb_flush_log_at_trx_commit
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_doublewrite"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-innodb_doublewrite.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_doublewrite.html">
+        innodb_doublewrite
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_buffer_pool_size"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-innodb_buffer_pool_size.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_buffer_pool_size.html">
+        innodb_buffer_pool_size
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_flush_method"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-innodb_flush_method.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_flush_method.html">
+        innodb_flush_method
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_io_capacity"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-innodb_io_capacity.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_io_capacity.html">
+        innodb_io_capacity
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="innodb_lru_scan_depth"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-innodb_lru_scan_depth.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-innodb_lru_scan_depth.html">
+        innodb_lru_scan_depth
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="open_file_limits"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-open_file_limits.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-open_file_limits.html">
+        open_file_limits
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de l'hôte pour MySQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de l'hôte</div>-->
+         Configuration de l'hôte
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conteneurisation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-containers.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-containers.html">
+        Conteneurisation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tables de rainures"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-slot-tables.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-slot-tables.html">
+        Tables de rainures
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planificateurs d'E/S."
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-schedulers.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-schedulers.html">
+        Planificateurs d'E/S.
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Descripteurs de fichier"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-file-descriptors.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-file-descriptors.html">
+        Descripteurs de fichier
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du stockage pour MySQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de stockage sous-jacente</div>-->
+         Configuration de stockage sous-jacente
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MySQL sur NFS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-mysql-over-nfs.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-mysql-over-nfs.html">
+        MySQL sur NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MySQL sur SAN"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/mysql/mysql-mysql-over-san.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/mysql/mysql-mysql-over-san.html">
+        MySQL sur SAN
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Base de données Oracle"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Base de données Oracle</div>-->
+         Base de données Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration ONTAP</div>-->
+         Configuration ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="RAID"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-raid.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-raid.html">
+        RAID
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Limites de capacité"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-capacity-limits.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-capacity-limits.html">
+        Limites de capacité
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Ordinateurs virtuels de stockage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-svm.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-svm.html">
+        Ordinateurs virtuels de stockage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="La qualité de service (QoS)"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-qos.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-qos.html">
+        La qualité de service (QoS)
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Efficacité"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-efficiency.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-efficiency.html">
+        Efficacité
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Provisionnement fin"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-thin-provisioning.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-thin-provisioning.html">
+        Provisionnement fin
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Basculement et basculement"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-ontap-config-failover.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-ontap-config-failover.html">
+        Basculement et basculement
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de la base de données pour Oracle Database"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de la base de données</div>-->
+         Configuration de la base de données
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tailles des fichiers de données et des blocs de reprise"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-app-config-block-sizes.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-app-config-block-sizes.html">
+        Tailles des fichiers de données et des blocs de reprise
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="db_file_multibloc_read_count"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-app-config-mbr.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-app-config-mbr.html">
+        db_file_multibloc_read_count
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="filesytemio_options"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-app-config-filesystemio_options.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-app-config-filesystemio_options.html">
+        filesytemio_options
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="RAC Oracle"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-app-config-rac.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-app-config-rac.html">
+        RAC Oracle
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de l'hôte pour Oracle Database"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de l'hôte</div>-->
+         Configuration de l'hôte
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="AIX"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-host-config-aix.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-aix.html">
+        AIX
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="HP-UX"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-host-config-hp-ux.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-hp-ux.html">
+        HP-UX
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Linux"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-host-config-linux.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-linux.html">
+        Linux
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Linux avec ASMlib et AFD"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-host-config-asmlib-afd.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-asmlib-afd.html">
+        Linux avec ASMlib et AFD
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Microsoft Windows"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-host-config-windows.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-windows.html">
+        Microsoft Windows
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Solaris"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-host-config-solaris.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-host-config-solaris.html">
+        Solaris
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration réseau pour Oracle Database"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration du réseau</div>-->
+         Configuration du réseau
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Interfaces logiques"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-network-config-lifs.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-network-config-lifs.html">
+        Interfaces logiques
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration Ethernet"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-network-config-ethernet.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-network-config-ethernet.html">
+        Configuration Ethernet
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration FC SAN"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-network-config-fc.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-network-config-fc.html">
+        Configuration FC SAN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Réseau à connexion directe"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-network-config-direct-connect.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-network-config-direct-connect.html">
+        Réseau à connexion directe
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du stockage pour Oracle Database"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de stockage sous-jacente</div>-->
+         Configuration de stockage sous-jacente
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAN FC"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> SAN FC</div>-->
+         SAN FC
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Alignement LUN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lun-alignment.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-san-config-lun-alignment.html">
+        Alignement LUN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Nombre de LUN et taille de LUN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lun-sizing.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-san-config-lun-sizing.html">
+        Nombre de LUN et taille de LUN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Redimensionnement de la LUN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lun-resizing.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-san-config-lun-resizing.html">
+        Redimensionnement de la LUN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Répartition LVM"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-lvm-striping.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-san-config-lvm-striping.html">
+        Répartition LVM
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NFS"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> NFS</div>-->
+         NFS
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-overview.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-nfs-config-overview.html">
+        Configuration
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle Direct NFS (dNFS)"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-dnfs.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-nfs-config-dnfs.html">
+        Oracle Direct NFS (dNFS)
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Locations et verrouillages NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-leases-and-locks.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-nfs-config-leases-and-locks.html">
+        Locations et verrouillages NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Mise en cache NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-caching.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-nfs-config-caching.html">
+        Mise en cache NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tailles de transfert NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-storage-nfs-config-transfer-sizes.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-nfs-config-transfer-sizes.html">
+        Tailles de transfert NFS
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle et NVFAIL"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dp-nvfail.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-nvfail.html">
+        Oracle et NVFAIL
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Utilitaire de récupération ASM"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-storage-san-config-asmru.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-storage-san-config-asmru.html">
+        Utilitaire de récupération ASM
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Virtualisation"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-virtualization-introduction.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-virtualization-introduction.html">
+        Virtualisation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Tiering"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Tiering</div>-->
+         Tiering
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-tiering-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Règles de hiérarchisation"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Règles de hiérarchisation</div>-->
+         Règles de hiérarchisation
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Envoi de données à un magasin d'objets"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-tiering-policies.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-policies.html">
+        Envoi de données à un magasin d'objets
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Récupération des données dans le magasin d'objets"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-tiering-retrieval-policies.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-retrieval-policies.html">
+        Récupération des données dans le magasin d'objets
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Stratégies de Tiering"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Stratégies de Tiering</div>-->
+         Stratégies de Tiering
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Fichiers entiers"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-tiering-whole-file.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-whole-file.html">
+        Fichiers entiers
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Fichiers partiels"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-tiering-partial-file.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-partial-file.html">
+        Fichiers partiels
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sélectionnez fichiers"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-tiering-logs.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-logs.html">
+        Sélectionnez fichiers
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Snapshots"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-tiering-snapshots.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-snapshots.html">
+        Snapshots
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sauvegardes"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-tiering-backups.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-backups.html">
+        Sauvegardes
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Interruptions d'accès au magasin d'objets"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-tiering-object-store-access-interruptions.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-tiering-object-store-access-interruptions.html">
+        Interruptions d'accès au magasin d'objets
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection des données Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Protection des données Oracle</div>-->
+         Protection des données Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dp-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="RPO, RTO et SLA"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dp-slas.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-slas.html">
+        RPO, RTO et SLA
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Disponibilité des données"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dp-data-availability.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-data-availability.html">
+        Disponibilité des données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Intégrité des données"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dp-data-integrity.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-data-integrity.html">
+        Intégrité des données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Notions de base sur la sauvegarde et la restauration"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Notions de base sur la sauvegarde et la restauration</div>-->
+         Notions de base sur la sauvegarde et la restauration
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Snapshots"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dp-snapshots.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-snapshots.html">
+        Snapshots
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SnapRestore"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dp-snaprestore.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-snaprestore.html">
+        SnapRestore
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sauvegardes en ligne basées sur des snapshots"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dp-online-backup.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-online-backup.html">
+        Sauvegardes en ligne basées sur des snapshots
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sauvegardes optimisées pour les snapshots de stockage"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dp-storage-snapshot-optimized-backups.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-storage-snapshot-optimized-backups.html">
+        Sauvegardes optimisées pour les snapshots de stockage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SnapCenter et autres outils"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dp-backup-tools.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dp-backup-tools.html">
+        SnapCenter et autres outils
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Reprise sur incident Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Reprise sur incident Oracle</div>-->
+         Reprise sur incident Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="MetroCluster"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> MetroCluster</div>-->
+         MetroCluster
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architecture physique"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-physical.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-physical.html">
+        Architecture physique
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architecture logique"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-logical.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-logical.html">
+        Architecture logique
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SyncMirror"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-syncmirror.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-syncmirror.html">
+        SyncMirror
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Basculement Oracle"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-failover.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-failover.html">
+        Basculement Oracle
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NVFAIL"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-nvfail.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-nvfail.html">
+        NVFAIL
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle si sur MetroCluster"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-si.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-si.html">
+        Oracle si sur MetroCluster
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle RAC sur MetroCluster"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-mcc-rac.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-mcc-rac.html">
+        Oracle RAC sur MetroCluster
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Synchronisation active SnapMirror"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Synchronisation active SnapMirror</div>-->
+         Synchronisation active SnapMirror
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architecture"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-architecture.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-smbc-architecture.html">
+        Architecture
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Basculement"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-failover.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-smbc-failover.html">
+        Basculement
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle si avec synchronisation active SnapMirror"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-si.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-smbc-si.html">
+        Oracle si avec synchronisation active SnapMirror
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Oracle RAC avec synchronisation active SnapMirror"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-rac.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-smbc-rac.html">
+        Oracle RAC avec synchronisation active SnapMirror
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Scénarios d'échec"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-dr-smbc-failure-scenarios.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-dr-smbc-failure-scenarios.html">
+        Scénarios d'échec
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Migration de la base de données Oracle"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Migration de la base de données Oracle</div>-->
+         Migration de la base de données Oracle
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planification"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-planning.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-planning.html">
+        Planification
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Procédures"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Procédures</div>-->
+         Procédures
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-procedures-overview.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-procedures-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Déplacement du fichier de données"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-datafile-move.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-datafile-move.html">
+        Déplacement du fichier de données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Envoi de journaux"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-log-shipping.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-log-shipping.html">
+        Envoi de journaux
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Copie des données de l'hôte"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-host-data-copy.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-host-data-copy.html">
+        Copie des données de l'hôte
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Importation de LUN étrangères"
+      data-li-level="4" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-4  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Importation de LUN étrangères</div>-->
+         Importation de LUN étrangères
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planification"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-planning.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-fli-planning.html">
+        Planification
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Mise en service"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-cutover.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-fli-cutover.html">
+        Mise en service
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Achèvement"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-completion.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-fli-completion.html">
+        Achèvement
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conversion de protocoles"
+      data-li-level="5#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-fli-protocol-conversion.html" 
+    ><a class="ie-sidebar-menuitem-5 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-fli-protocol-conversion.html">
+        Conversion de protocoles
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Exemples de scripts"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-migration-sample-scripts.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-migration-sample-scripts.html">
+        Exemples de scripts
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Remarques supplémentaires"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Remarques supplémentaires</div>-->
+         Remarques supplémentaires
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Optimisation des performances et analyse comparative"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-notes-optimization-and-benchmarking.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-notes-optimization-and-benchmarking.html">
+        Optimisation des performances et analyse comparative
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Verrous NFS obsolètes"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-notes-stale-nfs-locks.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-notes-stale-nfs-locks.html">
+        Verrous NFS obsolètes
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Vérification de l'alignement WAFL"
+      data-li-level="3#" 
+      class="  ie-sidebar-selected    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html">
+        Vérification de l'alignement WAFL
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="PostgreSQL"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> PostgreSQL</div>-->
+         PostgreSQL
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/postgres/postgres-overview.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration de l'hôte pour PostgreSQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de la base de données</div>-->
+         Configuration de la base de données
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Architecture"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/postgres/postgres-architecture.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-architecture.html">
+        Architecture
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Initialisation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/postgres/postgres-initialization.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-initialization.html">
+        Initialisation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Paramètres"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/postgres/postgres-db-config.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-db-config.html">
+        Paramètres
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Espaces de stockage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/postgres/postgres-tablespaces.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-tablespaces.html">
+        Espaces de stockage
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du stockage pour PostgreSQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Configuration de stockage sous-jacente</div>-->
+         Configuration de stockage sous-jacente
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NFS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/postgres/postgres-nfs-filesystems.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-nfs-filesystems.html">
+        NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAN"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/postgres/postgres-san-filesystems.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-san-filesystems.html">
+        SAN
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection des données pour PostgreSQL"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Protection des données</div>-->
+         Protection des données
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection native des données"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/postgres/postgres-native-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-native-dp.html">
+        Protection native des données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Technologie Snapshot"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/postgres/postgres-snapshot-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-snapshot-dp.html">
+        Technologie Snapshot
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Logiciels de protection des données"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/postgres/postgres-snapcenter-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/postgres/postgres-snapcenter-dp.html">
+        Logiciels de protection des données
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAP"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> SAP</div>-->
+         SAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAP HANA et AnyDB"
+      data-li-level="2#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="sap-solutions.html" 
+    ><a class="ie-sidebar-menuitem-2 " href="/fr-fr/ontap-apps-dbs/sap-solutions.html">
+        SAP HANA et AnyDB
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VMware"
+      data-li-level="1" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-1  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> VMware</div>-->
+         VMware
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VMware vSphere avec ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> VMware vSphere avec ONTAP</div>-->
+         VMware vSphere avec ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Le stockage unifié"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-unified.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-unified.html">
+        Le stockage unifié
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Outils de virtualisation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-vtools.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-vtools.html">
+        Outils de virtualisation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestion basée sur des règles de stockage et des volumes virtuels"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-vvols_and_spbm.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-vvols_and_spbm.html">
+        Gestion basée sur des règles de stockage et des volumes virtuels
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Datastores et protocoles"
+      data-li-level="3" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-3  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Datastores et protocoles</div>-->
+         Datastores et protocoles
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-top.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-datastores-top.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="SAN"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-san.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-datastores-san.html">
+        SAN
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="NFS"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-nfs.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-datastores-nfs.html">
+        NFS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Volumes FlexGroup"
+      data-li-level="4#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-datastores-fg.html" 
+    ><a class="ie-sidebar-menuitem-4 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-datastores-fg.html">
+        Volumes FlexGroup
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Configuration du réseau"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-network.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-network.html">
+        Configuration du réseau
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Clonage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-cloning.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-cloning.html">
+        Clonage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection des données"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-dp.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-dp.html">
+        Protection des données
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="La QoS"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-qos.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-qos.html">
+        La QoS
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Gestion basée sur des règles de stockage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-policy-and-vvols.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-policy-and-vvols.html">
+        Gestion basée sur des règles de stockage
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Planificateur de ressources distribué de stockage VMware"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-sdrs.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-sdrs.html">
+        Planificateur de ressources distribué de stockage VMware
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Paramètres recommandés"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vsphere-settings.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vsphere-settings.html">
+        Paramètres recommandés
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Volumes virtuels (vVols) avec ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Volumes virtuels (vVols) avec ONTAP</div>-->
+         Volumes virtuels (vVols) avec ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vvols-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vvols-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Utilisation de vVols avec ONTAP"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vvols-ontap.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vvols-ontap.html">
+        Utilisation de vVols avec ONTAP
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Déploiement du stockage vVols"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vvols-deploy.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vvols-deploy.html">
+        Déploiement du stockage vVols
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Protection des vVols"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vvols-protect.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vvols-protect.html">
+        Protection des vVols
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Dépannage"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-vvols-resources.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-vvols-resources.html">
+        Dépannage
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="VMware site Recovery Manager et ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> VMware site Recovery Manager et ONTAP</div>-->
+         VMware site Recovery Manager et ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-srm-overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-srm-overview.html">
+        Présentation
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Bonnes pratiques de déploiement"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-srm-deployment_best_practices.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-srm-deployment_best_practices.html">
+        Bonnes pratiques de déploiement
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Meilleures pratiques opérationnelles"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-srm-operational_best_practices.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-srm-operational_best_practices.html">
+        Meilleures pratiques opérationnelles
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Topologies de réplication"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-srm-replication_topologies.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-srm-replication_topologies.html">
+        Topologies de réplication
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Dépannage de SRM lors de l'utilisation de la réplication de vvols"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-srm-vvol-troubleshooting.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-srm-vvol-troubleshooting.html">
+        Dépannage de SRM lors de l'utilisation de la réplication de vvols
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Cluster de stockage vSphere Metro avec ONTAP"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Cluster de stockage vSphere Metro avec ONTAP</div>-->
+         Cluster de stockage vSphere Metro avec ONTAP
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Présentation de VMSC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware_vmsc_overview.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware_vmsc_overview.html">
+        Présentation de VMSC
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Solution vSphere HA"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware_vmsc_solution.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware_vmsc_solution.html">
+        Solution vSphere HA
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Conception VMSC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware_vmsc_design.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware_vmsc_design.html">
+        Conception VMSC
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Résilience VMSC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware_vmsc_resiliency.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware_vmsc_resiliency.html">
+        Résilience VMSC
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Scénarios VMSC avec MCC"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware_vmsc_scen_mcc.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware_vmsc_scen_mcc.html">
+        Scénarios VMSC avec MCC
+      </a></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Sécurité des produits"
+      data-li-level="2" 
+      class=" sidebar-folder    "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="" 
+    ><a class="ie-sidebar-menuitem-2  ie-sidebar-button " href="#">
+        <img class="ie-sidebar-icon ie-sidebar-button open" src="/fr-fr/ontap-apps-dbs/images/link_expand.svg" alt="" />
+        <img class="ie-sidebar-icon ie-sidebar-button close" src="/fr-fr/ontap-apps-dbs/images/link_collapse.svg" alt="" />
+        <!--<div class="" style="display: inline;"> Sécurité des produits</div>-->
+         Sécurité des produits
+      </a>
+      <ul class="">
+        <li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Les outils ONTAP pour VMware vSphere"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-security-tools.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-security-tools.html">
+        Les outils ONTAP pour VMware vSphere
+      </a></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Plug-in SnapCenter pour VMware vSphere"
+      data-li-level="3#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/vmware/vmware-security-snapcenter.html" 
+    ><a class="ie-sidebar-menuitem-3 " href="/fr-fr/ontap-apps-dbs/vmware/vmware-security-snapcenter.html">
+        Plug-in SnapCenter pour VMware vSphere
+      </a></li></ul></li></ul></li><li 
+      data-pdf-exists="true" 
+      data-pdf-filename="Mentions légales"
+      data-li-level="1#" 
+      class="   "
+      dale-page-url="/oracle/oracle-notes-wafl-alignment-verification.html" 
+      dale-entry-url="/legal-notices.html" 
+    ><a class="ie-sidebar-menuitem-1 " href="/fr-fr/ontap-apps-dbs/legal-notices.html">
+        Mentions légales
+      </a></li></ul>
+</div>
+<script>
+
+  $(".ie-sidebar-button").click(function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    expandedLI = $('li.ie-sidebar-expand')
+
+    const li = $(this).closest("li");
+
+    const parentsLI = $(li).parents('li');
+
+    expandedLI.map(element => {
+      if (sidebarAccordion && !li.hasClass('ie-sidebar-expand') && jQuery.inArray(expandedLI[element], parentsLI) == -1) {
+        $(expandedLI[element]).toggleClass('ie-sidebar-expand');
+        $(expandedLI[element]).children("ul").animate({ height: 'toggle' }, 400, function () {
+          $(li).children("ul").toggleClass('ie-sidebar-open');
+
+        })
+      }
+
+    })
+
+    $(li).toggleClass('ie-sidebar-expand');
+    $(li).children("ul").animate({ height: 'toggle' }, 400, function () {
+      $(li).children("ul").toggleClass('ie-sidebar-open');
+    })
+  });
+
+
+  
+    $("li.ie-sidebar-selected").parents('ul').toggleClass("ie-sidebar-open");
+    $("li.ie-sidebar-selected").toggleClass("ie-sidebar-expand")
+    $("ul.ie-sidebar-open").parent().toggleClass("ie-sidebar-expand");
+    $("li.ie-sidebar-selected").children('ul').toggleClass("ie-sidebar-open")
+  
+  
+</script>
+    </div>
+</div>
+<script>
+
+    
+    let sidebarScrollTopPosition = 0;
+    $("#ie-new-toc").on("scroll", function () {
+        if (sidebarScrollTopPosition == 0) {
+            $.cookie("sidebarScroll", $("#ie-new-toc").scrollTop(), {
+                path: "/fr-fr/ontap-apps-dbs"
+            });
+        }
+
+        if ($("#ie-new-toc").scrollTop() > 0) {
+            $('#ie-product-identity-lockup').addClass('ie-addShadow');
+        } else {
+            $('#ie-product-identity-lockup').removeClass('ie-addShadow');
+        }
+    });
+
+    $(function () {
+        if ($.cookie("sidebarScroll")) {
+            $("#ie-new-toc").scrollTop($.cookie("sidebarScroll"));
+        }
+    });
+
+    function setSidebarBottom() {
+        const footerGap = PXinViewport($(".n-footer"));
+        document.getElementById("ie-new-sidebar").style.bottom = Math.max(0, footerGap) + "px";
+    }
+
+    window.onscroll = () => {
+        setSidebarBottom();
+    };
+
+    $("#sidebar-collapse").click(function (e) {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        e.preventDefault();
+        const width = $(".ie-content-pane").width();
+        const marginLeft = parseInt($(".ie-content-pane").css('marginLeft'));
+
+        if ($.cookie("sidebarScroll")) {
+            sidebarScrollTopPosition = $.cookie("sidebarScroll");
+        }
+
+        $("#ie-new-sidebar").animate({ width: 'toggle' }, 350, function () {
+            $("#ie-new-sidebar-collapse").show();
+            $("#ie-new-sidebar").removeClass("open")
+            $("#ie-new-sidebar").addClass("close")
+            $("#ie-new-sidebar").removeAttr("style")
+        });
+        $(".ie-content-pane").animate({ width: (width + sidebarWidth), marginLeft: (marginLeft - sidebarWidth) }, 350, function () {
+            resizeContent()
+        })
+
+    });
+    $("#sidebar-expand").click(function (e) {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        e.preventDefault();
+        const width = $(".ie-content-pane").width();
+        const marginLeft = parseInt($(".ie-content-pane").css('marginLeft'));
+
+        $("#ie-new-sidebar").animate({ width: 'toggle' }, 250, function () {
+            $('#ie-new-sidebar').css('display', 'flex');
+            $("#ie-new-sidebar-collapse").hide();
+            $("#ie-new-sidebar").removeClass("close")
+            $("#ie-new-sidebar").addClass("open")
+            setSidebarBottom();
+
+            if (sidebarScrollTopPosition != 0) {
+                $.cookie("sidebarScroll", sidebarScrollTopPosition, {
+                    path: "/fr-fr/ontap-apps-dbs"
+                })
+                $("#ie-new-toc").scrollTop(sidebarScrollTopPosition);
+                sidebarScrollTopPosition = 0;
+            }
+        });
+        $(".ie-content-pane").animate({ width: (width - sidebarWidth), 'marginLeft': (marginLeft + sidebarWidth) }, 250, function () {
+            resizeContent()
+        })
+    });
+    function resizeContent() {
+        const sidebarWidth = $("#ie-new-sidebar").width() - $("#ie-new-sidebar-collapse").width();
+        const rightNavbarVisible =  $("#ie-right-navbar").css('display') && $("#ie-right-navbar").css('display') != 'none';
+        const sidebarVisible = $("#ie-new-sidebar").css('display') != 'none';
+        const rightNavbarWidth = $("#ie-right-navbar").width();
+        const rightNavbarCollapseWidth = $("#ie-right-navbar-collapse").width();
+        const rightNavbarCollapseVisible = $("#ie-right-navbar-collapse").css('display') && $("#ie-right-navbar-collapse").css('display') != 'none';
+        
+        if (rightNavbarVisible && sidebarVisible) {
+            $(".ie-content-pane").width(`calc(100% - ${sidebarWidth + rightNavbarWidth}px)`)
+            $(".ie-content-pane").css('marginLeft', `${sidebarWidth}px`)
+        } else if (sidebarVisible) {
+            $(".ie-content-pane").css('marginLeft', `${sidebarWidth}px`)
+            if (rightNavbarCollapseVisible) {
+                $(".ie-content-pane").width(`calc(100% - ${sidebarWidth + rightNavbarCollapseWidth}px)`)
+            } else {
+                $(".ie-content-pane").width(`calc(100% - ${$("#ie-new-sidebar").width()}px)`)
+            }
+
+        } else if (rightNavbarVisible) {
+            $(".ie-content-pane").css('marginLeft', `${$("#ie-new-sidebar-collapse").width()}px`)
+            $(".ie-content-pane").width(`calc(100% - ${rightNavbarWidth}px)`)
+        } else {
+            $(".ie-content-pane").css('marginLeft', `${$("#ie-new-sidebar-collapse").width()}px`)
+            if (rightNavbarCollapseVisible) {
+                $(".ie-content-pane").width(`calc(100% - ${rightNavbarCollapseWidth}px)`);
+            } else {
+                $(".ie-content-pane").width(`calc(100% - ${$("#ie-new-sidebar-collapse").width()}px) `);
+            }
+            
+        }
+    }
+    $(window).on("resize load", function () {
+        setSidebarBottom();
+        resizeContent()
+    });
+
+
+</script>
+
+<div class="ie-content-pane ie-component-detail-content ie-component-detail-content--show-code">
+    <!-- Begin of page container --><article class="page-content" id="main">
+      <!-- include utility.html -->
+      <div class="ie-info-disclaimer">
+    <span>
+      <div class="ie-info-disclaimer-container">
+        <div class="ie-info-disclaimer-icon">
+          <img src="/fr-fr/ontap-apps-dbs/images/notification-icons.svg" class="luci-icon" alt="" />
+        </div>
+        <div class="ie-info-disclaimer-content">
+          <span> La version française est une traduction automatique. La version anglaise prévaut sur la française en cas de divergence. </span>
+        </div>
+        <div style="clear:both;"></div>
+      </div>
+    </span>
+  </div><div class="ie-component-detail-heading-wrap">
+  <h1 class="ie-component-detail-heading">Vérification de l'alignement WAFL pour les bases de données Oracle</h1>
+</div>
+
+<div id="ie-byline">
+  
+<div class="page-details">
+    
+        
+            <time datetime="2024-01-18 14:02:04 +0000">01/18/2024</time>
+        
+    
+    
+        <span>Contributeurs
+        </span>
+    
+    
+</div>
+<div class="page-controls">
+    <div id="contribute-dropdown" class="custom-dropdown custom-dropdown-contrib" >
+        <div class="custom-dropdown-select custom-dropdown-select-contrib">
+        <span class="contrib-name"><img src="/fr-fr/ontap-apps-dbs/images/discuss-sm.svg" alt="" class="github-icon" />Suggérer des modifications</span>
+        <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevrondown invisible" />
+        <img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" alt="" class="custom-icon chevronup" />
+        </div>
+        <ul class="custom-dropdown-menu suggested-changes-dropdown"><li>
+                <a target="_blank" href="https://github.com/NetAppDocs/ontap-apps-dbs.fr-fr/issues/new?template=new-from-page.yml&page-url=https://docs.netapp.com/fr-fr/ontap-apps-dbs/oracle/oracle-notes-wafl-alignment-verification.html&page-title=Vérification de l'alignement WAFL pour les bases de données Oracle" class="page-nav-contribute-link" role="button">Demander des modifications de la documentation</a>
+            </li><li> 
+                <a target="_blank" href="https://github.com/NetAppDocs/ontap-apps-dbs/blob/main/oracle/oracle-notes-wafl-alignment-verification.adoc" class="page-nav-contribute-link" role="button">Modifier cette page</a>
+            </li><li><a target="_blank" href="https://docs.netapp.com/us-en/contribute/" class="page-nav-contribute-link"  >En savoir plus sur les contributions</a></li>
+        </ul>
+    </div>
+    <div id="pdf-control-container">
+        <div class="n-pdf-header">
+            <a id="toggleButtonPdf" class="n-pdf-button" type="button">
+                <img class="adobe-icon" src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>PDF<img src="/fr-fr/ontap-apps-dbs/images/dropdown-arrow.svg" class="custom-icon" alt="" />
+            </a>
+        </div>
+        <div class="n-pdf-body-container">
+            <ul id="toggleContainerPdf" class="n-pdf-body" style="display:none;"><li class="pdf-ux-container">
+                    
+                    
+                    
+                    <a target="_blank" class="pdf-download-link" href="/fr-fr/ontap-apps-dbs/pdfs/fullsite-sidebar/ONTAP_et_applications_d_entreprise.pdf" >
+                    <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>Un fichier PDF de toute la documentation</a>
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Microsoft_SQL_Server.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Microsoft SQL Server
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_la_base_de_données_pour_Microsoft_SQL_Server.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de la base de données
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_du_stockage_pour_Microsoft_SQL_Server.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de stockage sous-jacente
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/MySQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            MySQL
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_base_de_données_pour_MySQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de la base de données
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_l_hôte_pour_MySQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de l'hôte
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_du_stockage_pour_MySQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de stockage sous-jacente
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Base_de_données_Oracle.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Base de données Oracle
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_ONTAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_la_base_de_données_pour_Oracle_Database.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de la base de données
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_l_hôte_pour_Oracle_Database.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de l'hôte
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_réseau_pour_Oracle_Database.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration du réseau
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_du_stockage_pour_Oracle_Database.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de stockage sous-jacente
+          </a>
+          
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/SAN_FC.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            SAN FC
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/NFS.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            NFS
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Tiering.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Tiering
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Règles_de_hiérarchisation.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Règles de hiérarchisation
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Stratégies_de_Tiering.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Stratégies de Tiering
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Protection_des_données_Oracle.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Protection des données Oracle
+          </a>
+          
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Notions_de_base_sur_la_sauvegarde_et_la_restauration.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Notions de base sur la sauvegarde et la restauration
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Reprise_sur_incident_Oracle.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Reprise sur incident Oracle
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/MetroCluster.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            MetroCluster
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Synchronisation_active_SnapMirror.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Synchronisation active SnapMirror
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Migration_de_la_base_de_données_Oracle.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Migration de la base de données Oracle
+          </a>
+          
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Procédures.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Procédures
+          </a>
+          
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Importation_de_LUN_étrangères.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Importation de LUN étrangères
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Remarques_supplémentaires.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Remarques supplémentaires
+          </a>
+          
+
+
+
+
+    <ul class="subfolders" id="pdf-remove" style="display:none;"><li class="active"></li></ul>
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/PostgreSQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            PostgreSQL
+          </a>
+          
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_de_l_hôte_pour_PostgreSQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de la base de données
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Configuration_du_stockage_pour_PostgreSQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Configuration de stockage sous-jacente
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Protection_des_données_pour_PostgreSQL.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Protection des données
+          </a>
+          
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/SAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            SAP
+          </a>
+          
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/VMware.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            VMware
+          </a>
+          
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/VMware_vSphere_avec_ONTAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            VMware vSphere avec ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Datastores_et_protocoles.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Datastores et protocoles
+          </a>
+          
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Volumes_virtuels__vVols__avec_ONTAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Volumes virtuels (vVols) avec ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/VMware_site_Recovery_Manager_et_ONTAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            VMware site Recovery Manager et ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Cluster_de_stockage_vSphere_Metro_avec_ONTAP.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Cluster de stockage vSphere Metro avec ONTAP
+          </a>
+          
+
+
+
+
+
+
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+    
+      <ul class="subfolders" style="display:none;">
+        <li class="pdf-ux-container">
+          
+          
+          
+          <a target="_blank" class="pdf-download-link"
+            
+              href="/fr-fr/ontap-apps-dbs/pdfs/sidebar/Sécurité_des_produits.pdf" 
+            
+          >
+            <img src="/fr-fr/ontap-apps-dbs/images/pdf-icon.png" alt="" width="16" height="16"/>
+            Sécurité des produits
+          </a>
+          
+
+
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+        </li>
+      </ul>
+    
+
+  
+
+
+
+</li></ul>
+            <div class="zip-pdf-link-container" style="display: none;">   
+                <a href="#" id="zipPdf">
+                <img src="/fr-fr/ontap-apps-dbs/images/pdf-zip.png" alt="" width="16" height="16"/>
+                <pre>Plusieurs fichiers PDF<span class="zip-size"></span></pre>
+                </a><div id="zip-link-popup" class="hide">
+    <div class="inner-modal">
+        <div class="downloading-progress">
+            <div class="spinner"></div>
+            <h1>Creating your file...</h1>
+            <div>This may take a few minutes. Thanks for your patience.</div>
+            <button class="cancel-download-btn" type="button">Cancel</button>
+        </div>
+        <div class="download-complete hide">
+            <div class="done-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg>
+            </div>
+            <div>Your file is ready</div>
+            <button class="cancel-download-btn" type="button">OK</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(".cancel-download-btn").click(function(){
+        $("#zip-link-popup").addClass("hide");
+        $("#zip-link-popup .downloading-progress").removeClass("hide");
+        $("#zip-link-popup .download-complete").addClass("hide");
+    });
+</script></div>
+        </div>
+    </div>        
+<script>
+$("#toggleContainerPdf li.active:last-child").parents('ul.subfolders').toggle('display');
+$("#toggleButtonPdf").on('click', function(e){ 
+    e.stopPropagation();
+    $("#toggleContainerPdf").toggle('display');
+    $(".n-pdf-body-container .zip-pdf-link-container").toggle('display');
+});
+
+//hide is by clicking outside pdfcontainer
+$(document).on('click', function (e) {
+    if ($('#toggleContainerPdf').is(':visible') && !$('.n-pdf-body-container').is(e.target) && !$('.n-pdf-body-container').has(e.target).length)  {
+        
+        $("#toggleContainerPdf").toggle('display');
+        $(".n-pdf-body-container .zip-pdf-link-container").toggle('display');
+        $("#toggleButtonPdf").removeClass("active");
+    }
+});
+</script>
+<script>
+    function getPdfLocation() {
+        const pdfLocation = window.scrollX + document.querySelector('#pdf-control-container').getBoundingClientRect().left
+        if (pdfLocation < 450) {
+            $(".n-pdf-body-container").addClass("block")
+        } else {
+            $(".n-pdf-body-container").removeClass("block")
+        }
+    
+    }
+    $( window ).on( "resize", function() {
+        getPdfLocation()
+} );
+</script>
+<script>
+    const pdfButtonWidth =  $(".n-pdf-header").width();
+    const pdfMenuWidth = $(".n-pdf-body-container").width();
+    $(".n-pdf-body-container").css('margin-left', `calc(${pdfButtonWidth - pdfMenuWidth}px)`);
+</script>
+</div>
+
+    
+
+</div>
+
+
+
+
+<div class="content-to-index">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph lead">
+<p>Un alignement WAFL correct est essentiel pour de bonnes performances. Même si ONTAP gère des blocs dans des unités de 4 Ko, ONTAP ne réalise pas forcément toutes les opérations dans des unités de 4 Ko. ONTAP prend en charge les opérations en mode bloc de différentes tailles, mais la comptabilité sous-jacente est gérée par WAFL en unités de 4 Ko.</p>
+</div>
+<div class="paragraph">
+<p>Le terme « alignement » fait référence à la manière dont les E/S Oracle correspondent à ces unités de 4 Ko. Pour optimiser les performances, un bloc Oracle de 8 Ko doit résider sur deux blocs physiques WAFL de 4 Ko sur un disque. Si un bloc est décalé de 2 Ko, ce bloc réside dans la moitié d'un bloc de 4 Ko, dans un bloc séparé complet de 4 Ko, puis dans la moitié d'un troisième bloc de 4 Ko. Cette configuration entraîne une dégradation des performances.</p>
+</div>
+<div class="paragraph">
+<p>L'alignement n'est pas un problème avec les systèmes de fichiers NAS. Les fichiers de données Oracle sont alignés sur le début du fichier en fonction de la taille du bloc Oracle. Par conséquent, les tailles de bloc de 8 Ko, 16 Ko et 32 Ko sont toujours alignées. Toutes les opérations de bloc sont décalées par rapport au début du fichier en unités de 4 kilo-octets.</p>
+</div>
+<div class="paragraph">
+<p>Les LUN, en revanche, contiennent généralement au départ un type d'en-tête de pilote ou de métadonnées de système de fichiers qui crée un décalage. L'alignement est rarement un problème dans les systèmes d'exploitation modernes, car ces systèmes d'exploitation sont conçus pour des disques physiques pouvant utiliser un secteur natif de 4 Ko. De plus, ils requièrent l'alignement des E/S sur les limites de 4 Ko pour des performances optimales.</p>
+</div>
+<div class="paragraph">
+<p>Il y a toutefois quelques exceptions. Une base de données a peut-être été migrée à partir d'un système d'exploitation plus ancien qui n'a pas été optimisé pour les E/S de 4 Ko, ou une erreur de l'utilisateur lors de la création de la partition a pu entraîner un décalage qui ne se situe pas dans des unités de 4 Ko.</p>
+</div>
+<div class="paragraph">
+<p>Les exemples suivants sont spécifiques à Linux, mais la procédure peut être adaptée à n'importe quel système d'exploitation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="aligné">Aligné</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>L'exemple suivant montre une vérification d'alignement sur une seule LUN avec une seule partition.</p>
+</div>
+<div class="paragraph">
+<p>Tout d'abord, créez la partition qui utilise toutes les partitions disponibles sur le lecteur.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host0 iscsi]# fdisk /dev/sdb
+Device contains neither a valid DOS partition table, nor Sun, SGI or OSF disklabel
+Building a new DOS disklabel with disk identifier 0xb97f94c1.
+Changes will remain in memory only, until you decide to write them.
+After that, of course, the previous content won't be recoverable.
+The device presents a logical sector size that is smaller than
+the physical sector size. Aligning to a physical sector (or optimal
+I/O) size boundary is recommended, or performance may be impacted.
+Command (m for help): n
+Command action
+   e   extended
+   p   primary partition (1-4)
+p
+Partition number (1-4): 1
+First cylinder (1-10240, default 1):
+Using default value 1
+Last cylinder, +cylinders or +size{K,M,G} (1-10240, default 10240):
+Using default value 10240
+Command (m for help): w
+The partition table has been altered!
+Calling ioctl() to re-read partition table.
+Syncing disks.
+[root@host0 iscsi]#</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>L'alignement peut être vérifié mathématiquement à l'aide de la commande suivante :</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host0 iscsi]# fdisk -u -l /dev/sdb
+Disk /dev/sdb: 10.7 GB, 10737418240 bytes
+64 heads, 32 sectors/track, 10240 cylinders, total 20971520 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 65536 bytes
+Disk identifier: 0xb97f94c1
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sdb1              32    20971519    10485744   83  Linux</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le résultat indique que les unités sont de 512 octets et que le début de la partition est de 32 unités. Il s'agit d'un total de 32 x 512 = 16,834 octets, soit un ensemble de blocs WAFL de 4 Ko. Cette partition est correctement alignée.</p>
+</div>
+<div class="paragraph">
+<p>Pour vérifier que l'alignement est correct, procédez comme suit :</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Identifier l'UUID (identifiant universel unique) de la LUN</p>
+<div class="literalblock">
+<div class="content">
+<pre>FAS8040SAP::&gt; lun show -v /vol/jfs_luns/lun0
+              Vserver Name: jfs
+                  LUN UUID: ed95d953-1560-4f74-9006-85b352f58fcd
+                    Mapped: mapped`                `</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Entrez le shell du nœud sur le contrôleur ONTAP.</p>
+<div class="literalblock">
+<div class="content">
+<pre>FAS8040SAP::&gt; node run -node FAS8040SAP-02
+Type 'exit' or 'Ctrl-D' to return to the CLI
+FAS8040SAP-02&gt; set advanced
+set not found.  Type '?' for a list of commands
+FAS8040SAP-02&gt; priv set advanced
+Warning: These advanced commands are potentially dangerous; use
+         them only when directed to do so by NetApp
+         personnel.</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Démarrer les collections statistiques sur l'UUID cible identifié dans la première étape.</p>
+<div class="literalblock">
+<div class="content">
+<pre>FAS8040SAP-02*&gt; stats start lun:ed95d953-1560-4f74-9006-85b352f58fcd
+Stats identifier name is 'Ind0xffffff08b9536188'
+FAS8040SAP-02*&gt;</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Certaines E/S. Il est important d'utiliser le <code>iflag</code> Argument permettant de s'assurer que les E/S sont synchrones et non mises en tampon.</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<img src="/us-en/ontap-apps-dbs/images/note.svg" alt="Remarque">
+</td>
+<td class="content">
+Faites très attention avec cette commande. Inversion du <code>if</code> et <code>of</code> les arguments détruisent les données.
+</td>
+</tr>
+</table>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host0 iscsi]# dd if=/dev/sdb1 of=/dev/null iflag=dsync count=1000 bs=4096
+1000+0 records in
+1000+0 records out
+4096000 bytes (4.1 MB) copied, 0.0186706 s, 219 MB/s</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Arrêtez les statistiques et affichez l'histogramme d'alignement. Toutes les E/S doivent se trouver dans le <code>.0</code> Bucket, qui indique les E/S alignées sur les limites d'un bloc de 4 Ko.</p>
+<div class="literalblock">
+<div class="content">
+<pre>FAS8040SAP-02*&gt; stats stop
+StatisticsID: Ind0xffffff08b9536188
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:instance_uuid:ed95d953-1560-4f74-9006-85b352f58fcd
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.0:186%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.1:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.2:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.3:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.4:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.5:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.6:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.7:0%</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="mauvais-alignement">Mauvais alignement</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>L'exemple suivant illustre un mauvais alignement des E/S :</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Créez une partition qui ne s'aligne pas sur une limite de 4 Ko. Il ne s'agit pas d'un comportement par défaut sur les systèmes d'exploitation modernes.</p>
+<div class="literalblock">
+<div class="content">
+<pre>[root@host0 iscsi]# fdisk -u /dev/sdb
+Command (m for help): n
+Command action
+   e   extended
+   p   primary partition (1-4)
+p
+Partition number (1-4): 1
+First sector (32-20971519, default 32): 33
+Last sector, +sectors or +size{K,M,G} (33-20971519, default 20971519):
+Using default value 20971519
+Command (m for help): w
+The partition table has been altered!
+Calling ioctl() to re-read partition table.
+Syncing disks.</pre>
+</div>
+</div>
+</li>
+<li>
+<p>La partition a été créée avec un décalage de 33 secteurs au lieu du décalage de 32 par défaut. Répétez la procédure décrite à la section <a href="./oracle-notes-wafl-alignment-verification.html#aligned">"Aligné"</a>. L'histogramme s'affiche comme suit :</p>
+<div class="literalblock">
+<div class="content">
+<pre>FAS8040SAP-02*&gt; stats stop
+StatisticsID: Ind0xffffff0468242e78
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:instance_uuid:ed95d953-1560-4f74-9006-85b352f58fcd
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.0:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.1:136%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.2:4%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.3:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.4:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.5:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.6:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.7:0%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_partial_blocks:31%</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le mauvais alignement est clair. Les E/S tombent principalement dans le* *<code>.1</code> godet, qui correspond au décalage attendu. Lorsque la partition a été créée, elle a été déplacée de 512 octets plus loin dans le périphérique que la valeur par défaut optimisée, ce qui signifie que l'histogramme est décalé de 512 octets.</p>
+</div>
+<div class="paragraph">
+<p>De plus, le <code>read_partial_blocks</code> Ces statistiques ne sont pas égales à zéro, ce qui signifie que des E/S n'ont pas rempli un bloc de 4 Ko entier.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="fichiers-de-reprise">Fichiers de reprise</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Les procédures décrites ici s'appliquent aux fichiers de données. Les journaux de reprise et d'archivage Oracle ont différents modèles d'E/S. Par exemple, la journalisation de reprise est un remplacement circulaire d'un seul fichier. Si la taille de bloc par défaut de 512 octets est utilisée, les statistiques d'écriture se ressemblent à ceci :</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>FAS8040SAP-02*&gt; stats stop
+StatisticsID: Ind0xffffff0468242e78
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:instance_uuid:ed95d953-1560-4f74-9006-85b352f58fcd
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:write_align_histo.0:12%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:write_align_histo.1:8%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:write_align_histo.2:4%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:write_align_histo.3:10%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:write_align_histo.4:13%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:write_align_histo.5:6%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:write_align_histo.6:8%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:write_align_histo.7:10%
+lun:ed95d953-1560-4f74-9006-85b352f58fcd:write_partial_blocks:85%</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Les E/S sont réparties dans tous les compartiments de l'histogramme, mais cela n'est pas un problème de performances. Toutefois, des taux de journalisation de reprise extrêmement élevés peuvent bénéficier d'une taille de bloc de 4 Ko. Dans ce cas, il est conseillé de vérifier que les LUN de journalisation de reprise sont correctement alignées. Cependant, cette condition n'est pas aussi importante pour de bonnes performances que l'alignement des fichiers de données.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+
+
+    </article>
+    <!-- Page Container -->
+  </div>
+
+  
+  <!-- Start Page Toolbar -->
+<div id="ie-right-navbar-collapse" class="close">
+  <img id="navbar-expand" class="ie-searchbox-icon" src="/fr-fr/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+</div>
+<div id="ie-right-navbar" class="open">
+  <div id="right-navbar-collapse">
+    <img src="/fr-fr/ontap-apps-dbs/images/double_arrow.svg" alt="" />
+  </div>
+  <div class="page-nav-container">
+    <nav class="page-nav-fixed">
+      <div class="page-nav-title">Sur cette page</div>
+      <div class="page-nav-links">
+        <ul class="page-nav-inner" id="page-menu"></ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+
+<script>
+  resizeContent();
+  function setRightBarHeight() {
+    var h = 0;
+
+    // header 1
+    h += PXinViewport($('.n-footer'));
+    h += PXinViewport($('#ie-new-header'));
+
+    if ($('#ie-right-navbar').length) {
+      $('#ie-right-navbar').css({ height: `calc(100vh - ${h}px)` });
+    }
+    if ($('.page-nav-links').length) {
+      h += 98;
+      $('.page-nav-links').css({ height: `calc(100vh - ${h}px)` });
+    }
+  }
+
+  $(document).ready(function () {
+    // PAGE NAV - Click
+    const MASTHEAD_OFFSET = 65;
+    const SECTIONS = $("main h2, main h3");
+    let calculateActiveSection = false;
+    setTimeout(() => {
+      calculateActiveSection = true;
+    }, 100)
+
+    $(".page-nav__link").click(function (event) {
+      calculateActiveSection = false;
+      $(".page-nav__link").removeClass('page-nav__link--active');
+      var target = $(event.target);
+      target.addClass('page-nav__link--active');
+      location.hash = event.target.hash;
+      setTimeout(() => {
+        calculateActiveSection = true;
+      }, 100)
+
+    });
+
+    // PAGE NAV - Scroll
+    $(window).on('resize scroll', function () {
+      if (calculateActiveSection) {
+        var activeSection = getActiveSection(SECTIONS, MASTHEAD_OFFSET);
+        if (activeSection) {
+          var activeHref = $(activeSection).attr('id');
+          $(".page-nav__link").removeClass('page-nav__link--active');
+          $("#page-menu a[href=#" + activeHref + "]").addClass('page-nav__link--active');
+          if (location.hash != "#" + activeHref) {
+            if (history.replaceState) {
+              history.replaceState(null, null, "#" + activeHref);
+            }
+          }
+        }
+      }
+    });
+
+    $(".n-pdf-button").click(function () {
+      $(this).toggleClass("active");
+    });
+
+    $.fn.isVisibleAndInViewport = function () {
+      var elementTop = $(this).offset().top;
+      var elementBottom = elementTop + $(this).outerHeight();
+
+      var viewportTop = $(window).scrollTop();
+      var viewportBottom = viewportTop + $(window).height();
+
+      return elementBottom > viewportTop && elementTop < viewportBottom && $(this).is(":visible");
+    };
+
+
+    $(window).on('resize scroll', function () {
+      setRightBarHeight();
+    });
+
+    $(window).trigger('resize');
+
+
+  });
+
+  $("#right-navbar-collapse").click(function (e) {
+    const rightNavbarWidth = $("#ie-right-navbar").width() - $("#ie-right-navbar-collapse").width();
+    e.preventDefault();
+    const width = $(".ie-content-pane").width();
+
+    $("#ie-right-navbar").animate({ width: 'toggle' }, 350, function () {
+      $("#ie-right-navbar-collapse").removeClass("close")
+      $("#ie-right-navbar-collapse").addClass("open")
+      $("#ie-right-navbar").removeClass("open")
+      $("#ie-right-navbar").addClass("close")
+    });
+    $(".ie-content-pane").animate({ width: (width + rightNavbarWidth) }, 350, function () {
+      resizeContent()
+      setSidebarBottom();
+    })
+
+  });
+  $("#navbar-expand").click(function (e) {
+    const rightNavbarWidth = $("#ie-right-navbar").width() - $("#ie-right-navbar-collapse").width();
+    e.preventDefault();
+    const width = $(".ie-content-pane").width();
+    $("#ie-right-navbar").animate({ width: 'toggle' }, 250, function () {
+      $("#ie-right-navbar-collapse").removeClass("open")
+      $("#ie-right-navbar-collapse").addClass("close")
+      $("#ie-right-navbar").removeClass("close")
+      $("#ie-right-navbar").addClass("open")
+      setRightBarHeight();
+      setSidebarBottom();
+    });
+    $(".ie-content-pane").animate({ width: (width - rightNavbarWidth) }, 250, function () {
+      resizeContent()
+    })
+  });
+
+  function navbarResize() {
+    const rightNavbarResized = $("#ie-right-navbar-collapse").hasClass('resized');
+    if (window.innerWidth < 1024) {
+      $("#ie-right-navbar").removeClass("open")
+      $("#ie-right-navbar").addClass("close")
+      $("#ie-right-navbar").removeAttr("style")
+      $("#ie-right-navbar-collapse").removeClass("close")
+      $("#ie-right-navbar-collapse").addClass("open")
+      $("#ie-right-navbar-collapse").addClass("resized")
+    } else {
+      if (rightNavbarResized) {
+        $('#ie-right-navbar').removeClass('close');
+        $('#ie-right-navbar').addClass('open');
+        $("#ie-right-navbar-collapse").removeClass("resized")
+        $("#ie-right-navbar-collapse").removeClass("open")
+        $("#ie-right-navbar-collapse").addClass("close")
+      }
+    }
+    resizeContent()
+  }
+  navbarResize();
+  $(window).on('resize load', function () {
+    navbarResize()
+  });
+
+  function getActiveSection(sections, offset) {
+    var scrollPosition = $(window).scrollTop() + offset + 5;
+    var activeSection;
+    for (var i = 0; i < sections.length; i++) {
+      var el = $(sections[i]);
+      var activePosition = el.offset().top;
+      if (activePosition > scrollPosition) {
+        break;
+      }
+
+      activeSection = sections[i];
+    }
+
+    return activeSection;
+  }
+
+  $("a[href*=#]:not([href=#])").click(function () {
+    setTimeout(() => {
+      $(window).trigger('scroll');
+    }, 105)
+  })
+
+  const hashOnLoad = location.href.split("#")[1];
+  setTimeout(function () {
+    if (hashOnLoad) {
+      $(".page-nav__link").removeClass('page-nav__link--active');
+      $("#page-menu a[href=#" + hashOnLoad + "]").addClass('page-nav__link--active');
+    }
+  }, 100)
+
+</script>
+
+
+  <div style="clear: both"></div><!-- Main needs to have height --></div>
+
+        </main>
+
+        <footer class="n-footer">
+  <div class="n-footer__bottom">
+    <div class="n-container">
+        <div class="n-footer__left">
+          <li class="n-footer__copyright-link">
+                    <a href="https://www.netapp.com/company/legal/copyright/">© 2024 NetApp, Inc.</a>
+          </li>
+        </div>
+        <div class="n-footer__center">
+          <ul class="n-footer__copyright-list">
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/terms-of-use/">Conditions d'utilisation</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/privacy-policy/">Déclaration de confidentialité</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a href="https://www.netapp.com/company/legal/cookie-policy/">Déclaration sur les cookies</a>
+            </li>
+            <li class="n-footer__copyright-link">
+              <a class="ot-sdk-show-settings">Paramètres des cookies</a>
+            </li>
+          </ul>
+       </div>
+        <div class="n-footer__right">
+              <li class="n-footer__copyright-link">
+                <a target="_self" href="javascript:netapp_mailto()">Envoyer des commentaires à propos de cette page</a>
+              </li>
+        </div>
+     </div>
+  </div>
+</footer>
+
+      </div><!-- Elasticsearch JS -->
+      <script type="text/javascript" src='/fr-fr/ontap-apps-dbs/js/bundle.js'></script>
+
+      <!-- Syntax Highlighting -->
+      <script type="text/javascript" src='/fr-fr/ontap-apps-dbs/js/prism.js'></script>
+      <script type="text/javascript" src='/fr-fr/ontap-apps-dbs/js/prism-curl.js'></script>
+    </div>
+    <script>
+      document.body.offsetWidth=1903;
+      cookieLaw = {}
+      cookieLaw.euCountry = "US";
+      cookieLaw.invoke = function(){return false;}
+    </script>
+    <script src='/fr-fr/ontap-apps-dbs/js/ie-tabbed-blocks.js'></script>
+    <script src='/fr-fr/ontap-apps-dbs/js/ie-sidebar.js'></script>
+  </body>
+
+</html>
