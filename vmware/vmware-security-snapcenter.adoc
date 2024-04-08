@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmware-security-snapcenter.html 
-keywords: WP-7355, security, snapcenter, treat modeling, dast, vulnerability scanning, penetration testing 
-summary:  
+keywords: WP-7355, security, snapcenter, treat modeling, dast, vulnerability scanning, penetration testing,SCV,VMware,vSphere 
+summary: Ce document décrit les aspects de sécurité du plug-in SnapCenter pour VMware. 
 ---
 = Plug-in SnapCenter VMware vSphere
 :allow-uri-read: 
@@ -16,7 +16,7 @@ Le plug-in NetApp SnapCenter pour l'ingénierie logicielle VMware vSphere exploi
 * *Devise de code tierce.* dans le cadre du développement de logiciels et de l'utilisation de logiciels open-source (OSS), il est important de traiter les vulnérabilités de sécurité qui pourraient être associées à OSS qui a été intégré à votre produit. Il s'agit d'un effort continu car la version du composant OSS peut avoir une vulnérabilité nouvellement découverte signalée à tout moment.
 * *Analyse des vulnérabilités* l'analyse des vulnérabilités a pour but de détecter les vulnérabilités de sécurité courantes et connues dans les produits NetApp avant leur publication auprès des clients.
 * * Tests de pénétration.* le test de pénétration est le processus d'évaluation d'un système, d'une application Web ou d'un réseau pour trouver des vulnérabilités de sécurité qui pourraient être exploitées par un attaquant. Les tests d'intrusion chez NetApp sont réalisés par un groupe d'entreprises tierces de confiance et approuvées. Leur domaine de test comprend le lancement d'attaques contre une application ou un logiciel comme des intrus hostiles ou des pirates informatiques à l'aide de méthodes ou d'outils d'exploitation sophistiqués.
-* *Activité réponse aux incidents de sécurité des produits.* les vulnérabilités de sécurité sont découvertes à la fois en interne et en externe pour l'entreprise et peuvent poser un risque grave à la réputation de NetApps'ils ne sont pas traités en temps opportun. Pour faciliter ce processus, l'équipe d'intervention en cas d'incident de sécurité des produits (PSIRT) signale et effectue le suivi des vulnérabilités.
+* *Activité de réponse aux incidents de sécurité des produits.* les vulnérabilités de sécurité sont découvertes à la fois en interne et en externe dans l'entreprise et peuvent constituer un risque sérieux pour la réputation de NetApp si elles ne sont pas traitées dans les délais impartis. Pour faciliter ce processus, l'équipe d'intervention en cas d'incident de sécurité des produits (PSIRT) signale et effectue le suivi des vulnérabilités.
 
 
 
@@ -43,7 +43,7 @@ individual files in /usr/share/doc/*/copyright.
 Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
 permitted by applicable law.
 ....
-* *Contrôle d'accès basé sur des rôles (RBAC).* deux types de contrôles RBAC sont associés aux outils NetApp ONTAP :
+* *Contrôle d'accès basé sur les rôles (RBAC).* deux types de contrôles RBAC sont associés aux outils ONTAP :
 +
 ** Privilèges de serveur vCenter natif.
 ** Privilèges spécifiques au plug-in VMware vCenter. Pour plus d'informations, voir https://docs.netapp.com/us-en/sc-plugin-vmware-vsphere/scpivs44_role_based_access_control.html["Contrôle d'accès basé sur des rôles (RBAC)"^].

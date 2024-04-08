@@ -4,26 +4,26 @@ title: Microsoft SQL Server
 entries:
 - title: Présentation
   url: "/mssql/mssql-overview.html"
-- title: Charges de travail
-  url: "/mssql/mssql-workloads.html"
 - title: Configuration de la base de données
   pdf-filename: Configuration de la base de données pour Microsoft SQL Server
   entries:
-  - title: Instance partagée ou instance dédiée
-    url: "/mssql/mssql-shared-vs-dedicated.html"
   - title: Configuration du processeur
     url: "/mssql/mssql-cpu-configuration.html"
   - title: Configuration de la mémoire
     url: "/mssql/mssql-memory-configuration.html"
+  - title: Instance partagée ou instance dédiée
+    url: "/mssql/mssql-shared-vs-dedicated.html"
 - title: Configuration de stockage sous-jacente
   pdf-filename: Configuration du stockage pour Microsoft SQL Server
   entries:
+  - title: Présentation
+    url: "/mssql/mssql-storage-considerations.html"
   - title: Fichiers de base de données et groupes de fichiers
     url: "/mssql/mssql-files-and-filegroups.html"
+  - title: Répertoire du journal
+    url: "/mssql/mssql-log-directory.html"
   - title: Fichiers tempdb
     url: "/mssql/mssql-tempdb.html"
-  - title: Considérations relatives au stockage
-    url: "/mssql/mssql-storage-considerations.html"
   - title: Efficacité du stockage
     url: "/mssql/mssql-storage-efficiency.html"
 - title: Protection des données

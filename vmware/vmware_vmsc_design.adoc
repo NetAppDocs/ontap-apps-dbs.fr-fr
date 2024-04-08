@@ -47,23 +47,23 @@ Pour configurer un cluster HA, effectuez les étapes suivantes :
 . Cliquez avec le bouton droit de la souris sur l'objet de data Center et sélectionnez Nouveau cluster. Dans les notions de base, assurez-vous d'avoir activé vSphere DRS et vSphere HA. Suivez l'assistant.
 
 
-image::../media/vmsc_3_1.png[Capture d'écran d'une description d'ordinateur générée automatiquement,624,302]
+image::../media/vmsc_3_1.png[Nouveau cluster,624,302]
 
 . Sélectionnez le cluster et accédez à l'onglet configure. Sélectionnez vSphere HA et cliquez sur Edit.
 . Sous surveillance de l'hôte, sélectionnez l'option Activer la surveillance de l'hôte.
 
 
-image::../media/vmsc_3_2.png[Capture d'écran d'une description d'ordinateur générée automatiquement,624,475]
+image::../media/vmsc_3_2.png[Activer l'option surveillance de l'hôte,624,475]
 
 . Toujours sous l'onglet défaillances et réponses, sous surveillance VM, sélectionnez l'option VM Monitoring Only ou VM and application Monitoring.
 
 
-image::../media/vmsc_3_3.png[Capture d'écran d'une description d'ordinateur générée automatiquement,624,480]
+image::../media/vmsc_3_3.png[Surveillance des machines virtuelles,624,480]
 
 . Sous contrôle d'admission, définissez l'option de contrôle d'admission HA sur réserve de ressources de cluster ; utilisez 50 % CPU/MEM.
 
 
-image::../media/vmsc_3_4.png[Capture d'écran d'une description d'ordinateur générée automatiquement,624,479]
+image::../media/vmsc_3_4.png[Contrôle d'admission,624,479]
 
 . Cliquez sur OK.
 . Sélectionnez DRS et cliquez sur EDIT.
@@ -236,22 +236,22 @@ Pour configurer un cluster de datastore pour chaque site, procédez comme suit :
 * NetApp recommande de configurer Storage DRS en mode manuel, afin que l'administrateur puisse décider et contrôler les opérations de migration.
 
 
-image::../media/vmsc_3_9.png[Gros plan d'un texte Description générée automatiquement,528,94]
+image::../media/vmsc_3_9.png[DRS de stockage,528,94]
 
 . Vérifiez que la case Activer les mesures d'E/S pour les recommandations SDRS est cochée ; les paramètres de mesure peuvent être laissés avec les valeurs par défaut.
 
 
-image::../media/vmsc_3_10.png[Capture d'écran d'une description d'ordinateur générée automatiquement,624,241]
+image::../media/vmsc_3_10.png[Recommandations en matière de DTS,624,241]
 
 . Sélectionnez le cluster HA et cliquez sur Next.
 
 
-image::../media/vmsc_3_11.png[Capture d'écran d'une description d'ordinateur générée automatiquement,624,149]
+image::../media/vmsc_3_11.png[Cluster HA,624,149]
 
 . Sélectionnez les datastores appartenant au site A et cliquez sur Suivant.
 
 
-image::../media/vmsc_3_12.png[Capture d'écran d'une description d'ordinateur générée automatiquement,624,134]
+image::../media/vmsc_3_12.png[les datastores,624,134]
 
 . Vérifiez les options et cliquez sur Terminer.
 . Répétez ces étapes pour créer le cluster de datastore du site B et vérifier que seuls les datastores du site B sont sélectionnés.

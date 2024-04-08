@@ -1,0 +1,32 @@
+---
+sidebar: sidebar 
+permalink: microsoft/win_deploy_hyperv_slm.html 
+keywords: Windows,Hyper-V,VHDX,VM,Virtual 
+summary: Comment configurer la migration dynamique du stockage Hyper-V. 
+---
+= Déployez Hyper-V Storage Live migration
+:allow-uri-read: 
+
+
+[role="lead"]
+Découvrez comment configurer la migration dynamique du stockage Hyper-V.
+
+
+
+== Prérequis
+
+* Vous devez disposer d'un serveur Hyper-V autonome avec stockage indépendant (DAS ou LUN) ou d'un stockage SMB (local ou partagé entre d'autres serveurs Hyper-V).
+* Le serveur Hyper-V doit être configuré pour la migration en direct. Passez en revue la section sur le déploiement dans link:win_deploy_hyperv_replica_oce.html["Migration dynamique en dehors d'un environnement en cluster"].
+
+
+
+
+== Déploiement
+
+. Ouvrez Hyper-V Manager.
+. Cliquez avec le bouton droit de la souris sur une machine virtuelle et cliquez sur déplacer.
+. Sélectionnez déplacer le stockage de l'ordinateur virtuel.
+. Sélectionnez les options de déplacement du stockage en fonction de vos préférences.
+. Indiquez le nouvel emplacement des éléments de la machine virtuelle.
+. Vérifiez le récapitulatif et cliquez sur OK pour déplacer le stockage de la machine virtuelle.
+

@@ -17,9 +17,9 @@ summary: Pour en savoir plus sur les informations données dans ce livre blanc, 
 Pour en savoir plus sur les informations données dans ce livre blanc, consultez ces documents et/ou sites web :
 
 * Tr-4597 : VMware vSphere pour ONTAP
-https://docs.netapp.com/us-en/netapp-solutions/virtualization/vsphere_ontap_ontap_for_vsphere.html["https://docs.netapp.com/us-en/netapp-solutions/virtualization/vsphere_ontap_ontap_for_vsphere.html"^]
+link:vmware-vsphere-overview.html["https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vsphere-overview.html"^]
 * Tr-4400 : volumes virtuels VMware vSphere avec ONTAP
-https://www.netapp.com/pdf.html?item=/media/13555-tr4400.pdf["https://www.netapp.com/pdf.html?item=/media/13555-tr4400.pdf"^]
+link:vmware-vvols-overview.html["https://docs.netapp.com/us-en/ontap-apps-dbs/vmware/vmware-vvols-overview.html"^]
 * Tr-4015 Guide des meilleures pratiques en matière de configuration de SnapMirror pour ONTAP 9
 https://www.netapp.com/media/17229-tr4015.pdf?v=127202175503P[]
 * Créateur d'utilisateurs RBAC pour ONTAP

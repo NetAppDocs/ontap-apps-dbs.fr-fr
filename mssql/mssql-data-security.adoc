@@ -1,16 +1,16 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-data-security.html 
-keywords: MS-SQL,mssql,SQL Server, securing databases, security 
-summary: Microsoft SQL Server sur ONTAP 
+keywords: MSSQL,SQL Server, securing databases on ONTAP, snaplock, multiadmin verification, backup, tamperproof snapshots 
+summary: Sécurisation de Microsoft SQL Server sur ONTAP 
 ---
-= Sécurité de la base de données
+= Sécurisation de Microsoft SQL Server sur ONTAP
 :allow-uri-read: 
 :imagesdir: ../media/
 
 
 [role="lead"]
-La sécurisation d'un environnement de base de données représente un effort multidimensionnel qui va au-delà de la gestion de la base de données elle-même. NetApp propose plusieurs fonctionnalités uniques conçues pour sécuriser l'aspect stockage de votre infrastructure de base de données.
+La sécurisation d'un environnement de base de données SQL Server est un effort multidimensionnel qui va au-delà de la gestion de la base de données elle-même. ONTAP propose plusieurs fonctionnalités uniques conçues pour sécuriser l'aspect stockage de votre infrastructure de base de données.
 
 
 

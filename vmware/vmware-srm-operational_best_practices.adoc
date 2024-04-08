@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: vmware/vmware-srm-operational_best_practices.html 
 keywords: vmware, site, recovery manager, vsrm, datastores, protocols, spbm, vvols, protection, replication, volumes, array, groups, failover test, reportect, failback 
-summary: 'Si possible, utilisez toujours les outils ONTAP pour provisionner les datastores et les volumes. Cela vérifie que les volumes, les chemins de jonction, les LUN, les igroups, les règles d"exportation, et d"autres paramètres sont configurés de manière compatible.' 
+summary: Meilleures pratiques opérationnelles pour VMware SRM et le stockage ONTAP 
 ---
 = Meilleures pratiques opérationnelles
 :hardbreaks:
@@ -25,7 +25,7 @@ Les sections suivantes présentent les meilleures pratiques opérationnelles pou
 * Pour confirmer la connectivité, vérifiez toujours que vous pouvez monter et démonter un nouveau datastore test sur le site de reprise sur incident à partir du cluster ONTAP de destination. Testez chaque protocole que vous envisagez d'utiliser pour la connectivité du datastore. L'une des meilleures pratiques est d'utiliser les outils ONTAP pour créer votre datastore de test, car elle effectue toutes les automatisations du datastore telles que dirigées par SRM.
 * Les protocoles SAN doivent être homogènes pour chaque site. Vous pouvez combiner les protocoles NFS et SAN, mais les protocoles SAN ne doivent pas être combinés dans un même site. Par exemple, vous pouvez utiliser FCP sur le site A et iSCSI sur le site B. Vous ne devez pas utiliser FCP et iSCSI sur le site A. La raison en est que SRA ne crée pas de groupes initiateurs mixtes sur le site de reprise et SRM ne filtre pas la liste des initiateurs donnée à SRA.
 * Les guides précédents ont recommandé de créer la LIF pour la localisation des données. C'est-à-dire toujours monter un datastore à l'aide d'une LIF située sur le nœud qui détient physiquement le volume. Ce n'est plus une exigence dans les versions modernes de ONTAP 9. Dans la mesure du possible, et si des informations d'identification avec périmètre du cluster sont fournies, les outils ONTAP choisissent toujours d'équilibrer la charge entre les LIF locales aux données, mais il ne s'agit pas d'une exigence de haute disponibilité ou de performance.
-* NetApp ONTAP 9 peut être configuré pour supprimer automatiquement les snapshots afin de préserver la disponibilité en cas de manque d'espace lorsque la taille automatique ne peut pas fournir une capacité d'urgence suffisante. Le paramètre par défaut de cette fonctionnalité ne supprime pas automatiquement les snapshots créés par SnapMirror. Si des snapshots SnapMirror sont supprimés, NetApp SRA ne peut pas inverser et resynchroniser la réplication pour le volume affecté. Pour empêcher ONTAP de supprimer des snapshots SnapMirror, configurez la fonctionnalité de suppression automatique de snapshots.
+* ONTAP 9 peut être configuré pour supprimer automatiquement les snapshots afin de préserver la disponibilité en cas de manque d'espace lorsque la taille automatique ne peut pas fournir une capacité d'urgence suffisante. Le paramètre par défaut de cette fonctionnalité ne supprime pas automatiquement les snapshots créés par SnapMirror. Si des snapshots SnapMirror sont supprimés, NetApp SRA ne peut pas inverser et resynchroniser la réplication pour le volume affecté. Pour empêcher ONTAP de supprimer des snapshots SnapMirror, configurez la fonctionnalité de suppression automatique de snapshots.
 
 
 ....
@@ -45,15 +45,15 @@ snap autodelete modify -volume -commitment try
 
 L'exemple suivant montre l'activation de la réplication vVols.
 
-image:vsrm-ontap9_image2.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image2.png["Réplication vVols"]
 
 La capture d'écran suivante fournit un exemple de planifications SnapMirror affichées dans l'assistant de création de règles de stockage de machine virtuelle.
 
-image:vsrm-ontap9_image3.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image3.png["Planifications SnapMirror"]
 
 Le fournisseur ONTAP VASA prend en charge le basculement vers des systèmes de stockage différents. Par exemple, le système peut basculer d'un système ONTAP Select à un emplacement de périphérie vers un système AFF dans le data Center central. Indépendamment de la similarité de stockage, vous devez toujours configurer les mappages des règles de stockage et les mappages inversés des règles de stockage de machines virtuelles grâce à la réplication, afin de garantir que les services fournis sur le site de reprise répondent aux attentes et aux exigences de votre entreprise. La capture d'écran suivante met en évidence un exemple de mappage de règles.
 
-image:vsrm-ontap9_image4.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image4.png["mappage de règles"]
 
 
 
@@ -61,9 +61,9 @@ image:vsrm-ontap9_image4.png["Erreur : image graphique manquante"]
 
 À la différence des précédents datastores vvols, les datastores vvols répliqués doivent être créés dès le début avec une réplication activée, et ils doivent utiliser des volumes pré-créés sur les systèmes ONTAP avec des relations SnapMirror. Cela nécessite de pré-configurer des éléments tels que le peering de cluster et de SVM. Ces activités doivent être réalisées par votre administrateur ONTAP, car elles permettent une séparation stricte des responsabilités entre ceux qui gèrent les systèmes ONTAP sur plusieurs sites et ceux qui sont principalement responsables des opérations vSphere.
 
-Cette exigence est nouvelle pour le compte de l'administrateur vSphere. Les volumes étant créés hors du cadre des outils ONTAP, il n'est pas tenu de suivre les modifications apportées par votre administrateur ONTAP tant que la période de redécouverte planifiée n'est pas au moment de la prochaine découverte. C'est pourquoi il est recommandé de toujours exécuter la redécouverte chaque fois que vous créez un volume ou une relation SnapMirror à utiliser avec vvols. Il vous suffit de cliquer avec le bouton droit de la souris sur l'hôte ou le cluster et de sélectionner Outils NetApp ONTAP > mettre à jour les données d'hôte et de stockage, comme illustré dans la capture d'écran suivante.
+Cette exigence est nouvelle pour le compte de l'administrateur vSphere. Les volumes étant créés hors du cadre des outils ONTAP, il n'est pas tenu de suivre les modifications apportées par votre administrateur ONTAP tant que la période de redécouverte planifiée n'est pas au moment de la prochaine découverte. C'est pourquoi il est recommandé de toujours exécuter la redécouverte chaque fois que vous créez un volume ou une relation SnapMirror à utiliser avec vvols. Il vous suffit de cliquer avec le bouton droit de la souris sur l'hôte ou le cluster et de sélectionner Outils ONTAP > mettre à jour les données d'hôte et de stockage, comme illustré dans la capture d'écran suivante.
 
-image:vsrm-ontap9_image5.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image5.png["Mettre à jour les données d'hôte et de stockage"]
 
 Il faut faire preuve de prudence lorsqu'il s'agit de vVvols et SRM. Ne mélangez jamais des machines virtuelles protégées et non protégées dans le même datastore vVvols. Cela s'explique par le fait que, lorsque vous utilisez SRM pour basculer vers votre site de reprise sur incident, seules les machines virtuelles qui font partie du groupe de protection sont mises en ligne sur le site de reprise sur incident. Par conséquent, lorsque vous reprotégez (repassez de SnapMirror de la reprise sur incident à la production), vous pouvez remplacer les machines virtuelles qui n'étaient pas basculées et qui pouvaient contenir des données précieuses.
 
@@ -75,7 +75,7 @@ Un gestionnaire de matrices est créé pour chaque paire de matrices. Avec les o
 
 Lors de la configuration des paires de baies dans SRM, vous devez toujours les ajouter à SRM de la même manière que vous les avez ajoutés à ONTAP Tools : autrement dit, ils doivent utiliser le même nom d'utilisateur, mot de passe et LIF de gestion. Cette exigence garantit que SRA communique correctement avec la baie. La copie d'écran suivante montre comment un cluster peut s'afficher dans les outils ONTAP et comment il peut être ajouté à un gestionnaire de baies.
 
-image:vsrm-ontap9_image6.jpg["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image6.jpg["cluster"]
 
 
 

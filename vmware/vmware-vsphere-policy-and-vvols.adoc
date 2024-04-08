@@ -24,13 +24,13 @@ Le SCP prend en charge la QoS minimale et/ou maximale pour les vVols de données
 
 La figure suivante représente le tableau de bord des outils ONTAP pour VMware vSphere 9.8 vvols.
 
-image:vsphere_ontap_image7.png["Erreur : image graphique manquante"]
+image:vsphere_ontap_image7.png["Tableau de bord des outils ONTAP pour VMware vSphere 9.8 vVols"]
 
 Une fois le profil de capacité de stockage défini, il peut être utilisé pour provisionner les machines virtuelles à l'aide de la règle de stockage qui identifie ses exigences. Le mappage entre la stratégie de stockage de la machine virtuelle et le profil de capacité de stockage du datastore permet à vCenter d'afficher la liste des datastores compatibles à sélectionner. Cette approche est appelée gestion basée sur des règles de stockage.
 
 Vasa fournit la technologie permettant d'interroger le stockage et de renvoyer un ensemble de fonctionnalités de stockage vers vCenter. Les fournisseurs de VASA fournissent la traduction entre les API et les constructions du système de stockage et les API VMware que vCenter comprend. Le fournisseur VASA de NetApp pour ONTAP est proposé dans le cadre des outils ONTAP pour la machine virtuelle de l'appliance VMware vSphere. Le plug-in vCenter fournit l'interface de provisionnement et de gestion des datastores vVol, ainsi que la possibilité de définir des profils SCP (Storage Capability Profiles).
 
-ONTAP prend en charge les datastores VMFS et NFS vvol. L'utilisation de vvols avec des datastores SAN apporte certains des avantages de NFS tels que la granularité au niveau des VM. Voici quelques meilleures pratiques à prendre en compte, et vous trouverez des informations supplémentaires dans le http://www.netapp.com/us/media/tr-4400.pdf["TR-4400"^]:
+ONTAP prend en charge les datastores VMFS et NFS vvol. L'utilisation de vvols avec des datastores SAN apporte certains des avantages de NFS tels que la granularité au niveau des VM. Voici quelques meilleures pratiques à prendre en compte, et vous trouverez des informations supplémentaires dans le link:vmware-vvols-overview.html["TR-4400"^]:
 
 * Un datastore vvol peut être constitué de plusieurs volumes FlexVol sur plusieurs nœuds de cluster. L'approche la plus simple est un datastore unique, même si les volumes ont des capacités différentes. Grâce à la gestion du stockage basée sur des règles, un volume compatible est utilisé pour la machine virtuelle. Cependant, ces volumes doivent tous faire partie d'un seul SVM ONTAP et être accessibles via un seul protocole. Une LIF par nœud suffit pour chaque protocole. Évitez d'utiliser plusieurs versions de ONTAP dans un datastore vvol unique car les capacités de stockage peuvent varier d'une version à l'autre.
 * Utilisez les outils ONTAP pour le plug-in VMware vSphere pour créer et gérer des datastores vvol. En plus de gérer le datastore et son profil, il crée automatiquement un terminal de protocole permettant d'accéder aux vvols si nécessaire. Si les LUN sont utilisées, notez que les terminaux PE sont mappés à l'aide des ID de LUN 300 et supérieurs. Vérifiez que le paramètre système avancé de l'hôte ESXi est défini `Disk.MaxLUN` Autorise un ID de LUN supérieur à 300 (la valeur par défaut est 1,024). Pour ce faire, sélectionnez l'hôte ESXi dans vCenter, puis l'onglet configurer et Rechercher `Disk.MaxLUN` Dans la liste des paramètres système avancés.
@@ -40,4 +40,4 @@ ONTAP prend en charge les datastores VMFS et NFS vvol. L'utilisation de vvols av
 
 La figure suivante montre les composants de vvols.
 
-image:vsphere_ontap_image8.png["Erreur : image graphique manquante"]
+image:vsphere_ontap_image8.png["Composants vVols"]

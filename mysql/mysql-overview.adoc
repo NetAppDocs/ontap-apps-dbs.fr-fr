@@ -14,7 +14,7 @@ summary: MySQL sur ONTAP
 MySQL et ses variantes, y compris MariaDB et Percona MySQL, est la base de données la plus populaire au monde.
 
 
-NOTE: Cette documentation sur ONTAP et la base de données MySQL remplace la base de données _TR-4722: Base de données MySQL sur les meilleures pratiques NetApp ONTAP._
+NOTE: Cette documentation sur ONTAP et la base de données MySQL remplace la base de données _TR-4722: Base de données MySQL sur les meilleures pratiques ONTAP._
 
 ONTAP est une plate-forme idéale pour les bases de données MySQL car ONTAP est littéralement conçu pour les bases de données. De nombreuses fonctionnalités, telles que l'optimisation de la latence d'E/S aléatoire, pour la qualité de service (QoS) avancée et les fonctionnalités FlexClone de base, ont été spécialement conçues pour répondre aux besoins des charges de travail des bases de données.
 

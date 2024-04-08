@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-memory-configuration.html 
-keywords: MS-SQL,mssql,SQL Server 
-summary: Microsoft SQL Server sur ONTAP 
+keywords: MSSQL,SQL Server, memory 
+summary: Configuration de la mémoire Microsoft SQL Server 
 ---
 = Configuration de la mémoire Microsoft SQL Server
 :allow-uri-read: 
@@ -10,7 +10,7 @@ summary: Microsoft SQL Server sur ONTAP
 
 
 [role="lead"]
-Les sections suivantes expliquent certains des paramètres de configuration de mémoire critiques.
+La section suivante explique comment configurer les paramètres de mémoire SQL Server pour optimiser les performances de la base de données.
 
 
 
@@ -37,17 +37,11 @@ L'utilisation de SQL Server Management Studio pour ajuster la mémoire minimale 
 
 ....
 EXECUTE sp_configure 'show advanced options', 1
-
 GO
-
 EXECUTE sp_configure 'min server memory (MB)', 2048
-
 GO
-
 EXEC sp_configure 'max server memory (MB)', 120832
-
 GO
-
 RECONFIGURE WITH OVERRIDE
 ....
 
@@ -70,9 +64,9 @@ Il contrôle la quantité maximale de RAM initialement allouée pour la créatio
 
 == Mémoire min. Par requête
 
-Lorsqu'une requête est exécutée, SQL Server tente d'allouer la quantité optimale de mémoire pour qu'elle s'exécute efficacement.
+Lorsqu'une requête est exécutée, SQL Server tente d'allouer la quantité optimale de mémoire pour s'exécuter efficacement.
 
-Par défaut, la mémoire minimale par paramètre de requête alloue > ou = à 1024 Ko pour chaque requête à exécuter. Il est recommandé de laisser ce paramètre à la valeur par défaut 0 pour permettre à SQL Server de gérer dynamiquement la quantité de mémoire allouée aux opérations de création d'index. Cependant, si SQL Server dispose de plus de RAM que nécessaire pour fonctionner efficacement, les performances de certaines requêtes peuvent être améliorées si vous augmentez ce paramètre. Par conséquent, tant que la mémoire est disponible sur le serveur qui n'est pas utilisé par SQL Server, toute autre application ou le système d'exploitation, l'augmentation de ce paramètre peut aider à améliorer les performances globales de SQL Server. Si aucune mémoire disponible n'est disponible, l'augmentation de ce paramètre peut nuire aux performances globales.
+Par défaut, la mémoire min par paramètre de requête alloue >= à 1024 Ko pour chaque requête à exécuter. Il est recommandé de laisser ce paramètre à la valeur par défaut 0 pour permettre à SQL Server de gérer dynamiquement la quantité de mémoire allouée aux opérations de création d'index. Cependant, si SQL Server dispose de plus de RAM que nécessaire pour fonctionner efficacement, les performances de certaines requêtes peuvent être améliorées si vous augmentez ce paramètre. Par conséquent, tant que la mémoire est disponible sur le serveur qui n'est pas utilisé par SQL Server, toute autre application ou le système d'exploitation, l'augmentation de ce paramètre peut aider à améliorer les performances globales de SQL Server. Si aucune mémoire disponible n'est disponible, l'augmentation de ce paramètre peut nuire aux performances globales.
 
 image:mssql-min-memory-per-query.png["Erreur : image graphique manquante"]
 
@@ -108,14 +102,9 @@ L'exemple suivant montre une commande T-SQL pour configurer une extension de poo
 
 ....
 USE master
-
 GO
-
 ALTER SERVER CONFIGURATION
-
 SET BUFFER POOL EXTENSION ON
-
   (FILENAME = ‘P:\BUFFER POOL EXTENSION\SQLServerCache.BUFFER POOL EXTENSION', SIZE = 32 GB);
-
 GO
 ....

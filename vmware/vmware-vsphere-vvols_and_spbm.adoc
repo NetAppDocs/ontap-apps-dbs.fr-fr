@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: vmware/vmware-vsphere-vvols_and_spbm.html 
 keywords: vSphere, vVols, virtual volumes, SPBM, storage police based management, ONTAP 
-summary: 'Cette page décrit les meilleures pratiques relatives à l"implémentation d"une solution de stockage NetApp ONTAP dans un environnement VMware vSphere.' 
+summary: 'Cette page décrit les bonnes pratiques d"implémentation d"une solution de stockage ONTAP dans un environnement VMware vSphere.' 
 ---
 = Volumes virtuels (vvols) et gestion basée sur des règles de stockage (SPBM)
 :hardbreaks:
@@ -21,4 +21,4 @@ Grâce à la gestion du stockage basée sur des règles, une structure sert de c
 ONTAP est leader du secteur du stockage dans l'évolutivité de vvols, en gérant des centaines de milliers de vvols dans un seul cluster, alors que les fournisseurs de baies d'entreprise et de baies Flash plus petites prennent en charge aussi peu que plusieurs milliers de vvols par baie. NetApp pilotant également l'évolution de la gestion granulaire des machines virtuelles avec des fonctionnalités à venir en matière de prise en charge de vvols 3.0.
 
 
-NOTE: Pour plus d'informations sur les volumes virtuels VMware vSphere, SPBM et ONTAP, voir https://www.netapp.com/pdf.html?item=/media/13555-tr4400.pdf["Tr-4400 : volumes virtuels VMware vSphere avec ONTAP"^].
+NOTE: Pour plus d'informations sur les volumes virtuels VMware vSphere, SPBM et ONTAP, voir link:vmware-vvols-overview.html["Tr-4400 : volumes virtuels VMware vSphere avec ONTAP"^].

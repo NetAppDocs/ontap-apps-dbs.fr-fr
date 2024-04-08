@@ -129,7 +129,7 @@ En utilisant les règles d'affinité pour les hôtes de machine virtuelle dans V
 
 Voici un exemple de groupes d'hôtes de machine virtuelle et de règles d'affinité.
 
-image::../media/vmsc_2_2.png[Diagramme d'un serveur informatique Description générée automatiquement,528,369]
+image::../media/vmsc_2_2.png[Groupes d'hôtes VM et règles d'affinité,528,369]
 
 
 

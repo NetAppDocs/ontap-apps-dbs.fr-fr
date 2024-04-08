@@ -1,31 +1,23 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-overview.html 
-keywords: MS-SQL,mssql,SQL Server,TR-4590 
+keywords: MSSQL,SQL Server,TR-4590, SnapCenter, ONTAP 
 summary: Microsoft SQL Server sur ONTAP 
 ---
-= Présentation de Microsoft SQL Server
+= Microsoft SQL Server sur ONTAP
 :allow-uri-read: 
 :imagesdir: ../media/
 
 
 [role="lead"]
-SQL Server constitue le socle de la plateforme de données Microsoft. Il apporte les performances stratégiques grâce aux technologies in-memory et permet d'obtenir plus rapidement des informations sur toutes les données, qu'elles soient sur site ou dans le cloud.
+ONTAP propose une solution de sécurité et de performances pour vos bases de données Microsoft SQL Server, tout en fournissant des outils de pointe pour gérer votre environnement.
 
 
 NOTE: Cette documentation remplace le rapport technique _TR-4590 : guide des meilleures pratiques pour Microsoft SQL Server avec ONTAP_
 
-Microsoft SQL Server s'appuie sur les fonctionnalités stratégiques des versions précédentes pour offrir des performances, une disponibilité et une gestion exceptionnelles pour les applications stratégiques. Le système de stockage joue un rôle clé dans les performances globales d'une base de données SQL Server. NetApp propose plusieurs produits qui permettent à votre base de données SQL Server de fournir des performances d'entreprise tout en fournissant des outils de pointe pour la gestion de votre environnement.
+NetApp suppose que le lecteur a une connaissance pratique des éléments suivants :
 
-
-
-== But et portée
-
-Cette section décrit les meilleures pratiques et présente des conseils de conception pour déployer SQL Server sur des systèmes de stockage NetApp exécutant le logiciel NetApp ONTAP. Vous pouvez ainsi déployer le stockage de manière efficace et efficace, ainsi que planifier la protection et la conservation des données de bout en bout. Le périmètre de ce guide se limite aux instructions de conception technique basées sur les principes de conception et les normes privilégiées que NetApp recommande pour l'infrastructure de stockage lors du déploiement de SQL Server. La mise en œuvre de bout en bout ne fait pas partie du champ d'application du présent rapport.
-
-Les meilleures pratiques et recommandations décrites dans ce guide permettent aux architectes SQL Server et aux administrateurs de stockage NetApp de planifier un environnement SQL Server hautement disponible et facile à gérer et de répondre à des SLA rigoureux. NetApp suppose que le lecteur a une connaissance pratique des éléments suivants :
-
-* Logiciel NetApp ONTAP
+* Logiciel ONTAP
 * NetApp SnapCenter en tant que logiciel de sauvegarde, qui inclut :
 +
 ** Plug-in SnapCenter pour Microsoft Windows
@@ -35,4 +27,16 @@ Les meilleures pratiques et recommandations décrites dans ce guide permettent a
 * Architecture et administration de Microsoft SQL Server
 
 
-Pour connaître la compatibilité de la configuration sur l'ensemble de la pile NetApp, reportez-vous au link:http://mysupport.netapp.com/NOW/products/interoperability/["Matrice d'interopérabilité NetApp (IMT)"^].
+La portée de cette section sur les meilleures pratiques se limite à la conception technique basée sur les principes de conception et les normes privilégiées que NetApp recommande pour l'infrastructure de stockage. L'implémentation de bout en bout n'est pas concernée.
+
+Pour plus d'informations sur la compatibilité de la configuration entre les produits NetApp, reportez-vous au link:https://mysupport.netapp.com/matrix/["Matrice d'interopérabilité NetApp (IMT)"^].
+
+
+
+== Workloads Microsoft SQL Server
+
+Avant de déployer SQL Server, vous devez comprendre les exigences de charge de travail de la base de données des applications prises en charge par vos instances SQL Server. Chaque application a des exigences variables en termes de capacité, de performance et de disponibilité. Par conséquent, chaque base de données doit être conçue de manière à répondre de manière optimale à ces exigences. De nombreuses entreprises classent les bases de données en plusieurs niveaux de gestion, en utilisant les exigences des applications pour définir des contrats de niveau de service. Les charges de travail SQL Server sont les suivantes :
+
+* Les bases de données OLTP sont souvent également les bases de données les plus stratégiques d'une entreprise. Ces bases de données prennent généralement en charge les applications orientées client et sont considérées comme essentielles aux opérations stratégiques de l'entreprise. Les bases de données OLTP stratégiques et les applications qu'elles prennent en charge disposent souvent de SLA qui exigent des niveaux de performances élevés et sont sensibles à la dégradation des performances et à la disponibilité. Ils peuvent également être candidats pour toujours sur les clusters de basculement ou pour toujours sur les groupes de disponibilité. La combinaison E/S de ces types de bases de données se caractérise généralement par une lecture aléatoire de 75 à 90 % et une écriture de 25 à 10 %.
+* Les bases de données du système d'aide à la décision (DSS) peuvent également être appelées data warehouses. Ces bases de données jouent un rôle stratégique dans de nombreuses entreprises qui s'appuient sur l'analytique pour leurs activités. Ces bases de données sont sensibles à l'utilisation du CPU et aux opérations de lecture à partir du disque lors de l'exécution de requêtes. Dans de nombreuses entreprises, les bases de données DSS sont les plus critiques à la fin du mois, du trimestre et de l'année Cette charge de travail présente généralement un mélange d'E/S de lecture à 100 %.
+

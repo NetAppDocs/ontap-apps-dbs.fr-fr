@@ -2,9 +2,9 @@
 sidebar: sidebar 
 permalink: vmware/vmware_vmsc_overview.html 
 keywords: VMware, Data protection, MetroCluster, SMBC, SnapMirror active sync, vMSC 
-summary: Cluster de stockage vSphere Metro avec NetApp ONTAP 
+summary: Cluster de stockage vSphere Metro avec ONTAP 
 ---
-= Cluster de stockage vSphere Metro avec NetApp ONTAP
+= Cluster de stockage vSphere Metro avec ONTAP
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -22,7 +22,7 @@ Les solutions VMSC sont prises en charge avec NetApp® MetroCluster™ et la syn
 
 == Disponibilité continue pour les environnements vSphere
 
-L'architecture NetApp ONTAP est une plateforme de stockage flexible et évolutive qui fournit des services SAN (FCP, iSCSI et NVMe-of) et NAS (NFS v3 et v4.1) pour les datastores. Les systèmes de stockage NetApp AFF, ASA et FAS utilisent le système d'exploitation ONTAP pour offrir des protocoles supplémentaires pour l'accès au stockage invité comme S3 et SMB/CIFS.
+L'architecture ONTAP est une plateforme de stockage flexible et évolutive qui fournit des services SAN (FCP, iSCSI et NVMe-of) et NAS (NFS v3 et v4.1) pour les datastores. Les systèmes de stockage NetApp AFF, ASA et FAS utilisent le système d'exploitation ONTAP pour offrir des protocoles supplémentaires pour l'accès au stockage invité comme S3 et SMB/CIFS.
 
 NetApp MetroCluster utilise la fonction HA (basculement du contrôleur ou CFO) de NetApp pour se protéger contre les défaillances du contrôleur. Elle inclut également la technologie SyncMirror locale, le basculement de cluster en cas d'incident (basculement du contrôleur à la demande ou CFOD), la redondance matérielle et la séparation géographique pour atteindre des niveaux élevés de disponibilité. SyncMirror met en miroir les données de manière synchrone sur les deux moitiés de la configuration MetroCluster en écrivant les données sur deux plexes : le plex local (sur le tiroir local) assure activement le service des données et le plex distant (sur le tiroir distant) n'assure généralement pas le service des données. La redondance matérielle est mise en place pour tous les composants MetroCluster, tels que les contrôleurs, le stockage, les câbles, les commutateurs (utilisés avec Fabric MetroCluster) et les adaptateurs.
 

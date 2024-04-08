@@ -1,0 +1,67 @@
+---
+sidebar: sidebar 
+permalink: microsoft/win_deploy_hyperv_lmoce.html 
+keywords: Windows,Hyper-V,VHDX,VM,Virtual 
+summary: 'Cette annexe explique comment utiliser la migration dynamique Hyper-V en dehors d"un environnement en cluster' 
+---
+= Déployer Hyper-V Live migration en dehors d'un environnement en cluster
+:allow-uri-read: 
+
+
+[role="lead"]
+Cette section décrit le déploiement de la migration dynamique Hyper-V en dehors d'un environnement en cluster.
+
+
+
+== Prérequis
+
+* Serveurs Hyper-V autonomes avec stockage indépendant ou stockage SMB partagé.
+* Rôle Hyper-V installé à la fois sur les serveurs source et de destination.
+* Les deux serveurs Hyper-V appartiennent au même domaine ou aux domaines qui se font confiance.
+
+
+
+
+== Déploiement
+
+Pour effectuer une migration en direct dans un environnement non mis en cluster, configurez les serveurs Hyper-V source et de destination afin qu'ils puissent envoyer et recevoir des opérations de migration en direct. Sur les deux serveurs Hyper-V, procédez comme suit :
+
+. Ouvrez Hyper-V Manager dans la section Outils de Server Manager.
+. Dans actions, cliquez sur Paramètres Hyper-V.
+. Cliquez sur migrations dynamiques et sélectionnez Activer les migrations dynamiques entrantes et sortantes.
+. Choisissez d'autoriser le trafic de migration en direct sur n'importe quel réseau disponible ou uniquement sur des réseaux spécifiques.
+. Vous pouvez également configurer le protocole d'authentification et les options de performances à partir de la section Avancé de Live migrations.
+. Si CredSSP est utilisé comme protocole d'authentification, assurez-vous de vous connecter au serveur Hyper-V source à partir du serveur Hyper-V de destination avant de déplacer la machine virtuelle.
+. Si Kerberos est utilisé comme protocole d'authentification, configurez la délégation contrainte. Pour ce faire, vous devez accéder au contrôleur de domaine Active Directory. Pour configurer la délégation, procédez comme suit :
++
+.. Connectez-vous au contrôleur de domaine Active Directory en tant qu'administrateur.
+.. Démarrez Server Manager.
+.. Dans la section Outils, cliquez sur utilisateurs et ordinateurs Active Directory.
+.. Développez le domaine et cliquez sur ordinateurs.
+.. Sélectionnez le serveur Hyper-V source dans la liste, cliquez dessus avec le bouton droit de la souris et cliquez sur Propriétés.
+.. Dans l'onglet délégation, sélectionnez faire confiance à cet ordinateur pour la délégation aux services spécifiés uniquement.
+.. Sélectionnez utiliser Kerberos uniquement.
+.. Cliquez sur Ajouter pour ouvrir l'assistant Ajouter des services.
+.. Dans Ajouter des services, cliquez sur utilisateurs et ordinateurs, ce qui ouvre Sélectionner utilisateurs ou ordinateurs**.**
+.. Indiquez le nom du serveur Hyper-V de destination et cliquez sur OK.
++
+*** Pour déplacer le stockage de la machine virtuelle, sélectionnez CIFS.
+*** Pour déplacer des machines virtuelles, sélectionnez le service Microsoft Virtual System migration.
+
+
+.. Dans l'onglet délégation, cliquez sur OK.
+.. Dans le dossier ordinateurs, sélectionnez le serveur Hyper-V de destination dans la liste et répétez le processus. Dans Sélectionner utilisateurs ou ordinateurs, indiquez le nom du serveur Hyper-V source.
+
+
+. Déplacer la VM.
++
+.. Ouvrez Hyper-V Manager.
+.. Cliquez avec le bouton droit de la souris sur une machine virtuelle et cliquez sur déplacer.
+.. Choisissez déplacer la machine virtuelle.
+.. Spécifier le serveur Hyper-V de destination pour la machine virtuelle.
+.. Choisissez les options de déplacement. Pour Shared Live migration, choisissez déplacer uniquement la machine virtuelle. Pour Shared Nothing Live migration, choisissez l'une des deux autres options en fonction de vos préférences.
+.. Indiquez l'emplacement de la machine virtuelle sur le serveur Hyper-V de destination en fonction de vos préférences.
+.. Vérifiez le récapitulatif et cliquez sur OK pour déplacer la machine virtuelle.
+
+
+

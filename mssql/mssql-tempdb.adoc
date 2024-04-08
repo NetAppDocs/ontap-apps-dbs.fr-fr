@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-tempdb.html 
-keywords: MS-SQL,mssql,SQL Server 
-summary: Microsoft SQL Server sur ONTAP 
+keywords: MSSQL,SQL Server, tempdb, ONTAP 
+summary: Placement de tempdb Microsoft SQL Server sur ONTAP 
 ---
 = Fichiers tempdb Microsoft SQL Server
 :allow-uri-read: 
@@ -10,7 +10,7 @@ summary: Microsoft SQL Server sur ONTAP
 
 
 [role="lead"]
-NetApp recommande de gonfler de manière proactive les fichiers tempdb à leur pleine taille pour éviter la fragmentation du disque.
+La base de données tempdb peut être largement utilisée. Outre le placement optimal des fichiers de base de données utilisateur sur ONTAP, modifiez les fichiers de données tempdb pour réduire les conflits d'allocation
 
 Les conflits de pages peuvent se produire sur les pages GAM (Global allocation map), SGAM (Global allocation map) ou PFS (page Free Space) lorsque SQL Server doit écrire sur des pages système spéciales pour allouer de nouveaux objets. Les loquets protègent (verrouillent) ces pages en mémoire. Sur une instance SQL Server occupée, l'obtention d'un verrou sur une page système dans tempdb peut prendre un certain temps. Cela ralentit les temps d'exécution des requêtes et est appelé conflit de type LATCH. Consultez les meilleures pratiques suivantes pour la création de fichiers de données tempdb :
 

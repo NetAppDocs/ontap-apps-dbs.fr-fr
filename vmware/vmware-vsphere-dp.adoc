@@ -24,7 +24,7 @@ Ces plug-ins offrent des fonctionnalités étendues pour protéger les bases de 
 
 La figure suivante représente un exemple de déploiement SnapCenter.
 
-image:vsphere_ontap_image4.png["Erreur : image graphique manquante"]
+image:vsphere_ontap_image4.png["Déploiement SnapCenter"]
 
 Pour des fonctionnalités améliorées de reprise sur incident, utilisez l'outil NetApp SRA pour ONTAP avec VMware site Recovery Manager. Outre la prise en charge de la réplication de datastores sur un site de reprise après incident, il permet également d'effectuer des tests sans interruption dans l'environnement de reprise après incident en clonant les datastores répliqués. L'automatisation intégrée à SRA simplifie également la reprise après incident et la reprotection de la production après panne.
 

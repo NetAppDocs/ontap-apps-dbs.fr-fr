@@ -14,7 +14,7 @@ summary: 'Avec ONTAP, le concept de machine virtuelle de stockage (SVM) offre un
 
 
 [role="lead"]
-Les sections suivantes présentent les meilleures pratiques de déploiement avec VMware et ONTAP SRM.
+Les sections suivantes présentent les meilleures pratiques de déploiement avec ONTAP et VMware SRM.
 
 
 

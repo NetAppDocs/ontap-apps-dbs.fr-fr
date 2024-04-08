@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: vmware/vmware-srm-replication_topologies.html 
 keywords: vmware, site, recovery manager, vsrm, replication, technologies, snapmirror layouts, array manager, snapvault, qtress, fc, iscsi, supported 
-summary: 'Dans ONTAP 9, les composants physiques d"un cluster sont visibles pour les administrateurs du cluster, mais ils ne sont pas directement visibles pour les applications et les hôtes qui utilisent le cluster.' 
+summary: Topologies de réplication utilisant ONTAP avec SnapMirror et VMware SRM. 
 ---
 = Topologies de réplication
 :hardbreaks:
@@ -36,13 +36,13 @@ Une seule machine virtuelle ne peut pas héberger de données (Virtual machine D
 
 Les figures suivantes présentent les scénarios de disposition des relations SnapMirror pris en charge par SRM et SRA. Chaque machine virtuelle des volumes répliqués est propriétaire de données sur une seule baie SRM (SVM) sur chaque site.
 
-image:vsrm-ontap9_image7.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image7.png["La disposition des relations SnapMirror"]
 
-image:vsrm-ontap9_image8.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image8.png["La disposition des relations SnapMirror"]
 
-image:vsrm-ontap9_image9.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image9.png["La disposition des relations SnapMirror"]
 
-image:vsrm-ontap9_image10.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image10.png["La disposition des relations SnapMirror"]
 
 
 
@@ -50,7 +50,7 @@ image:vsrm-ontap9_image10.png["Erreur : image graphique manquante"]
 
 Lorsque vous utilisez la réplication basée sur la baie (ABR) dans SRM, les groupes de protection sont isolés vers une seule paire de baies, comme l'illustre la capture d'écran suivante. Dans ce scénario, `SVM1` et `SVM2` sont associés à `SVM3` et `SVM4` sur le site de reprise. Cependant, vous ne pouvez sélectionner qu'une des deux paires de matrices lorsque vous créez un groupe de protection.
 
-image:vsrm-ontap9_image11.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image11.png["paires de baies"]
 
 
 
@@ -58,13 +58,13 @@ image:vsrm-ontap9_image11.png["Erreur : image graphique manquante"]
 
 Les configurations non prises en charge possèdent des données (VMDK ou RDM) sur plusieurs SVM appartenant à une machine virtuelle individuelle. Dans les exemples présentés dans les figures suivantes, `VM1` Ne peut pas être configuré pour la protection avec SRM car `VM1` Possède des données sur deux SVM.
 
-image:vsrm-ontap9_image12.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image12.png["Configurations non prises en charge"]
 
-image:vsrm-ontap9_image13.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image13.png["Configurations non prises en charge"]
 
 Toute relation de réplication dans laquelle un volume NetApp individuel est répliqué depuis un SVM source vers plusieurs destinations dans un même SVM ou dans différents SVM, est appelée « Fan-Out » de SnapMirror. La réplication « Fan-Out » n'est pas prise en charge par SRM. Dans l'exemple illustré dans la figure suivante, `VM1` Ne peut pas être configuré pour la protection dans SRM car elle est répliquée avec SnapMirror dans deux emplacements différents.
 
-image:vsrm-ontap9_image14.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image14.png["Configurations non prises en charge"]
 
 
 
@@ -72,7 +72,7 @@ image:vsrm-ontap9_image14.png["Erreur : image graphique manquante"]
 
 SRM ne prend pas en charge le cascade des relations SnapMirror, dans lesquelles un volume source est répliqué sur un volume de destination, et ce volume de destination est également répliqué avec SnapMirror vers un autre volume de destination. Dans le scénario illustré dans la figure suivante, SRM ne peut pas être utilisé pour le basculement entre des sites.
 
-image:vsrm-ontap9_image15.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image15.png["Cascade de relations SnapMirror"]
 
 
 
@@ -103,11 +103,11 @@ Dans un environnement VMware, chaque datastore dispose d'un identifiant unique u
 
 La figure suivante décrit une configuration SnapMirror vers SnapVault en cascade. Si la destination SnapVault se trouve sur le site de reprise après incident ou sur un site tertiaire non affecté par une panne sur le site primaire, l'environnement peut être reconfiguré afin de permettre la continuité des sauvegardes après le basculement.
 
-image:vsrm-ontap9_image16.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image16.png["SnapMirror en cascade vers SnapVault"]
 
 La figure suivante décrit la configuration après l'utilisation de SRM pour renvoyer la réplication SnapMirror vers le site primaire. L'environnement a également été reconfiguré de façon à ce que les sauvegardes SnapVault s'effectuent à partir d'une source SnapMirror. Cette configuration est « Fan-Out » de SnapMirror SnapVault.
 
-image:vsrm-ontap9_image17.png["Erreur : image graphique manquante"]
+image:vsrm-ontap9_image17.png["Inversion de la cascade de SnapMirror vers SnapVault"]
 
 Une fois que SRM a effectué une restauration et une seconde inversion des relations SnapMirror, les données de production sont de nouveau sur le site principal. Ces données sont désormais protégées de la même manière qu'avant le basculement vers le site de reprise après incident, via les sauvegardes SnapMirror et SnapVault.
 

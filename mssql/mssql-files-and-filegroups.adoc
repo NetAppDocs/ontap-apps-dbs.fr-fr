@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-files-and-filegroups.html 
-keywords: MS-SQL,mssql,SQL Server 
-summary: Microsoft SQL Server sur ONTAP 
+keywords: MSSQL,SQL Server, backup, recovery, database file management 
+summary: Placement des fichiers de base de données Microsoft SQL Server 
 ---
 = Fichiers de base de données et groupes de fichiers Microsoft SQL Server
 :allow-uri-read: 
@@ -10,7 +10,7 @@ summary: Microsoft SQL Server sur ONTAP
 
 
 [role="lead"]
-Une base de données SQL Server est une collection d'objets qui vous permet de stocker et de manipuler des données.
+Il est essentiel de placer correctement les fichiers de base de données SQL Server sur ONTAP lors de la phase de déploiement initiale. Vous bénéficiez ainsi de performances optimales, d'un temps de gestion de l'espace, de sauvegarde et de restauration qui peuvent être configurés pour répondre aux besoins de votre entreprise.
 
 En théorie, SQL Server (64 bits) prend en charge 32,767 bases de données par instance et 524 272 To de taille de base de données, bien que l'installation standard comporte généralement plusieurs bases de données. Cependant, le nombre de bases de données que SQL Server peut gérer dépend de la charge et du matériel. Il n'est pas rare que des instances SQL Server hébergent des dizaines, des centaines, voire des milliers de petites bases de données.
 
@@ -34,7 +34,7 @@ Vous pouvez spécifier la taille initiale du fichier et les paramètres de crois
 
 TIP: *NetApp recommande* que tous les fichiers d'un seul groupe de fichiers aient les mêmes paramètres de taille initiale et de croissance automatique, avec la taille de croissance définie en mégaoctets plutôt qu'en pourcentages. Cela permet à l'algorithme de remplissage proportionnel d'équilibrer uniformément les activités d'écriture entre les fichiers de données.
 
-Chaque fois que SQL Server augmente les fichiers, il remplit l'espace nouvellement alloué dans les fichiers avec des zéros. Ce processus bloque toutes les sessions qui doivent écrire dans le fichier correspondant ou, en cas de croissance du journal de transactions, générer des enregistrements de journal de transactions.
+Chaque fois que SQL Server augmente la taille des fichiers, il remplit l'espace nouvellement alloué avec des zéros. Ce processus bloque toutes les sessions qui doivent écrire dans le fichier correspondant ou, en cas de croissance du journal de transactions, générer des enregistrements de journal de transactions.
 
 SQL Server met toujours à zéro le journal de transactions et ce comportement ne peut pas être modifié. Toutefois, vous pouvez contrôler si les fichiers de données sont mis à zéro en activant ou en désactivant l'initialisation instantanée des fichiers. L'activation de l'initialisation instantanée des fichiers permet d'accélérer la croissance des fichiers de données et de réduire le temps nécessaire à la création ou à la restauration de la base de données.
 
@@ -48,23 +48,14 @@ Pour vérifier si l'autorisation est activée, vous pouvez utiliser le code de l
 
 ....
 DBCC TRACEON(3004,3605,-1)
-
 GO
-
 CREATE DATABASE DelMe
-
 GO
-
 EXECUTE sp_readerrorlog
-
 GO
-
 DROP DATABASE DelMe
-
 GO
-
 DBCC TRACEOFF(3004,3605,-1)
-
 GO
 ....
 Lorsque l'initialisation instantanée des fichiers n'est pas activée, le journal d'erreurs SQL Server indique que SQL Server met à zéro le fichier de données mdf en plus de mettre à zéro le fichier journal ldf, comme indiqué dans l'exemple suivant. Lorsque l'initialisation instantanée des fichiers est activée, elle affiche uniquement la remise à zéro du fichier journal.

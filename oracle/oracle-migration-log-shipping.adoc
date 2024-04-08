@@ -36,7 +36,7 @@ La première étape consiste à créer une sauvegarde de base de données. Plus 
 
 === De production
 
-Dans cet exemple, la base de données source se trouve sur un système ONTAP. La méthode la plus simple pour créer une sauvegarde d'une base de données consiste à utiliser une copie Snapshot. La base de données est placée en mode de sauvegarde à chaud pendant quelques secondes `snapshot create` l'opération est exécutée sur le volume hébergeant les fichiers de données.
+Dans cet exemple, la base de données source se trouve sur un système ONTAP. La méthode la plus simple pour créer une sauvegarde d'une base de données consiste à utiliser un instantané. La base de données est placée en mode de sauvegarde à chaud pendant quelques secondes `snapshot create` l'opération est exécutée sur le volume hébergeant les fichiers de données.
 
 ....
 SQL> alter database begin backup;
@@ -50,7 +50,7 @@ Cluster01::*>
 SQL> alter database end backup;
 Database altered.
 ....
-Le résultat est une copie Snapshot sur disque appelée `hotbackup` qui contient une image des fichiers de données en mode de sauvegarde à chaud. Lorsqu'elles sont combinées aux journaux d'archivage appropriés pour assurer la cohérence des fichiers de données, les données de cette copie Snapshot peuvent servir de base à une restauration ou à un clone. Dans ce cas, il est répliqué sur le nouveau serveur.
+Le résultat est un instantané sur le disque appelé `hotbackup` qui contient une image des fichiers de données en mode de sauvegarde à chaud. Lorsqu'elles sont combinées avec les journaux d'archivage appropriés pour assurer la cohérence des fichiers de données, les données de cet instantané peuvent servir de base à une restauration ou à un clone. Dans ce cas, il est répliqué sur le nouveau serveur.
 
 
 
@@ -58,7 +58,7 @@ Le résultat est une copie Snapshot sur disque appelée `hotbackup` qui contient
 
 La sauvegarde doit maintenant être restaurée dans le nouvel environnement. Cette opération peut être effectuée de plusieurs façons, notamment Oracle RMAN, la restauration à partir d'une application de sauvegarde comme NetBackup ou une simple opération de copie des fichiers de données placés en mode de sauvegarde à chaud.
 
-Dans cet exemple, SnapMirror est utilisé pour répliquer la copie Snapshot appelée sauvegarde à chaud vers un nouvel emplacement.
+Dans cet exemple, SnapMirror est utilisé pour répliquer la sauvegarde à chaud de snapshot vers un nouvel emplacement.
 
 . Créez un volume pour recevoir les données de snapshot. Initialiser la mise en miroir à partir de `jfsc1_oradata` à `vol_oradata`.
 +

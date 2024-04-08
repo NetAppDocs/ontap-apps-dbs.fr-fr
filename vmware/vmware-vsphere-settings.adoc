@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmware-vsphere-settings.html 
-keywords:  
-summary:  
+keywords: VMware,vSphere,ESXi,settings,NFS,iSCSI,FC,FCP 
+summary: Ce document classe et énumère les paramètres de stockage et de réseau recommandés. 
 ---
 = Hôte ESXi recommandé et autres paramètres ONTAP recommandés
 :hardbreaks:
@@ -14,7 +14,11 @@ summary:
 
 
 [role="lead"]
-NetApp a développé un ensemble de paramètres de chemins d'accès multiples de l'hôte ESXi et de délai d'expiration de la carte HBA afin que son comportement soit correct avec ONTAP suite à des tests effectués par NetApp. Ils sont facilement configurés à l'aide des outils ONTAP pour VMware vSphere. Dans le tableau de bord Résumé, cliquez sur Modifier les paramètres dans le portlet systèmes hôtes ou cliquez avec le bouton droit de la souris sur l'hôte dans vCenter, puis accédez aux outils ONTAP > définir les valeurs recommandées. Voici les paramètres d'hôte actuellement recommandés avec la version 9.8.
+NetApp a développé un ensemble de paramètres hôtes ESXi optimaux pour les protocoles NFS et les protocoles en mode bloc. Des conseils spécifiques sont également fournis concernant les paramètres de chemins d'accès multiples et de délai d'expiration des HBA pour un comportement correct avec ONTAP basé sur les tests internes NetApp et VMware.
+
+Ces valeurs sont facilement définies à l'aide des outils ONTAP pour VMware vSphere : dans le tableau de bord Résumé, cliquez sur Modifier les paramètres dans le portlet systèmes hôtes ou cliquez avec le bouton droit de la souris sur l'hôte dans vCenter, puis accédez à Outils ONTAP > définir les valeurs recommandées.
+
+Voici les paramètres d'hôte actuellement recommandés pour les versions 9.8-9.13.
 
 |===
 
@@ -28,7 +32,7 @@ NetApp a développé un ensemble de paramètres de chemins d'accès multiples de
 | VMFS3.HardwareAccélérationde la localisation | Conserver la valeur par défaut (1) | Non 
 
 
-| VMFS3.EnableBlockDelete | Conservez la valeur par défaut (0), mais vous pouvez la modifier si nécessaire.
+| VMFS3.EnableBlockDelete | Conserver la valeur par défaut (0), mais peut être modifiée si nécessaire.
 Pour plus d'informations, voir link:https://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=2007427["VMware KB 2007427"] | Non 
 
 
@@ -48,7 +52,7 @@ Défini sur 1024 Mo pour 6.5U3, 6.7U3 et 7.0 ou version ultérieure. | Oui.
 
 
 | NFS.MaxVolumes | VSphere 6.0 ou version ultérieure, défini sur 256
-Toutes les autres configurations NFS, définies sur 64. | Non 
+Toutes les autres configurations NFS définies sur 64. | Non 
 
 
 | NFS41.Maxvolumes | VSphere 6.0 ou version ultérieure, défini sur 256. | Non 
@@ -152,7 +156,7 @@ Lors de la création de volumes et de LUN ONTAP FlexVol, les outils ONTAP permet
 Bien qu'il ne soit pas actuellement configuré par les outils ONTAP disponibles, NetApp suggère les options de configuration suivantes :
 
 * Dans les environnements hautes performances ou lors des tests de performances avec un seul datastore LUN, envisagez de modifier le paramètre d'équilibrage de charge de la règle de sélection de chemin Round-Robin (VMW_PSP_RR) entre la valeur de 1000 IOPS par défaut et la valeur de 1. Voir VMware KB https://kb.vmware.com/s/article/2069356["2069356"^] pour en savoir plus.
-* Dans vSphere 6.7 mise à jour 1, VMware a introduit un nouveau mécanisme d'équilibrage de la charge de latence pour la PSP Round Robin. La nouvelle option prend en compte la bande passante d'E/S et la latence de chemin lors de la sélection du chemin optimal pour les E/S. Il peut être bénéfique de l'utiliser dans des environnements dotés d'une connectivité de chemin non équivalente, comme les cas où il y a plus de sauts réseau sur un chemin que l'autre ou lors de l'utilisation d'un système de baie SAN de NetApp. Voir https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.storage.doc/GUID-B7AD0CA0-CBE2-4DB4-A22C-AD323226A257.html?hWord=N4IghgNiBcIA4Gc4AIJgC4FMB2BjAniAL5A["Plug-ins et règles de sélection de chemin"^] pour en savoir plus.
+* Dans vSphere 6.7 mise à jour 1, VMware a introduit un nouveau mécanisme d'équilibrage de la charge de latence pour la PSP Round Robin. La nouvelle option prend en compte la bande passante d'E/S et la latence de chemin lors de la sélection du chemin optimal pour les E/S. Vous pouvez tirer parti de son utilisation dans des environnements dotés d'une connectivité de chemin non équivalente, tels que des cas avec plus de sauts réseau sur un chemin qu'un autre, ou lors de l'utilisation d'un système NetApp All SAN Array. Voir https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.storage.doc/GUID-B7AD0CA0-CBE2-4DB4-A22C-AD323226A257.html?hWord=N4IghgNiBcIA4Gc4AIJgC4FMB2BjAniAL5A["Plug-ins et règles de sélection de chemin"^] pour en savoir plus.
 
 
 

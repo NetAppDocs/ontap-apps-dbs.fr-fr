@@ -1,0 +1,35 @@
+---
+sidebar: sidebar 
+permalink: microsoft/win_deploy_hyperv_lmce.html 
+keywords: Windows,Hyper-V,VHDX,VM,Virtual 
+summary: Cette annexe décrit le déploiement de la migration dynamique dans un environnement en cluster. 
+---
+= Déployer Hyper-V Live migration dans un environnement en cluster
+:allow-uri-read: 
+
+
+[role="lead"]
+Cette annexe décrit le déploiement de la migration dynamique dans un environnement en cluster.
+
+
+
+== Prérequis
+
+Pour déployer la migration en direct, vous devez configurer des serveurs Hyper-V dans un cluster de basculement avec stockage partagé. Passez en revue la section link:win_deploy_hyperv.html["Mise en cluster Hyper-V."] pour en savoir plus.
+
+
+
+== Déploiement
+
+Pour utiliser la migration dynamique dans un environnement en cluster, procédez comme suit :
+
+. Dans Failover Cluster Manager, sélectionnez et développez le cluster. Si le cluster n'est pas visible, cliquez sur Gestionnaire de cluster de basculement, cliquez sur se connecter au cluster et indiquez le nom du cluster.
+. Cliquez sur rôles, qui répertorie toutes les machines virtuelles disponibles dans un cluster.
+. Cliquez avec le bouton droit de la souris sur la machine virtuelle et cliquez sur déplacer. Vous disposez ainsi de trois options :
++
+** *Migration dynamique.* vous pouvez sélectionner un nœud manuellement ou autoriser le cluster à sélectionner le meilleur nœud. Dans le cadre de la migration dynamique, le cluster copie la mémoire utilisée par la machine virtuelle du nœud actuel vers un autre nœud. Par conséquent, lorsque la machine virtuelle est migrée vers un autre nœud, la mémoire et les informations d'état requises par la machine virtuelle sont déjà en place pour cette dernière. Cette méthode de migration est quasi instantanée, mais une seule machine virtuelle peut être migrée en direct à la fois.
+** *Migration rapide.* vous pouvez sélectionner un nœud manuellement ou autoriser le cluster à sélectionner le meilleur nœud. Lors d'une migration rapide, le cluster copie la mémoire utilisée par une machine virtuelle sur un disque du système de stockage. Par conséquent, lorsque la machine virtuelle est migrée vers un autre nœud, l'autre nœud peut rapidement lire la mémoire et les informations d'état requises par la machine virtuelle à partir du disque. Grâce à une migration rapide, plusieurs machines virtuelles peuvent être migrées simultanément.
+** *Migration du stockage de la machine virtuelle.* cette méthode utilise l'assistant de déplacement du stockage de la machine virtuelle. Cet assistant vous permet de sélectionner le disque de la machine virtuelle ainsi que d'autres fichiers à déplacer vers un autre emplacement, qui peut être un partage CSV ou SMB.
+
+
+

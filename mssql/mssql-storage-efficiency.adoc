@@ -1,18 +1,18 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-storage-efficiency.html 
-keywords: MS-SQL,mssql,SQL Server 
-summary: Microsoft SQL Server sur ONTAP 
+keywords: MSSQL,SQL Server, efficiency, compression, deduplication 
+summary: Efficacité du stockage Microsoft SQL Server et ONTAP 
 ---
-= Efficacité du stockage ONTAP avec Microsoft SQL Server
+= Microsoft SQL Server et l'efficacité du stockage
 :allow-uri-read: 
 :imagesdir: ../media/
 
 
 [role="lead"]
-L'efficacité du stockage désigne la capacité de stocker et de gérer des données SQL Server d'une manière qui utilise le moins d'espace de stockage avec peu ou pas d'impact sur les performances globales du système.
+L'efficacité du stockage ONTAP est optimisée pour stocker et gérer des données SQL Server d'une manière qui utilise le moins d'espace de stockage avec peu ou pas d'impact sur les performances globales du système.
 
-L'efficacité du stockage combine RAID, le provisionnement (disposition et utilisation globales), la mise en miroir et d'autres technologies de protection des données. Les technologies NetApp telles que les copies Snapshot, le provisionnement fin et FlexClone permettent de réaliser des économies en optimisant le stockage existant de l'infrastructure et en différant, voire en évitant, les dépenses futures en stockage. Plus vous utilisez ces technologies ensemble, plus vous réalisez d'économies.
+L'efficacité du stockage combine RAID, le provisionnement (disposition et utilisation globales), la mise en miroir et d'autres technologies de protection des données. Les technologies NetApp, qui incluent les snapshots, le provisionnement fin et le clonage, optimisent le stockage existant dans l'infrastructure et permettent de reporter ou d'éviter les dépenses futures en stockage. Plus vous utilisez ces technologies ensemble, plus vous réalisez d'économies.
 
 
 
@@ -96,7 +96,7 @@ Les fonctionnalités d'optimisation de l'espace, telles que la compression, la c
 
 NOTE: Reportez-vous aux sections ci-dessous sur le provisionnement fin pour une explication de l'interaction entre l'efficacité du stockage et la réservation fractionnaire.
 
-SQL Server dispose également de fonctionnalités permettant de compresser et de gérer efficacement les données. SQL Server prend actuellement en charge deux types de compression de données : la compression de ligne et la compression de page.
+SQL Server lui-même dispose également de fonctionnalités pour compresser et gérer efficacement les données. SQL Server prend actuellement en charge deux types de compression de données : la compression de ligne et la compression de page.
 
 La compression de ligne modifie le format de stockage des données. Par exemple, il change les entiers et les décimales au format de longueur variable au lieu de leur format natif de longueur fixe. Il remplace également les chaînes de caractères de longueur fixe par le format de longueur variable en éliminant les espaces vides. La compression de page implémente la compression de ligne et deux autres stratégies de compression (compression de préfixe et compression de dictionnaire). Vous trouverez plus de détails sur la compression de page dans link:https://learn.microsoft.com/en-us/sql/relational-databases/data-compression/page-compression-implementation?view=sql-server-ver16&redirectedfrom=MSDN["Mise en œuvre de la compression de page"^].
 

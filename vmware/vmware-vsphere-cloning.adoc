@@ -22,7 +22,7 @@ Les clones liés permettent un gain d'espace considérable, mais ils augmentent 
 
 La figure suivante représente le clonage ONTAP.
 
-image:vsphere_ontap_image5.png["Erreur : image graphique manquante"]
+image:vsphere_ontap_image5.png["Clonage ONTAP"]
 
 Le clonage peut être déchargé sur les systèmes qui exécutent le logiciel ONTAP via plusieurs mécanismes, en général au niveau de la machine virtuelle, du volume ou du datastore. Ces champs d'application incluent :
 

@@ -1,0 +1,70 @@
+---
+sidebar: sidebar 
+permalink: microsoft/win_deploy_hyperv.html 
+keywords: Windows,Hyper-V,VHDX,VM,Virtual 
+summary: 'Cette annexe décrit le déploiement d"un cluster Hyper-V haute disponibilité sur un système de stockage NetApp.' 
+---
+= Déployez le cluster Hyper-V.
+:allow-uri-read: 
+
+
+[role="lead"]
+Cette annexe décrit le déploiement d'un cluster Hyper-V.
+
+
+
+== Prérequis
+
+* Au moins deux serveurs Hyper-V sont connectés l'un à l'autre.
+* Au moins un commutateur virtuel est configuré sur chaque serveur Hyper-V.
+* La fonctionnalité cluster de basculement est activée sur chaque serveur Hyper-V.
+* Les partages SMB ou les CSV sont utilisés comme stockage partagé pour stocker les machines virtuelles et leurs disques pour la mise en cluster Hyper-V.
+* Le stockage ne doit pas être partagé entre des clusters différents. Vous ne devez avoir qu'un seul partage CSV/CIFS par cluster.
+* Si le partage SMB est utilisé comme stockage partagé, les autorisations sur le partage SMB doivent être configurées de manière à accorder l'accès aux comptes ordinateur de tous les serveurs Hyper-V du cluster.
+
+
+
+
+== Déploiement
+
+. Connectez-vous à l'un des serveurs Windows Hyper-V en tant que membre du groupe d'administrateurs.
+. Démarrez Server Manager**.**
+. Dans la section Outils, cliquez sur Gestionnaire de clusters de basculement.
+. Cliquez sur le menu Créer un cluster à partir des actions.
+. Fournir des détails sur le serveur Hyper-V qui fait partie de ce cluster.
+. Validez la configuration du cluster. Sélectionnez Oui lorsque vous êtes invité à valider la configuration du cluster, puis sélectionnez les tests requis pour vérifier si les serveurs Hyper-V satisfont aux conditions préalables requises pour faire partie du cluster.
+. Une fois la validation réussie, l'assistant de création de cluster démarre. Dans l'assistant, indiquez le nom du cluster et l'adresse IP du nouveau cluster. Un nouveau cluster de basculement est ensuite créé pour le serveur Hyper-V.
+. Cliquez sur le nouveau cluster créé dans Failover Cluster Manager et gérez-le.
+. Définir le stockage partagé à utiliser par le cluster. Il peut s'agir d'un partage SMB ou d'un fichier CSV.
+. L'utilisation d'un partage SMB comme stockage partagé ne nécessite pas d'étapes spéciales.
++
+** Configurez un partage CIFS sur un contrôleur de stockage NetApp. Pour ce faire, reportez-vous à la section «link:win_smb.html["Le provisionnement dans les environnements SMB"]«.
+
+
+. Pour utiliser un fichier CSV comme stockage partagé, procédez comme suit :
++
+.. Configurer les LUN sur un contrôleur de stockage NetApp Pour ce faire, reportez-vous à la section « provisionnement dans les environnements SAN ».
+.. Assurez-vous que tous les serveurs Hyper-V du cluster de basculement peuvent voir les LUN NetApp. Pour ce faire pour tous les serveurs Hyper-V faisant partie du cluster de basculement, assurez-vous que leurs initiateurs sont ajoutés au groupe initiateur sur le stockage NetApp. Assurez-vous également que leurs LUN sont détectées et que MPIO est activé.
+.. Sur l'un des serveurs Hyper-V du cluster, effectuez les opérations suivantes :
++
+... Mettre la LUN en ligne, initialiser le disque, créer un nouveau volume simple et le formater à l'aide de NTFS ou de ReFS.
+... Dans le Gestionnaire de clusters de basculement, développez le cluster, développez stockage, cliquez avec le bouton droit de la souris sur disques, puis cliquez sur Ajouter des disques. L'assistant Ajouter des disques à un cluster s'ouvre alors et affiche la LUN comme disque. Cliquez sur OK pour ajouter la LUN en tant que disque.
+... La LUN s'appelle désormais disque en cluster et est affichée comme stockage disponible sous disques.
+
+
+.. Cliquez avec le bouton droit de la souris sur la LUN (disque en cluster), puis cliquez sur Ajouter aux volumes partagés du cluster. La LUN s'affiche désormais au format CSV.
+.. Le CSV est visible et accessible simultanément depuis tous les serveurs Hyper-V du cluster de basculement à son emplacement local C:\ClusterStorage\.
+
+
+. Créer un serveur virtuel hautement disponible :
++
+.. Dans Failover Cluster Manager, sélectionnez et développez le cluster créé précédemment.
+.. Cliquez sur rôles, puis sur machines virtuelles dans actions. Cliquez sur Nouvelle machine virtuelle.
+.. Sélectionnez dans le cluster le nœud sur lequel la machine virtuelle doit résider.
+.. Dans l'assistant Virtual machine Creation (création d'une machine virtuelle), indiquez le stockage partagé (partage SMB ou CSV) comme chemin d'accès pour stocker la machine virtuelle et ses disques.
+.. Utilisez Hyper-V Manager pour définir le stockage partagé (partage SMB ou CSV) comme chemin par défaut pour stocker la machine virtuelle et ses disques pour un serveur Hyper-V.
+
+
+. Test du basculement planifié. Déplacez des machines virtuelles vers un autre nœud via une migration dynamique, une migration rapide ou une migration du stockage (déplacement). Passez en revue la section «link:\win_deploy_hyperv_lmce.html["Migration dynamique dans un environnement en cluster"]" pour plus de détails.
+. Tester le basculement non planifié. Arrêtez le service de cluster sur le serveur propriétaire de la machine virtuelle.
+

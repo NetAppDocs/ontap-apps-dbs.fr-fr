@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: vmware/vmware-srm-ontap-tools-features.html 
 keywords: vmware, site, recovery manager, vsrm, vsphere, ipv6, support, rest, api, replication, ccols, spbm, srm, appliance based 
-summary: 'Avec la transition de l"appliance virtuelle existante, les outils ONTAP apportent une richesse de nouvelles fonctionnalités, de limites plus élevées, et de la prise en charge de nouveaux vvols.' 
+summary: Prise en charge des fonctionnalités, limites et vVols avec les outils ONTAP. 
 ---
 = Nouvelles fonctionnalités de SRM et des outils ONTAP
 :hardbreaks:

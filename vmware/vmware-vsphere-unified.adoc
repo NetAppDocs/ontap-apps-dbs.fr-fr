@@ -2,26 +2,26 @@
 sidebar: sidebar 
 permalink: vmware/vmware-vsphere-unified.html 
 keywords: introduction, unified storage, virtual volumes, storage efficiency, hybrid cloud 
-summary: 'Depuis près de vingt ans, le logiciel NetApp ONTAP est une solution de stockage leader pour les environnements VMware vSphere. Il continue d"ajouter des fonctionnalités innovantes pour simplifier la gestion, tout en réduisant les coûts. Ce document présente la solution ONTAP pour vSphere, comprenant les dernières informations sur les produits et les meilleures pratiques, afin de rationaliser le déploiement, de réduire les risques et de simplifier la gestion.' 
+summary: 'Le logiciel ONTAP, solution de stockage leader pour les environnements VMware vSphere depuis près de vingt ans, continue d"ajouter des fonctionnalités innovantes pour simplifier la gestion tout en réduisant les coûts. Ce document présente la solution ONTAP pour vSphere, comprenant les dernières informations sur les produits et les meilleures pratiques, afin de rationaliser le déploiement, de réduire les risques et de simplifier la gestion.' 
 ---
 = Stockage unifié
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
 
-
-
-
-== Stockage unifié
 
 [role="lead"]
-Les systèmes qui exécutent le logiciel ONTAP sont unifiés de plusieurs façons.
+NetApp ONTAP unifie le stockage selon une approche Software-defined simplifiée pour une gestion sécurisée et efficace, des performances améliorées et une évolutivité transparente. Cette approche améliore la protection des données et permet une utilisation efficace des ressources cloud.
 
-Cette approche, auparavant appelée à prendre en charge les protocoles NAS et SAN sur un seul système de stockage, et ONTAP continue d'être une plateforme SAN leader en plus de sa puissance initiale dans le stockage NAS.
+À l'origine, cette approche unifiée faisait référence à la prise en charge des protocoles NAS et SAN sur un système de stockage unique. ONTAP continue d'être l'une des principales plateformes pour SAN, tout comme sa puissance initiale en matière de stockage NAS. ONTAP prend désormais également en charge le protocole objet S3. Bien que S3 ne soit pas utilisé pour les datastores, vous pouvez l'utiliser pour les applications hôtes. Pour en savoir plus sur la prise en charge du protocole S3 dans ONTAP, consultez le link:https://docs.netapp.com/us-en/ontap/s3-config/index.html["Présentation de la configuration S3"].
 
-Une machine virtuelle de stockage (SVM) est une structure logique qui permet aux clients d'accéder aux systèmes exécutant le logiciel ONTAP. Les SVM peuvent transmettre simultanément les données par le biais de plusieurs protocoles d'accès aux données via des interfaces logiques (LIF). Les SVM fournissent un accès aux données de niveau fichier via les protocoles NAS, tels que CIFS et NFS, et un accès aux données de niveau bloc via les protocoles SAN, tels que iSCSI, FC/FCoE et NVMe. Les SVM peuvent fournir des données aux clients SAN et NAS de façon indépendante et simultanément.
+Une machine virtuelle de stockage (SVM) est l'unité de la colocation sécurisée dans ONTAP. Il s'agit d'une structure logique permettant aux clients d'accéder aux systèmes qui exécutent le logiciel ONTAP. Les SVM peuvent transmettre simultanément les données par le biais de plusieurs protocoles d'accès aux données via des interfaces logiques (LIF). Les SVM fournissent un accès aux données de niveau fichier via les protocoles NAS, tels que CIFS et NFS, et un accès aux données de niveau bloc via les protocoles SAN, tels que iSCSI, FC/FCoE et NVMe. Les SVM peuvent fournir des données aux clients SAN et NAS de façon indépendante et en même temps avec S3.
 
 image:vsphere_admin_unified_storage.png["Stockage unifié"]
 
 Dans le monde de vSphere, cette approche peut également se traduire par un système unifié d'infrastructure de postes de travail virtuels (VDI) avec une infrastructure de serveurs virtuels (VSI). Les systèmes qui exécutent le logiciel ONTAP sont généralement moins coûteux pour VSI que les baies d'entreprise classiques et offrent cependant des fonctionnalités avancées d'efficacité du stockage permettant de gérer l'infrastructure VDI au sein du même système. ONTAP unifie également une grande variété de supports de stockage, des SSD aux SATA, et peut s'étendre facilement au cloud. Il n'est pas nécessaire d'acheter une baie Flash pour les performances, une baie SATA pour l'archivage ou des systèmes distincts pour le cloud. ONTAP les lie tous ensemble.
 
-
-NOTE: Pour plus d'informations sur les SVM, le stockage unifié et l'accès aux clients, voir https://docs.netapp.com/ontap-9/index.jsp?lang=en["Virtualisation du stockage"^] Dans le centre de documentation ONTAP 9.
+*REMARQUE :* pour plus d'informations sur les SVM, le stockage unifié et l'accès client, voir link:https://docs.netapp.com/us-en/ontap/concepts/storage-virtualization-concept.html["Virtualisation du stockage"] Dans le centre de documentation ONTAP 9.

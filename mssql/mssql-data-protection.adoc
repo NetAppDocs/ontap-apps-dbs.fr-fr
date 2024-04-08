@@ -1,29 +1,29 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-data-protection.html 
-keywords: MS-SQL,mssql,SQL Server, SnapCenter, data protection 
-summary: Protection des données Microsoft SQL Server avec ONTAP 
+keywords: MSSQL,SQL Server, SnapCenter, data protection, app-consistent backup, ONTAP 
+summary: Protection des bases de données Microsoft SQL Server sur ONTAP avec les commandes SnapCenter et T-SQL. 
 ---
-= Protection des données Microsoft SQL Server avec ONTAP
+= Protection des données Microsoft SQL Server avec le logiciel de gestion NetApp
 :allow-uri-read: 
 :imagesdir: ../media/
 
 
 [role="lead"]
-La protection des bases de données est essentielle pour toute entreprise. Plus la taille et le nombre de bases de données ont augmenté, plus il est essentiel de maintenir l'objectif de délai de restauration (RTO) et l'objectif de point de récupération (RPO).
-
-La principale considération pour la sauvegarde de base de données est d'exploiter la technologie NetApp Snapshot. La sauvegarde cohérente avec les applications et la disposition de la base de données sont d'autres éléments clés à prendre en compte pour atteindre les objectifs RTO et RPO, qui peuvent être orchestrés par NetApp SnapCenter.
+La planification de la sauvegarde de la base de données dépend des besoins de l'entreprise. En combinant la technologie NetApp Snapshot d'ONTAP et en exploitant les API de Microsoft SQL Server, vous pouvez effectuer rapidement des sauvegardes cohérentes au niveau des applications, quelle que soit la taille des bases de données utilisateur. Pour une gestion des données plus avancée ou scale-out, NetApp propose SnapCenter.
 
 
 
 == SnapCenter
 
-SnapCenter est le logiciel NetApp de protection des données pour les applications d'entreprise.les bases de données SQL Server peuvent être rapidement et facilement protégées à l'aide du logiciel NetApp SnapCenter avec le plug-in pour SQL Server et le plug-in pour Microsoft Windows.
+SnapCenter est le logiciel NetApp de protection des données pour les applications d'entreprise. Les bases de données SQL Server peuvent être protégées rapidement et facilement grâce au plug-in SnapCenter pour SQL Server et aux opérations du système d'exploitation gérées par le plug-in SnapCenter pour Microsoft Windows.
 
-Ce produit permet la sauvegarde cohérente avec les applications, le clonage automatisé, ainsi que la restauration et la restauration de bases de données SQL Server, d'instances ou de groupes de disponibilité.
+L'instance SQL Server peut être une instance de cluster d'installation autonome ou de basculement, ou elle peut être toujours sur le groupe de disponibilité. Le résultat est que depuis une fenêtre unique, les bases de données peuvent être protégées, clonées et restaurées à partir d'une copie principale ou secondaire. SnapCenter peut gérer les bases de données SQL Server à la fois sur site, dans le cloud et dans des configurations hybrides.des copies de bases de données peuvent également être créées en quelques minutes sur l'hôte original ou alternatif à des fins de développement ou de reporting.
 
 
-TIP: *NetApp recommande* d'utiliser SnapCenter pour créer des copies Snapshot.
+TIP: *NetApp recommande* d'utiliser SnapCenter pour créer des copies Snapshot. La méthode T-SQL décrite ci-dessous fonctionne également, mais SnapCenter offre une automatisation complète du processus de sauvegarde, de restauration et de clonage. Il effectue également une découverte pour s'assurer que les snapshots corrects sont créés. Aucune préconfiguration n'est requise.
+...
+SQL Server nécessite également une coordination entre le système d'exploitation et le stockage pour s'assurer que les données correctes sont présentes dans les snapshots au moment de la création. Dans la plupart des cas, la seule méthode sûre pour ce faire est SnapCenter ou T-SQL. Les snapshots créés sans cette coordination supplémentaire peuvent ne pas être récupérables de manière fiable.
 
 Pour plus d'informations sur le plug-in SQL Server pour SnapCenter, reportez-vous à la section link:https://www.netapp.com/pdf.html?item=/media/12400-tr4714.pdf["Tr-4714 : guide des meilleures pratiques pour SQL Server avec NetApp SnapCenter"^].
 
@@ -31,11 +31,11 @@ Pour plus d'informations sur le plug-in SQL Server pour SnapCenter, reportez-vou
 
 == Protection de la base de données à l'aide de snapshots T-SQL
 
-Dans SQL Server 2022, Microsoft a introduit les snapshots T-SQL qui offrent un avantage intégré par rapport à la méthode traditionnelle, qui n'a pas été facilement consommée par l'administrateur de base de données. À l'aide des API REST de ONTAP, vous pouvez appeler des commandes vers des volumes Snapshot.
+Dans SQL Server 2022, Microsoft a introduit des snapshots T-SQL qui permettent de réaliser des scripts et d'automatiser les opérations de sauvegarde. Au lieu d'effectuer des copies complètes, vous pouvez préparer la base de données pour les snapshots. Une fois la base de données prête pour la sauvegarde, vous pouvez utiliser les API REST de ONTAP pour créer des snapshots.
 
 Voici un exemple de flux de travail de sauvegarde :
 
-. Figez une base de données à l'aide de la commande ALTER, afin d'effectuer un snapshot cohérent sur le stockage sous-jacent. Ensuite, vous pouvez dégeler la base de données et enregistrer le snapshot avec la commande BACKUP.
+. Figez une base de données à l'aide de la commande ALTER. La base de données est ainsi préparée pour un snapshot cohérent sur le stockage sous-jacent. Après le gel, vous pouvez dégeler la base de données et enregistrer le snapshot avec la commande BACKUP.
 . Réalisez des instantanés de plusieurs bases de données sur les volumes de stockage simultanément avec les nouvelles commandes de GROUPE DE SAUVEGARDE et de SERVEUR DE SAUVEGARDE.
 . Effectuer des sauvegardes COMPLÈTES ou des sauvegardes COMPLÈTES COPY_ONLY. Ces sauvegardes sont également enregistrées dans msdb.
 . Effectuez une restauration instantanée à l'aide de sauvegardes de journaux effectuées avec l'approche de streaming standard après la sauvegarde COMPLÈTE des snapshots. Les sauvegardes différentielles en continu sont également prises en charge si nécessaire.

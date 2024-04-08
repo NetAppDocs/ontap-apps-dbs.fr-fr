@@ -1,8 +1,8 @@
 ---
 sidebar: sidebar 
 permalink: mssql/mssql-shared-vs-dedicated.html 
-keywords: MS-SQL,mssql,SQL Server 
-summary: Microsoft SQL Server sur ONTAP 
+keywords: MSSQL,SQL Server, multiple instances, dedicated instance, ONTAP 
+summary: 'Déploiement d"instances Microsoft SQL Server' 
 ---
 = Instance partagée Microsoft SQL Server par rapport à une instance dédiée
 :allow-uri-read: 
@@ -10,9 +10,9 @@ summary: Microsoft SQL Server sur ONTAP
 
 
 [role="lead"]
-Si une application possède de nombreux schémas et procédures stockées, elle peut affecter d'autres applications qui partagent une instance SQL Server.
+Plusieurs serveurs SQL peuvent être configurés en tant qu'instance unique par serveur ou en tant que plusieurs instances. La bonne décision dépend généralement de facteurs tels que l'utilisation du serveur pour la production ou le développement, que l'instance soit considérée comme stratégique pour le fonctionnement de l'entreprise et les objectifs de performances.
 
-Les ressources d'instance peuvent potentiellement être divisées ou verrouillées, ce qui entraîne des problèmes de performances pour d'autres applications pour lesquelles des bases de données sont hébergées sur l'instance SQL Server partagée.
+La configuration initiale des configurations d'instances partagées peut être plus facile à configurer, mais elle peut entraîner des problèmes de division ou de verrouillage des ressources, ce qui entraîne des problèmes de performances pour d'autres applications sur lesquelles des bases de données sont hébergées sur l'instance SQL Server partagée.
 
 La résolution des problèmes de performances peut s'avérer complexe, car vous devez déterminer quelle instance est la cause première. Cette question est comparée aux coûts des licences de systèmes d'exploitation et des licences SQL Server. Si les performances des applications sont primordiales, une instance dédiée est fortement recommandée.
 

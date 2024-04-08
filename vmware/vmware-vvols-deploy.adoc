@@ -28,7 +28,7 @@ Les deux premières étapes peuvent ne pas être nécessaires dans un environnem
 +
 ** Ajoutez le cluster ONTAP aux outils ONTAP sous _systèmes de stockage_
 +
-*** Tandis que les outils ONTAP et SRA prennent en charge les informations d'identification au niveau du cluster et du SVM, le fournisseur VASA prend uniquement en charge les informations d'identification au niveau du cluster pour les systèmes de stockage. Cela est becuase que de nombreuses API utilisées pour les vVols ne sont disponibles qu'au niveau du cluster. Par conséquent, si vous prévoyez d'utiliser vVols, vous devez ajouter vos clusters ONTAP à l'aide d'identifiants cluster-scoped.
+*** Tandis que les outils ONTAP et SRA prennent en charge les informations d'identification au niveau du cluster et du SVM, le fournisseur VASA prend uniquement en charge les informations d'identification au niveau du cluster pour les systèmes de stockage. En effet, de nombreuses API utilisées pour les vVols ne sont disponibles qu'au niveau du cluster. Par conséquent, si vous prévoyez d'utiliser vVols, vous devez ajouter vos clusters ONTAP à l'aide d'identifiants cluster-scoped.
 
 
 ** Si vos LIFs de données ONTAP se trouvent sur des sous-réseaux différents de vos adaptateurs VMkernel, vous devez ajouter les sous-réseaux de l'adaptateur VMkernel à la liste Selected Subnets (sous-réseaux sélectionnés) dans le menu settings (paramètres) des outils ONTAP. Par défaut, les outils ONTAP sécurisent votre trafic de stockage en autorisant uniquement l'accès au sous-réseau local.

@@ -1,0 +1,63 @@
+---
+sidebar: sidebar 
+permalink: microsoft/win_efficiency.html 
+keywords: Windows,Hyper-V,VHDX,VM,Virtual 
+summary: Efficacité du stockage ONTAP avec Microsoft Hyper-V. 
+---
+= Efficacité du stockage
+:allow-uri-read: 
+
+
+[role="lead"]
+ONTAP offre une efficacité du stockage de pointe pour les environnements virtualisés tels que Microsoft Hyper-V. NetApp propose également des programmes de garantie d'efficacité du stockage.
+
+
+
+== Déduplication NetApp
+
+La déduplication NetApp supprime les blocs dupliqués au niveau du volume de stockage et ne stocke qu'une seule copie physique, quel que soit le nombre de copies logiques présentes. Par conséquent, la déduplication crée l'illusion qu'il y a de nombreuses copies de ce bloc. La déduplication supprime automatiquement les blocs de données dupliqués au niveau d'un bloc de 4 Ko répartis sur un volume entier. Ce processus récupère le stockage pour réaliser des économies d'espace et de performances potentielles en réduisant le nombre d'écritures physiques sur le disque. La déduplication permet de réaliser des économies d'espace supérieures à 70 % dans les environnements Hyper-V.
+
+
+
+== Provisionnement fin
+
+Le provisionnement fin constitue un moyen efficace de provisionner le stockage, car celui-ci n'est pas préalloué à l'avance. En d'autres termes, lorsqu'un volume ou une LUN est créé à l'aide du provisionnement fin, l'espace sur le système de stockage n'est pas utilisé. L'espace reste inutilisé jusqu'à ce que les données soient écrites sur la LUN ou le volume. Seul l'espace nécessaire pour stocker les données est utilisé. NetApp recommande d'activer le provisionnement fin sur le volume et de désactiver la réservation de LUN.
+
+
+
+== Qualité de service
+
+La QoS du stockage de clustered ONTAP vous permet de regrouper des objets de stockage et de définir des limites de débit sur le groupe. La QoS du stockage peut être utilisée pour limiter le débit aux charges de travail et surveiller la performance des charges de travail. L'administrateur du stockage peut ainsi séparer les charges de travail par organisation, application, entité commerciale ou environnement de production ou de développement.
+
+Dans les environnements d'entreprise, la QoS du stockage contribue à atteindre les objectifs suivants :
+
+* Évitez que les charges de travail des utilisateurs ne s'entraffectent.
+* Protège les applications stratégiques avec des temps de réponse spécifiques qui doivent être respectés dans les environnements IT à la demande (ITaaS).
+* Empêche les locataires de s'entraffecter.
+* Évite la dégradation des performances avec l'ajout de chaque nouveau locataire.
+
+
+La QoS vous permet de limiter la quantité d'E/S envoyées à un SVM, un volume flexible, un LUN ou un fichier. Les E/S peuvent être limitées par le nombre d'opérations ou le débit brut.
+
+La figure suivante illustre une SVM avec sa propre règle de QoS appliquée appliquant une limite de débit maximale.
+
+image:win_image13.png["Machine virtuelle de stockage avec sa propre règle de qualité de service, largeur=319, hauteur=341"]
+
+Pour configurer un SVM avec ses propres politiques de QoS et surveiller le groupe de règles, exécutez les commandes suivantes sur votre cluster ONTAP :
+
+....
+# create a new policy group pg1 with a maximum throughput of 5,000 IOPS
+cluster::> qos policy-group create pg1 -vserver vs1 -max-throughput 5000iops
+....
+....
+# create a new policy group pg2 without a maximum throughput
+cluster::> qos policy-group create pg2 -vserver vs2
+....
+....
+# monitor policy group performance
+cluster::> qos statistics performance show
+....
+....
+# monitor workload performance
+cluster::> qos statistics workload performance show
+....

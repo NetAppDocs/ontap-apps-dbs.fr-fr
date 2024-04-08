@@ -2,7 +2,7 @@
 sidebar: sidebar 
 permalink: vmware/vmware_vmsc_resiliency.html 
 keywords: VMware, Data protection, MetroCluster, SMBC, SnapMirror active sync, vMSC 
-summary: En savoir plus sur le cluster de stockage vSphere Metro avec NetApp ONTAP 
+summary: En savoir plus sur le cluster de stockage vSphere Metro avec ONTAP 
 ---
 = Résilience pour les événements planifiés et non planifiés
 :hardbreaks:
