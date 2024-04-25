@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: Sécurité du stockage ONTAP avec Hyper-V. 
 ---
 = Sécurité
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]
@@ -19,7 +24,7 @@ Windows Defender est un logiciel antimalware installé et activé par défaut su
 
 
 
-=== Plus de lecture
+=== Lecture ultérieure
 
 Pour plus d'informations, reportez-vous au https://technet.microsoft.com/windows-server-docs/security/windows-defender/windows-defender-overview-windows-server?f=255&MSPPError=-2147217396["Présentation de Windows Defender"].
 
@@ -31,6 +36,6 @@ Le chiffrement de lecteur BitLocker est une fonction de protection des données,
 
 
 
-=== Meilleure pratique
+=== Et des meilleures pratiques
 
 Avant d'activer BitLocker, le CSV doit être mis en mode de maintenance. Par conséquent, NetApp recommande de prendre des décisions relatives à la sécurité basée sur BitLocker avant de créer des machines virtuelles sur le CSV afin d'éviter les temps d'arrêt.

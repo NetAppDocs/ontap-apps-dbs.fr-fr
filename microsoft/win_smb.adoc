@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: Stockage NAS ONTAP pour Hyper-V utilisant SMB3 
 ---
 = Le provisionnement dans les environnements SMB
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]
@@ -23,7 +28,7 @@ Lorsqu'un SVM est créé avec le protocole CIFS, un serveur CIFS s'exécute en p
 
 
 
-== Provisionnement du partage SMB sur Windows Server
+== Provisionnement des partages SMB sur Windows Server
 
 
 
@@ -109,7 +114,7 @@ Pour détecter le partage CIFS créé précédemment avec Windows Server, procé
 
 
 
-=== Détails à retenir
+=== Choses à retenir
 
 * Lorsque vous provisionnez des volumes pour les environnements SMB, les volumes doivent être créés avec le style de sécurité NTFS.
 * Les paramètres de temps des nœuds du cluster doivent être configurés en conséquence. Utilisez le protocole NTP si le serveur CIFS NetApp doit participer au domaine Windows Active Directory.
@@ -123,7 +128,7 @@ Pour détecter le partage CIFS créé précédemment avec Windows Server, procé
 
 
 
-== Provisionnement du partage SMB sur Nano Server
+== Provisionnement des partages SMB sur Nano Server
 
 Le serveur nano n'a pas besoin d'un logiciel client supplémentaire pour accéder aux données du partage CIFS sur un contrôleur de stockage NetApp.
 

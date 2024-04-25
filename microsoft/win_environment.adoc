@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: 'En savoir plus sur le stockage NetApp et l"environnement de serveur Windows' 
 ---
 = Stockage NetApp et environnement Windows Server
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]
@@ -76,7 +81,7 @@ Le kit NetApp PowerShell (PSTK) est un module PowerShell qui offre une automatis
 
 
 
-=== Détails à retenir
+=== Choses à retenir
 
 * NetApp ne prend pas en charge les espaces de stockage Windows Server. Les espaces de stockage sont utilisés uniquement pour JBOD (une simple concaténation de disques) et ne fonctionnent avec aucun type RAID (stockage DAS ou SAN).
 * Les pools de stockage en cluster dans Windows Server ne sont pas pris en charge par ONTAP.
@@ -86,7 +91,7 @@ Le kit NetApp PowerShell (PSTK) est un module PowerShell qui offre une automatis
 
 
 
-=== Plus de lecture
+=== Lecture ultérieure
 
 * Pour plus d'informations sur le kit NetApp PowerShell, rendez-vous sur le https://mysupport.netapp.com/site/tools/tool-eula/ontap-powershell-toolkit["Site de support NetApp"].
 * Pour plus d'informations sur les bonnes pratiques du kit NetApp PowerShell, reportez-vous à la section https://www.netapp.com/media/16861-tr-4475.pdf?v=93202073432AM["Tr-4475 : guide des bonnes pratiques du kit NetApp PowerShell"].

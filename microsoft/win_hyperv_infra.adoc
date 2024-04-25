@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: Infrastructure de stockage Hyper-V avec ONTAP 
 ---
 = Infrastructure de stockage Hyper-V sur NetApp
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]
@@ -25,7 +30,7 @@ image:win_image5.png["Infrastructure de stockage Hyper-V sur NetApp, largeur=624
 
 
 
-== Stockage Hyper-V sur partage CIFS NetApp
+== Stockage Hyper-V sur NetApp CIFS
 
 Avant de commencer les étapes énumérées dans cette section, passez en revue la section «link:win_smb.html["Le provisionnement dans les environnements SMB"]." Pour configurer le stockage Hyper-V sur le partage CIFS NetApp, effectuez les opérations suivantes :
 
@@ -53,7 +58,7 @@ Chaque machine virtuelle d'Hyper-V peut à son tour être fournie avec les LUN N
 
 
 
-=== Détails à retenir
+=== Choses à retenir
 
 * Le provisionnement d'une machine virtuelle à l'aide de la technologie Fibre Channel virtuelle requiert un N_Port ID Virtualisationâ€"Enabled FC HBA. Quatre ports FC au maximum sont pris en charge.
 * Si le système hôte est configuré avec plusieurs ports FC et présenté à la machine virtuelle, MPIO doit être installé dans la machine virtuelle pour activer les chemins d'accès multiples.
@@ -63,7 +68,7 @@ Chaque machine virtuelle d'Hyper-V peut à son tour être fournie avec les LUN N
 
 
 
-=== Plus de lecture
+=== Lecture ultérieure
 
 * Pour plus d'informations sur les HBA FC, reportez-vous au http://mysupport.netapp.com/matrix/["Matrice d'interopérabilité NetApp"].
 * Pour plus d'informations sur la technologie Fibre Channel virtuelle, consultez le document Microsoft https://technet.microsoft.com/en-us/library/hh831413.aspx["Présentation de Hyper-V Virtual Fibre Channel"] page.
@@ -111,7 +116,7 @@ cluster::> set privilege admin
 
 
 
-=== Détails à retenir
+=== Choses à retenir
 
 * Pour CIFS, ODX est disponible uniquement lorsque le client et le serveur de stockage prennent en charge SMB 3.0 et la fonction ODX.
 * Pour les environnements SAN, ODX est disponible uniquement lorsque le client et le serveur de stockage prennent en charge la fonctionnalité ODX.
@@ -119,7 +124,7 @@ cluster::> set privilege admin
 
 
 
-=== Plus de lecture
+=== Lecture ultérieure
 
 Pour plus d'informations sur ODX, voir https://docs.netapp.com/us-en/ontap/smb-admin/improve-microsoft-remote-copy-performance-concept.html["Amélioration des performances de Microsoft Remote Copy"] et https://docs.netapp.com/us-en/ontap/san-admin/microsoft-offloaded-data-transfer-odx-concept.html["Transferts de données allégés par Microsoft"] .
 
@@ -149,7 +154,7 @@ image:win_image6.png["Cluster de basculement Hyper-V et NetApp,largeur=624,haute
 
 
 
-=== Détails à retenir
+=== Choses à retenir
 
 * Les disques utilisés pour CSV doivent être partitionnés avec NTFS ou ReFS. Les disques formatés avec FAT ou FAT32 ne peuvent pas être utilisés pour un CSV.
 * Les disques utilisés pour les CSV doivent utiliser un formatage de 64 Ko pour l'allocation.
@@ -157,7 +162,7 @@ image:win_image6.png["Cluster de basculement Hyper-V et NetApp,largeur=624,haute
 
 
 
-=== Plus de lecture
+=== Lecture ultérieure
 
 Pour plus d'informations sur le déploiement d'un cluster Hyper-V, reportez-vous à l'Annexe B : link:win_deploy_hyperv.html["Déployez le cluster Hyper-V."].
 
@@ -177,7 +182,7 @@ image:win_image7.png["Migration dynamique dans un environnement en cluster,large
 
 
 
-=== Meilleure pratique
+=== Et des meilleures pratiques
 
 * Disposer d'un port dédié pour le trafic de migration en direct.
 * Disposer d'un réseau dédié de migration dynamique des hôtes pour éviter les problèmes liés au réseau pendant la migration.
@@ -185,7 +190,7 @@ image:win_image7.png["Migration dynamique dans un environnement en cluster,large
 
 
 
-=== Plus de lecture
+=== Lecture ultérieure
 
 Pour plus d'informations sur le déploiement de la migration dynamique dans un environnement en cluster, reportez-vous à la section link:win_deploy_hyperv_lmce.html["Annexe C : déploiement de la migration dynamique Hyper-V dans un environnement en cluster"].
 
@@ -209,7 +214,7 @@ image:win_image10.png["Migration dynamique sans partage dans un environnement no
 
 
 
-=== Plus de lecture
+=== Lecture ultérieure
 
 Pour plus d'informations sur le déploiement de la migration dynamique en dehors d'un environnement en cluster, reportez-vous à la section link:win_deploy_hyperv_lmoce.html["Annexe D : déploiement de la migration dynamique Hyper-V en dehors d'un environnement en cluster"].
 
@@ -252,13 +257,13 @@ image:win_image11.png["Migration dynamique du stockage Hyper-V, largeur=339, hau
 
 
 
-=== Plus de lecture
+=== Lecture ultérieure
 
 Pour plus d'informations sur le déploiement de la migration dynamique du stockage, reportez-vous à la section link:win_deploy_hyperv_slm.html["Annexe E : déploiement de la migration dynamique du stockage Hyper-V."].
 
 
 
-== Réplication Hyper-V : reprise après incident pour les machines virtuelles
+== Hyper-V Replica : reprise après incident pour les machines virtuelles
 
 Le réplica Hyper-V réplique les machines virtuelles Hyper-V depuis un site principal vers des machines virtuelles de réplica sur un site secondaire, assurant ainsi une reprise après incident asynchrone pour les machines virtuelles. Le serveur Hyper-V sur le site principal hébergeant les machines virtuelles est appelé serveur principal ; le serveur Hyper-V sur le site secondaire qui reçoit les machines virtuelles répliquées est appelé serveur de réplica. Un exemple de scénario de réplica Hyper-V est illustré dans la figure suivante. Vous pouvez utiliser Hyper-V Replica pour les machines virtuelles entre des serveurs Hyper-V faisant partie d'un cluster de basculement ou entre des serveurs Hyper-V indépendants qui ne font pas partie d'un cluster.
 
@@ -295,7 +300,7 @@ Lorsque vous configurez la réplication pour une machine virtuelle, vous pouvez 
 
 
 
-=== Plus de lecture
+=== Lecture ultérieure
 
 * Pour plus d'informations sur le déploiement d'un réplica Hyper-V en dehors d'un environnement en cluster, reportez-vous à la section «link:win_deploy_hyperv_replica_oce.html["Déploiement d'un réplica Hyper-V en dehors d'un environnement en cluster"]."
 * Pour plus d'informations sur le déploiement d'un réplica Hyper-V dans un environnement en cluster, reportez-vous à la section «link:win_deploy_hyperv_replica_ce.html["Déployez le réplica Hyper-V dans un environnement en cluster"]."

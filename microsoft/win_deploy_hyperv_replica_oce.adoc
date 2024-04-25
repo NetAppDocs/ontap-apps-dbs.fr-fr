@@ -4,8 +4,13 @@ permalink: microsoft/win_deploy_hyperv_replica_oce.html
 keywords: Windows,Hyper-V,VHDX,VM,Virtual 
 summary: 'Cette annexe décrit le déploiement d"un réplica Hyper-V en dehors d"un environnement en cluster.' 
 ---
-= Déployez le réplica Hyper-V en dehors d'un environnement en cluster
+= Déployer le réplica Hyper-V en dehors d'un environnement en cluster
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]

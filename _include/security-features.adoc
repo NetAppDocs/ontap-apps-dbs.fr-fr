@@ -56,7 +56,7 @@ Pour plus d'informations sur le contrôle d'accès administratif, cliquez sur li
 
 == Authentification Multfactor
 
-ONTAP et certains autres produits NetApp prennent désormais en charge l'authentification multifacteur par le biais de diverses méthodes. Le résultat est un nom d'utilisateur/mot de passe compromis seul n'est pas un thread de sécurité sans les données du deuxième facteur, tel qu'un FOB ou une application de smartphone.
+ONTAP et certains autres produits NetApp prennent désormais en charge l'authentification multifacteur (MFA) selon plusieurs méthodes. Le résultat est un nom d'utilisateur/mot de passe compromis seul n'est pas un thread de sécurité sans les données du deuxième facteur, tel qu'un FOB ou une application de smartphone.
 
 Pour plus d'informations, cliquez sur link:https://docs.netapp.com/us-en/ontap/authentication/mfa-overview.html["ici."]
 
@@ -70,7 +70,7 @@ Pour en savoir plus, démarrez la société https://docs.netapp.com/us-en/ontap-
 
 
 
-== Vérification multi-administrateurs
+== Vérification multiadministrateur
 
 L'authentification multifacteur peut être encore plus poussée en exigeant que deux administrateurs différents, chacun disposant de leurs propres informations d'identification, approuvent certaines activités. Cela inclut la modification des autorisations de connexion, l'exécution des commandes de diagnostic et la suppression des données.
 

@@ -4,8 +4,13 @@ permalink: microsoft/win_deploy_hyperv_replica_ce.html
 keywords: Windows,Hyper-V,VHDX,VM,Virtual 
 summary: Découvrez comment déployer et configurer une réplique Hyper-V avec le cluster de basculement Windows Server. 
 ---
-= Déployez le réplica Hyper-V dans un environnement en cluster
+= Déployer la réplique Hyper-V dans un environnement en cluster
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]
@@ -32,7 +37,7 @@ get-clusternode | ForEach-Object \{Invoke-command -computername $_.name -scriptb
 ....
 +
 ....
- # For Certificate authentication
+# For Certificate authentication
 get-clusternode | ForEach-Object \{Invoke-command -computername $_.name -scriptblock \{Enable-Netfirewallrule -displayname "Hyper-V Replica HTTPS Listener (TCP-In)"}}
 ....
 . Configurer le cluster de réplica.

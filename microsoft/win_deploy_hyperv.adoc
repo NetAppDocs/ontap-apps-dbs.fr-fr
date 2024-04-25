@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: 'Cette annexe décrit le déploiement d"un cluster Hyper-V haute disponibilité sur un système de stockage NetApp.' 
 ---
 = Déployez le cluster Hyper-V.
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]

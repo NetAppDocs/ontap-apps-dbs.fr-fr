@@ -2,7 +2,7 @@
 :allow-uri-read: 
 
 
-Il s'agit notamment de mesures de planification courantes, telles que l'assurance d'une bande passante suffisante sur le SAN entre l'hôte et le système de stockage, la vérification de l'existence de tous les chemins SAN entre tous les périphériques requis, l'utilisation des paramètres de port FC requis par le fournisseur du commutateur FC, l'utilisation des conflits ISL et à l'utilisation d'un système de surveillance de la structure SAN approprié.
+Il s'agit notamment de mesures de planification courantes, telles que l'assurance d'une bande passante suffisante sur le SAN entre l'hôte et le système de stockage, la vérification de la présence de tous les chemins SAN entre tous les périphériques requis, l'utilisation des paramètres de port FC requis par le fournisseur du commutateur FC, la prévention des conflits ISL, et à l'utilisation d'un système de surveillance de la structure SAN approprié.
 
 
 

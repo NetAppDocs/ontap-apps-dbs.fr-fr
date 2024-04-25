@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: Cette annexe décrit le déploiement de la migration dynamique dans un environnement en cluster. 
 ---
 = Déployer Hyper-V Live migration dans un environnement en cluster
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]

@@ -10,7 +10,7 @@ La déduplication permet de supprimer les tailles de bloc dupliquées d'un datas
 
 Les données, telles que les LUN de démarrage invité VMware, se dédupliquent extrêmement bien, car elles sont constituées de plusieurs copies des mêmes fichiers du système d'exploitation. L'efficacité de 100:1 et plus ont été observées.
 
-Certaines données ne contiennent pas de données dupliquées. Par exemple, un bloc Oracle contient un en-tête globalement unique à la base de données et une bande-annonce presque unique. Par conséquent, la déduplication d'une base de données Oracle permet rarement de réaliser plus de 1 % d'économies. La déduplication avec les bases de données MS SQL est légèrement meilleure, mais les métadonnées uniques au niveau des blocs restent une limite.
+Certaines données ne contiennent pas de données dupliquées. Par exemple, un bloc Oracle contient un en-tête globalement unique à la base de données et une bande-annonce presque unique. Par conséquent, la déduplication d'une base de données Oracle permet rarement de réaliser plus de 1 % d'économies. La déduplication avec les bases de données MS SQL est légèrement meilleure, mais les métadonnées uniques au niveau des blocs restent une limitation.
 
 Dans quelques cas, des économies d'espace allant jusqu'à 15 % ont été observées pour les bases de données de 16 Ko et les blocs volumineux. La bande de 4 Ko initiale de chaque bloc contient l'en-tête unique dans le monde, et le bloc de 4 Ko final contient la remorque presque unique. Les blocs internes sont candidats à la déduplication, bien que dans la pratique cela soit presque entièrement attribué à la déduplication des données mises à zéro.
 

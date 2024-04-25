@@ -12,7 +12,7 @@ En pratique, il fonctionne comme une version granulaire de MetroCluster grâce �
 
 == Accès au chemin
 
-Grâce à la synchronisation active SnapMirror, les périphériques de stockage sont visibles pour les systèmes d'exploitation hôtes à partir des baies de stockage primaire et distant. Les chemins sont gérés via le protocole ALUA (Asymmetric Logical Unit Access), qui est un protocole standard de l'industrie pour identifier les chemins optimisés entre un système de stockage et un hôte.
+Avec la synchronisation active SnapMirror, les périphériques de stockage sont visibles pour les systèmes d'exploitation hôtes à partir des baies de stockage primaire et distant. Les chemins sont gérés via le protocole ALUA (Asymmetric Logical Unit Access), qui est un protocole standard de l'industrie pour identifier les chemins optimisés entre un système de stockage et un hôte.
 
 Le chemin de périphérique le plus court pour accéder aux E/S est considéré comme des chemins actifs/optimisés et le reste des chemins sont considérés comme des chemins actifs/non optimisés.
 

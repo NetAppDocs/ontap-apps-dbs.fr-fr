@@ -5,7 +5,12 @@ keywords: Windows,Hyper-V,VHDX,VM,Virtual
 summary: 'Cette annexe explique comment utiliser la migration dynamique Hyper-V en dehors d"un environnement en cluster' 
 ---
 = Déployer Hyper-V Live migration en dehors d'un environnement en cluster
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media
 
 
 [role="lead"]
