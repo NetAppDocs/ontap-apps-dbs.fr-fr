@@ -15,7 +15,7 @@ Cette annexe décrit le déploiement de la migration dynamique dans un environne
 
 == Prérequis
 
-Pour déployer la migration en direct, vous devez configurer des serveurs Hyper-V dans un cluster de basculement avec stockage partagé. Passez en revue la section link:win_deploy_hyperv.html["Mise en cluster Hyper-V."] pour en savoir plus.
+Pour déployer la migration en direct, vous devez configurer des serveurs Hyper-V dans un cluster de basculement avec stockage partagé. Révision link:win_deploy_hyperv.html["Déployez le cluster Hyper-V."] pour en savoir plus.
 
 
 

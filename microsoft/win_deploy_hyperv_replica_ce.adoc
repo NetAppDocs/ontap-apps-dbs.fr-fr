@@ -15,7 +15,7 @@ Découvrez comment déployer et configurer une réplique Hyper-V avec le cluster
 
 == Prérequis
 
-* Vous devez disposer de clusters Hyper-V situés dans le même emplacement ou dans des emplacements géographiques distincts, et servant de clusters principal et de clusters de réplica. Passez en revue la section «link:\l["Mise en cluster Hyper-V."]" pour plus de détails.
+* Vous devez disposer de clusters Hyper-V situés dans le même emplacement ou dans des emplacements géographiques distincts, et servant de clusters principal et de clusters de réplica. Révision link:win_deploy_hyperv.html["Déployez le cluster Hyper-V."] pour en savoir plus.
 * Si des sites distincts sont utilisés, le pare-feu de chaque site doit être configuré pour permettre la communication entre les clusters principal et de réplica.
 * Le cluster de réplica doit disposer d'un espace suffisant pour stocker les charges de travail répliquées.
 
