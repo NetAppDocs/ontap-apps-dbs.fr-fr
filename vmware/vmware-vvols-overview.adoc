@@ -6,6 +6,10 @@ summary: 'Présentation des volumes virtuels VMware vSphere (vVols) avec ONTAP'
 ---
 = Présentation
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
 
 
 [role="lead"]

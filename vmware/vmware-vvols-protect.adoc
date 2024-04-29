@@ -49,7 +49,7 @@ Actuellement, VMware SRM est la seule solution d'automatisation de la migration 
 
 === Réplication de vVols avec SRM
 
-image:vvols-image17.png["Réplication des vVols avec SRM,300"]
+image:vvols-image17.png["Réplication de vVols avec SRM"]
 
 
 
@@ -91,7 +91,7 @@ Le plug-in SnapCenter pour VMware vSphere est déployé en tant qu'appliance aut
 
 === Architecture SnapCenter
 
-image:vvols-image18.png["Architecture SnapCenter,300"]
+image:snapcenter_arch.png["Architecture SnapCenter"]
 
 Comme les autres plug-ins SnapCenter ne prennent pas encore en charge les vVols au moment de la rédaction de ce document, nous nous concentrerons sur le modèle de déploiement autonome présenté dans ce document.
 
@@ -155,7 +155,7 @@ Les bonnes pratiques suivantes peuvent vous aider à tirer le meilleur parti de 
 
 === Options de notification de groupe de ressources
 
-image:vvols-image19.png["Options de notification des groupes de ressources,300"]
+image:vvols-image19.png["Options de notification de groupe de ressources"]
 
 
 
