@@ -20,14 +20,6 @@ Voir la link:https://docs.netapp.com/us-en/ontap/volumes/index.html["documentati
 
 
 
-== Provisionnement fin des LUN
-
-L'efficacité du provisionnement fin des LUN actives dans un environnement de système de fichiers peut être perdue au fil du temps suite à la suppression des données. À moins que les données supprimées ne soient remplacées par des zéros ou que l'espace ne soit libéré par la récupération d'espace TRIM/UNMAP, les données « effacées » occupent de plus en plus d'espace non alloué dans le système de fichiers. En outre, l'utilisation du provisionnement fin des LUN actives est limitée dans de nombreux environnements de base de données, car les fichiers de données sont initialisés sur leur taille complète au moment de la création.
-
-Une planification minutieuse de la configuration de LVM peut améliorer l'efficacité et réduire les besoins en provisionnement du stockage et en redimensionnement des LUN. Lorsqu'un LVM tel que Veritas VxVM ou Oracle ASM est utilisé, les LUN sous-jacentes sont divisés en extensions qui ne sont utilisées que lorsque cela est nécessaire. Par exemple, si un dataset commence à 2 To mais peut atteindre 10 To au fil du temps, ce dataset peut être placé sur 10 To de LUN à provisionnement fin organisées dans un groupe de disques LVM. Elle occupant seulement 2 To d'espace au moment de la création et réclarait uniquement de l'espace supplémentaire, dans la mesure où les extensions sont allouées pour prendre en charge la croissance du volume des données. Ce processus est sûr tant que l'espace est surveillé.
-
-
-
 == Réservations fractionnaires
 
 La réserve fractionnaire fait référence au comportement d'une LUN dans un volume en ce qui concerne l'efficacité de l'espace. Lorsque l'option `fractional-reserve` est défini sur 100 %. toutes les données du volume peuvent connaître un taux de rotation de 100 % avec n'importe quel modèle de données, sans épuiser l'espace sur le volume.

@@ -66,6 +66,8 @@ entries:
       url: "/oracle/oracle-storage-san-config-lun-alignment.html"
     - title: Nombre de LUN et taille de LUN
       url: "/oracle/oracle-storage-san-config-lun-sizing.html"
+    - title: Placement des LUN
+      url: "/oracle/oracle-storage-san-config-lun-placement.html"
     - title: Redimensionnement de la LUN
       url: "/oracle/oracle-storage-san-config-lun-resizing.html"
     - title: Répartition LVM

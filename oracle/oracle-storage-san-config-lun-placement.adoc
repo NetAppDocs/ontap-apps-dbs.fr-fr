@@ -1,0 +1,77 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-storage-san-config-lun-placement.html 
+keywords: SAN, ASM, LVM 
+summary: Placement des volumes et des LUN Oracle et ONTAP 
+---
+= Placement des LUN de la base de données Oracle
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le placement optimal des LUN de base de données dans les volumes ONTAP dépend principalement de l'utilisation des différentes fonctionnalités ONTAP.
+
+
+
+== Volumes
+
+L'un des points de confusion les plus courants avec les nouveaux clients ONTAP est l'utilisation des volumes FlexVol, communément appelés simplement « volumes ».
+
+Un volume n'est pas une LUN. Ces termes sont utilisés de façon synonymie avec de nombreux autres produits de fournisseurs, y compris les fournisseurs de cloud. Les volumes ONTAP sont des conteneurs de gestion simples. Ils ne fournissent pas les données en eux-mêmes, ni n'occupent l'espace. Il s'agit de conteneurs pour les fichiers et les LUN. Ils permettent d'améliorer et de simplifier la gestion, notamment à grande échelle.
+
+
+
+== Volumes et LUN
+
+Les LUN associées sont généralement situées en colocation dans un seul volume. Par exemple, une base de données qui nécessite 10 LUN doit généralement avoir les 10 LUN placées sur le même volume.
+
+[CAUTION]
+====
+* L'utilisation d'un rapport LUN/volumes de 1:1, c'est-à-dire une LUN par volume, n'est *pas* une bonne pratique formelle.
+* À la place, les volumes doivent être considérés comme des conteneurs pour les charges de travail ou les datasets. Il peut y avoir une seule LUN par volume ou il peut y en avoir plusieurs. La bonne réponse dépend des exigences de gestion.
+* La diffusion des LUN sur un nombre inutile de volumes peut entraîner une surcharge supplémentaire et des problèmes de planification pour des opérations telles que les opérations de snapshot, un nombre excessif d'objets affichés dans l'interface utilisateur et entraîner l'atteinte des limites de volume de la plate-forme avant que la limite de LUN ne soit atteinte.
+
+
+====
+
+
+== Volumes, LUN et snapshots
+
+Les règles et planifications Snapshot sont placées sur le volume, et non sur la LUN. Un jeu de données composé de 10 LUN ne nécessite qu'une seule règle de snapshot lorsque ces LUN sont co-localisées dans le même volume.
+
+En outre, la colocation de toutes les LUN associées à un jeu de données donné dans un seul volume permet d'effectuer des opérations de snapshot atomiques. Par exemple, une base de données résidant sur 10 LUN ou un environnement d'application VMware comprenant 10 systèmes d'exploitation différents peut être protégé comme un objet unique et cohérent si les LUN sous-jacentes sont tous placés sur un seul volume. S'ils sont placés sur des volumes différents, les snapshots peuvent être synchronisés à 100 %, même s'ils sont programmés en même temps.
+
+Dans certains cas, il peut être nécessaire de diviser un jeu de LUN associé en deux volumes différents en raison des exigences de restauration. Par exemple, une base de données peut contenir quatre LUN pour les fichiers de données et deux LUN pour les journaux. Dans ce cas, un volume de fichiers de données avec 4 LUN et un volume de journaux avec 2 LUN peuvent être la meilleure option. La raison en est une capacité de restauration indépendante. Par exemple, le volume des fichiers de données peut être restauré de manière sélective à un état antérieur, ce qui signifie que les quatre LUN seraient rétablies à l'état du snapshot, tandis que le volume du journal contenant ses données stratégiques ne serait pas affecté.
+
+
+
+== Volumes, LUN et SnapMirror
+
+Les règles et opérations SnapMirror sont, tout comme les opérations Snapshot, exécutées sur le volume, et non sur la LUN.
+
+La colocation de LUN associées dans un seul volume vous permet de créer une relation SnapMirror unique et de mettre à jour toutes les données qu'elle contient en une seule mise à jour. Comme pour les instantanés, la mise à jour sera également une opération atomique. La destination SnapMirror dispose d'une réplique instantanée unique des LUN source. Si les LUN ont été réparties sur plusieurs volumes, les répliques peuvent être cohérentes les unes avec les autres.
+
+
+
+== Volumes, LUN et QoS
+
+S'il est possible d'appliquer la QoS de manière sélective à chaque LUN, il est généralement plus facile de la configurer au niveau du volume. Par exemple, toutes les LUN utilisées par les invités dans un serveur ESX donné peuvent être placées sur un seul volume, puis une règle de qualité de service adaptative de ONTAP peut être appliquée. Vous obtenez ainsi une limite d'IOPS par To qui s'applique à toutes les LUN.
+
+De même, si une base de données nécessitait 100 000 IOPS et occupait 10 LUN, il serait plus facile de définir une seule limite de 100 000 IOPS sur un seul volume que de définir 10 limites individuelles de 10 000 IOPS, une sur chaque LUN.
+
+
+
+== Dispositions multi-volumes
+
+Dans certains cas, la distribution de LUN sur plusieurs volumes peut être avantageuse. La principale raison est la répartition des contrôleurs. Par exemple, un système de stockage haute disponibilité peut héberger une base de données unique dans laquelle chaque contrôleur a besoin du potentiel de traitement et de mise en cache complet. Dans ce cas, la conception type consisterait à placer la moitié des LUN dans un seul volume sur le contrôleur 1 et l'autre moitié des LUN dans un seul volume sur le contrôleur 2.
+
+De même, la répartition des contrôleurs peut être utilisée pour l'équilibrage de la charge. Un système haute disponibilité hébergeant 100 bases de données de 10 LUN chacune peut être conçu où chaque base de données reçoit un volume de 5 LUN sur chacun des deux contrôleurs. Il en résulte une charge symétrique garantie de chaque contrôleur au fur et à mesure que des bases de données supplémentaires sont provisionnées.
+
+Cependant, aucun de ces exemples ne correspond à un ratio volume/LUN de 1:1. L'objectif reste d'optimiser la gestion en co-localisant les LUN associées dans les volumes.
+
+Par exemple, la conteneurisation est un rapport LUN/volume 1:1. Chaque LUN peut représenter une seule charge de travail et doit être gérée individuellement. Dans ce cas, un rapport de 1:1 peut être optimal.
