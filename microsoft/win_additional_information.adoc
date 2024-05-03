@@ -22,8 +22,8 @@ https://docs.netapp.com/us-en/ontap/concepts/introducing-data-management-softwar
 https://www.netapp.com/media/10680-tr4080.pdf[]
 * Disponibilité et intégrité des données des baies SAN 100 % Flash de NetApp avec NetApp ASA
 https://www.netapp.com/pdf.html?item=/media/85671-tr-4968.pdf[]
-* Meilleures pratiques du protocole SMB
-https://www.netapp.com/pdf.html?item=/media/10678-tr-4543pdf.pdf[]
+* Documentation SMB
+https://docs.netapp.com/us-en/ontap/smb-admin/index.html[]
 * Mise en route avec Nano Server +
 https://technet.microsoft.com/library/mt126167.aspx[]
 * Nouveautés d'Hyper-V sur Windows Server +
