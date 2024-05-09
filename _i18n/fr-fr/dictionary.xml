@@ -5207,7 +5207,7 @@ Utilisé pour les connexions SOAP sur HTTPS</block>
   <block id="cb197b06aa92a742d01e256d58d3e34b" category="sidebar">Attaque dos</block>
   <block id="d870a4bd29f74339732a958574d2c4eb" category="sidebar">Configuration NTP</block>
   <block id="339ce1d4220ba7045e3a35ef35279ad3" category="sidebar">Stratégies de mot de passe</block>
-  <block id="08fe6a0b481c7eba55985eb19ee19e1e" category="summary">Guide de renforcement de la sécurité des outils ONTAP pour VMware vSphere, présentation et introduction.</block>
-  <block id="baecfb438214487bb004e49d325c66bf" category="doc">Guide de renforcement de la sécurité des outils ONTAP pour VMware vSphere</block>
-  <block id="8d1618af2c6a6379783e2978ba4a551c" category="paragraph">Le Guide de renforcement de la sécurité des outils ONTAP pour VMware vSphere fournit un ensemble complet d'instructions pour configurer les paramètres les plus sécurisés.</block>
+  <block id="3698338a95ad1801e25ed154adaf1a70" category="summary">Guide sur le renforcement de la sécurité des outils ONTAP pour VMware vSphere, présentation et introduction.</block>
+  <block id="47d29daaa26fbfa9c9a069d4cd023ac1" category="doc">Guide de renforcement de la sécurité des outils ONTAP pour VMware vSphere</block>
+  <block id="fe0e23a929284a636c245a362ada6472" category="paragraph">Le guide de renforcement de la sécurité des outils ONTAP pour VMware vSphere fournit un ensemble complet d'instructions pour configurer les paramètres les plus sécurisés.</block>
 </blocks>
