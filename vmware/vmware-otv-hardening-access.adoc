@@ -1,0 +1,56 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-otv-hardening-access.html 
+keywords: VMware, Data protection, security, ONTAP tools, Hardening, ONTAP Tools 
+summary: 'Guide de renforcement de la sécurité des outils ONTAP pour VMware vSphere, points d"accès utilisateur.' 
+---
+= Outils ONTAP pour les points d'accès VMware vSphere (utilisateurs)
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+L'installation des outils ONTAP pour VMware vSphere crée et utilise trois types d'utilisateurs :
+
+. Utilisateur système : compte utilisateur root
+. Utilisateur de l'application : l'utilisateur administrateur, l'utilisateur maint et les comptes utilisateur db
+. Utilisateur de support : compte utilisateur diag
+
+
+
+
+== 1. Utilisateur du système
+
+L'utilisateur System(root) est créé par l'installation des outils ONTAP sur le système d'exploitation sous-jacent (Debian).
+
+* Un utilisateur système par défaut "root" est créé sur Debian par l'installation des outils ONTAP. Sa valeur par défaut est désactivée et peut être activée ad hoc via la console « maint ».
+
+
+
+
+== 2. Utilisateur de l'application
+
+L'utilisateur de l'application est nommé en tant qu'utilisateur local dans les outils ONTAP. Il s'agit d'utilisateurs créés dans l'application Outils ONTAP. Le tableau ci-dessous répertorie les types d'utilisateurs d'applications :
+
+[cols="22%,78%"]
+|===
+| *Utilisateur* | *Description* 
+
+
+| Utilisateur administrateur | Il est créé lors de l'installation des outils ONTAP et l'utilisateur fournit les informations d'identification lors du déploiement des outils ONTAP. Les utilisateurs ont la possibilité de modifier le mot de passe dans la console « maint ». Le mot de passe expirera dans 90 jours et les utilisateurs devraient changer de mot de passe. 
+
+
+| Utilisateur de maintenance | Il est créé lors de l'installation des outils ONTAP et l'utilisateur fournit les informations d'identification lors du déploiement des outils ONTAP. Les utilisateurs ont la possibilité de modifier le mot de passe dans la console « maint ». Il s'agit d'un utilisateur de maintenance créé pour exécuter les opérations de la console de maintenance. 
+
+
+| Utilisateur de la base de données | Il est créé lors de l'installation des outils ONTAP et l'utilisateur fournit les informations d'identification lors du déploiement des outils ONTAP. Les utilisateurs ont la possibilité de modifier le mot de passe dans la console « maint ». Le mot de passe expirera dans 90 jours et les utilisateurs devraient changer de mot de passe. 
+|===
+
+
+== 3. Support user(diag user)
+
+Lors de l'installation des outils ONTAP, un utilisateur du support est créé. Cet utilisateur peut accéder aux outils ONTAP en cas de problème ou de panne du serveur et collecter les journaux. Par défaut, cet utilisateur est désactivé, mais il peut être activé sur une base ad hoc via la console « maint ». Il est important de noter que cet utilisateur sera automatiquement désactivé après une certaine période.

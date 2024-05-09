@@ -1,0 +1,21 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-otv-hardening-timeout.html 
+keywords: VMware, Data protection, security, OTV, Hardening, ONTAP Tools 
+summary: Guide de renforcement de la sécurité des outils ONTAP pour VMware vSphere. 
+---
+= Délai d'inactivité
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Pour empêcher tout accès non autorisé, un délai d'inactivité est défini, ce qui déconnecte automatiquement les utilisateurs inactifs pendant une certaine période pendant l'utilisation des ressources autorisées. Cela permet de garantir que seuls les utilisateurs autorisés peuvent accéder aux ressources et contribue à maintenir la sécurité.
+
+* Par défaut, les sessions du client vSphere se ferment après 120 minutes d'inactivité, ce qui oblige l'utilisateur à se reconnecter pour reprendre à l'aide du client. Vous pouvez modifier la valeur du délai d'attente en modifiant le fichier webclient.properties. Vous pouvez configurer le délai d'expiration du client vSphere https://docs.vmware.com/en/VMware-vSphere/7.0/com.vmware.vsphere.vcenterhost.doc/GUID-975412DE-CDCB-49A1-8E2A-0965325D33A5.html["Configurez la valeur du délai d'expiration du client vSphere"]
+* Les outils ONTAP ont un délai de déconnexion de session de l'interface de ligne de commande Web de 30 minutes.
+

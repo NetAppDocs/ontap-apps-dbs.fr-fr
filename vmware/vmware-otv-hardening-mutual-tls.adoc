@@ -1,0 +1,59 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-otv-hardening-mutual-tls.html 
+keywords: VMware, Data protection, security, OTV, Hardening, ONTAP Tools 
+summary: Guide de renforcement de la sécurité des outils ONTAP pour VMware vSphere, chiffrement TLS mutuel pour les connexions de gestion du stockage. 
+---
+= Authentification mutuelle TLS (basée sur un certificat)
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Les versions 9.7 et ultérieures de ONTAP prennent en charge les communications TLS mutuelles. Depuis les outils ONTAP pour VMware et vSphere 9.12, le protocole TLS mutuel est utilisé pour la communication avec les nouveaux clusters ajoutés (selon la version de ONTAP).
+
+
+
+== ONTAP
+
+Pour tous les systèmes de stockage précédemment ajoutés : lors d'une mise à niveau, tous les systèmes de stockage ajoutés font l'objet d'une fiabilité automatique et les mécanismes d'authentification basés sur des certificats sont configurés.
+
+Comme dans la capture d'écran ci-dessous, la page de configuration du cluster affiche l'état d'authentification mutuelle TLS (Certificate Based Authentication), configurée pour chaque cluster.
+
+image:vmware-otv-hardening-mutual-tls-image2.png["image2,largeur=468,hauteur=158"]
+
+
+
+=== *Cluster Add*
+
+Lors du workflow d'ajout de cluster, si le cluster ajouté prend en charge MTLS, MTLS sera configuré par défaut. L'utilisateur n'a pas besoin d'effectuer de configuration pour cela. La capture d'écran ci-dessous présente l'écran présenté à l'utilisateur lors de l'ajout d'un cluster.
+
+image:vmware-otv-hardening-mutual-tls-image3.png["Ajouter un système de stockage,largeur=450,hauteur=400"]
+
+image:vmware-otv-hardening-mutual-tls-image4.png["Ajouter un système de stockage,largeur=468,hauteur=416"]
+
+image:vmware-otv-hardening-mutual-tls-image5.png["Ajouter un système de stockage,largeur=450,hauteur=400"]
+
+image:vmware-otv-hardening-mutual-tls-image6.png["Ajouter un système de stockage,largeur=468,hauteur=516"]
+
+
+
+=== Modification du cluster
+
+Lors de l'opération d'édition de cluster, il existe deux scénarios :
+
+* Si le certificat ONTAP expire, l'utilisateur devra obtenir le nouveau certificat et le télécharger.
+* Si le certificat OTV expire, l'utilisateur peut le régénérer en cochant la case.
++
+** _Générer un nouveau certificat client pour ONTAP._
+
+
+
+
+image:vmware-otv-hardening-mutual-tls-image7.png["Modifier le système de stockage,largeur=468,hauteur=461"]
+
+image:vmware-otv-hardening-mutual-tls-image8.png["Modifier le système de stockage,largeur=468,hauteur=461"]
