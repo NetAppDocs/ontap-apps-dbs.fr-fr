@@ -14,11 +14,15 @@ summary: 'SnapCenter vous permet de créer des règles de sauvegarde qui peuvent
 
 
 [role="lead"]
-Les systèmes qui exécutent le logiciel ONTAP peuvent utiliser la fonctionnalité de QoS du stockage de ONTAP pour limiter le débit en Mbit/s et/ou E/S par seconde (IOPS) pour différents objets de stockage tels que des fichiers, des LUN, des volumes, ou des SVM entiers.
+Les limites de débit sont utiles pour contrôler les niveaux de service, gérer les charges de travail inconnues ou tester les applications avant le déploiement pour s'assurer qu'elles n'affectent pas les autres charges de travail en production. Elles peuvent également être utilisées pour contraindre une charge de travail dominante après son identification.
 
-Les limites de débit sont utiles pour contrôler les charges de travail inconnues ou de test avant le déploiement afin de s'assurer qu'elles n'affectent pas les autres charges de travail. Elles peuvent également être utilisées pour contraindre une charge de travail dominante après son identification. Des niveaux minimaux de service basés sur des IOPS sont également pris en charge pour assurer des performances prévisibles pour les objets SAN d'ONTAP 9.2 et pour les objets NAS d'ONTAP 9.3.
 
-Avec un datastore NFS, une politique de qualité de services peut s'appliquer à tout le volume FlexVol ou à tous les fichiers VMDK de l'environnement IT. Avec les datastores VMFS utilisant des LUN ONTAP, les règles de QoS peuvent être appliquées au volume FlexVol contenant les LUN ou les LUN individuels, mais pas aux fichiers VMDK individuels, car ONTAP ne connaît pas le système de fichiers VMFS. Lors de l'utilisation de vvols, il est possible de définir une qualité de service minimale et/ou maximale sur des machines virtuelles individuelles en utilisant le profil de capacité de stockage et la règle de stockage des machines virtuelles.
+
+== Prise en charge des règles de QoS de ONTAP
+
+Les systèmes qui exécutent le logiciel ONTAP peuvent utiliser la fonction QoS du stockage pour limiter le débit en Mbit/s et/ou E/S par seconde (IOPS) de différents objets de stockage tels que des fichiers, des LUN, des volumes ou des SVM entiers.
+
+Des niveaux minimaux de service basés sur des IOPS sont également pris en charge pour assurer des performances prévisibles pour les objets SAN d'ONTAP 9.2 et pour les objets NAS d'ONTAP 9.3.
 
 Le débit maximal de QoS sur un objet peut être défini en Mbit/s et/ou IOPS. Si les deux sont utilisés, la première limite atteinte est appliquée par ONTAP. Une charge de travail peut contenir plusieurs objets et une règle de QoS peut être appliquée à un ou plusieurs workloads. Lorsqu'une règle est appliquée à plusieurs workloads, celle-ci partage la limite totale de la règle. Les objets imbriqués ne sont pas pris en charge (par exemple, les fichiers d'un volume ne peuvent pas chacun avoir leur propre stratégie). La valeur minimale de qualité de service ne peut être définie que dans les IOPS.
 
@@ -32,18 +36,54 @@ Les outils suivants sont actuellement disponibles pour la gestion des règles de
 * Outils ONTAP pour VMware vSphere VASA Provider
 
 
+Pour affecter une QoS à une LUN, y compris VMFS et RDM, le SVM ONTAP (affiché comme vServer), le chemin LUN et le numéro de série peuvent être obtenus du menu systèmes de stockage de la page d'accueil des outils ONTAP pour VMware vSphere. Sélectionner le système de stockage (SVM), puis objets associés > SAN.  Utilisez cette approche lors de la spécification de QoS à l'aide de l'un des outils ONTAP.
+
+Reportez-vous à la section link:https://docs.netapp.com/us-en/ontap/performance-admin/index.html["Contrôle des performances et présentation de la gestion"] pour en savoir plus.
+
+
+
+== Datastores NFS non vVols
+
+Une règle de qualité de service ONTAP peut être appliquée au datastore entier ou aux fichiers VMDK individuels qu'il contient. Toutefois, il est important de comprendre que toutes les machines virtuelles d'un datastore NFS traditionnel (non vVols) partagent une file d'attente d'E/S commune à partir d'un hôte donné. Si une règle de qualité de service ONTAP limite un ordinateur virtuel, toutes les E/S de ce datastore semblent alors restreintes pour cet hôte.
+
+*Exemple:*
+* Vous configurez une limite QoS sur vm1.vmdk pour un volume monté en tant que datastore NFS traditionnel par l'hôte esxi-01.
+* Le même hôte (esxi-01) utilise vm2.vmdk et se trouve sur le même volume.
+* Si vm1.vmdk est étranglé, alors vm2.vmdk semble également être étranglé car il partage la même file d'attente d'E/S avec vm1.vmdk.
+
+*Note:* cela ne s'applique pas aux vVols.
+
+À partir de vSphere 6.5, vous pouvez gérer les limites granulaires au niveau des fichiers sur les datastores non vVols en utilisant la gestion basée sur des règles de stockage (SPBM) avec le contrôle des E/S de stockage (SIOC) v2.
+
+Pour plus d'informations sur la gestion des performances avec les règles SIOC et SPBM, reportez-vous aux liens suivants.
+
+link:https://blogs.vmware.com/virtualblocks/2019/07/02/spbm-host-based-rules/["Règles basées sur l'hôte SPBM : SIOC v2"]
+link:https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-resource-management/GUID-7686FEC3-1FAC-4DA7-B698-B808C44E5E96.html["Gestion des ressources d'E/S de stockage avec vSphere"]
+
 Pour affecter une politique de QoS à un VMDK sur NFS, suivez les consignes suivantes :
 
-* La politique doit être appliquée au `vmname- flat.vmdk` qui contient l'image réelle du disque virtuel, pas le `vmname.vmdk` (fichier de descripteur de disque virtuel) ou `vmname.vmx` (Fichier de descripteur de machine virtuelle).
+* La politique doit être appliquée au `vmname-flat.vmdk` qui contient l'image réelle du disque virtuel, pas le `vmname.vmdk` (fichier de descripteur de disque virtuel) ou `vmname.vmx` (Fichier de descripteur de machine virtuelle).
 * N'appliquez pas de règles aux autres fichiers VM tels que les fichiers d'échange virtuels (`vmname.vswp`).
 * Lors de l'utilisation du client Web vSphere pour trouver des chemins de fichiers (datastore > fichiers), notez qu'il combine les informations de l' `- flat.vmdk` et `. vmdk` et montre simplement un fichier avec le nom du `. vmdk` mais la taille du `- flat.vmdk`. Autres `-flat` dans le nom du fichier pour obtenir le chemin correct.
 
 
-Pour affecter une QoS à une LUN, y compris VMFS et RDM, le SVM ONTAP (affiché comme vServer), le chemin LUN et le numéro de série peuvent être obtenus du menu systèmes de stockage de la page d'accueil des outils ONTAP pour VMware vSphere. Sélectionner le système de stockage (SVM), puis objets associés > SAN.  Utilisez cette approche lors de la spécification de QoS à l'aide de l'un des outils ONTAP.
+Les datastores FlexGroup offrent des fonctionnalités QoS améliorées lors de l'utilisation des outils ONTAP pour VMware vSphere 9.8 et versions ultérieures. Vous pouvez facilement définir la qualité de service sur toutes les machines virtuelles d'un datastore ou sur des machines virtuelles spécifiques. Consultez la section FlexGroup de ce rapport pour plus d'informations. Notez que les limitations de QoS mentionnées précédemment s'appliquent toujours avec les datastores NFS classiques.
 
-Il est possible de définir une qualité de service minimale et maximale facilement sur une machine virtuelle basée sur des volumes grâce aux outils ONTAP pour VMware vSphere ou Virtual Storage Console 7.1 et versions ultérieures. Lors de la création du profil de capacité de stockage pour le conteneur vVol, spécifiez une valeur IOPS max et/ou min sous la fonctionnalité de performance, puis indiquez ce SCP avec la stratégie de stockage de la VM. Utilisez cette règle lors de la création de la machine virtuelle ou appliquez-la à une machine virtuelle existante.
 
-Les datastores FlexGroup offrent des fonctionnalités QoS améliorées lors de l'utilisation des outils ONTAP pour VMware vSphere 9.8 et versions ultérieures. Vous pouvez facilement définir la qualité de service sur toutes les machines virtuelles d'un datastore ou sur des machines virtuelles spécifiques. Consultez la section FlexGroup de ce rapport pour plus d'informations.
+
+== Datastores VMFS
+
+Avec des LUN ONTAP, les règles de qualité de service peuvent être appliquées au volume FlexVol qui contient les LUN ou les LUN individuelles, mais pas aux fichiers VMDK individuels car ONTAP ne connaît pas le système de fichiers VMFS.
+
+
+
+== Datastores vVols
+
+La qualité de service minimale et/ou maximale peut être facilement définie sur des machines virtuelles individuelles ou des VMDK sans affecter les autres machines virtuelles ou VMDK à l'aide de la gestion basée sur des règles de stockage et des vVols.
+
+Lors de la création du profil de capacité de stockage pour le conteneur vVol, spécifiez une valeur IOPS max et/ou min sous la fonctionnalité de performance, puis indiquez ce SCP avec la stratégie de stockage de la VM. Utilisez cette règle lors de la création de la machine virtuelle ou appliquez-la à une machine virtuelle existante.
+
+*Remarque :* vVols requiert l'utilisation des outils ONTAP pour VMware vSphere qui fonctionne comme le fournisseur VASA pour ONTAP. Reportez-vous à la section link:/vmware/vmware-vvols-overview.html["VMware vSphere Virtual volumes (vVols) avec ONTAP"] Pour les bonnes pratiques vVols.
 
 
 
@@ -70,10 +110,10 @@ La QoS ONTAP et la fonctionnalité VMware vSphere Storage I/O Control (SIOC) son
 | Définir la qualité de service sur la LUN (RDM) ? | Oui. | Non 
 
 
-| Définir la QoS sur LUN (VMFS) ? | Oui. | Non 
+| Définir la QoS sur LUN (VMFS) ? | Oui. | Oui (le datastore peut être limité) 
 
 
-| Définir la qualité de service sur le volume (datastore NFS) ? | Oui. | Non 
+| Définir la qualité de service sur le volume (datastore NFS) ? | Oui. | Oui (le datastore peut être limité) 
 
 
 | Qualité de service définie sur un SVM (locataire) ? | Oui. | Non 
@@ -133,54 +173,3 @@ ONTAP prend en charge les datastores VMFS et NFS vvol. L'utilisation de vvols av
 La figure suivante montre les composants de vvols.
 
 image:vsphere_ontap_image8.png["Composants vVols"]
-
-
-
-== Migration et sauvegarde dans le cloud
-
-ONTAP permet également la prise en charge étendue du cloud hybride en fusionnant les systèmes de votre cloud privé sur site avec des capacités de cloud public. Voici quelques solutions clouds NetApp qui peuvent être utilisées en association avec vSphere :
-
-* *Cloud volumes.* NetApp Cloud Volumes Service pour Amazon Web Services ou Google Cloud Platform et Azure NetApp Files pour ANF offrent des services de stockage gérés multiprotocole haute performance dans les principaux environnements de cloud public. Ils peuvent être utilisés directement par les invités de machine virtuelle VMware Cloud.
-* *Cloud Volumes ONTAP.* le logiciel de gestion des données NetApp Cloud Volumes ONTAP permet de contrôler et de protéger les données et d'optimiser l'efficacité du stockage, tout en bénéficiant de la flexibilité du cloud de votre choix. Cloud Volumes ONTAP est un logiciel de gestion des données cloud basé sur le stockage ONTAP. Utilisez-les conjointement avec Cloud Manager pour déployer et gérer des instances Cloud Volumes ONTAP avec vos systèmes ONTAP sur site. Profitez des fonctionnalités NAS avancées et SAN iSCSI combinées à la gestion unifiée des données, notamment les copies Snapshot et la réplication SnapMirror.
-* *Services cloud.* utilisez Cloud Backup Service ou SnapMirror Cloud pour protéger les données des systèmes sur site qui utilisent un stockage de cloud public. Cloud Sync vous aide à migrer et à synchroniser vos données sur les systèmes NAS, les magasins d'objets et le stockage Cloud Volumes Service.
-* *FabricPool.* FabricPool offre un Tiering simple et rapide pour les données ONTAP. Les blocs inactifs peuvent être migrés vers un magasin d'objets dans des clouds publics ou un magasin d'objets StorageGRID privé. Ils sont automatiquement rappelés lorsque vous accédez de nouveau aux données ONTAP. Vous pouvez également utiliser le Tier objet comme troisième niveau de protection pour les données déjà gérées par SnapVault. Cette approche peut vous permettre de https://www.linkedin.com/pulse/rethink-vmware-backup-again-keith-aasen/["Stockez davantage de snapshots de vos machines virtuelles"^] Sur les systèmes de stockage ONTAP primaires et/ou secondaires.
-* *ONTAP Select.* utilisez le stockage Software-defined NetApp pour étendre votre cloud privé sur Internet aux sites et bureaux distants, où vous pouvez utiliser ONTAP Select pour prendre en charge les services de blocs et de fichiers ainsi que les mêmes fonctionnalités de gestion de données vSphere que votre data Center d'entreprise.
-
-
-Lors de la conception de vos applications basées sur une VM, pensez à la mobilité future du cloud. Par exemple, plutôt que de placer les fichiers d'application et de données en même temps que les fichiers de données, utilisez une exportation LUN ou NFS distincte. Cela vous permet de migrer la machine virtuelle et les données séparément vers des services cloud.
-
-
-
-== Chiffrement pour les données vSphere
-
-Aujourd'hui, les exigences croissantes en matière de protection des données au repos sont liées au chiffrement. Bien que la priorité initiale ait été donnée aux informations financières et de santé, il est de plus en plus intéressant de protéger toutes les informations, qu'elles soient stockées dans des fichiers, des bases de données ou tout autre type de données.
-
-Les systèmes qui exécutent le logiciel ONTAP simplifient la protection de toutes les données au repos. NetApp Storage Encryption (NSE) utilise des lecteurs de disque à chiffrement automatique avec ONTAP pour protéger les données SAN et NAS. NetApp propose également NetApp Volume Encryption et NetApp Aggregate Encryption comme une approche logicielle simple pour le chiffrement des volumes sur tous les disques. Ce chiffrement logiciel ne nécessite pas de disques spéciaux ni de gestionnaires de clés externes. Il est disponible gratuitement pour les clients ONTAP. Vous pouvez procéder à une mise à niveau et commencer à l'utiliser sans perturber vos clients ou applications. Elles sont validées par la norme FIPS 140-2 de niveau 1, y compris le gestionnaire de clés intégré.
-
-Il existe plusieurs approches de protection des données des applications virtualisées qui s'exécutent sur VMware vSphere. L'une d'elles consiste à protéger les données avec les logiciels internes à la machine virtuelle au niveau du système d'exploitation invité. Les nouveaux hyperviseurs, tels que vSphere 6.5, prennent désormais en charge le cryptage au niveau des machines virtuelles. Cependant, le chiffrement logiciel NetApp est simple et facile :
-
-* *Aucun effet sur la CPU du serveur virtuel.* certains environnements de serveurs virtuels nécessitent chaque cycle CPU disponible pour leurs applications, mais les tests ont montré que jusqu'à 5x ressources CPU sont nécessaires avec le cryptage au niveau de l'hyperviseur. Même si le logiciel de chiffrement prend en charge l'ensemble d'instructions AES-ni d'Intel pour décharger la charge de travail de chiffrement (comme le fait le chiffrement du logiciel NetApp), cette approche peut ne pas être possible en raison de l'exigence de nouveaux processeurs non compatibles avec les anciens serveurs.
-* *Gestionnaire de clés intégré inclus.* le chiffrement logiciel NetApp inclut un gestionnaire de clés intégré sans frais supplémentaires, ce qui simplifie les prises en main sans serveurs de gestion des clés haute disponibilité complexes à acheter et à utiliser.
-* *Aucun effet sur l'efficacité du stockage.* les techniques d'efficacité du stockage comme la déduplication et la compression sont largement utilisées aujourd'hui et sont essentielles pour exploiter les supports disque Flash de façon rentable. Toutefois, les données cryptées ne sont en général pas dédupliquées ou compressées. Le cryptage du stockage et du matériel NetApp fonctionne à un niveau inférieur et permet l'utilisation totale des fonctionnalités d'efficacité du stockage NetApp, contrairement aux autres approches.
-* *Chiffrement granulaire simple des datastores.* avec NetApp Volume Encryption, chaque volume bénéficie de sa propre clé AES 256 bits. Si vous devez le modifier, utilisez une seule commande. Cette approche est idéale si vous disposez de plusieurs locataires ou si vous devez prouver votre chiffrement indépendant pour différents services ou applications. Ce chiffrement est géré au niveau du datastore, ce qui est bien plus simple que de gérer des machines virtuelles individuelles.
-
-
-La prise en main du chiffrement logiciel est très simple. Une fois la licence installée, il vous suffit de configurer le gestionnaire de clés intégré en spécifiant une phrase secrète, puis de créer un volume ou de déplacer un volume côté stockage pour activer le chiffrement. NetApp travaille à ajouter une prise en charge plus intégrée des fonctionnalités de cryptage dans les prochaines versions de ses outils VMware.
-
-
-
-== Active IQ Unified Manager
-
-Active IQ Unified Manager permet d'avoir une grande visibilité sur les machines virtuelles de votre infrastructure virtuelle et assure la surveillance et le dépannage des problèmes de stockage et de performances dans votre environnement virtuel.
-
-Un déploiement d'infrastructure virtuelle standard sur ONTAP comporte divers composants répartis sur les couches de calcul, de réseau et de stockage. Tout ralentissement des performances dans une application VM peut survenir en raison de la combinaison de latences rencontrées par les différents composants au niveau des couches respectives.
-
-La capture d'écran suivante présente la vue des machines virtuelles Active IQ Unified Manager.
-
-image:vsphere_ontap_image9.png["Vue machines virtuelles Active IQ Unified Manager"]
-
-Unified Manager présente le sous-système sous-jacent d'un environnement virtuel dans une vue topologique afin de déterminer si un problème de latence a eu lieu dans le nœud de calcul, le réseau ou le stockage. La vue indique également l'objet spécifique qui provoque le décalage des performances lors de la réalisation des étapes correctives et de la résolution du problème sous-jacent.
-
-La capture d'écran suivante montre la topologie étendue AIQUM.
-
-image:vsphere_ontap_image10.png["Topologie étendue AIQUM"]

@@ -33,7 +33,7 @@ Voici les paramètres d'hôte actuellement recommandés pour les versions 9.8-9.
 
 
 | VMFS3.EnableBlockDelete | Conserver la valeur par défaut (0), mais peut être modifiée si nécessaire.
-Pour plus d'informations, voir link:https://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=2007427["VMware KB 2007427"] | Non 
+Pour plus d'informations, voir link:https://knowledge.broadcom.com/external/article?legacyId=2007427["VMware KB 2007427"] | Non 
 
 
 | VMFS3.EnableVMFS6Unmap | Conserver la valeur par défaut (1)
@@ -48,7 +48,7 @@ Toutes les autres configurations NFS, définies sur 30 | Oui.
 
 
 | Net.TcpipeHeapMax | Défini sur 512 Mo pour la plupart des versions vSphere 6.X.
-Défini sur 1024 Mo pour 6.5U3, 6.7U3 et 7.0 ou version ultérieure. | Oui. 
+Réglez sur la valeur par défaut (1024 Mo) pour 6.5U3, 6.7U3 et 7.0 ou ultérieure. | Oui. 
 
 
 | NFS.MaxVolumes | VSphere 6.0 ou version ultérieure, défini sur 256
