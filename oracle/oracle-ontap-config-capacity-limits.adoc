@@ -34,4 +34,4 @@ La recommandation de 10 % d'espace libre est très prudente. Les agrégats SSD p
 == Les agrégats HDD, y compris les agrégats Flash Pool
 
 
-TIP: *NetApp recommande* un minimum de 15 % d'espace libre lorsque des disques rotatifs sont utilisés. Cela inclut tout l'espace inutilisé, y compris l'espace libre au sein de l'agrégat ou d'un volume, ainsi que tout espace libre alloué en raison de l'utilisation du provisionnement complet, mais qui n'est pas utilisé par les données réelles. Les performances seront affectées aux approches de la liberté d'expression de 10 %.
+TIP: *NetApp recommande* un minimum de 15 % d'espace libre lorsque des disques rotatifs sont utilisés. Cela inclut tout l'espace inutilisé, y compris l'espace libre au sein de l'agrégat ou d'un volume, ainsi que tout espace libre alloué en raison de l'utilisation du provisionnement complet, mais qui n'est pas utilisé par les données réelles. Les performances seront affectées à mesure que l'espace libre approche 10 %.

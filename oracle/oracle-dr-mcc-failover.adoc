@@ -14,6 +14,8 @@ summary: Basculement de base de données Oracle avec MetroCluster
 
 
 [role="lead"]
-MetroCluster est une fonctionnalité ONTAP qui protège vos bases de données Oracle avec une mise en miroir synchrone RPO=0 sur tous les sites. Elle peut évoluer jusqu'à prendre en charge des centaines de bases de données sur un seul système MetroCluster. Il est également simple à utiliser. L'utilisation de MetroCluster n'ajoute pas nécessairement à ou ne modifie pas nécessairement les meilleures ractiques pour l'exploitation des applications et bases de données d'entreprise.
+MetroCluster est une fonctionnalité ONTAP qui protège vos bases de données Oracle avec une mise en miroir synchrone RPO=0 sur tous les sites. Elle peut évoluer jusqu'à prendre en charge des centaines de bases de données sur un seul système MetroCluster.
+
+Il est également simple à utiliser. L'utilisation de MetroCluster n'ajoute pas nécessairement à ou ne modifie pas nécessairement les meilleures ractiques pour l'exploitation des applications et bases de données d'entreprise.
 
 Les bonnes pratiques habituelles s'appliquent toujours. Si vos besoins requièrent uniquement une protection des données avec un objectif de point de récupération de 0, MetroCluster répond à ce besoin. Cependant, la plupart des clients utilisent MetroCluster non seulement pour la protection des données avec un objectif de point de récupération de 0, mais aussi pour améliorer l'objectif de délai de restauration en cas d'incident et fournir un basculement transparent dans le cadre des activités de maintenance du site.
