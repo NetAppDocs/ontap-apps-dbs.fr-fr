@@ -143,7 +143,7 @@ Comme décrit à la section 1.2, la gestion basée sur des règles permet de pro
 * *Provisionnement plus intelligent.* les fonctionnalités du système de stockage peuvent être exposées via les API VASA, ce qui permet aux flux de travail de provisionnement de tirer parti de fonctionnalités avancées sans que l'administrateur des machines virtuelles ait besoin de comprendre comment gérer le système de stockage.
 * *Provisionnement plus rapide.* différentes capacités de stockage peuvent être prises en charge dans un seul datastore et sélectionnées automatiquement comme approprié pour une machine virtuelle en fonction de la stratégie de la machine virtuelle.
 * *Évitez les erreurs.* les stratégies de stockage et de machines virtuelles sont développées à l'avance et appliquées selon les besoins sans avoir à personnaliser le stockage à chaque fois qu'une machine virtuelle est provisionnée. Les alarmes de conformité sont déclenchées lorsque les fonctionnalités de stockage sont différentes des règles définies. Comme mentionné précédemment, les plateformes SCP rendent le provisionnement initial prévisible et reproductible, tandis que la base des règles de stockage des serveurs virtuels sur les plateformes SCP garantit un placement précis.
-* *Meilleure gestion de la capacité.* les outils VASA et ONTAP permettent de visualiser la capacité de stockage jusqu'au niveau de l'agrégat industriel si nécessaire et de fournir plusieurs couches d'alertes en cas de début d'exécution de la capacité.
+* *Meilleure gestion des capacités.* Les outils VASA et ONTAP permettent de consulter la capacité de stockage jusqu'au niveau des agrégats individuels si nécessaire et de fournir plusieurs couches d'alertes en cas de début d'exécution de la capacité.
 
 
 
