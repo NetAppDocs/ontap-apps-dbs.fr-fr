@@ -1,0 +1,61 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-example-overview.html 
+keywords: epic,cache,iris 
+summary: Exemple de déploiement Epic sur ONTAP 
+---
+= Exemple de déploiement Epic sur ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+Cette section vous présente une configuration avancée complète d'un cluster ONTAP, le provisionnement et la présentation du stockage à un serveur Epic.
+
+Pour capturer des détails et faciliter la documentation, la ligne de commande est utilisée. Si l'interface utilisateur graphique est préférée, vous pouvez provisionner tous les paramètres dans System Manager.
+
+Historiquement, la configuration initiale de gros projets est généralement plus rapide en utilisant les commandes répertoriées dans le tableau 1, surtout si vous concaténez les commandes dans une feuille de calcul. Cette liste de commandes sert également d'excellente documentation de construction.
+
+Une autre option de provisionnement consiste à utiliser des scripts d'automatisation dès le premier jour et à l'aide d'Ansible. NetApp dispose de centaines de playbooks Ansible disponibles au téléchargement, y compris la collection Ansible Galaxy via la commande ansible-Galaxy collection install NetApp.ONTAP.
+
+L'interface graphique fonctionne également très bien avec un LUN d'une seule page et un provisionnement partagé. L'interface graphique est particulièrement utile pour les opérations d'ajout, de modification ou de suppression de stockage. Les deux options conviennent si vous appliquez les paramètres de stockage des meilleures pratiques du Tableau 1.
+
+La configuration complète du cluster et le provisionnement du stockage/de l'hôte ne doivent pas prendre plus d'une heure lors de leur mise en place.
+
+*Paramètres de stockage des meilleures pratiques*
+
+[cols="1,1"]
+|===
+
+
+| Réglage | Valeur 
+
+
+| Agrégat | Provisionnement automatique par défaut, un agrégat ADP par nœud avec RAID DEP 
+
+
+| SVM | Deux SVM en cas d'utilisation de Multiprocol (SVM bloc et SVM SMB/NFS) Utilisez Epic et la convention de nommage des protocoles. Utilisez un style de sécurité approprié 
+
+
+| Garantie d'espace pour les volumes | Aucune 
+
+
+| Règle de snapshot du volume | Aucune 
+
+
+| Dimensionnement automatique du volume | Grandir 
+
+
+| Taille automatique maximale du volume | Taille de LUN 2 T ou 2 X. 
+
+
+| Suppression automatique du Snapshot de volume | activé 
+
+
+| Taille du volume | 1.5 x taille de LUN 
+
+
+| Disposition des volumes | Distribué même sur plusieurs contrôleurs 
+
+
+| type d'igroup | OS lorsqu'il est utilisé avec des serveurs physiques, type VMware lorsqu'il est utilisé avec ESX. 
+|===

@@ -1,0 +1,26 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-arch-8node.html 
+keywords: epic,cache,iris 
+summary: Architecture Epic à huit nœuds 
+---
+= Architecture Epic à huit nœuds
+:allow-uri-read: 
+
+
+[role="lead"]
+Les figures ci-dessous illustrent l'architecture scale-out à huit nœuds. Là encore, vous pouvez commencer avec quatre nœuds, puis les faire évoluer jusqu'à six, et continuer jusqu'à huit nœuds au-delà. Cette architecture offre le meilleur équilibre entre performance et capacité sur les six nœuds en production.
+
+Dans cette conception, les environnements de test sont clonés à partir du rapport au lieu de la production. La production peut ainsi décharger les environnements de test et les contrôles d'intégrité.
+
+
+
+== Architecture à huit nœuds
+
+image:epic-8node.png["Architecture Epic à 4 nœuds"]
+
+
+
+== Placement des workloads à huit nœuds
+
+image:epic-8node-design.png["Placement Epic à 8 nœuds"]

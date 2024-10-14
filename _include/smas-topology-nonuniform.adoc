@@ -1,0 +1,15 @@
+= 
+:allow-uri-read: 
+
+
+image:smas-nonuniform.png["SnapMirror actif Sync mise en réseau non uniforme"]
+
+Le principal avantage de cette approche est la simplicité du SAN : vous n'avez plus besoin d'étendre un SAN sur le réseau. Certains clients ne disposent pas d'une connectivité à faible latence suffisante entre les sites, ou n'ont pas l'infrastructure nécessaire pour acheminer le trafic SAN FC sur un réseau intersite.
+
+L'inconvénient de l'accès non uniforme est que certains scénarios de défaillance, notamment la perte du lien de réplication, entraînent la perte de l'accès au stockage par certains hôtes. En cas de perte de la connectivité du stockage local, les applications qui s'exécutent en tant qu'instances uniques, telles qu'une base de données non en cluster et qui ne s'exécute intrinsèquement que sur un hôte unique sur un montage donné, échouent. Les données seraient toujours protégées, mais le serveur de base de données n'aurait plus accès. Il doit être redémarré sur un site distant, de préférence par le biais d'un processus automatisé. Par exemple, VMware HA peut détecter une situation de tous les chemins d'accès sur un serveur et redémarrer une machine virtuelle sur un autre serveur sur lequel les chemins d'accès sont disponibles.
+
+En revanche, une application en cluster telle qu'Oracle RAC peut fournir un service qui est disponible simultanément sur deux sites différents. La perte d'un site ne signifie pas la perte du service applicatif dans son ensemble. Les instances restent disponibles et s'exécutent sur le site survivant.
+
+Dans de nombreux cas, la surcharge liée à la latence supplémentaire qu'une application accède au système de stockage via une liaison site à site ne serait pas acceptable. Cela signifie que l'amélioration de la disponibilité des réseaux uniformes est minime, car la perte de stockage sur un site entraînerait la nécessité de fermer les services sur ce site défaillant.
+
+Il existe des chemins redondants à travers le cluster local qui ne sont pas illustrés sur ces schémas pour plus de simplicité. Les systèmes de stockage ONTAP étant dotés de la haute disponibilité, une panne du contrôleur ne devrait pas entraîner de panne sur le site. Il devrait simplement entraîner une modification dans laquelle les chemins locaux sont utilisés sur le site affecté.

@@ -1,0 +1,53 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-fail-manual.html 
+keywords: Oracle, SnapMirror active sync, SMBC, failover 
+summary: Synchronisation active Oracle et SnapMirror - basculement manuel 
+---
+= Synchronisation active Oracle et SnapMirror - basculement manuel
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le terme « basculement » ne fait pas référence au sens de la réplication avec la synchronisation active SnapMirror, car il s'agit d'une technologie de réplication bidirectionnelle. En revanche, le terme « basculement » désigne le système de stockage qui sera le site privilégié en cas de défaillance.
+
+Par exemple, vous pouvez effectuer un basculement pour modifier le site préféré avant d'arrêter un site pour des raisons de maintenance ou avant d'effectuer un test de reprise après incident.
+
+La modification du site préféré nécessite une opération simple. L'E/S s'interrompt pendant une ou deux secondes car l'autorité sur le comportement de réplication change entre les clusters, mais l'E/S n'est pas affectée.
+
+Exemple d'interface graphique :
+
+image:smas-preferred-site.png["Clip SystemManager de SM-en tant que site préféré"]
+
+Exemple de modification via l'interface de ligne de commande :
+
+....
+Cluster2::> snapmirror failover start -destination-path jfs_as2:/cg/jfsAA
+[Job 9575] Job is queued: SnapMirror failover for destination "jfs_as2:/cg/jfsAA                      ".
+
+Cluster2::> snapmirror failover show
+
+Source    Destination                                          Error
+Path      Path        Type     Status    start-time end-time   Reason
+-------- -----------  -------- --------- ---------- ---------- ----------
+jfs_as1:/cg/jfsAA
+         jfs_as2:/cg/jfsAA
+                      planned  completed 9/11/2024  9/11/2024
+                                         09:29:22   09:29:32
+
+The new destination path can be verified as follows:
+
+
+Cluster1::> snapmirror show -destination-path jfs_as1:/cg/jfsAA
+
+                            Source Path: jfs_as2:/cg/jfsAA
+                       Destination Path: jfs_as1:/cg/jfsAA
+                      Relationship Type: XDP
+                Relationship Group Type: consistencygroup
+                 SnapMirror Policy Type: automated-failover-duplex
+                      SnapMirror Policy: AutomatedFailOverDuplex
+                            Tries Limit: -
+                           Mirror State: Snapmirrored
+                    Relationship Status: InSync
+....

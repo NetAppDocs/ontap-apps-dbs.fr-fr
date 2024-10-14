@@ -10,7 +10,7 @@ summary: Provisionnez le stockage ONTAP pour Windows et Hyper-V dans les environ
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -91,7 +91,7 @@ image:win_image3.png["Chemins multiples dans l'environnement SAN,largeur=624,hau
 
 === MPIO
 
-NetApp ONTAP fournit un stockage hautement disponible dans lequel plusieurs chemins d'accès peuvent exister entre le contrôleur de stockage et le serveur Windows. Les chemins d'accès multiples correspondent à la capacité d'avoir plusieurs chemins de données entre un serveur et une baie de stockage. Les chemins d'accès multiples protègent contre les pannes matérielles (coupures de câbles, défaillance du switch et de l'adaptateur de bus hôte [HBA], etc.). Ils peuvent également offrir des limites de performances plus élevées en utilisant les performances d'agrégat de plusieurs connexions. Lorsqu'un chemin ou une connexion devient indisponible, le logiciel de chemins d'accès multiples déplace automatiquement la charge vers l'un des autres chemins disponibles. La fonctionnalité MPIO combine les chemins physiques multiples vers le stockage comme un chemin logique unique utilisé pour l'accès aux données, afin d'assurer la résilience du stockage et l'équilibrage de la charge. Pour utiliser cette fonctionnalité, la fonctionnalité MPIO doit être activée sur Windows Server.
+ONTAP fournit un stockage hautement disponible dans lequel plusieurs chemins d'accès peuvent exister entre le contrôleur de stockage et le serveur Windows. Les chemins d'accès multiples correspondent à la capacité d'avoir plusieurs chemins de données entre un serveur et une baie de stockage. Les chemins d'accès multiples protègent contre les pannes matérielles (coupures de câbles, défaillance du switch et de l'adaptateur de bus hôte [HBA], etc.). Ils peuvent également offrir des limites de performances plus élevées en utilisant les performances d'agrégat de plusieurs connexions. Lorsqu'un chemin ou une connexion devient indisponible, le logiciel de chemins d'accès multiples déplace automatiquement la charge vers l'un des autres chemins disponibles. La fonctionnalité MPIO combine les chemins physiques multiples vers le stockage comme un chemin logique unique utilisé pour l'accès aux données, afin d'assurer la résilience du stockage et l'équilibrage de la charge. Pour utiliser cette fonctionnalité, la fonctionnalité MPIO doit être activée sur Windows Server.
 
 
 

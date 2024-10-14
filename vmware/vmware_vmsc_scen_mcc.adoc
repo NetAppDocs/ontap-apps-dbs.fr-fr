@@ -22,7 +22,8 @@ Les sections suivantes décrivent les résultats attendus de différents scénar
 
 Dans ce scénario, si des composants tels que le port HBA, le port réseau, le port du commutateur de données frontal ou un câble FC ou Ethernet échouent, ce chemin particulier vers le périphérique de stockage est marqué comme mort par l'hôte ESXi. Si plusieurs chemins sont configurés pour le périphérique de stockage en fournissant la résilience au niveau du port HBA/réseau/commutateur, ESXi effectue idéalement un basculement de chemin. Pendant cette période, les ordinateurs virtuels restent en fonctionnement sans être affectés, car la disponibilité du stockage est assurée par plusieurs chemins vers le périphérique de stockage.
 
-*Note:* il n'y a pas de changement dans le comportement de MetroCluster dans ce scénario, et tous les datastores continuent d'être intacts de leurs sites respectifs.
+
+NOTE: Dans ce scénario, le comportement de MetroCluster n'a pas changé et tous les datastores sont toujours intacts sur leurs sites respectifs.
 
 
 
@@ -72,7 +73,10 @@ Dans ce scénario, il y a une panne de plus de deux disques ou d'un tiroir entie
 
 image::../media/vmsc_5_3.png[Une panne de tiroir disque.,624,576]
 
-*Remarque :* au cours de cette période, il n'y a pas d'impact sur les opérations d'E/S de la machine virtuelle, mais les performances sont dégradées car les données sont accessibles depuis le tiroir disque distant via les liaisons ISL.
+* [NOTE]
+
+* Au cours de cette période, les opérations d'E/S du serveur virtuel ne sont pas affectées, mais les performances sont réduites du fait de l'accès aux données depuis le tiroir disque distant via des liens ISL.
+
 
 
 
@@ -96,7 +100,8 @@ image::../media/vmsc_5_5.png[Défaillance de la liaison entre les commutateurs a
 
 Dans ce scénario, si les liaisons ISL du réseau de gestion de l'hôte frontal tombent en panne, les hôtes ESXi du site A ne pourront pas communiquer avec les hôtes ESXi du site B. Cela entraîne une partition réseau, car les hôtes ESXi d'un site particulier ne peuvent pas envoyer les battements de cœur du réseau au nœud maître du cluster HA. Ainsi, il y aura deux segments de réseau en raison de la partition et il y aura un nœud maître dans chaque segment qui protégera les machines virtuelles des défaillances de l'hôte au sein du site particulier.
 
-*Remarque :* pendant cette période, les machines virtuelles restent en cours d'exécution et il n'y a pas de changement dans le comportement de MetroCluster dans ce scénario. Tous les datastores sont toujours intacts sur leurs sites respectifs.
+
+NOTE: Pendant cette période, les machines virtuelles restent en cours d'exécution et le comportement de MetroCluster n'a pas changé dans ce scénario. Tous les datastores sont toujours intacts sur leurs sites respectifs.
 
 
 
@@ -152,7 +157,8 @@ Dans un scénario de défaillance de site complet A, les hôtes ESXi du site B n
 
 Si la tentative de redémarrage d'une machine virtuelle par l'agent principal vSphere HA (qui implique son enregistrement et sa mise sous tension) échoue, le redémarrage est relancé après un délai. Le délai entre les redémarrages peut être configuré jusqu'à un maximum de 30 minutes. VSphere HA tente ces redémarrages au maximum pour un nombre maximal de tentatives (six tentatives par défaut).
 
-*Remarque :* le maître HA ne lance pas les tentatives de redémarrage tant que le gestionnaire de placement n'a pas trouvé le stockage approprié, donc dans le cas d'une défaillance complète du site, ce serait une fois le basculement effectué.
+
+NOTE: Le maître haute disponibilité ne lance pas les tentatives de redémarrage tant que le gestionnaire des placements n'a pas trouvé le stockage approprié. Dans le cas d'une défaillance complète du site, cela reviendrait à une fois le basculement effectué.
 
 Si le site A été basculé, la panne suivante de l'un des nœuds du site B survivant peut être gérée de manière transparente par le basculement vers le nœud survivant. Dans ce cas, le travail de quatre nœuds est désormais effectué par un seul nœud. Dans ce cas, la restauration consiste à effectuer un rétablissement vers le nœud local. Ensuite, lorsque le site A est restauré, une opération de rétablissement est effectuée pour restaurer le fonctionnement en état stable de la configuration.
 

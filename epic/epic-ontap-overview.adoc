@@ -1,0 +1,22 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-overview.html 
+keywords: epic,cache,iris 
+summary: 'Présentation d"Epic sur ONTAP' 
+---
+= EPIC sur ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+Epic est plus facile avec ONTAP.
+
+ONTAP est une plateforme de gestion des données qui vous permet de consolider les workloads Epic tout en répondant à vos besoins de performances, de protection des données et de gestion des données.
+
+Seul NetApp permet de standardiser tous vos workloads de santé pour SAN, NAS et objet sur une plateforme unique de gestion des données haute disponibilité. ONTAP est la plateforme logicielle de stockage la plus largement déployée au monde et s'accompagne de près de 30 ans d'innovation constante. Vous pouvez relever tous vos défis Epic grâce aux outils de gestion des données ONTAP natifs et à l'intégration des applications. Nul besoin d'acheter une multitude d'outils tiers pour combler les lacunes de la solution.
+
+De nombreux fournisseurs de stockage proposent un stockage bloc classique, fiable et rapide. Elles fonctionnent bien, mais sont généralement déployées en silos pour exécuter une seule charge de travail, telle que la production, le reporting, la clarté, l'infrastructure de postes de travail virtuels, VMware et NAS. Chacun de ces silos possède du matériel et des outils de gestion différents, et sont généralement gérés par des groupes INFORMATIQUES différents. Cette approche traditionnelle ajoute au plus gros problème dans le domaine de la santé aujourd'hui : la complexité.
+
+NetApp facilite et optimise la gestion des données. Au lieu d'investir dans des silos surdimensionnés, ONTAP utilise l'innovation et la technologie pour fournir un niveau de service cohérent et garanti pour chaque charge de travail sur une plateforme unique, quel que soit le protocole utilisé avec la protection des données intégrée. Ces fonctionnalités et outils s'étendent également au cloud de votre choix, comme illustré ci-dessous.
+
+image:epic-consolidation.png["Évolutivité et simplicité pour le secteur de la santé avec ONTAP"]

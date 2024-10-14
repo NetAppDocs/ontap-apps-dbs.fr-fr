@@ -24,7 +24,7 @@ Placez le répertoire des journaux sur un volume ou une LUN dédié. La quantit�
 
 * Assurez-vous que le répertoire du journal de l'hôte n'est partagé par aucun autre type de données pouvant potentiellement corrompre les données du snapshot de sauvegarde.
 * Ne placez pas de bases de données utilisateur ou de bases de données système sur un LUN qui héberge des points de montage.
-* Créez le répertoire des journaux hôtes sur le volume FlexVol dédié sur lequel SnapCenter copie les journaux de transactions.
+* Créez le répertoire des journaux hôtes sur un volume dédié sur lequel SnapCenter copie les journaux de transactions.
 * Utilisez les assistants SnapCenter pour migrer les bases de données vers le stockage NetApp de sorte que les bases de données soient stockées dans des emplacements valides, ce qui permet de réaliser les opérations de sauvegarde et de restauration SnapCenter. N'oubliez pas que le processus de migration est disruptif et peut mettre les bases de données hors ligne pendant la migration.
 * Les conditions suivantes doivent être en place pour les instances de cluster de basculement (FCI) de SQL Server :
 +

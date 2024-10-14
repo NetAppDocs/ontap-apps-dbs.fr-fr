@@ -10,7 +10,7 @@ summary: Découvrez comment déployer et configurer une réplique Hyper-V avec l
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-snapshots.html 
+keywords: epic,cache,iris 
+summary: Snapshots Epic et clonage 
+---
+= Configuration de l'efficacité du stockage Epic
+:allow-uri-read: 
+
+
+[role="lead"]
+Un snapshot est une copie instantanée d'un volume en lecture seule.
+
+Un snapshot place un verrou logique sur tous les blocs du système de fichiers actif. Les copies Snapshot NetApp ONTAP sont quasi instantanées et n'utilisent aucun stockage supplémentaire.
+
+Write anwhere File Layout, ou WAFL, est un système de fichiers en écriture seule ; il n'effectue pas d'E/S supplémentaires, telles que la copie des données dans un bloc protégé par copie Snapshot avant d'être écrasé. Aucune donnée n'est jamais déplacée. Par conséquent, les copies Snapshot n'ont aucun impact sur la capacité de stockage ou les performances. Les copies Snapshot permettent de réaliser des économies de stockage considérables tout en augmentant la solution de sauvegarde.
+
+
+
+== FlexClone
+
+Un volume NetApp ONTAP FlexClone est un clone d'un volume existant ou un snapshot d'un volume existant. Il s'agit autrement d'un volume ONTAP comme tout autre, et il peut lui-même être cloné, protégé par des copies Snapshot et configuré avec une règle de qualité de service.
+
+Comme pour les snapshots, un volume FlexClone ne nécessite aucun espace supplémentaire au moment de sa création. Seules les modifications apportées au clone nécessitent une capacité supplémentaire.
+
+Epic requiert entre 10 et 30 copies des bases de données de production pour répondre à divers besoins opérationnels, tels que les sauvegardes en continu, les vérifications d'intégrité et les environnements de mise à niveau intermédiaire. La nécessité d'une solution basée sur les volumes FlexClone s'est accrue avec le passage à des mises à niveau plus fréquentes.
+
+
+NOTE: Une solution de sauvegarde Epic entièrement automatisée et une solution d'actualisation Epic sont fournies par NetApp dans le cadre de la solution à l'aide d'Ansible et des outils NetApp natifs.

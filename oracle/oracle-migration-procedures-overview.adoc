@@ -24,7 +24,9 @@ Il n'existe pas de meilleure pratique unique pour créer une stratégie de migra
 
 Par exemple, une étape soulève le problème de la taille totale de la base de données. L'étape suivante dépend si la base de données est supérieure ou inférieure à 1 To. Les étapes recommandées sont précisément des recommandations basées sur les pratiques standard des clients. La plupart des clients n'utiliseraient pas DataGuard pour copier une petite base de données, mais d'autres pourraient le faire. La plupart des clients ne tenteraient pas de copier une base de données de 50 To en raison du temps nécessaire, mais certaines peuvent disposer d'une fenêtre de maintenance suffisamment longue pour permettre une telle opération.
 
-Vous trouverez un organigramme des différents types de considérations sur le meilleur chemin de migration link:/media/migration-options-flowchart.png["ici"].
+L'organigramme ci-dessous présente les différents éléments à prendre en compte pour déterminer le chemin de migration le plus approprié. Vous pouvez cliquer avec le bouton droit de la souris sur l'image et l'ouvrir dans un nouvel onglet pour améliorer la lisibilité.
+
+image:migration-options-flowchart.png["Organigramme de la migration"].
 
 
 

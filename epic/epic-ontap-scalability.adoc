@@ -1,0 +1,22 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-scalability.html 
+keywords: epic,cache,iris 
+summary: 'Epic sur l"évolutivité ONTAP' 
+---
+= Epic sur l'évolutivité ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+Le Guide de configuration du matériel Epic représente environ 20 % de croissance annuelle pendant 3 ans. Cependant, les environnements peuvent également se développer de manière inattendue.
+
+NetApp peut facilement faire évoluer les performances et la capacité jusqu'à 12 nœuds pour les clusters NAS, SAN et objet. Par conséquent, vous pouvez évoluer horizontalement et verticalement sans interruption pour accompagner la croissance de votre entreprise.
+
+EPIC Iris offre des capacités d'évolutivité supplémentaires. Il permet aux clients de plus grande taille disposant de plusieurs instances Epic de procéder à la consolidation vers une seule instance. link:https://www.netapp.com/media/27905-nva-1159-design.pdf["Epic sur l'architecture vérifiée NetApp sur le SAN moderne"^]Ce document démontre qu'Epic peut faire évoluer de manière fluide les charges de travail consolidées à 720 000 IOPS sur une seule haute disponibilité et évoluer en mode scale-out jusqu'à plus de 4 millions d'IOPS dans un cluster. Vous pouvez évoluer en mode « scale-up » sans interrompre l'activité en mettant à niveau les contrôleurs ou en ajoutant des disques aux clusters existants.
+
+Les données NAS, SAN et objet peuvent également être déplacées sans interruption entre les nœuds du cluster. Chaque paire haute disponibilité dans le cluster peut correspondre à n'importe quelle combinaison de types et de tailles de systèmes ONTAP FAS et AFF. Vous pouvez équilibrer vos charges de travail sur un seul cluster afin d'optimiser votre investissement en stockage.
+
+ONTAP permet également d'utiliser le stockage objet sur StorageGRID ou le cloud comme cible de sauvegarde et/ou cible de Tiering automatique du stockage à froid. Ainsi, vous pouvez libérer automatiquement des disques 100 % Flash coûteux, des snapshots de Tiering et des données inactives dans un environnement objet.
+
+Le résultat : Epic fonctionne simplement mieux avec le portefeuille de produits NetApp, exploitant ONTAP, plusieurs protocoles, StorageGRID et le cloud de votre choix. Ces produits proposent des options de reprise après incident, d'archivage, d'analytique, de Tiering, etc.

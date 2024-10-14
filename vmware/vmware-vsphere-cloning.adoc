@@ -24,7 +24,7 @@ La figure suivante représente le clonage ONTAP.
 
 image:vsphere_ontap_image5.png["Clonage ONTAP"]
 
-Le clonage peut être déchargé sur les systèmes qui exécutent le logiciel ONTAP via plusieurs mécanismes, en général au niveau de la machine virtuelle, du volume ou du datastore. Ces champs d'application incluent :
+Le clonage peut être déchargé sur les systèmes qui exécutent ONTAP par le biais de plusieurs mécanismes, généralement au niveau des VM, vVol ou datastore. Ces champs d'application incluent :
 
 * Vvols avec le fournisseur NetApp vSphere APIs for Storage Awareness (VASA).  Les clones ONTAP sont utilisés pour prendre en charge les snapshots vVol gérés par vCenter. Ces snapshots sont peu encombrants avec un impact E/S minimal en termes de création et de suppression.  Les machines virtuelles peuvent également être clonées via vCenter, qui sont également déchargées vers ONTAP, que ce soit dans un datastore/volume unique ou entre les datastores/volumes.
 * Clonage et migration de vSphere à l'aide des API vSphere – intégration de baies (VAAI). Les opérations de clonage de VM peuvent être déchargées sur ONTAP dans les environnements SAN et NAS (NetApp fournit un plug-in ESXi pour que VAAI for NFS).  VSphere ne décharge les opérations sur les machines virtuelles inactives (désactivées) dans un datastore NAS, tandis que les opérations sur les machines virtuelles fortement sollicitées (clonage et stockage vMotion) sont également déchargées pour le système SAN. ONTAP utilise l'approche la plus efficace selon la source, la destination et les licences des produits installés. Cette fonctionnalité est également utilisée par VMware Horizon View.

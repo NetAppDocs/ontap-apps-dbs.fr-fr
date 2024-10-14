@@ -10,9 +10,9 @@ summary: 'Déploiement d"instances Microsoft SQL Server'
 
 
 [role="lead"]
-Plusieurs serveurs SQL peuvent être configurés en tant qu'instance unique par serveur ou en tant que plusieurs instances. La bonne décision dépend généralement de facteurs tels que l'utilisation du serveur pour la production ou le développement, que l'instance soit considérée comme stratégique pour le fonctionnement de l'entreprise et les objectifs de performances.
+SQL Server peut être configuré en tant qu'instance unique par serveur ou en tant que plusieurs instances. La bonne décision dépend généralement de facteurs tels que l'utilisation du serveur pour la production ou le développement, que l'instance soit considérée comme stratégique pour le fonctionnement de l'entreprise et les objectifs de performances.
 
-La configuration initiale des configurations d'instances partagées peut être plus facile à configurer, mais elle peut entraîner des problèmes de division ou de verrouillage des ressources, ce qui entraîne des problèmes de performances pour d'autres applications sur lesquelles des bases de données sont hébergées sur l'instance SQL Server partagée.
+Les configurations d'instances partagées peuvent être initialement plus faciles à configurer, mais elles peuvent entraîner des problèmes de division ou de verrouillage des ressources, ce qui entraîne des problèmes de performances pour d'autres applications dont les bases de données sont hébergées sur l'instance SQL Server partagée.
 
 La résolution des problèmes de performances peut s'avérer complexe, car vous devez déterminer quelle instance est la cause première. Cette question est comparée aux coûts des licences de systèmes d'exploitation et des licences SQL Server. Si les performances des applications sont primordiales, une instance dédiée est fortement recommandée.
 

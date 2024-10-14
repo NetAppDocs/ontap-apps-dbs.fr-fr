@@ -12,20 +12,26 @@ summary: Reprise après incident de Microsoft SQL Server avec ONTAP
 [role="lead"]
 Les bases de données d'entreprise et les infrastructures applicatives ont souvent besoin d'une réplication pour se protéger contre les catastrophes naturelles ou les perturbations imprévues, avec un temps d'interruption minimal.
 
-La fonction de réplication de groupe de disponibilité en continu de SQL Server peut être une excellente option, et NetApp offre optiosn pour intégrer la protection des données à la disponibilité continue. Toutefois, dans certains cas, il peut être intéressant d'opter pour la technologie de réplication ONTAP. Les options de réplication ONTAP, y compris MetroCluster et SnapMirror, peuvent évoluer mieux avec un impact minime sur les performances, protéger les données non SQL et fournir généralement une solution de réplication et de reprise après incident complète de l'infrastructure.
+La fonction de réplication de groupe de disponibilité en continu de SQL Server peut constituer une excellente option, et NetApp offre des options pour intégrer la protection des données à la disponibilité continue. Toutefois, dans certains cas, il peut être intéressant d'opter pour la technologie de réplication ONTAP. Il existe trois options de base.
 
 
 
-== Réplication asynchrone SnapMirror
+== SnapMirror
 
-La technologie SnapMirror offre une solution d'entreprise asynchrone rapide et flexible pour la réplication de données sur des réseaux LAN et WAN. La technologie SnapMirror transfère uniquement les blocs de données modifiés vers la destination après la création du miroir initial, ce qui réduit considérablement les besoins en bande passante réseau.
-
-Voici les recommandations pour SnapMirror pour SQL Server :
-
-* Si CIFS est utilisé, le SVM de destination doit être membre du même domaine Active Directory dont le SVM source est membre, de sorte que les listes de contrôle d'accès (ACL) stockées dans les fichiers NAS ne soient pas interrompues pendant la reprise après un incident.
-* L'utilisation de noms de volume de destination identiques aux noms de volume source n'est pas requise, mais peut faciliter la gestion du processus de montage des volumes de destination dans la destination. Si CIFS est utilisé, vous devez rendre l'espace de noms NAS de destination identique dans les chemins et la structure de répertoires vers l'espace de noms source.
-* À des fins de cohérence, ne planifiez pas les mises à jour SnapMirror depuis les contrôleurs. Activez plutôt les mises à jour SnapMirror depuis SnapCenter pour mettre à jour SnapMirror une fois la sauvegarde complète ou la sauvegarde du journal terminée.
-* Distribuez les volumes contenant des données SQL Server sur différents nœuds du cluster pour permettre à tous les nœuds de cluster de partager l'activité de réplication SnapMirror. Cette distribution optimise l'utilisation des ressources du nœud.
+La technologie SnapMirror offre une solution d'entreprise rapide et flexible pour la réplication de données sur des réseaux LAN et WAN. La technologie SnapMirror transfère uniquement les blocs de données modifiés vers la destination après la création du miroir initial, ce qui réduit considérablement les besoins en bande passante réseau. Il peut être configuré en mode synchrone ou asynchrone.
 
 
-Pour plus d'informations sur SnapMirror, reportez-vous à la section link:https://www.netapp.com/us/media/tr-4015.pdf["Tr-4015 : Guide de configuration et des meilleures pratiques de SnapMirror pour ONTAP 9"^].
+
+== NetApp MetroCluster
+
+Les configurations MetroCluster permettent d'offrir des solutions de stockage haute disponibilité sans perte de données pour les applications, bases de données et plateformes de virtualisation. La solution est implémentée en combinant la mise en cluster basée sur les baies et la réplication synchrone, ce qui offre une couche de protection supplémentaire pour l'intégralité du stockage et de l'environnement hôte.
+
+
+
+== Synchronisation active SnapMirror (anciennement SnapMirror Business Continuity)
+
+La synchronisation active SnapMirror repose sur SnapMirror synchrone et sa capacité à répliquer plusieurs LUN sur le stockage de réplica tout en maintenant la cohérence de l'ordre d'écriture. Avec MetroCluster, le contrôleur ONTAP, y compris la configuration réseau, doit être identique sur tous les sites. Avec la synchronisation active SnapMirror, deux systèmes ONTAP différents conservent des copies indépendantes de vos données LUN, mais fonctionnent ensemble pour présenter une seule instance de ce LUN. Du point de vue de l'hôte, il s'agit d'une entité LUN unique.
+
+La principale différence entre la synchronisation active MetroCluster et SnapMirror est la granularité et l'évolutivité. Si vous devez sélectionner uniquement des workloads spécifiques à répliquer de manière synchrone ou si des LUN doivent être disponibles sur les deux sites pour des opérations de lecture/écriture, la synchronisation active SnapMirror est la meilleure option. Si vous devez répliquer des environnements entiers, voire des data centers, MetroCluster est la meilleure option. De plus, SnapMirror Active Sync n'est actuellement disponible que pour les environnements SAN, tandis que MetroCluster est multiprotocole, y compris SAN, NFS et SMB.
+
+Pour plus d'informations sur SnapMirror, voir link:https://www.netapp.com/pdf.html?item=/media/17229-tr4015pdf.pdf["Tr-4015 : Guide de configuration et des meilleures pratiques de SnapMirror pour ONTAP 9"^].

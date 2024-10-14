@@ -1,0 +1,16 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-example-svm.html 
+keywords: epic,cache,iris 
+summary: 'Exemple de déploiement d"Epic sur ONTAP - SVM' 
+---
+= Exemple de déploiement d'Epic sur ONTAP - SVM
+:allow-uri-read: 
+
+
+[role="lead"]
+NetApp virtualise le stockage et l'accès utilisateur est assuré par le SVM.
+
+Pour Epic, il existe un SVM FCP et un SVM SMB. Selon la façon dont vous souhaitez gérer votre stockage et éventuellement la colocation, vous pouvez utiliser davantage de SVM.
+
+Pour configurer un SVM, cliquer sur link:https://docs.netapp.com/us-en/ontap/networking/create_svms.html["ici"^]

@@ -1,0 +1,54 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-arch-si.html 
+keywords: oracle, active sync, mcc, MCC-IP 
+summary: Synchronisation active Oracle SnapMirror 
+---
+= Oracle Single instance avec synchronisation active SnapMirror
+:allow-uri-read: 
+
+
+[role="lead"]
+Les exemples décrits ci-dessous illustrent certaines des nombreuses options de déploiement des bases de données Oracle Single instance avec la réplication SnapMirror Active Sync.
+
+image:smas-oracle-si-nonuniform.png["Oracle si avec accès non uniforme"]
+
+
+
+== Basculement avec un système d'exploitation préconfiguré
+
+La synchronisation active SnapMirror fournit une copie synchrone des données au niveau du site de reprise d'activité. Toutefois, la mise à disposition des données requiert un système d'exploitation et les applications associées. L'automatisation de base peut considérablement améliorer le délai de basculement de l'environnement global. Les produits Clusterware tels que Pacemaker sont souvent utilisés pour créer un cluster sur les sites et, dans la plupart des cas, le processus de basculement peut être piloté par des scripts simples.
+
+En cas de perte des nœuds principaux, le cluster (ou les scripts) mettra les bases de données en ligne sur le site secondaire. Une option consiste à créer des serveurs de secours préconfigurés pour les ressources SAN qui constituent la base de données. En cas de défaillance du site principal, le logiciel de mise en cluster ou l'alternative scriptée effectue une séquence d'actions similaires à celles décrites ci-dessous :
+
+. Détection d'une défaillance du site principal
+. Effectuez la détection des LUN FC ou iSCSI
+. Montage de systèmes de fichiers et/ou montage de groupes de disques ASM
+. Démarrage de la base de données
+
+
+Cette approche doit avant tout se passer d'un système d'exploitation en cours d'exécution sur le site distant. Elles doivent être préconfigurées avec des binaires Oracle, ce qui signifie également que des tâches telles que l'application de correctifs Oracle doivent être effectuées sur les sites principal et de secours. Les binaires Oracle peuvent également être mis en miroir vers le site distant et montés en cas d'incident.
+
+La procédure d'activation réelle est simple. Les commandes telles que la découverte de LUN ne nécessitent que quelques commandes par port FC. Le montage du système de fichiers n'est rien de plus qu'une `mount` commande et les bases de données et ASM peuvent être démarrés et arrêtés sur l'interface de ligne de commande à l'aide d'une seule commande.
+
+
+
+== Basculement avec un système d'exploitation virtualisé
+
+Le basculement des environnements de base de données peut être étendu pour inclure le système d'exploitation lui-même. En théorie, ce basculement peut être effectué avec des LUN de démarrage, mais le plus souvent avec un système d'exploitation virtualisé. La procédure est similaire aux étapes suivantes :
+
+. Détection d'une défaillance du site principal
+. Montage des datastores hébergeant les machines virtuelles du serveur de base de données
+. Démarrage des machines virtuelles
+. Démarrage manuel des bases de données ou configuration des machines virtuelles pour démarrer automatiquement les bases de données.
+
+
+Par exemple, un cluster ESX peut couvrir des sites. En cas d'incident, les machines virtuelles peuvent être mises en ligne sur le site de reprise après incident après le basculement.
+
+
+
+== Protection contre les défaillances du stockage
+
+Le diagramme ci-dessus montre l'utilisation de link:oracle-dr-smas-nonuniform.html["accès non uniforme"], où le SAN n'est pas étendu entre les sites. Cela peut être plus simple à configurer et, dans certains cas, peut être la seule option étant donné les fonctionnalités SAN actuelles, mais cela signifie également que la défaillance du système de stockage principal entraînerait une panne de la base de données jusqu'à ce que l'application ait été ratée.
+
+Pour une résilience supplémentaire, la solution pourrait être déployée avec link:oracle-dr-smas-uniform.html["accès uniforme"]. Cela permettrait aux applications de continuer à fonctionner en utilisant les chemins annoncés à partir du site opposé.

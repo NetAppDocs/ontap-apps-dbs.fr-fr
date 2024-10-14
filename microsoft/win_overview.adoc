@@ -10,7 +10,7 @@ summary: Présentation de la virtualisation Microsoft Windows et Hyper-V avec ON
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -19,7 +19,7 @@ Microsoft Windows Server est un système d'exploitation (OS) professionnel qui c
 
 NOTE: *Cette documentation remplace les rapports techniques publiés précédemment _TR-4568: Consignes de déploiement NetApp et meilleures pratiques de stockage pour Windows Server_*
 
-.Le logiciel de gestion NetApp ONTAP(R) s'exécute sur les contrôleurs de stockage NetApp. Il est disponible dans plusieurs formats.
+.ONTAP s'exécute sur les contrôleurs de stockage NetApp. Il est disponible dans plusieurs formats.
 * Architecture unifiée prenant en charge les protocoles de fichiers, d'objets et de blocs. Les contrôleurs de stockage peuvent ainsi agir en tant que périphériques NAS et SAN, ainsi qu'en tant que magasins d'objets
 * Une baie 100 % SAN (ASA) axée uniquement sur les protocoles de niveau bloc et qui optimise les temps de reprise des E/S (IORT) en ajoutant un chemins d'accès multiples actif-actif symétrique pour les hôtes connectés
 * Architecture unifiée Software-defined

@@ -28,7 +28,8 @@ NOTE: Cette documentation remplace le rapport technique _TR-4592 : Oracle on Met
 * Contrôleur unique avec connectivité FC
 
 
-[REMARQUE]le terme « connectivité » fait référence à la connexion en cluster utilisée pour la réplication entre sites. Il ne fait pas référence aux protocoles hôtes. Tous les protocoles côté hôte sont pris en charge comme d'habitude dans une configuration MetroCluster, quel que soit le type de connexion utilisé pour les communications entre clusters.
+
+NOTE: Le terme « connectivité » fait référence à la connexion au cluster utilisée pour la réplication entre sites. Il ne fait pas référence aux protocoles hôtes. Tous les protocoles côté hôte sont pris en charge comme d'habitude dans une configuration MetroCluster, quel que soit le type de connexion utilisé pour les communications entre clusters.
 
 
 

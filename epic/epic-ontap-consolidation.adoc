@@ -1,0 +1,16 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-consolidation.html 
+keywords: epic,cache,iris 
+summary: Epic sur la consolidation ONTAP 
+---
+= Epic sur la consolidation ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+L'un des principaux défis dans le domaine de la santé est l'inefficacité des environnements en silos.
+
+Plusieurs solutions ponctuelles sont créées par divers groupes qui empêchent le progrès. Une stratégie unifiée de gestion des données apporte de l'efficacité pour accélérer la transformation. Des technologies perturbatrices, telles que la numérisation des dossiers médicaux, les ransomwares et l'IA générative, qui sont autant d'éléments qui nécessitent une consolidation.
+
+Avec ONTAP, vous pouvez consolider les fichiers, les blocs et les objets ainsi que chacun de vos workloads de Tier 0/1/2/3, sur site et dans le cloud, qui s'exécutent tous sur ONTAP.

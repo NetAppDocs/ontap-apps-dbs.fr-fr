@@ -1,0 +1,20 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-availability.html 
+keywords: epic,cache,iris 
+summary: Disponibilité Epic sur ONTAP 
+---
+= Disponibilité Epic sur ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+La continuité de l'activité est au cœur de ONTAP et vous permet d'éviter les interruptions coûteuses de vos activités.
+
+NetApp assure une disponibilité supérieure à 99.999999 % sur les données de production, qui sont appelées « maison » via NetApp Active IQ. Chaque paire haute disponibilité dans le cluster ne présente pas de point de défaillance unique. Depuis 1992, ONTAP est le logiciel de gestion des données le plus largement déployé au monde. Depuis, sa fiabilité de stockage a fait ses preuve d'une expérience exceptionnelle. Active IQ surveille et résout automatiquement 97 % des problèmes de manière proactive. La disponibilité est ainsi accrue et le nombre de dossiers de demande de support est considérablement réduit.
+
+Epic recommande l'utilisation de systèmes de stockage haute disponibilité pour limiter les défaillances de composants matériels. Cette recommandation s'étend du matériel de base (par exemple, les alimentations redondantes) aux réseaux (par exemple, les réseaux à chemins d'accès multiples).
+
+Lorsque vous devez mettre à niveau le stockage, le faire évoluer verticalement, le faire évoluer horizontalement ou rééquilibrer les charges de travail dans le cluster, les soins aux patients ne sont pas pris en charge. Vous pouvez déplacer des données, mais les patients ne doivent plus jamais interrompre les soins lors des migrations de données ou des mises à niveau majeures. Optez pour une technologie nouvelle génération, pérenne et sans dépendance vis-à-vis d'un seul matériel. NetApp garantit même une disponibilité écrite de 100 %.
+
+Pour plus d'informations sur la fiabilité, la disponibilité, la facilité de maintenance et les fonctions de sécurité de NetApp, consultez le link:https://www.netapp.com/media/67355-wp-7354.pdf["Fiabilité, disponibilité, facilité de maintenance et sécurité du système NetApp ONTAP"^]livre blanc.

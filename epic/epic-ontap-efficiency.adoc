@@ -1,0 +1,31 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-efficiency.html 
+keywords: epic,cache,iris 
+summary: 'Epic sur l"efficacité ONTAP' 
+---
+= Epic sur l'efficacité ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+Epic s'exécute sur des baies 100 % Flash, où la majeure partie du coût est le disque. Par conséquent, l'efficacité du stockage est essentielle pour réaliser des économies.
+
+L'efficacité du stockage à la volée de NetApp permet de réaliser des économies de stockage de pointe sans effets sur les performances, et nous proposons même une garantie d'efficacité écrite avec les baies 100 % Flash.
+
+Lors du calcul de l'efficacité du stockage, il est important de mesurer la capacité brute à la capacité utilisable réelle.
+
+* *Capacité brute* avant d'appliquer un RAID, taille du disque par nombre de disques.
+* *Capacité utilisable* après application de RAID, combien de stockage utilisable est disponible.
+* *Capacité effective* quantité de stockage provisionnée et présentée à l'hôte ou au client.
+
+
+La figure ci-dessous est un exemple de calcul d'efficacité pour un déploiement Epic classique, incluant toutes les charges de travail nécessitant 852 To de stockage effectif et avec un ratio d'efficacité de 5.2:1 pour 1,32 po de données effectives totales.
+
+
+NOTE: La capacité brute à utilisable varie légèrement en fonction du nombre de disques.
+
+image:epic-efficiency.png["Efficacité du stockage Epic"]
+
+
+NOTE: NetApp n'utilise pas la technologie Snapshot de NetApp ni le provisionnement fin pour calculer l'efficacité du programme de garantie. Cela démontre une efficacité irréaliste entre 30 et 100:1, ce qui ne veut rien dire lors du dimensionnement de la capacité de stockage réelle.

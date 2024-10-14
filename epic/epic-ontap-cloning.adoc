@@ -1,0 +1,63 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-cloning.html 
+keywords: epic,cache,iris 
+summary: Protection des données Epic 
+---
+= Clonage Epic
+:allow-uri-read: 
+
+
+[role="lead"]
+Epic reconnaît que la technologie Snapshot NetApp basée sur des nœuds de stockage n'a aucun impact sur les performances des workloads de production par rapport aux sauvegardes classiques basées sur des fichiers. Lorsque les sauvegardes Snapshot sont utilisées comme source de restauration pour la base de données de production, la méthode de sauvegarde doit être implémentée en tenant compte de la cohérence de la base de données.
+
+Un snapshot est une copie de sauvegarde en lecture seule d'un volume à un point dans le temps. NetApp FlexClone® prend un instantané et le rend instantanément lisible et inscriptible. Les volumes FlexClone sont particulièrement utiles pour créer des copies Snapshot en lecture seule cohérentes au niveau des applications et des volumes FlexClone inscriptibles à partir des données de production. Cette fonctionnalité native a un impact significatif sur les économies de stockage, le temps d'exploitation et les fonctionnalités d'automatisation.
+
+Pour le processus d'actualisation, des volumes FlexClone sont utilisés.
+
+
+
+== La gestion des données
+
+Dans le cadre de sa solution, NetApp propose une solution de sauvegarde et d'actualisation des tests entièrement automatisée à l'aide des outils ONTAP natifs. Cette solution a été conçue pour simplifier la gestion des données Epic tout particulièrement pour la grande communauté d'administrateurs de bases de données Epic :
+
+* Epic Mirror est utilisé pour répliquer les données vers la reprise sur incident et le rapport (indiqué en vert).
+* Vidage quotidien des données du rapport à Clarity.
+* Sauvegardes automatisées NetApp (indiquées en jaune)
+* Actualisation des tests automatisés NetApp du SUP, du REP et d'autres (indiquée en bleu).
+* Les environnements de test sont destinés aux environnements à copie intégrale, et non aux copies de copie de copie de base plus petites.
+
+
+Pour plus d'informations, contactez les services NetApp pour applications Epic.
+
+Les applications avec stockage réparti sur plusieurs volumes avec une ou plusieurs LUN de quantité appropriée à la charge de travail nécessitent que le contenu soit sauvegardé ensemble pour assurer la cohérence de la protection des données.
+
+Les groupes de cohérence (CGS pour Short) proposent cette fonctionnalité et bien plus encore. Elles peuvent être utilisées chaque nuit pour créer des copies Snapshot cohérentes à la demande ou planifiées à l'aide d'une règle. Vous pouvez l'utiliser pour restaurer, cloner et même répliquer des données.
+
+Pour plus d'informations sur CGS, reportez-vous à link:https://docs.netapp.com/us-en/ontap/consistency-groups/["Documentation NetApp sur les groupes de cohérence"^]
+
+
+
+== Configuration de groupes de cohérence pour Epic
+
+Une fois les volumes et les LUN provisionnés comme détaillé dans les sections précédentes de ce document, ils peuvent ensuite être configurés dans un ensemble de groupes de cohérence. La meilleure pratique recommandée est de les configurer comme indiqué dans l'image ci-dessous :
+
+image:epic-cg-layout.png["Groupes Epic et Consistency"]
+
+
+
+== Snapshots de groupes de cohérence
+
+Un planning de snapshots de groupe de cohérence doit être défini chaque jour sur les groupes de cohérence enfant associés aux volumes fournissant du stockage pour la base de données de production. Cela donnera lieu à un nouvel ensemble de sauvegardes cohérentes de ces CGS chaque nuit. Vous pouvez ensuite les utiliser pour cloner la base de données de production afin de les utiliser dans des environnements hors production, tels que le développement et le test. NetApp a développé des workflows Ansible automatisés basés sur un groupe de cohérence propriétaire pour Epic afin d'automatiser la sauvegarde des bases de données de production, l'actualisation et les environnements de test.
+
+Les snapshots de groupe de cohérence peuvent être utilisés pour prendre en charge les opérations de restauration de la base de données de production d'Epic.
+
+Pour les volumes SAN, désactivez la règle de snapshot par défaut sur chaque volume utilisé pour les groupes de cohérence. Ces snapshots sont généralement gérés par l'application de sauvegarde utilisée ou le service d'automatisation Epic Ansible de NetApp.
+
+Pour les volumes SAN, désactivez la règle de snapshot par défaut sur chaque volume. Ces snapshots sont généralement gérés par une application de sauvegarde ou par l'automatisation Ansible d'Epic.[NS2]
+
+Les jeux de données WebBLOB et VMare doivent être configurés en tant que volumes uniquement, et non associés à CGS. Vous pouvez utiliser la technologie SnapMirror ou SnapVault pour conserver vos copies Snapshot sur des systèmes de stockage distincts de la production.
+
+Une fois la configuration terminée, elle se présente comme suit :
+
+image:epic-cg-snapshots.png["Snapshots épiques de groupe de cohérence"]

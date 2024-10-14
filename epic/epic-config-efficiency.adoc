@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-config-efficiency.html 
+keywords: epic,cache,iris 
+summary: 'Configuration de l"efficacité du stockage Epic' 
+---
+= Configuration de l'efficacité du stockage Epic
+:allow-uri-read: 
+
+
+[role="lead"]
+Les fonctionnalités d'efficacité à la volée de ONTAP sont activées par défaut et fonctionnent indépendamment du protocole, de l'application ou du Tier de stockage.
+
+Les fonctionnalités d'efficacité réduisent la quantité de données écrites sur un système de stockage Flash coûteux et le nombre de disques requis. ONTAP préserve l'efficacité de la réplication. L'efficacité n'a que peu, voire pas du tout d'effet sur les performances, même pour une application sensible à la latence comme Epic.
+
+[TIP]
+====
+*NetApp recommande* d'activer tous les paramètres d'efficacité pour optimiser l'utilisation du disque. Ces paramètres sont activés par défaut sur les systèmes AFF et ASA.
+
+====
+Les fonctionnalités suivantes rendent ce stockage efficace possible :
+
+* La déduplication économise de l'espace sur le stockage primaire en supprimant les copies redondantes des blocs d'un volume qui héberge des LUN. Cette option recommandée est activée par défaut.
+* La compression à la volée réduit la quantité de données à écrire sur le disque, et les workloads Epic réalisent des économies d'espace considérables. Cette option recommandée est activée par défaut.
+* La compaction à la volée permet de combiner des blocs de 4 ko moins de moitié pleins dans un seul bloc. Cette option recommandée est activée par défaut.
+* La réplication fine est au cœur de la gamme de logiciels de protection des données NetApp, qui inclut le logiciel NetApp SnapMirror. La réplication fine de SnapMirror protège les données stratégiques tout en limitant les besoins en capacité de stockage. *NetApp recommande* d'activer cette option.
+* Déduplication dans l'agrégat. La déduplication a toujours été au niveau du volume. Avec ONTAP 9.2, la déduplication de l'agrégat est désormais disponible, ce qui permet de réaliser des économies supplémentaires en termes de réduction de disque. La déduplication post-traitement dans l'agrégat a été ajoutée à ONTAP 9.3. *NetApp recommande* d'activer cette option.
+

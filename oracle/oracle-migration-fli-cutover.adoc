@@ -146,7 +146,7 @@ vserver1  800DT$HuVWBn /vol/new_lvm/LUN8 2
 vserver1  800DT$HuVWBo /vol/new_lvm/LUN9 2
 20 entries were displayed.
 ....
-Si vous avez besoin d'un processus hors ligne, retardez la redécouverte ou le redémarrage des services jusqu'au `lun import show` indique que la migration a réussi et s'est terminée. Vous pouvez ensuite terminer le processus de migration comme décrit à la section link:../migration/migration_options.html#foreign-lun-import-fli["Importation de LUN étrangères—fin"].
+Si vous avez besoin d'un processus hors ligne, retardez la redécouverte ou le redémarrage des services jusqu'à ce que la `lun import show` commande indique que la migration a abouti. Vous pouvez ensuite terminer le processus de migration comme décrit à la section link:oracle-migration-fli-completion.html["Importation de LUN étrangères—fin"].
 
 Si vous avez besoin d'une migration en ligne, redécouvrez les LUN de leur nouveau domicile et accédez aux services.
 

@@ -1,0 +1,26 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-arch-6node.html 
+keywords: epic,cache,iris 
+summary: Architecture Epic à 6 nœuds 
+---
+= Architecture Epic à 6 nœuds
+:allow-uri-read: 
+
+
+[role="lead"]
+Les clients peuvent commencer par une conception à six nœuds ou évoluer horizontalement de manière fluide de quatre à six nœuds en fonction de la demande croissante. L'évolutivité scale-out permet de déplacer des charges de travail entre les nœuds et de rééquilibrer les opérations sans interruption dans le cluster.
+
+Cette architecture offre le meilleur équilibre entre performances et capacité sur le cluster. Les applications Epic production, Epic Report et Epic Test s'exécutent sur la première paire haute disponibilité. La deuxième paire haute disponibilité est utilisée pour la clarté, l'hyperespace, VMware, NAS1 et les autres workloads Epic. La reprise sur incident est identique à l'architecture à quatre nœuds de la section précédente.
+
+
+
+== Architecture à six nœuds
+
+image:epic-6node.png["Architecture Epic à 6 nœuds"]
+
+
+
+== Placement des workloads à 6 nœuds
+
+image:epic-6node-design.png["Placement Epic à 6 nœuds"]

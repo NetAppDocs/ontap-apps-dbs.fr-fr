@@ -1,0 +1,20 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-config-huk.html 
+keywords: epic,cache,iris 
+summary: Epic sur ONTAP - utilitaires hôtes 
+---
+= Epic sur ONTAP - utilitaires hôtes
+:allow-uri-read: 
+
+
+[role="lead"]
+Les utilitaires d'hôte NetApp sont des packs logiciels destinés à divers systèmes d'exploitation qui contiennent des utilitaires de gestion tels que `sanlun` le binaire de l'interface de ligne de commande, les pilotes multivoies et d'autres fichiers importants requis pour effectuer correctement des opérations SAN.
+
+[TIP]
+====
+*NetApp recommande* d'installer les utilitaires hôtes NetApp sur les hôtes connectés aux systèmes de stockage NetApp et qui y accèdent. Pour plus d'informations, reportez-vous à  la section link:https://imt.netapp.com/matrix/["Matrice d'interopérabilité"^] et link:https://docs.netapp.com/us-en/ontap-sanhost/["Hôtes SAN"^]à la documentation.
+
+====
+
+NOTE: Avec AIX, il est particulièrement important que les utilitaires hôtes soient installés avant de découvrir les LUN. Cela permet de s'assurer que le comportement de chemins d'accès multiples de la LUN est correctement configuré. Si la découverte a été effectuée sans les utilitaires hôtes, les LUN doivent être déconfigurées du système à l'aide de la `rmdev -dl` commande, puis redécouvertes via `cfgmgr` ou un redémarrage.

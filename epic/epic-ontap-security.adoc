@@ -1,0 +1,20 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-ontap-security.html 
+keywords: epic,cache,iris 
+summary: Epic sur la sécurité ONTAP 
+---
+= Epic sur la sécurité ONTAP
+:allow-uri-read: 
+
+
+[role="lead"]
+La sécurité est aujourd'hui la principale préoccupation des entreprises et des cadres de la santé. Sa gestion n'a jamais été aussi difficile et les entreprises sont confrontées à des défis tels que la conformité, la gouvernance des données, la protection antivirus et les ransomwares.
+
+Le présent document ne contient pas de guide complet sur Epic et la sécurité du stockage. Il détaille toutefois link:https://docs.netapp.com/us-en/ontap/ontap-security-hardening/security-hardening-overview.html["Guide sur le renforcement de la sécurité de la solution ONTAP"^]toutes les fonctionnalités de sécurité avancées et étendues disponibles avec ONTAP.
+
+NetApp Active IQ Unified Manager surveille les violations de sécurité en fonction des informations incluses dans  et les signale dans le link:https://docs.netapp.com/us-en/ontap/ontap-security-hardening/security-hardening-overview.html["TR-4569"^]tableau de bord afin de simplifier la gestion de la sécurité. Ces outils peuvent aider votre entreprise à atteindre ses objectifs de sécurité en matière de protection, de détection et de résolution des attaques.
+
+NetApp a également établi des partenariats avec des fournisseurs de solutions de sécurité pour permettre une intégration par le biais de link:https://docs.netapp.com/us-en/ontap/ontap-security-hardening/create-fpolicy.html["NetApp FPolicy"^] logiciels permettant d'améliorer vos offres de sécurité. En outre, link:https://docs.netapp.com/us-en/ontap/authentication/mfa-overview.html["Authentification multifacteur (MFA)"^] ils peuvent être ajoutés pour sécuriser votre environnement Epic contre tout accès non autorisé avec des informations d'identification qui ont fui.
+
+Enfin, les copies Snapshot natives ONTAP et les technologies SnapLock immuables avec link:https://docs.netapp.com/us-en/netapp-solutions/cyber-vault/ontap-cyber-vault-overview.html["Cyber-coffre ONTAP"^], offrent une fonctionnalité d'air Gap unique pour protéger vos dossiers médicaux contre les ransomwares. Voir la documentation NetApp sur link:https://docs.netapp.com/us-en/ontap/ransomware-solutions/ransomware-overview.html["Solution NetApp pour ransomware"^]. Pour une approche plus stratégique de la sécurité, voir link:https://docs.netapp.com/us-en/ontap/zero-trust/zero-trust-overview.html["NetApp et le modèle « zéro confiance »"^].

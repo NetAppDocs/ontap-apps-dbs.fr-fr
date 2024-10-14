@@ -1,0 +1,29 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-dr-mcc-sql.html 
+keywords: MSSQL,SQL Server, MetroCluster 
+summary: Microsoft SQL Server avec NetApp MetroCluster 
+---
+= Microsoft SQL Server avec MetroCluster
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+MetroCluster est une option de protection des bases de données SQL Server avec un RPO nul. MetroCluster est une technologie de réplication simple, haute performance avec un objectif de point de récupération de 0, qui vous permet de répliquer facilement toute une infrastructure sur plusieurs sites.
+
+SQL Server peut évoluer jusqu'à des milliers de bases de données sur un seul système MetroCluster. Il peut y avoir des instances autonomes SQL Server ou des instances de cluster de basculement ; le système MetroCluster n'ajoute pas nécessairement ou ne modifie pas les meilleures pratiques de gestion d'une base de données.
+
+Une explication complète de MetroCluster dépasse le champ d'application de ce document, mais les principes sont simples. MetroCluster peut fournir une solution de réplication RPO=0 avec basculement rapide. La base que vous exploitez dépend de vos besoins.
+
+Par exemple, une procédure de reprise sur incident rapide de base après une perte soudaine du site peut utiliser les étapes de base suivantes :
+
+* Force le basculement MetroCluster
+* Découverte de LUN FC/iSCSI (SAN uniquement)
+* Montez les systèmes de fichiers
+* Démarrez SQL Services
+
+
+Cette approche doit avant tout se passer d'un système d'exploitation en cours d'exécution sur le site distant. Il doit être préconfiguré avec la configuration de SQL Server et doit être mis à jour avec une version de build équivalente. Les bases de données système SQL Server peuvent également être mises en miroir sur le site distant et montées en cas d'incident.
+
+Si les volumes, les systèmes de fichiers et les datastores hébergeant des bases de données virtualisées ne sont pas utilisés sur le site de reprise d'activité avant le basculement, il n'est pas nécessaire de les définir `dr-force- nvfail` sur les volumes associés.

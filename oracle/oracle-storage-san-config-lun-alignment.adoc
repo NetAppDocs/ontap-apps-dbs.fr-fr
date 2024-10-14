@@ -16,23 +16,15 @@ summary: Alignement des LUN avec les bases de données Oracle
 [role="lead"]
 L'alignement des LUN fait référence à l'optimisation des E/S par rapport à la disposition du système de fichiers sous-jacent.
 
-Sur un système ONTAP, le stockage est organisé en unités de 4 Ko. Un bloc de 8 Ko de base de données ou de système de fichiers doit être mappé à exactement deux blocs de 4 Ko. Si une erreur de configuration de LUN déplace l'alignement de 1 Ko dans les deux sens, chaque bloc de 8 Ko existerait sur trois blocs de stockage de 4 Ko différents au lieu de deux. Cette configuration entraîne une augmentation de la latence et des E/S supplémentaires au sein du système de stockage.
+Directive non résolue dans <stdin> - include::lun-alignment.adoc[]
 
-L'alignement affecte également les architectures LVM. Si un volume physique au sein d'un groupe de volumes logiques est défini sur l'unité entière (aucune partition n'est créée), le premier bloc de 4 Ko de la LUN s'aligne sur le premier bloc de 4 Ko du système de stockage. Il s'agit d'un alignement correct. Des problèmes surviennent avec les partitions car elles déplacent l'emplacement de départ où le système d'exploitation utilise le LUN. Tant que le décalage est décalé en unités entières de 4 Ko, la LUN est alignée.
-
-Dans les environnements Linux, créez des groupes de volumes logiques sur l'ensemble de l'unité de disque. Lorsqu'une partition est requise, vérifiez l'alignement en exécutant `fdisk –u` et vérifier que le début de chaque partition est un multiple de huit. Cela signifie que la partition démarre à un multiple de huit secteurs de 512 octets, soit 4 Ko.
-
-Voir également la discussion sur l'alignement des blocs de compression dans la section link:../ontap-configuration/oracle-efficiency.html["Efficacité"]. Toute disposition alignée avec les limites des blocs de compression de 8 Ko est également alignée avec les limites de 4 Ko.
+Voir également la discussion sur l'alignement des blocs de compression dans la section link:oracle-ontap-config-efficiency.html["Efficacité"]. Toute disposition alignée avec les limites des blocs de compression de 8 Ko est également alignée avec les limites de 4 Ko.
 
 
 
 == Avertissements de mauvais alignement
 
-La journalisation des opérations de reprise et des transactions de la base de données génère normalement des E/S non alignées qui peuvent entraîner des avertissements erronés concernant les LUN mal alignées sur ONTAP.
-
-La journalisation effectue une écriture séquentielle du fichier journal avec des écritures de taille variable. Une opération d'écriture de journal qui ne s'aligne pas sur les limites de 4 Ko ne provoque généralement pas de problèmes de performances, car l'opération d'écriture de journal suivante termine le bloc. ONTAP est ainsi en mesure de traiter la quasi-totalité des écritures sous forme de blocs complets de 4 Ko, même si les données de blocs de 4 Ko ont été écrites dans deux opérations distinctes.
-
-Vérifiez l'alignement à l'aide d'utilitaires tels que `sio` ou `dd` Qui peuvent générer des E/S à une taille de bloc définie. Les statistiques d'alignement des E/S sur le système de stockage peuvent être affichées à l'aide du `stats` commande. Voir link:../notes/wafl_alignment_verification.html["Vérification de l'alignement WAFL"] pour en savoir plus.
+Directive non résolue dans <stdin> - include::database-alignment-warnings.adoc[]
 
 L'alignement dans les environnements Solaris est plus compliqué. Reportez-vous à la section http://support.netapp.com/documentation/productlibrary/index.html?productID=61343["Configuration de l'hôte SAN ONTAP"^] pour en savoir plus.
 

@@ -1,0 +1,40 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-fail-repl.html 
+keywords: Oracle, SnapMirror active sync, SMBC, failover 
+summary: Basculement de la synchronisation active Oracle et SnapMirror 
+---
+= Synchronisation active SnapMirror : perte totale de la connectivité
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Si la liaison de réplication entre les sites est totalement perdue, la synchronisation active SnapMirror et la connectivité RAC Oracle seront interrompues.
+
+La détection d'Oracle RAC à cerveau divisé dépend du pulsation du stockage Oracle RAC. Si la perte de la connectivité site à site entraîne la perte simultanée du signal de détection du réseau RAC et des services de réplication du stockage, les sites RAC ne pourront pas communiquer entre sites via l'interconnexion RAC ou les disques de vote RAC. Le résultat d'un ensemble de nœuds à numéro pair peut être l'exclusion des deux sites sous les paramètres par défaut. Le comportement exact dépend de la séquence des événements et de la synchronisation des sondages de pulsation du réseau RAC et du disque.
+
+Le risque d'une panne sur deux sites peut être résolu de deux manières. Tout d'abord, une link:oracle-dr-smas-arch-tiebreaker.html["disjoncteur d'attache"] configuration peut être utilisée.
+
+Si aucun site tiers n'est disponible, ce risque peut être résolu en ajustant le paramètre misscount sur le cluster RAC. Sous les valeurs par défaut, le délai d'expiration de la pulsation réseau du RAC est de 30 secondes. Il est généralement utilisé par RAC pour identifier les nœuds RAC défaillants et les supprimer du cluster. Il dispose également d'une connexion à la pulsation du disque de vote.
+
+Si, par exemple, le conduit transportant le trafic intersite pour Oracle RAC et les services de réplication de stockage est coupé par une pelle rétro, le compte à rebours des erreurs de 30 secondes commence. Si le nœud du site RAC préféré ne peut pas rétablir le contact avec le site opposé dans les 30 secondes et qu'il ne peut pas utiliser les disques de vote pour confirmer que le site opposé est en panne dans la même fenêtre de 30 secondes, les nœuds du site préféré seront également supprimés. Il en résulte une interruption complète de la base de données.
+
+Selon le moment où l'interrogation du compte erroné se produit, 30 secondes peuvent ne pas suffire à la temporisation de la synchronisation active SnapMirror et à permettre au stockage du site préféré de reprendre les services avant l'expiration de la fenêtre de 30 secondes. Cette fenêtre de 30 secondes peut être augmentée.
+
+....
+[root@jfs12 ~]# /grid/bin/crsctl set css misscount 100
+CRS-4684: Successful set of parameter misscount to 100 for Cluster Synchronization Services.
+....
+Cette valeur permet au système de stockage sur le site préféré de reprendre les opérations avant que le délai d'erreur n'expire. Le résultat sera alors la suppression uniquement des nœuds sur le site où les chemins de LUN ont été supprimés. Exemple ci-dessous :
+
+....
+2024-09-12 09:50:59.352 [ONMD(681360)]CRS-1612: Network communication with node jfs13 (2) has been missing for 50% of the timeout interval.  If this persists, removal of this node from cluster will occur in 49.570 seconds
+2024-09-12 09:51:10.082 [CRSD(682669)]CRS-7503: The Oracle Grid Infrastructure process 'crsd' observed communication issues between node 'jfs12' and node 'jfs13', interface list of local node 'jfs12' is '192.168.30.1:46039;', interface list of remote node 'jfs13' is '192.168.30.2:42037;'.
+2024-09-12 09:51:24.356 [ONMD(681360)]CRS-1611: Network communication with node jfs13 (2) has been missing for 75% of the timeout interval.  If this persists, removal of this node from cluster will occur in 24.560 seconds
+2024-09-12 09:51:39.359 [ONMD(681360)]CRS-1610: Network communication with node jfs13 (2) has been missing for 90% of the timeout interval.  If this persists, removal of this node from cluster will occur in 9.560 seconds
+2024-09-12 09:51:47.527 [OHASD(680884)]CRS-8011: reboot advisory message from host: jfs13, component: cssagent, with time stamp: L-2024-09-12-09:51:47.451
+2024-09-12 09:51:47.527 [OHASD(680884)]CRS-8013: reboot advisory message text: oracssdagent is about to reboot this node due to unknown reason as it did not receive local heartbeats for 10470 ms amount of time
+2024-09-12 09:51:48.925 [ONMD(681360)]CRS-1632: Node jfs13 is being removed from the cluster in cluster incarnation 621596607
+....
+Le support Oracle déconseille fortement de modifier les paramètres misscount ou disktimeout pour résoudre les problèmes de configuration. Toutefois, la modification de ces paramètres peut s'avérer justifiée et inévitable dans de nombreux cas, notamment dans les configurations de démarrage SAN, de virtualisation et de réplication du stockage. Si, par exemple, vous avez rencontré des problèmes de stabilité avec un réseau SAN ou IP qui ont entraîné des expulsions RAC, vous devez résoudre le problème sous-jacent et ne pas facturer les valeurs de l'erreur de décompte ou du dépassement de disque. La modification des délais pour résoudre les erreurs de configuration masque un problème et non pas résout un problème. La modification de ces paramètres pour configurer correctement un environnement RAC basé sur les aspects de conception de l'infrastructure sous-jacente est différente et est conforme aux instructions de support Oracle. Avec le démarrage SAN, il est courant d'ajuster misscount jusqu'à 200 pour correspondre au disktimeout. Voir link:oracle-app-config-rac.html["ce lien"] pour plus d'informations.

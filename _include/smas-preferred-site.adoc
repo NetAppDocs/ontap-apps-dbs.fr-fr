@@ -1,0 +1,30 @@
+= 
+:allow-uri-read: 
+
+
+La synchronisation active SnapMirror considère un site comme la « source » et l'autre comme la « destination ». Cela implique une relation de réplication unidirectionnelle, mais cela ne s'applique pas au comportement d'E/S. La réplication est bidirectionnelle et symétrique. Les temps de réponse d'E/S sont identiques de part et d'autre du miroir.
+
+La `source` désignation est le contrôle du site préféré. En cas de perte du lien de réplication, les chemins de LUN sur la copie source continueront à transmettre des données tandis que les chemins de LUN sur la copie de destination deviendront indisponibles jusqu'à ce que la réplication soit rétablie et que SnapMirror repasse à l'état synchrone. Les chemins reprennent alors le service des données.
+
+La configuration source/destination peut être affichée via SystemManager :
+
+image:smas-source-systemmanager.png["Capture d'écran SM de SM-AS source"]
+
+Ou sur l'interface de ligne de commande :
+
+....
+Cluster2::> snapmirror show -destination-path jfs_as2:/cg/jfsAA
+
+                            Source Path: jfs_as1:/cg/jfsAA
+                       Destination Path: jfs_as2:/cg/jfsAA
+                      Relationship Type: XDP
+                Relationship Group Type: consistencygroup
+                    SnapMirror Schedule: -
+                 SnapMirror Policy Type: automated-failover-duplex
+                      SnapMirror Policy: AutomatedFailOverDuplex
+                            Tries Limit: -
+                      Throttle (KB/sec): -
+                           Mirror State: Snapmirrored
+                    Relationship Status: InSync
+....
+La clé est que la source est le SVM sur le cluster1. Comme mentionné ci-dessus, les termes « source » et « destination » ne décrivent pas le flux des données répliquées. Les deux sites peuvent traiter une écriture et la répliquer sur le site opposé. En effet, les deux grappes sont des sources et des destinations. La désignation d'un cluster comme source contrôle simplement le cluster qui survit en tant que système de stockage en lecture/écriture en cas de perte du lien de réplication.

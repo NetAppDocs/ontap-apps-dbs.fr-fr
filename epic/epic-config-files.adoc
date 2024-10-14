@@ -1,0 +1,19 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-config-files.html 
+keywords: epic,cache,iris 
+summary: Protocoles Epic et de fichiers 
+---
+= Protocoles Epic et de fichiers
+:allow-uri-read: 
+
+
+[role="lead"]
+Il est possible d'associer NAS et SAN au sein d'une même baie 100 % Flash.
+
+[TIP]
+====
+*NetApp recommande* d'utiliser des volumes FlexGroup pour les partages NAS, tels que WebBLOB (si disponible).
+
+====
+WebBLOB représente jusqu'à 95 % des données inactives. Vous pouvez également libérer de l'espace sur votre baie 100 % Flash et procéder au Tiering des sauvegardes et des données inactives vers un stockage objet sur site ou dans le cloud à l'aide de la link:https://docs.netapp.com/us-en/ontap/fabricpool/index.html["FabricPool"^]fonctionnalité ONTAP. Tout cela peut être réalisé sans effet notable sur les performances. FabricPool est une fonctionnalité incluse dans ONTAP. Les clients peuvent générer un rapport de données inactives pour évaluer les bénéfices potentiels grâce à l'activation de FabricPool. Vous pouvez définir l'âge des données à hiérarchiser via une règle. Les clients Epic ont réalisé des économies considérables grâce à cette fonctionnalité.

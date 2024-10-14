@@ -10,9 +10,7 @@ summary: Efficacité du stockage Microsoft SQL Server et ONTAP
 
 
 [role="lead"]
-L'efficacité du stockage ONTAP est optimisée pour stocker et gérer des données SQL Server d'une manière qui utilise le moins d'espace de stockage avec peu ou pas d'impact sur les performances globales du système.
-
-L'efficacité du stockage combine RAID, le provisionnement (disposition et utilisation globales), la mise en miroir et d'autres technologies de protection des données. Les technologies NetApp, qui incluent les snapshots, le provisionnement fin et le clonage, optimisent le stockage existant dans l'infrastructure et permettent de reporter ou d'éviter les dépenses futures en stockage. Plus vous utilisez ces technologies ensemble, plus vous réalisez d'économies.
+L'efficacité du stockage ONTAP est optimisée pour stocker et gérer les données SQL Server de manière à utiliser la quantité la plus faible d'espace de stockage sans affecter les performances.
 
 Les fonctionnalités d'optimisation de l'espace, telles que la compression, la compaction et la déduplication, sont conçues pour augmenter la quantité de données logiques correspondant à un volume de stockage physique donné. Vous réduisez ainsi vos coûts et vos frais de gestion.
 
@@ -69,7 +67,7 @@ Le degré d'économie obtenu varie. En général, les données déjà compressé
 
 === Efficacité du stockage sensible à la température
 
-L'efficacité du stockage sensible à la température (TSSE) est disponible dans ONTAP 9.8 et versions ultérieures. Elle repose sur des cartes thermiques d'accès aux blocs pour identifier les blocs peu utilisés et les compresser avec une efficacité accrue.
+L'efficacité de stockage sensible à la température (TSSE) est disponible dans ONTAP 9.8 et versions ultérieures. Il s'appuie sur des cartes thermiques d'accès aux blocs pour identifier les blocs peu utilisés et les compresser à l'aide d'une meilleure efficacité.
 
 
 
@@ -132,8 +130,11 @@ La compression des données est actuellement prise en charge dans les éditions 
 Voici les recommandations pour la gestion de l'espace pour les fichiers de données SQL Server
 
 * Utiliser le provisionnement fin dans les environnements SQL Server pour améliorer l'utilisation de l'espace et réduire les besoins globaux en stockage lorsque la fonctionnalité de garantie d'espace est utilisée.
-* Utilisez le croissance automatique dans la plupart des configurations de déploiement courantes, car l'administrateur du stockage ne doit contrôler l'utilisation de l'espace dans l'agrégat.
-* Il est conseillé de ne pas activer la déduplication sur les volumes contenant des fichiers de données SQL Server, sauf si le volume contient plusieurs copies des mêmes données, telles que la restauration de la base de données à partir de sauvegardes sur un seul volume.
++
+** Utilisez le croissance automatique dans la plupart des configurations de déploiement courantes, car l'administrateur du stockage ne doit contrôler l'utilisation de l'espace dans l'agrégat.
+
+
+* N'activez pas la déduplication sur les volumes contenant des fichiers de données SQL Server, sauf si le volume contient plusieurs copies des mêmes données, telles que la restauration de la base de données à partir de sauvegardes sur un seul volume.
 
 
 

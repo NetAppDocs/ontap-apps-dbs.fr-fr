@@ -10,7 +10,7 @@ summary: Stockage NAS ONTAP pour Hyper-V utilisant SMB3
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -61,7 +61,7 @@ cluster::> system services ntp server create â€“server $domainControllerIP
 
 . Créer un SVM avec le protocole NAS CIFS activé Il est possible de créer un SVM avec l'une des méthodes suivantes :
 +
-** Commandes CLI sur NetApp ONTAP
+** Commandes CLI sur ONTAP
 ** System Manager
 ** Kit NetApp PowerShell
 
@@ -84,14 +84,14 @@ cluster::> system services ntp server create â€“server $domainControllerIP
 
 === Intégration de l'hôte
 
-Le protocole NAS CIFS est intégré en mode natif à ONTAP. Par conséquent, Windows Server n'a pas besoin d'un logiciel client supplémentaire pour accéder aux données sur NetApp ONTAP. Un contrôleur de stockage NetApp apparaît sur le réseau en tant que serveur de fichiers natif et prend en charge l'authentification Microsoft Active Directory.
+Le protocole NAS CIFS est intégré en mode natif à ONTAP. Par conséquent, Windows Server n'a pas besoin d'un logiciel client supplémentaire pour accéder aux données sur ONTAP. Un contrôleur de stockage NetApp apparaît sur le réseau en tant que serveur de fichiers natif et prend en charge l'authentification Microsoft Active Directory.
 
 Pour détecter le partage CIFS créé précédemment avec Windows Server, procédez comme suit :
 
 . Connectez-vous à Windows Server en tant que membre du groupe d'administrateurs.
 . Accédez à run.exe et saisissez le chemin d'accès complet du partage CIFS créé pour accéder au partage.
 . Pour mapper le partage de façon permanente sur le serveur Windows, cliquez avec le bouton droit de la souris sur ce PC, cliquez sur connecter un lecteur réseau et indiquez le chemin du partage CIFS.
-. Certaines tâches de gestion CIFS peuvent être effectuées à l'aide de la console MMC (Microsoft Management Console). Avant d'effectuer ces tâches, vous devez connecter la console MMC au stockage NetApp ONTAP à l'aide des commandes de menu MMC.
+. Certaines tâches de gestion CIFS peuvent être effectuées à l'aide de la console MMC (Microsoft Management Console). Avant d'effectuer ces tâches, vous devez connecter la console MMC au stockage ONTAP à l'aide des commandes de menu MMC.
 +
 .. Pour ouvrir la console MMC dans Windows Server, cliquez sur gestion de l'ordinateur dans la section Outils de Server Manager.
 .. Cliquez sur autres actions et connectez-vous à un autre ordinateur, ce qui ouvre la boîte de dialogue Sélectionner un ordinateur.
@@ -108,7 +108,7 @@ Pour détecter le partage CIFS créé précédemment avec Windows Server, procé
 * Pour vérifier qu'il n'y a pas de temps d'indisponibilité lorsqu'un volume est déplacé d'un nœud vers un autre ou en cas de défaillance d'un nœud, NetApp vous recommande d'activer l'option de disponibilité continue sur le partage de fichiers.
 * Lors du provisionnement d'ordinateurs virtuels dans un environnement Hyper-V-over-SMB, NetApp vous recommande d'activer la fonction de déchargement des copies sur le système de stockage. Le temps de provisionnement des ordinateurs virtuels est ainsi réduit.
 * Si le cluster de stockage héberge plusieurs charges de travail SMB, telles que SQL Server, Hyper-V et des serveurs CIFS, NetApp recommande d'héberger différentes charges de travail SMB sur des SVM distincts, sur des agrégats distincts. Cette configuration est avantageuse, car chacune de ces charges de travail garantit une disposition unique du réseau et des volumes de stockage.
-* NetApp recommande de connecter les hôtes Hyper-V et le stockage NetApp ONTAP à un réseau de 10 Go, le cas échéant. Dans le cas d'une connectivité réseau de 1 Go, NetApp recommande de créer un groupe d'interfaces composé de plusieurs ports de 1 Go.
+* NetApp recommande de connecter les hôtes Hyper-V et le stockage ONTAP à un réseau de 10 Go, le cas échéant. Dans le cas d'une connectivité réseau de 1 Go, NetApp recommande de créer un groupe d'interfaces composé de plusieurs ports de 1 Go.
 * Lors de la migration de machines virtuelles d'un partage SMB 3.0 vers un autre, NetApp recommande d'activer la fonctionnalité de déchargement des copies CIFS sur le système de stockage afin d'accélérer la migration.
 
 

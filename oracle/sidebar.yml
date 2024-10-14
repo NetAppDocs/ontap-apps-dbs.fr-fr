@@ -158,16 +158,48 @@ entries:
       url: "/oracle/oracle-dr-mcc-rac.html"
   - title: Synchronisation active SnapMirror
     entries:
-    - title: Architecture
-      url: "/oracle/oracle-dr-smbc-architecture.html"
-    - title: Basculement
-      url: "/oracle/oracle-dr-smbc-failover.html"
-    - title: Oracle si avec synchronisation active SnapMirror
-      url: "/oracle/oracle-dr-smbc-si.html"
-    - title: Oracle RAC avec synchronisation active SnapMirror
-      url: "/oracle/oracle-dr-smbc-rac.html"
+    - title: Présentation
+      url: "/oracle/oracle-dr-smas-overview.html"
+    - title: Médiateur de ONTAP
+      url: "/oracle/oracle-dr-smas-mediator.html"
+    - title: Site préféré
+      url: "/oracle/oracle-dr-smas-preferred-site.html"
+    - title: Topologie réseau
+      entries:
+      - title: Accès uniforme
+        url: "/oracle/oracle-dr-smas-uniform.html"
+      - title: Accès non uniforme
+        url: "/oracle/oracle-dr-smas-nonuniform.html"
+    - title: Configurations Oracle
+      entries:
+      - title: Présentation
+        url: "/oracle/oracle-dr-smas-arch-overview.html"
+      - title: Instance unique Oracle
+        url: "/oracle/oracle-dr-smas-arch-si.html"
+      - title: RAC Oracle
+        url: "/oracle/oracle-dr-smas-arch-rac.html"
+      - title: Oracle RAC et Tiebreakers
+        url: "/oracle/oracle-dr-smas-arch-tiebreaker.html"
     - title: Scénarios d'échec
-      url: "/oracle/oracle-dr-smbc-failure-scenarios.html"
+      entries:
+      - title: Présentation
+        url: "/oracle/oracle-dr-smas-fail-overview.html"
+      - title: Exemple d'architecture
+        url: "/oracle/oracle-dr-smas-fail-sample.html"
+      - title: Échec de l'interconnexion du RAC
+        url: "/oracle/oracle-dr-smas-fail-interconnect.html"
+      - title: Échec de communication SnapMirror
+        url: "/oracle/oracle-dr-smas-fail-snapmirror.html"
+      - title: Échec total de l'interconnexion réseau
+        url: "/oracle/oracle-dr-smas-fail-repl.html"
+      - title: Panne du site
+        url: "/oracle/oracle-dr-smas-fail-site.html"
+      - title: Défaillance du médiateur
+        url: "/oracle/oracle-dr-smas-fail-mediator.html"
+      - title: Restauration du service après une panne
+        url: "/oracle/oracle-dr-smas-fail-restore.html"
+      - title: Basculements manuels
+        url: "/oracle/oracle-dr-smas-fail-manual.html"
 - title: Migration de la base de données Oracle
   entries:
   - title: Présentation

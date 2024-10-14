@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-arch-4node.html 
+keywords: epic,cache,iris 
+summary: Architecture à quatre nœuds Epic 
+---
+= Architecture à quatre nœuds Epic
+:allow-uri-read: 
+
+
+[role="lead"]
+Les figures ci-dessous illustrent la disposition du stockage pour une architecture à quatre nœuds : une paire haute disponibilité en production et une paire haute disponibilité en reprise après incident. La taille des contrôleurs et le nombre de disques sont basés sur la dernière image de dimensionnement.
+
+NetApp garantit des performances minimales au niveau du sol en acceptant les politiques de gestion de la qualité de service recommandées par SLM. Epic prend en charge la consolidation des pools de stockage sur ONTAP sur beaucoup moins de matériel. Pour plus d'informations, consultez le document Epic Quarterly SPATS. En fait, pool1, pool2 et NAS1 (répertoriés dans l'Epic Hardware Configuration Guide) peuvent toutes être exécutés sur une seule paire haute disponibilité, les charges de travail étant réparties de manière homogène entre les deux contrôleurs. Dans le cadre de la reprise sur incident, les pools Epic 3 et NAS 3 sont également répartis entre les deux contrôleurs de la paire haute disponibilité.
+
+Les environnements de copie complète de test (SUP, REL et PJX, par exemple) sont clonés à partir d'Epic production, d'Epic Report ou d'Epic Disaster Recovery. Pour plus d'informations sur la sauvegarde et l'actualisation d'Epic, reportez-vous à la section intitulée « gestion des données ».
+
+
+
+== Architecture à quatre nœuds
+
+image:epic-4node.png["Architecture Epic à 4 nœuds"]
+
+
+
+== Placement des workloads à quatre nœuds
+
+image:epic-4node-design.png["Placement Epic à 4 nœuds"]

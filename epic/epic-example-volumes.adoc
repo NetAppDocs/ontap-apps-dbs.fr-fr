@@ -1,0 +1,21 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-example-volumes.html 
+keywords: epic,cache,iris 
+summary: Exemple de déploiement Epic sur ONTAP - volumes 
+---
+= Exemple de déploiement Epic sur ONTAP - volumes
+:allow-uri-read: 
+
+
+[role="lead"]
+Pour créer des volumes, voir https://docs.netapp.com/us-en/ontap-cli-9141//volume-create.html[]
+
+
+NOTE: Depuis la version ONTAP 9.7, le chiffrement des agrégats et des volumes est activé par défaut lorsque vous disposez d'une licence NVE et d'une gestion des clés intégrée ou externe. Pour activer la déduplication au niveau des volumes, définissez la panne add -crypt sur la commande volume create/modify (si vous disposez d'une licence NVE).
+
+
+
+== Suppression automatique des instantanés
+
+Pour supprimer automatiquement des instantanés : https://docs.netapp.com/us-en/ontap-cli-9141//volume-snapshot-autodelete-modify.html[]

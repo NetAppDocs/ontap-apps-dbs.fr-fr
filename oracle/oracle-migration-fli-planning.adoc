@@ -14,7 +14,7 @@ summary: 'Migration Oracle avec FLI : planification'
 
 
 [role="lead"]
-Les procédures de migration des ressources SAN à l'aide de FLI sont décrites dans NetApp http://www.netapp.com/us/media/tr-4380.pdf["Tr-4380 : migration SAN à l'aide de Foreign LUN Import"^].
+Les procédures de migration des ressources SAN à l'aide de FLI sont décrites dans NetApp https://docs.netapp.com/us-en/ontap-fli/index.html["Documentation relative à l'importation de LUN étrangères de ONTAP"^] .
 
 Du point de vue de la base de données et de l'hôte, aucune étape particulière n'est requise. Une fois les zones FC mises à jour et les LUN disponibles sur ONTAP, LVM doit pouvoir lire les métadonnées LVM des LUN. De plus, les groupes de volumes sont prêts à être utilisés sans étape de configuration supplémentaire. Dans de rares cas, les environnements peuvent inclure des fichiers de configuration codés en dur avec des références à la baie de stockage précédente. Par exemple, un système Linux inclus `/etc/multipath.conf` Les règles qui référençaient un WWN d'un périphérique donné doivent être mises à jour pour refléter les modifications introduites par FLI.
 

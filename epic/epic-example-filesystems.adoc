@@ -1,0 +1,27 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-example-filesystems.html 
+keywords: epic,cache,iris 
+summary: Exemple de déploiement EPIC sur ONTAP - systèmes de fichiers 
+---
+= Exemple de déploiement EPIC sur ONTAP - systèmes de fichiers
+:allow-uri-read: 
+
+
+[role="lead"]
+Pour plus d'informations sur le montage de LUN, la création de groupes de volumes et de volumes logiques et la configuration des systèmes de fichiers, reportez-vous au Guide de référence rapide de configuration de stockage Epic. Utilisez les exemples de commandes suivants pour configurer les serveurs de production Epic pour RHEL.
+
+
+
+== Système de fichiers et options de montage
+
+Une fois les LUN créées et mappées et le zoning terminé, utilisez la procédure suivante pour connecter le stockage au serveur.
+
+
+NOTE: Dans cet exemple, nous avons utilisé 8 LUN de 24 Go pour la base de données, 2 LUN de 24 Go pour les journaux et 2 LUN de 24 Go pour les installations d'applications.
+
+
+
+== E/S asynchrones
+
+Une copie du livre blanc « considérations SAN d'Epic » et du document de référence rapide sur la configuration du stockage explique comment configurer les hôtes et se connecter au stockage. Cette section explique comment configurer un hôte Red Hat Enterprise Linux. Les détails AIX sont disponibles dans les documents référencés.

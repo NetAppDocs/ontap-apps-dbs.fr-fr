@@ -38,7 +38,8 @@ La gestion d'une configuration vMSC avec SnapMirror Active Sync est différente 
 
 La création d'un cluster vSphere HA est un processus en plusieurs étapes entièrement documenté à l'adresse https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-vcenter-esxi-management/GUID-F7818000-26E3-4E2A-93D2-FCDCE7114508.html["Comment créer et configurer des clusters dans vSphere client sur docs.vmware.com"]. En bref, vous devez d'abord créer un cluster vide, puis, à l'aide de vCenter, vous devez ajouter des hôtes et spécifier les paramètres vSphere HA et autres du cluster.
 
-*Note:* rien dans ce document ne remplace https://core.vmware.com/resource/vmware-vsphere-metro-storage-cluster-recommended-practices["Bonnes pratiques pour VMware vSphere Metro Storage Cluster"]
+
+NOTE: Rien dans ce document ne remplace https://core.vmware.com/resource/vmware-vsphere-metro-storage-cluster-recommended-practices["Bonnes pratiques pour VMware vSphere Metro Storage Cluster"]
 
 Pour configurer un cluster HA, effectuez les étapes suivantes :
 
@@ -155,7 +156,10 @@ Dans cette section, nous créons des groupes DRS pour les machines virtuelles et
 * NetApp recommande vivement la spécification *devrait s'exécuter sur les hôtes du groupe* plutôt que la spécification *doit s'exécuter sur les hôtes du groupe*. En cas de défaillance d'un hôte sur un site, les machines virtuelles Du site A doivent être redémarrées sur les hôtes du site B via vSphere HA, mais cette dernière spécification ne permet pas à HA de redémarrer les machines virtuelles sur le site B, car il s'agit d'une règle stricte. Il s'agit d'une règle souple qui ne sera pas respectée en cas de haute disponibilité, garantissant ainsi la disponibilité plutôt que la performance.
 
 
-*Remarque :* vous pouvez créer une alarme basée sur des événements qui est déclenchée lorsqu'une machine virtuelle viole une règle d'affinité VM-Host. Dans le client vSphere, ajoutez une nouvelle alarme pour la machine virtuelle et sélectionnez « VM viole VM-Host Affinity Rule » comme déclencheur d'événement. Pour plus d'informations sur la création et la modification d'alarmes, reportez-vous à la section http://pubs.vmware.com/vsphere-51/topic/com.vmware.ICbase/PDF/vsphere-esxi-vcenter-server-51-monitoring-performance-guide.pdf["Surveillance et performances vSphere"] documentation :
+* [NOTE]
+
+* Vous pouvez créer une alarme basée sur des événements qui est déclenchée lorsqu'une machine virtuelle viole une règle d'affinité VM-Host. Dans le client vSphere, ajoutez une nouvelle alarme pour la machine virtuelle et sélectionnez « VM viole VM-Host Affinity Rule » comme déclencheur d'événement. Pour plus d'informations sur la création et la modification d'alarmes, reportez-vous à la http://pubs.vmware.com/vsphere-51/topic/com.vmware.ICbase/PDF/vsphere-esxi-vcenter-server-51-monitoring-performance-guide.pdf["Surveillance et performances vSphere"] documentation.
+
 
 
 

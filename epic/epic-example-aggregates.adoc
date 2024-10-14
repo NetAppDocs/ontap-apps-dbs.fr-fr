@@ -1,0 +1,15 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-example-aggregates.html 
+keywords: epic,cache,iris 
+summary: 'Exemple de déploiement Epic sur ONTAP : agrégats' 
+---
+= Exemple de déploiement Epic sur ONTAP : agrégats
+:allow-uri-read: 
+
+
+[role="lead"]
+Pour obtenir la documentation la plus récente sur le provisionnement des agrégats, cliquez sur link:https://docs.netapp.com/us-en/ontap/disks-aggregates/manage-local-tiers-overview-concept.html["ici"^].
+
+
+NOTE: Les paramètres par défaut optimisent les performances et la capacité. Un grand agrégat est créé par nœud.

@@ -1,0 +1,23 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-config-performance.html 
+keywords: epic,cache,iris,QoS 
+summary: Gestion des performances Epic 
+---
+= Gestion des performances Epic
+:allow-uri-read: 
+
+
+[role="lead"]
+La plupart des baies 100 % Flash offrent les performances requises pour les workloads Epic. L'atout de NetApp est sa capacité à définir des règles de performance au niveau du sol et à garantir une performance prévisible pour chaque application.
+
+
+
+== Qualité de service (QoS)
+
+NetApp recommande d'utiliser la QoS. Le bénéfice de la QoS est la possibilité de consolider tous les workloads Epic. Tous les protocoles et les pools de stockage peuvent résider sur moins de matériel. Il n'est pas nécessaire de séparer les pools de stockage.
+
+* NetApp recommande d'attribuer à toutes les charges de travail du cluster une politique de qualité de service afin de mieux gérer la marge sur le cluster.
+* NetApp recommande d'équilibrer toutes les charges de travail de façon homogène dans la paire haute disponibilité.
+* N'utilisez pas les règles de qualité de service lors des tests d'E/S ; dans le cas contraire, les tests Genio échoueront. Analysez les différents workloads de production pendant 2-4 semaines avant d'attribuer des règles de QoS.
+

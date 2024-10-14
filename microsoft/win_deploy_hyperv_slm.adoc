@@ -10,7 +10,7 @@ summary: Comment configurer la migration dynamique du stockage Hyper-V.
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

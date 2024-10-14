@@ -1,0 +1,42 @@
+---
+sidebar: sidebar 
+permalink: epic/epic-arch-storage.html 
+keywords: epic,cache,iris 
+summary: Exigences de stockage Epic 
+---
+= Exigences de stockage Epic
+:allow-uri-read: 
+
+
+[role="lead"]
+Des ressources de stockage dédiées sont généralement fournies pour la base de données de production, tandis que les instances de base de données en miroir partagent des ressources de stockage secondaires avec d'autres composants logiciels Epic, tels que les outils de reporting Clarity.
+
+D'autres environnements de stockage logiciels, tels que ceux utilisés pour les fichiers d'applications et de systèmes, sont également fournis par les ressources de stockage secondaires.
+
+Outre les considérations de dimensionnement, Epic propose les règles d'infrastructure de stockage supplémentaires suivantes et les considérations clés suivantes :
+
+* Depuis 2020, toutes les charges de travail opérationnelles de la base de données (ODB) doivent se trouver sur des baies 100 % Flash.
+* Epic recommande que chaque pool de stockage se trouve sur du matériel physique distinct, notamment pool1, pool2, pool3, NAS1 et NAS2.
+
+
+
+NOTE: Un nœud d'un cluster peut être considéré comme un pool de stockage. Avec ONTAP 9.4 ou version ultérieure et AQoS, vous pouvez créer des pools protégés à l'aide de stratégies.
+
+* Nouvelle recommandation de sauvegarde Epic 3-2-1.
++
+.. Copie située dans le site distant (reprise après incident)
+.. L'une de ces copies doit se trouver sur une plateforme de stockage différente de la copie principale
+.. Des copies des données
+
+
+
+
+
+NOTE: Les clients qui utilisent NetApp SnapMirror pour la sauvegarde de NetApp ne répondent pas aux recommandations 3-2-1. La raison en est que ONTAP to ONTAP ne satisfait pas à la deuxième exigence indiquée ci-dessus. Vous pouvez utiliser SnapMirror directement depuis ONTAP vers le stockage objet sur site (via StorageGRID, par exemple) ou vers le cloud pour répondre aux exigences d'Epic.
+
+Pour plus d'informations sur les impératifs de stockage, consultez les guides Epic suivants disponibles dans Galaxy :
+
+* Considérations relatives aux SAN
+* Produits de stockage et état de la technologie (SPAT)
+* Guide de configuration matérielle
+

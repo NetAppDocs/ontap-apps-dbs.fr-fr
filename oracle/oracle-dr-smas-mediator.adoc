@@ -1,0 +1,45 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-dr-smas-mediator.html 
+keywords: MSSQL,SQL Server, SnapMirror active sync, SMBC, overview 
+summary: Oracle,SM-AS,synchronisation active,médiateur 
+---
+= Oracle et le médiateur ONTAP
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le médiateur est requis pour automatiser le basculement en toute sécurité. Dans l'idéal, elle serait placée sur un site tiers indépendant, mais elle peut toujours fonctionner pour la plupart des besoins si elle est en colocation avec l'un des clusters participant à la réplication.
+
+Le médiateur n'est pas vraiment un casse-barre, bien que c'est effectivement la fonction qu'il fournit. Il ne prend aucune action ; il fournit plutôt un canal de communication alternatif pour la communication cluster à cluster.
+
+image:smas-mediator.png["Diagramme de synchronisation active SnapMirror avec médiateur"]
+
+Le principal défi lié au basculement automatisé est le problème des réseaux partagés, qui se pose en cas de perte de connectivité entre les deux sites. Que doit-on faire ? Vous ne voulez pas que deux sites différents se désignent comme les copies restantes des données, mais comment un seul site peut-il faire la différence entre la perte réelle du site opposé et l'incapacité à communiquer avec le site opposé ?
+
+C'est là que le médiateur entre dans la photo. S'il est placé sur un troisième site, et chaque site a une connexion réseau distincte à ce site, alors vous avez un chemin supplémentaire pour chaque site pour valider l'état de santé de l'autre. Examinez à nouveau l'image ci-dessus et examinez les scénarios suivants.
+
+* Que se passe-t-il si le médiateur échoue ou est inaccessible à partir d'un ou des deux sites ?
++
+** Les deux clusters peuvent toujours communiquer entre eux sur le même lien que celui utilisé pour les services de réplication.
+** Les données restent protégées avec un objectif de point de récupération de 0
+
+
+* Que se passe-t-il si le site A tombe en panne ?
++
+** Le site B verra les deux canaux de communication tomber en panne.
+** Le site B prendra le contrôle des services de données, mais sans mise en miroir RPO=0
+
+
+* Que se passe-t-il si le site B tombe en panne ?
++
+** Le site A verra les deux canaux de communication tomber en panne.
+** Le site A prend le relais des services de données, mais sans mise en miroir avec un objectif de point de récupération de 0
+
+
+
+
+Il y a un autre scénario à prendre en compte : la perte du lien de réplication des données. En cas de perte de la liaison de réplication entre les sites, la mise en miroir avec un objectif de point de récupération de 0 sera évidemment impossible. Que devrait-on alors se passer ?
+
+Ceci est contrôlé par le statut du site préféré. Dans une relation SM-AS, l'un des sites est secondaire à l'autre. Cela n'a aucun effet sur les opérations normales, et tout accès aux données est symétrique. Toutefois, si la réplication est interrompue, le nœud devra être rompu pour reprendre les opérations. Par conséquent, le site privilégié continuera les opérations sans mise en miroir et le site secondaire arrêtera le traitement des E/S jusqu'à ce que la communication de réplication soit restaurée.

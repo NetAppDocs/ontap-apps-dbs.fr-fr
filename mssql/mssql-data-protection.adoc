@@ -10,7 +10,7 @@ summary: Protection des bases de données Microsoft SQL Server sur ONTAP avec le
 
 
 [role="lead"]
-La planification de la sauvegarde de la base de données dépend des besoins de l'entreprise. En combinant la technologie NetApp Snapshot d'ONTAP et en exploitant les API de Microsoft SQL Server, vous pouvez effectuer rapidement des sauvegardes cohérentes au niveau des applications, quelle que soit la taille des bases de données utilisateur. Pour une gestion des données plus avancée ou scale-out, NetApp propose SnapCenter.
+Les stratégies de sauvegarde des bases de données doivent être basées sur des exigences métier identifiées, et non sur des capacités théoriques. En combinant la technologie Snapshot de ONTAP et en exploitant les API de Microsoft SQL Server, vous pouvez effectuer rapidement des sauvegardes cohérentes au niveau des applications, quelle que soit la taille des bases de données utilisateur. Pour une gestion des données plus avancée ou scale-out, NetApp propose SnapCenter.
 
 
 
@@ -22,7 +22,7 @@ L'instance SQL Server peut être une instance de cluster d'installation autonome
 
 
 TIP: *NetApp recommande* d'utiliser SnapCenter pour créer des copies Snapshot. La méthode T-SQL décrite ci-dessous fonctionne également, mais SnapCenter offre une automatisation complète du processus de sauvegarde, de restauration et de clonage. Il effectue également une découverte pour s'assurer que les snapshots corrects sont créés. Aucune préconfiguration n'est requise.
-...
+
 SQL Server nécessite également une coordination entre le système d'exploitation et le stockage pour s'assurer que les données correctes sont présentes dans les snapshots au moment de la création. Dans la plupart des cas, la seule méthode sûre pour ce faire est SnapCenter ou T-SQL. Les snapshots créés sans cette coordination supplémentaire peuvent ne pas être récupérables de manière fiable.
 
 Pour plus d'informations sur le plug-in SQL Server pour SnapCenter, reportez-vous à la section link:https://www.netapp.com/pdf.html?item=/media/12400-tr4714.pdf["Tr-4714 : guide des meilleures pratiques pour SQL Server avec NetApp SnapCenter"^].

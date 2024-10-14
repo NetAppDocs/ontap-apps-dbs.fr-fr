@@ -10,7 +10,7 @@ summary: Découvrez comment déployer Microsoft Windows Nano Server
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

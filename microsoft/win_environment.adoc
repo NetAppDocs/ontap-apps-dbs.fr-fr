@@ -10,13 +10,13 @@ summary: 'En savoir plus sur le stockage NetApp et l"environnement de serveur Wi
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]
 Comme indiqué dans le link:win_overview.html["Présentation"], Les contrôleurs de stockage NetApp offrent une architecture réellement unifiée qui prend en charge les protocoles de fichiers, de blocs et d'objets. Notamment SMB/CIFS, NFS, NVMe/TCP, NVMe/FC, iSCSI, FC(FCP) et S3 créent un accès client et hôte unifié. Le même contrôleur de stockage peut fournir simultanément un service de stockage bloc sous la forme de LUN SAN et de service de fichiers comme NFS et SMB/CIFS. ONTAP est également disponible en tant que baie 100 % SAN (ASA) qui optimise l'accès à l'hôte via des chemins d'accès multiples symétriques actif-actif avec iSCSI et FCP, tandis que les systèmes ONTAP unifiés utilisent des chemins d'accès multiples asymétriques actifs/actifs. Dans les deux modes, ONTAP utilise ANA pour la gestion des chemins d'accès multiples NVMe over Fabrics (NVMe-of).
 
-Un contrôleur de stockage NetApp exécutant le logiciel ONTAP peut prendre en charge les charges de travail suivantes dans un environnement Windows Server :
+Un contrôleur de stockage NetApp exécutant ONTAP peut prendre en charge les charges de travail suivantes dans un environnement Windows Server :
 
 * Machines virtuelles hébergées dans des partages SMB 3.0 disponibles en continu
 * Serveurs virtuels hébergés sur des LUN CSV (Cluster Shared Volume) s'exécutant sur iSCSI ou FC
@@ -77,7 +77,7 @@ Pour connecter, configurer et gérer le stockage NetApp à partir de Windows Ser
 
 == Kit NetApp PowerShell
 
-Le kit NetApp PowerShell (PSTK) est un module PowerShell qui offre une automatisation de bout en bout et permet d'administrer le stockage NetApp ONTAP. Le module ONTAP contient plus de 2,000 cmdlets et aide à l'administration de FAS, NetApp de AFF (FAS 100 % Flash), de matériel générique et de ressources cloud.
+Le kit NetApp PowerShell (PSTK) est un module PowerShell qui offre une automatisation de bout en bout et permet d'administrer le stockage ONTAP. Le module ONTAP contient plus de 2,000 cmdlets et aide à l'administration de FAS, NetApp de AFF (FAS 100 % Flash), de matériel générique et de ressources cloud.
 
 
 

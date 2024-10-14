@@ -52,7 +52,7 @@ La méthode la plus simple consiste à placer tous les fichiers ou LUN dans un g
 
 == Architecture de réplication et de reprise après incident
 
-Cette section traite de la protection des données à distance, pour laquelle les données sont répliquées vers un site distant à des fins de stockage hors site sécurisé et de reprise sur incident. Notez que ces tableaux ne traitent pas de la protection des données de mise en miroir synchrone. Pour cette condition, consultez la documentation de NetApp MetroCluster, y compris link:../metrocluster/overview.html["MetroCluster"] et link:../smbc/overview.html["Synchronisation active SnapMirror"]
+Cette section traite de la protection des données à distance, pour laquelle les données sont répliquées vers un site distant à des fins de stockage hors site sécurisé et de reprise sur incident. Notez que ces tableaux ne traitent pas de la protection des données de mise en miroir synchrone. Pour cette exigence, consultez la documentation NetApp MetroCluster, y compris link:oracle-dr-mcc-failover.html["MetroCluster"] et link:oracle-dr-smas-overview.html["Synchronisation active SnapMirror"]
 
 Le RPO de reprise sur incident est limité par la bande passante réseau disponible et la taille totale des données protégées. Une fois le transfert de base initial créé, les mises à jour sont uniquement basées sur les données modifiées, ce qui représente généralement un faible pourcentage de l'empreinte totale des données, même si des exceptions existent.
 

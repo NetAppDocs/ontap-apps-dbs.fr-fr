@@ -17,26 +17,27 @@ NOTE: Cette documentation remplace le rapport technique _TR-4590 : guide des mei
 
 NetApp suppose que le lecteur a une connaissance pratique des éléments suivants :
 
-* Logiciel ONTAP
+* ONTAP
+* Architecture et administration de Microsoft SQL Server
+* Le logiciel de sauvegarde SnapCenter comprend les composants suivants :
 * NetApp SnapCenter en tant que logiciel de sauvegarde, qui inclut :
 +
 ** Plug-in SnapCenter pour Microsoft Windows
 ** Plug-in SnapCenter pour SQL Server
 
 
-* Architecture et administration de Microsoft SQL Server
 
 
-La portée de cette section sur les meilleures pratiques se limite à la conception technique basée sur les principes de conception et les normes privilégiées que NetApp recommande pour l'infrastructure de stockage. L'implémentation de bout en bout n'est pas concernée.
+La portée de cette section sur les meilleures pratiques se limite à la conception technique basée sur les principes et les normes préconisant NetApp pour l'infrastructure de stockage. L'implémentation de bout en bout n'est pas concernée.
 
-Pour plus d'informations sur la compatibilité de la configuration entre les produits NetApp, reportez-vous au link:https://mysupport.netapp.com/matrix/["Matrice d'interopérabilité NetApp (IMT)"^].
+Pour plus d'informations sur la compatibilité entre les produits NetApp, consultez le link:https://mysupport.netapp.com/matrix/["Matrice d'interopérabilité NetApp (IMT)"^].
 
 
 
 == Workloads Microsoft SQL Server
 
-Avant de déployer SQL Server, vous devez comprendre les exigences de charge de travail de la base de données des applications prises en charge par vos instances SQL Server. Chaque application a des exigences variables en termes de capacité, de performance et de disponibilité. Par conséquent, chaque base de données doit être conçue de manière à répondre de manière optimale à ces exigences. De nombreuses entreprises classent les bases de données en plusieurs niveaux de gestion, en utilisant les exigences des applications pour définir des contrats de niveau de service. Les charges de travail SQL Server sont les suivantes :
+Avant de déployer SQL Server, vous devez comprendre les exigences de charge de travail des applications prises en charge par vos instances de base de données SQL Server. Chaque application a des exigences variables en termes de capacité, de performance et de disponibilité. Par conséquent, chaque base de données doit être conçue de manière à répondre de manière optimale à ces exigences. De nombreuses entreprises classent les bases de données en plusieurs niveaux de gestion, en utilisant les exigences des applications pour définir des contrats de niveau de service. Les charges de travail SQL Server sont souvent classées comme décrit ci-dessous :
 
-* Les bases de données OLTP sont souvent également les bases de données les plus stratégiques d'une entreprise. Ces bases de données prennent généralement en charge les applications orientées client et sont considérées comme essentielles aux opérations stratégiques de l'entreprise. Les bases de données OLTP stratégiques et les applications qu'elles prennent en charge disposent souvent de SLA qui exigent des niveaux de performances élevés et sont sensibles à la dégradation des performances et à la disponibilité. Ils peuvent également être candidats pour toujours sur les clusters de basculement ou pour toujours sur les groupes de disponibilité. La combinaison E/S de ces types de bases de données se caractérise généralement par une lecture aléatoire de 75 à 90 % et une écriture de 25 à 10 %.
-* Les bases de données du système d'aide à la décision (DSS) peuvent également être appelées data warehouses. Ces bases de données jouent un rôle stratégique dans de nombreuses entreprises qui s'appuient sur l'analytique pour leurs activités. Ces bases de données sont sensibles à l'utilisation du CPU et aux opérations de lecture à partir du disque lors de l'exécution de requêtes. Dans de nombreuses entreprises, les bases de données DSS sont les plus critiques à la fin du mois, du trimestre et de l'année Cette charge de travail présente généralement un mélange d'E/S de lecture à 100 %.
+* OLTP, qui sont souvent les bases de données les plus stratégiques d'une entreprise. Ces bases de données prennent généralement en charge les applications orientées client et sont considérées comme essentielles aux opérations stratégiques de l'entreprise. Les bases de données OLTP stratégiques et les applications qu'elles prennent en charge respectent souvent des SLA qui exigent des performances élevées, qui sont sensibles à la dégradation des performances et qui exigent une disponibilité maximale. Ils peuvent également être candidats pour toujours sur les clusters de basculement ou pour toujours sur les groupes de disponibilité. La combinaison d'E/S sur ces types de bases de données se caractérise généralement par une lecture aléatoire de 75 à 90 % et une écriture de 25 à 10 %.
+* Bases de données du système d'aide à la décision (DSS), parfois appelées entrepôts de données. Ces bases de données jouent un rôle stratégique pour de nombreuses entreprises qui s'appuient sur l'analytique pour leurs activités. Ces bases de données sont sensibles à l'utilisation du CPU et aux opérations de lecture à partir du disque lors de l'exécution de requêtes. Dans de nombreuses entreprises, les bases de données DSS sont les plus critiques à la fin du mois, du trimestre et de l'année Ce workload présente généralement un mélange d'E/S de lecture de près de 100 %, et le débit d'E/S est souvent plus important que les IOPS.
 

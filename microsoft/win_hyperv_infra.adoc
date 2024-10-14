@@ -10,7 +10,7 @@ summary: Infrastructure de stockage Hyper-V avec ONTAP
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -78,7 +78,7 @@ Chaque machine virtuelle d'Hyper-V peut à son tour être fournie avec les LUN N
 
 == Transfert de données allégé
 
-Microsoft ODX, également appelé allègement de la charge des copies, permet des transferts directs de données au sein d'un dispositif de stockage ou entre des dispositifs de stockage compatibles sans transférer les données via l'ordinateur hôte. NetApp ONTAP prend en charge la fonction ODX pour les protocoles CIFS et SAN. ODX peut améliorer les performances si les copies se trouvent dans le même volume, réduire l'utilisation du processeur et de la mémoire sur le client et réduire l'utilisation de la bande passante des E/S réseau.
+Microsoft ODX, également appelé allègement de la charge des copies, permet des transferts directs de données au sein d'un dispositif de stockage ou entre des dispositifs de stockage compatibles sans transférer les données via l'ordinateur hôte. ONTAP prend en charge la fonction ODX pour les protocoles CIFS et SAN. ODX peut améliorer les performances si les copies se trouvent dans le même volume, réduire l'utilisation du processeur et de la mémoire sur le client et réduire l'utilisation de la bande passante des E/S réseau.
 
 Avec ODX, il est plus rapide et efficace de copier des fichiers au sein des partages SMB, au sein des LUN et entre les partages SMB et les LUN s'ils se trouvent dans le même volume. Cette approche s'avère plus utile dans le cas où plusieurs copies de l'image de référence d'un système d'exploitation (VHD/VHDX) sont requises au sein du même volume. Plusieurs copies de la même image de référence peuvent être réalisées en beaucoup moins de temps si les copies se trouvent dans le même volume. ODX est également appliqué à la migration dynamique du stockage Hyper-V pour le déplacement du stockage des machines virtuelles.
 
@@ -134,7 +134,7 @@ Pour plus d'informations sur ODX, voir https://docs.netapp.com/us-en/ontap/smb-a
 
 Les clusters de basculement offrent une haute disponibilité et une évolutivité aux serveurs Hyper-V. Un cluster de basculement est un groupe de serveurs Hyper-V indépendants qui fonctionnent ensemble pour améliorer la disponibilité et l'évolutivité des machines virtuelles.
 
-Les serveurs en cluster Hyper-V (appelés nœuds) sont connectés par le réseau physique et par un logiciel de cluster. Ces nœuds utilisent un stockage partagé pour stocker les fichiers de la machine virtuelle, notamment les fichiers de configuration, les fichiers des disques durs virtuels (VHD) et les copies Snapshot. Le stockage partagé peut être un partage SMB/CIFS NetApp ou un fichier CSV sur un LUN NetApp, comme illustré dans la Figure 6. Ce stockage partagé fournit un namespace cohérent et distribué auquel tous les nœuds du cluster peuvent accéder simultanément. Par conséquent, si un nœud tombe en panne dans le cluster, l'autre nœud assure le service par un processus appelé basculement. Les clusters de basculement peuvent être gérés à l'aide du composant logiciel enfichable Failover Cluster Manager et des applets de commande de mise en cluster de basculement Windows PowerShell.
+Les serveurs en cluster Hyper-V (appelés nœuds) sont connectés par le réseau physique et par un logiciel de cluster. Ces nœuds utilisent un stockage partagé pour stocker les fichiers de la machine virtuelle, notamment les fichiers de configuration, les fichiers des disques durs virtuels (VHD) et les copies Snapshot. Le stockage partagé peut être un partage SMB/CIFS NetApp ou un fichier CSV sur un LUN NetApp, comme illustré ci-dessous. Ce stockage partagé fournit un namespace cohérent et distribué auquel tous les nœuds du cluster peuvent accéder simultanément. Par conséquent, si un nœud tombe en panne dans le cluster, l'autre nœud assure le service par un processus appelé basculement. Les clusters de basculement peuvent être gérés à l'aide du composant logiciel enfichable Failover Cluster Manager et des applets de commande de mise en cluster de basculement Windows PowerShell.
 
 
 
@@ -200,7 +200,7 @@ Pour plus d'informations sur le déploiement de la migration dynamique dans un e
 
 Il est possible de migrer un serveur virtuel en direct entre deux serveurs Hyper-V indépendants non mis en cluster. Ce processus peut utiliser une migration dynamique sans partage ou partagée.
 
-* Dans la migration dynamique partagée, la machine virtuelle est stockée sur un partage SMB. Par conséquent, lorsque vous migrez une machine virtuelle en direct, le stockage de la machine virtuelle reste sur le partage SMB central pour un accès instantané par l'autre nœud, comme illustré dans la figure ci-dessous.
+* Dans la migration dynamique partagée, la machine virtuelle est stockée sur un partage SMB. Par conséquent, lorsque vous migrez une machine virtuelle en direct, le stockage de la machine virtuelle reste sur le partage SMB central pour un accès instantané par l'autre nœud, comme illustré ci-dessous.
 
 
 image:win_image8.png["Migration dynamique partagée dans un environnement non mis en cluster,largeur=331,hauteur=271"]

@@ -10,7 +10,7 @@ summary: Cette annexe décrit le déploiement de la migration dynamique dans un 
 :nofooter: 
 :icons: font
 :linkattrs: 
-:imagesdir: ../media
+:imagesdir: ../media/
 
 
 [role="lead"]

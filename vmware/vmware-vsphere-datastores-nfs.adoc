@@ -14,7 +14,7 @@ summary: 'Cette page décrit les bonnes pratiques d"implémentation de VMware vS
 
 
 [role="lead"]
-NetApp ONTAP est, entre autres, une baie NAS scale-out de grande qualité. ONTAP permet à VMware vSphere d'accéder simultanément aux datastores connectés par NFS à partir de nombreux hôtes VMware ESXi, ce qui dépasse de loin les limites imposées aux systèmes de fichiers VMFS. L'utilisation de NFS avec vSphere offre des avantages en termes de facilité d'utilisation et d'efficacité du stockage, comme indiqué dans le link:vmware-vsphere-datastores-top.html["les datastores"] section.
+ONTAP est, entre autres, une baie NAS scale-out de grande qualité. ONTAP permet à VMware vSphere d'accéder simultanément aux datastores connectés par NFS à partir de nombreux hôtes VMware ESXi, ce qui dépasse de loin les limites imposées aux systèmes de fichiers VMFS. L'utilisation de NFS avec vSphere offre des avantages en termes de facilité d'utilisation et d'efficacité du stockage, comme indiqué dans la link:vmware-vsphere-datastores-top.html["les datastores"] section.
 
 Nous vous recommandons les meilleures pratiques suivantes lorsque vous utilisez ONTAP NFS avec vSphere :
 

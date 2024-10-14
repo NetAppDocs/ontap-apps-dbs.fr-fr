@@ -42,4 +42,4 @@ Lorsque les options de montage des bases de données à instance unique sont uti
 Ne modifiez les options de montage que si (a) dNFS est utilisé et (b) un problème résulte d'un décalage dans la visibilité des fichiers. Si dNFS n'est pas utilisé, les options de montage Oracle RAC sur une base de données à instance unique entraînent une dégradation des performances.
 
 
-NOTE: Voir la remarque sur `nosharecache` dans link:../host-configuration/linux.html#linux-direct-nfs["Options de montage NFS Linux"] Pour un problème dNFS spécifique à Linux qui peut produire des résultats inhabituels.
+NOTE: Reportez-vous à la remarque à propos de `nosharecache` la link:oracle-host-config-linux.html#linux-direct-nfs["Options de montage NFS Linux"] pour un problème dNFS spécifique à Linux qui peut produire des résultats inhabituels.
