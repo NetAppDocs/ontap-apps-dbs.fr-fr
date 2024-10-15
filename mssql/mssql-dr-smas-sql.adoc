@@ -10,7 +10,7 @@ summary: Synchronisation active de Microsoft SQL Server et SnapMirror
 
 
 [role="lead"]
-SQL Server peut être configuré pour fonctionner avec SnapMirror actif de plusieurs façons. La bonne réponse dépend de la connectivité réseau disponible, des exigences de RPO et de la disponibilité.
+SQL Server peut être configuré pour fonctionner avec la synchronisation active SnapMirror de plusieurs façons. La bonne réponse dépend de la connectivité réseau disponible, des exigences de RPO et de la disponibilité.
 
 
 
