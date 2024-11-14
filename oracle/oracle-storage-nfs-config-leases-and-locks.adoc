@@ -102,6 +102,9 @@ Lorsqu'un serveur NFSv3 est redémarré, il est prêt à transmettre les E/S pre
 
 NFSv4, cependant, fera une courte pause. Cela fait partie du fonctionnement de NFSv4.
 
+
+NOTE: Les sections suivantes sont à jour depuis ONTAP 9.15.1, mais le comportement de bail et de verrouillage ainsi que les options de réglage peuvent changer de version à version. Si vous avez besoin d'ajuster les délais de location/verrouillage de NFSv4, veuillez consulter le support NetApp pour obtenir les informations les plus récentes.
+
 Les serveurs NFSv4 doivent suivre les baux, les verrous et les utilisateurs des données. Si un serveur NFS fonctionne de manière incohérente et redémarre, ou perd de l'alimentation pendant un moment, ou est redémarré pendant l'activité de maintenance, le résultat est le bail/verrouillage et d'autres informations client sont perdues. Le serveur doit déterminer quel client utilise les données avant de reprendre les opérations. C'est là que intervient le délai de grâce.
 
 Si vous mettez soudainement votre serveur NFSv4 hors/sous tension. Lorsqu'il est rétabli, les clients qui tentent de reprendre l'E/S reçoivent une réponse qui dit essentiellement « J'ai perdu les informations de location/verrouillage. Voulez-vous réenregistrer vos verrous ? » C'est le début de la période de grâce. La valeur par défaut est 45 secondes sur ONTAP :
@@ -115,12 +118,23 @@ vserver1  45
 ....
 Par conséquent, après un redémarrage, un contrôleur met en pause les E/S tandis que tous les clients récupèrent leurs baux et verrous. Une fois le délai de grâce terminé, le serveur reprend les opérations d'E/S.
 
+Cette période de grâce contrôle la récupération de bail pendant les modifications de l'interface réseau, mais il existe une deuxième période de grâce qui contrôle la récupération pendant le basculement du stockage `locking.grace_lease_seconds`. Il s'agit d'une option au niveau du nœud.
+
+....
+cluster01::> node run [node names or *] options locking.grace_lease_seconds
+....
+Par exemple, si vous avez fréquemment besoin d'effectuer des basculements LIF, et que vous devez réduire le délai de grâce, vous changiez . `v4-grace-seconds` Si vous souhaitez améliorer le temps de reprise des E/S pendant le basculement du contrôleur, vous devez le modifier `locking.grace_lease_seconds`.
+
+Ne modifiez ces valeurs qu'avec prudence et après avoir parfaitement compris les risques et les conséquences. Les pauses E/S liées aux opérations de basculement et de migration avec NFSv4.X ne peuvent pas être entièrement évitées. Les périodes de verrouillage, de bail et de grâce font partie de la RFC NFS. Pour de nombreux clients, NFSv3 est préférable, car les délais de basculement sont plus courts.
+
 
 
 == Délais de location par rapport aux délais de grâce
 
-Le délai de grâce et la période de location sont connectés. Comme mentionné ci-dessus, le délai de bail par défaut est de 30 secondes, ce qui signifie que les clients NFSv4 doivent s'enregistrer auprès du serveur au moins toutes les 30 secondes, sinon ils perdent leur bail et, à leur tour, leurs verrous. Le délai de grâce existe pour permettre à un serveur NFS de reconstruire les données de bail/verrouillage, et il prend par défaut 45 secondes. ONTAP exige que le délai de grâce soit supérieur de 15 secondes à la période de location. Cela permet de s'assurer qu'un environnement client NFS conçu pour renouveler les contrats de location au moins toutes les 30 secondes aura la possibilité d'archiver avec le serveur après un redémarrage. Un délai de grâce de 45 secondes garantit que tous les clients qui s'attendent à renouveler leur contrat de location au moins toutes les 30 secondes ont certainement l'occasion de le faire.
+Le délai de grâce et la période de location sont connectés. Comme mentionné ci-dessus, le délai de bail par défaut est de 30 secondes, ce qui signifie que les clients NFSv4 doivent s'enregistrer auprès du serveur au moins toutes les 30 secondes, sinon ils perdent leur bail et, à leur tour, leurs verrous. Le délai de grâce existe pour permettre à un serveur NFS de reconstruire les données de bail/verrouillage, et il prend par défaut 45 secondes. Le délai de grâce doit être plus long que la période de location. Cela permet de s'assurer qu'un environnement client NFS conçu pour renouveler les contrats de location au moins toutes les 30 secondes aura la possibilité d'archiver avec le serveur après un redémarrage. Un délai de grâce de 45 secondes garantit que tous les clients qui s'attendent à renouveler leur contrat de location au moins toutes les 30 secondes ont certainement l'occasion de le faire.
 
-Si un délai de 30 secondes n'est pas acceptable, vous pouvez choisir de prolonger la période de location. Si vous souhaitez augmenter le délai de bail à 60 secondes pour résister à une panne de réseau de 60 secondes, vous devrez augmenter le délai de grâce à au moins 75 secondes. ONTAP exige qu'il soit supérieur de 15 secondes à la période de location. Une pause d'E/S plus longue sera donc nécessaire lors du basculement du contrôleur.
+Si un délai de 30 secondes n'est pas acceptable, vous pouvez choisir de prolonger la période de location.
 
-Ce ne devrait normalement pas être un problème. En général, les utilisateurs ne mettent à jour les contrôleurs ONTAP qu'une ou deux fois par an. En outre, les basculements non planifiés en raison de défaillances matérielles sont extrêmement rares. En outre, si vous aviez un réseau où une panne réseau de 60 secondes était possible, et que le délai de bail était de 60 secondes, vous n'auriez probablement pas à vous opposer à un basculement rare du système de stockage, ce qui aurait entraîné une pause de 75 secondes non plus. Vous avez déjà reconnu que vous disposez d'un réseau qui s'arrête pendant plus de 60 secondes plutôt fréquemment.
+Si vous souhaitez augmenter le délai de bail à 60 secondes pour résister à une panne réseau de 60 secondes, vous devrez également augmenter le délai de grâce. Une pause d'E/S plus longue sera donc nécessaire lors du basculement du contrôleur.
+
+Ce ne devrait normalement pas être un problème. En général, les utilisateurs ne mettent à jour les contrôleurs ONTAP qu'une ou deux fois par an. En outre, les basculements non planifiés en raison de défaillances matérielles sont extrêmement rares. En outre, si vous aviez un réseau où une panne réseau de 60 secondes était possible, et que le délai de bail était de 60 secondes, vous n'auriez probablement pas à vous opposer à un basculement rare du système de stockage, ce qui aurait entraîné une pause de 61 secondes non plus. Vous avez déjà reconnu que vous disposez d'un réseau qui s'arrête pendant plus de 60 secondes plutôt fréquemment.
