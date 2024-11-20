@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: mysql/mysql-slot-tables.html 
 keywords: MySQL,MariaDB,TR-4722 
 summary: 'Tables d"emplacements MySQL et NFSv3' 
+searchtitle: 'Tables d"emplacements MySQL et NFSv3' 
 ---
-= Tables d'emplacements MySQL et NFSv3
+= Tables d'emplacements NFSv3
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/

@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: postgres/postgres-db-config.html 
 keywords: PostgreSQL,database,postgres 
 summary: Configuration de la base de données PostgreSQL avec ONTAP 
+searchtitle: Configuration de la base de données PostgreSQL avec ONTAP 
 ---
-= Configuration de la base de données PostgreSQL avec ONTAP
+= Paramètres
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/

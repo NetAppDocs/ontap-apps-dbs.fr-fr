@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: mssql/mssql-log-directory.html 
 keywords: MSSQL,SQL Server, volumes, LUN, SnapCenter 
 summary: Répertoire du journal Microsoft SQL Server 
+searchtitle: Répertoire du journal Microsoft SQL Server 
 ---
-= Répertoire du journal Microsoft SQL Server
+= Répertoire du journal
 :allow-uri-read: 
 :imagesdir: ../media/
 

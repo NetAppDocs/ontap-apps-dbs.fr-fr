@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: mysql/mysql-mysql-over-san.html 
 keywords: MySQL,MariaDB,SAN 
 summary: MySQL avec SAN 
+searchtitle: MySQL avec SAN 
 ---
-= MySQL avec SAN
+= SAN
 :allow-uri-read: 
 :icons: font
 :imagesdir: ../media/

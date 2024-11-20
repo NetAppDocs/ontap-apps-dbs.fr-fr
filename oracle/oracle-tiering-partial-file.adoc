@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-tiering-partial-file.html 
 keywords: tiering, fabricpool 
 summary: Tiering FabricPool de fichiers partiels Oracle 
+searchtitle: Tiering FabricPool de fichiers partiels Oracle 
 ---
-= Tiering FabricPool de fichiers partiels Oracle
+= Tiering partiel des fichiers
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

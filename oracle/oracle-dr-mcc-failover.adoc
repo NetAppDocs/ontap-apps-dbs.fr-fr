@@ -2,9 +2,10 @@
 sidebar: sidebar 
 permalink: oracle/oracle-dr-mcc-failover.html 
 keywords: Metrocluster, mcc, MCC-IP 
-summary: Basculement de base de données Oracle avec MetroCluster 
+summary: Reprise après incident des bases de données Oracle avec MetroCluster 
+searchtitle: Reprise après incident des bases de données Oracle avec MetroCluster 
 ---
-= Basculement de base de données Oracle avec MetroCluster
+= Reprise d'activité avec MetroCluster
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

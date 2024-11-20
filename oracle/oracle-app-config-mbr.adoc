@@ -3,8 +3,9 @@ permalink: oracle/oracle-app-config-mbr.html
 sidebar: sidebar 
 keywords: oracle, database, ontap, db_file_multiblock_read_count, multiblock 
 summary: Paramètres de base de données Oracle - db_file_multiblock_read_count 
+searchtitle: Paramètres de base de données Oracle - db_file_multiblock_read_count 
 ---
-= Paramètres de la base de données Oracle : db_file_multibloc_read_count
+= db_file_multibloc_read_count
 :allow-uri-read: 
 
 

@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-ontap-config-failover.html 
 keywords: failover, switchover 
 summary: 'Il est nécessaire de bien comprendre les fonctions de basculement et de basculement du stockage pour s"assurer que les opérations de la base de données Oracle ne sont pas interrompues par ces opérations. En outre, les arguments utilisés par les opérations de basculement et de basculement peuvent affecter l"intégrité des données en cas d"utilisation incorrecte.' 
+searchtitle: Basculement/basculement des bases de données Oracle et du contrôleur ONTAP 
 ---
-= Basculement/basculement des bases de données Oracle et du contrôleur ONTAP
+= Basculement/basculement ONTAP
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

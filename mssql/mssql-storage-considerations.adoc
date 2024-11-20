@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: mssql/mssql-storage-considerations.html 
 keywords: MSSQL,SQL Server, volumes, LUN, SnapCenter 
 summary: Considérations relatives au stockage Microsoft SQL Server 
+searchtitle: Considérations relatives au stockage Microsoft SQL Server 
 ---
-= Considérations relatives au stockage Microsoft SQL Server
+= Présentation
 :allow-uri-read: 
 :imagesdir: ../media/
 

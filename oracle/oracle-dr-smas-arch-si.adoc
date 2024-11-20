@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-dr-smas-arch-si.html 
 keywords: oracle, active sync, mcc, MCC-IP 
 summary: Synchronisation active Oracle SnapMirror 
+searchtitle: Oracle Single instance avec synchronisation active SnapMirror 
 ---
-= Oracle Single instance avec synchronisation active SnapMirror
+= Instance unique Oracle
 :allow-uri-read: 
 
 

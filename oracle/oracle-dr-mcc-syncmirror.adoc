@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-dr-mcc-syncmirror.html 
 keywords: metrocluster, syncmirror 
 summary: Les bases de données Oracle avec SyncMirror 
+searchtitle: Les bases de données Oracle avec SyncMirror 
 ---
-= Les bases de données Oracle avec SyncMirror
+= SyncMirror
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

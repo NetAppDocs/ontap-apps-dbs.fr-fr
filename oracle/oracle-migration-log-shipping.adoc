@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-migration-log-shipping.html 
 keywords: migration, oracle, log shipping 
 summary: 'Migration Oracle via l"envoi de journaux' 
+searchtitle: 'Migration de la base de données Oracle via l"envoi de journaux' 
 ---
-= Migration de la base de données Oracle via l'envoi de journaux
+= Envoi de journaux
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-migration-datafile-move.html 
 keywords: migration, oracle, move datafile 
 summary: Migration des fichiers de données Oracle individuels 
+searchtitle: Migration des fichiers de données Oracle 
 ---
-= Migration des fichiers de données Oracle
+= Migration des fichiers de données
 :allow-uri-read: 
 
 

@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-migration-fli-cutover.html 
 keywords: migration, oracle, FLI 
 summary: Migration Oracle avec FLI - mise en service 
+searchtitle: Migration Oracle avec FLI - mise en service 
 ---
-= Migration Oracle avec FLI - mise en service
+= Mise en service
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

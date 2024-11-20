@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-dr-smas-fail-sample.html 
 keywords: Oracle, SnapMirror active sync, SMBC, failover 
 summary: Basculement de la synchronisation active Oracle et SnapMirror 
+searchtitle: 'Exemple d"architecture Oracle avec SnapMirror Active Sync' 
 ---
-= Exemple d'architecture Oracle avec SnapMirror Active Sync
+= Exemple d'architecture
 :allow-uri-read: 
 :imagesdir: ../media/
 

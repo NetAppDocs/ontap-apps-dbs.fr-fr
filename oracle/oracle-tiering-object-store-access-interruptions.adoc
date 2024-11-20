@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-tiering-object-store-access-interruptions.html 
 keywords: tiering, fabricpool, interruption 
 summary: 'Interruptions d"accès aux bases de données Oracle et aux magasins d"objets' 
+searchtitle: 'Interruptions d"accès aux bases de données Oracle et aux magasins d"objets' 
 ---
-= Interruptions d'accès aux bases de données Oracle et aux magasins d'objets
+= Interruptions d'accès au magasin d'objets
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

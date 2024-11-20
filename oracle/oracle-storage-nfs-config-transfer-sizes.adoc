@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-storage-nfs-config-transfer-sizes.html 
 keywords: NFS 
 summary: Tailles de transfert NFS avec Oracle 
+searchtitle: Tailles de transfert NFS avec les bases de données Oracle 
 ---
-= Tailles de transfert NFS avec les bases de données Oracle
+= Tailles de transfert NFS
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

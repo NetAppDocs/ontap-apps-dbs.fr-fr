@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-app-config-block-sizes.html 
 keywords: oracle, database, ontap, SAN, ASM, blocks 
 summary: Tailles des blocs de base de données Oracle 
+searchtitle: Tailles des blocs de base de données Oracle 
 ---
-= Tailles des blocs de base de données Oracle
+= Tailles de bloc
 :allow-uri-read: 
 
 

@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-dr-smas-mediator.html 
 keywords: MSSQL,SQL Server, SnapMirror active sync, SMBC, overview 
 summary: Oracle,SM-AS,synchronisation active,médiateur 
+searchtitle: Oracle, la synchronisation active SnapMirror et le médiateur ONTAP 
 ---
-= Oracle et le médiateur ONTAP
+= Médiateur de ONTAP
 :allow-uri-read: 
 :imagesdir: ../media/
 

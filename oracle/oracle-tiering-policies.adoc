@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-tiering-policies.html 
 keywords: tiering, fabricpool 
 summary: Règles de Tiering FabricPool de la base de données Oracle 
+searchtitle: Règles de Tiering FabricPool de la base de données Oracle 
 ---
-= Règles de Tiering FabricPool de la base de données Oracle
+= Règles de hiérarchisation
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

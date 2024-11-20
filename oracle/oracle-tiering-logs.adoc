@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-tiering-logs.html 
 keywords: tiering, fabricpool 
 summary: 'Tiering des journaux d"archivage Oracle' 
+searchtitle: 'Tiering des journaux d"archivage de bases de données Oracle' 
 ---
-= Tiering des journaux d'archivage de bases de données Oracle
+= Tiering des journaux d'archivage
 :allow-uri-read: 
 :nofooter: 
 :icons: font

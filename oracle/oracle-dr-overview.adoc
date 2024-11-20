@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: oracle/oracle-dr-overview.html 
 keywords: metrocluster, syncmirror, oracle 
 summary: Reprise après incident de la base de données Oracle avec ONTAP 
+searchtitle: Reprise après incident de la base de données Oracle avec ONTAP 
 ---
-= Reprise après incident de la base de données Oracle avec ONTAP
+= Présentation
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

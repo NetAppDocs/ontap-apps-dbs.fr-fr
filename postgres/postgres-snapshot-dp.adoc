@@ -3,8 +3,9 @@ sidebar: sidebar
 permalink: postgres/postgres-snapshot-dp.html 
 keywords: PostgreSQL,database,postgres 
 summary: Bases de données PostgreSQL et snapshots de stockage 
+searchtitle: Bases de données PostgreSQL et snapshots de stockage 
 ---
-= Bases de données PostgreSQL et snapshots de stockage
+= Snapshots
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
