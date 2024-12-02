@@ -13,7 +13,15 @@ Le document recommandations d'Epic Database Storage Layout fournit des conseils 
 
 Il est important de consulter ce document avec l'aide d'Epic DBA et d'Epic, et de finaliser le nombre de LUN et la taille de LUN en cas d'ajustement. Ces recommandations de stockage sont importantes pour la profondeur de file d'attente des HBA, les performances de stockage, la facilité d'exploitation et la facilité d'extension.
 
-Pour connaître la profondeur de la file d'attente du système d'exploitation du serveur, utilisez au moins huit LUN (une LUN par volume) pour une base de données. Augmentez le nombre de LUN par multiples de huit. Dans les environnements de plus grande taille, vous pouvez avoir besoin de davantage de LUN ; utilisez le même nombre de volumes (huit au total, quatre par nœud) et ajoutez des LUN par multiples de huit. Epic recommande de conserver les LUN < 8 To et le nombre de LUN < 32. Cette approche vous permet de faire évoluer facilement votre environnement Epic.
+Pour connaître la profondeur de la file d'attente du système d'exploitation du serveur, utilisez au moins huit LUN (une LUN par volume) pour une base de données. Augmentez le nombre de LUN en fonction du nombre de nœuds dans le cluster ONTAP. Par exemple, ajoutez 4 LUN si vous utilisez un cluster à 4 nœuds (2 paires HA). Pour les environnements de plus grande taille, davantage de LUN peuvent être nécessaires ; utilisez le même nombre de volumes (huit au total, distribués sur un nœud de stockage) et ajoutez des LUN par multiples de deux entre les nœuds et les volumes du cluster. Cette approche vous permet de faire évoluer facilement votre environnement Epic.
+
+*Exemple 1 : cluster ONTAP à 2 nœuds*
+
+2 nœuds, 1 paire HA 8 volumes, 4 volumes par nœud 8 LUN, une LUN par volume Ajout de 2 LUN supplémentaires, une LUN sur le nœud 01 dans le volume 01, une LUN sur le nœud 02 dans le volume 02.
+
+*Exemple 2 : cluster ONTAP à 4 nœuds*
+
+4 nœuds, 2 paires HA 8 volumes, 2 volumes par nœud 8 LUN, une LUN par volume Ajout de 4 LUN supplémentaires, une LUN sur le nœud 01 dans le volume01, une LUN sur le nœud 02 dans le volume02, une LUN sur le nœud 03 dans le volume03, une LUN sur le nœud 04 dans le volume04.
 
 Pour optimiser les performances d'une charge de travail, comme Epic ODB ou Clarity, chaque disposition est également optimisée pour le stockage NetApp. Avec huit volumes utilisés, les E/S d'écriture sont réparties de façon homogène entre les contrôleurs, optimisant ainsi l'utilisation du processeur. Pour la réplication et la sauvegarde, il est préférable de limiter le nombre de volumes à huit pour simplifier les opérations.
 
@@ -21,7 +29,9 @@ Pour optimiser les performances d'une charge de travail, comme Epic ODB ou Clari
 
 == Options d'évolutivité
 
-Si le serveur requiert plus de stockage, l'option la plus simple est d'augmenter les LUN contenant des volumes. La seconde option consiste à ajouter des LUN aux groupes de volumes par multiples de huit à la fois (un par volume existant). L'ajout d'une ou deux LUN peut créer une zone brûlante et affecter les performances.
+Si le serveur requiert plus de stockage, l'option la plus simple est d'augmenter les LUN contenant des volumes. La seconde option consiste à ajouter des LUN aux groupes de volumes par multiples de deux à la fois (un par volume par nœud).
+
+Exemple :
 
 
 
@@ -30,30 +40,15 @@ Si le serveur requiert plus de stockage, l'option la plus simple est d'augmenter
 image:epic-8lun.png["Disposition Epic 8 LUN"]
 
 
-
-== Disposition des volumes et 16 LUN
-
-image:epic-16lun.png["Disposition Epic 16 LUN"]
-
-
-
-== Disposition des volumes et 24 LUN
-
-image:epic-24lun.png["Disposition Epic 24 LUN"]
-
-
-
-== Disposition des volumes et 32 LUN
-
-image:epic-32lun.png["Disposition Epic 32 LUN"]
+NOTE: Si dans un grand environnement nécessitant plus de 4 nœuds ou 8 LUN, consultez notre équipe Epic pour confirmer les conceptions de LUN. L'équipe peut être rejointe sur Epic@NetApp.com.
 
 
 
 == Et des meilleures pratiques
 
-* Utilisez 8, 16, 24 ou 32 LUN dans 8 volumes.
+* Utilisez 8 LUN dans 8 volumes pour démarrer, en ajoutant 2 LUN à la fois, sur tous les nœuds du cluster.
 * Équilibrez les charges de travail sur toute la paire haute disponibilité afin d'optimiser les performances et l'efficacité.
-* Créez des LUN dont la taille est prévue pour 3 ans de croissance afin d'éviter de multiplier par 10 les limites d'extension des LUN.
+* Créez des LUN dont la taille est prévue pour 3 ans de croissance. (Pour connaître la taille maximale de LUN, consultez lalink:https://docs.netapp.com/us-en/ontap/san-admin/resize-lun-task.html["Documentation de l'ONTAP"].)
 * Utilisation de volumes et de LUN à provisionnement fin
 * Utilisez au moins huit LUN de base de données, deux LUN de journal et deux LUN d'application. Cette configuration optimise les performances du stockage et la profondeur de la file d'attente du système d'exploitation. Vous pouvez utiliser davantage de ressources si nécessaire pour des raisons de capacité ou autres.
 * Si vous devez ajouter des LUN à des groupes de volumes, ajoutez huit LUN à la fois.
