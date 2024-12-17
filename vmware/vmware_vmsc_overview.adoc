@@ -66,4 +66,4 @@ La synchronisation active SnapMirror peut également être déployée de deux ma
 
 image::../media/vmsc_1_2.png[Schéma VMSC avec MCC,624,485]
 
-Reportez-vous à la section https://docs.netapp.com/us-en/ontap/smbc/index.html["Documents NetApp"] Pour des informations spécifiques sur le design et le déploiement de SnapMirror active Sync.
+Pour plus d'informations sur les avantages de la conception et du déploiement symétriques ou asymétriques, consultez le https://docs.netapp.com/us-en/ontap/smbc/index.html["Documentation de synchronisation active SnapMirror"].
