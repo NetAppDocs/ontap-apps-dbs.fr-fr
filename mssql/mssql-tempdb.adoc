@@ -11,15 +11,16 @@ searchtitle: Fichiers tempdb Microsoft SQL Server
 
 
 [role="lead"]
-La base de données tempdb peut être largement utilisée. Outre le placement optimal des fichiers de base de données utilisateur sur ONTAP, le placement des fichiers de données tempdb est également essentiel pour réduire les conflits d'allocation
+La base de données tempdb peut être largement utilisée. Outre le placement optimal des fichiers de base de données utilisateur sur ONTAP, le placement des fichiers de données tempdb est également essentiel pour réduire les conflits d'allocation. Tempdb doit être placé sur un disque distinct et non partagé avec les fichiers de données utilisateur.
 
 Des conflits de page peuvent se produire sur les pages GAM (Global allocation map), SGAM (Shared global allocation map) ou PFS (page Free Space) lorsque SQL Server doit écrire sur des pages système spéciales pour allouer de nouveaux objets. Les loquets verrouillent ces pages en mémoire. Sur une instance SQL Server occupée, l'obtention d'un verrou sur une page système dans tempdb peut prendre un certain temps. Cela ralentit les temps d'exécution des requêtes et est appelé conflit de type LATCH. Consultez les meilleures pratiques suivantes pour la création de fichiers de données tempdb :
 
 * Pour < ou = jusqu'à 8 cœurs : fichiers de données tempdb = nombre de cœurs
 * Pour plus de 8 cœurs : 8 fichiers de données tempdb
+* Le fichier de données tempdb doit être créé avec la même taille
 
 
-L'exemple de script suivant modifie tempdb en créant huit fichiers tempdb et en déplaçant tempdb vers le point de montage `C:\MSSQL\tempdb` Pour SQL Server 2012 et versions ultérieures.
+L'exemple de script suivant modifie tempdb en créant huit fichiers tempdb de taille égale et en déplaçant tempdb vers le point de montage `C:\MSSQL\tempdb` pour SQL Server 2012 et versions ultérieures.
 
 ....
 use master

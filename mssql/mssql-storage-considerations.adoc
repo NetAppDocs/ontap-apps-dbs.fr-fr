@@ -47,9 +47,9 @@ les volumes sont créés et résident dans des agrégats. Ce terme peut parfois 
 
 Avant de créer une conception de volume de base de données, il est important de comprendre comment le modèle et les caractéristiques d'E/S SQL Server varient en fonction de la charge de travail et des exigences de sauvegarde et de restauration. Consultez les recommandations NetApp suivantes pour les volumes flexibles :
 
-* Évitez de partager des volumes entre des hôtes. Par exemple, s'il est possible de créer 2 LUN dans un seul volume et de partager chaque LUN avec un autre hôte, cela peut être évité, car la gestion peut en compliquer la tâche.
+* Évitez de partager des volumes entre des hôtes. Par exemple, s'il est possible de créer 2 LUN dans un seul volume et de partager chaque LUN avec un autre hôte, cela peut être évité, car la gestion peut en compliquer la tâche. Dans le cas d'une exécution de plusieurs instances SQL Server sur le même hôte, sauf si vous êtes proche de la limite de volume sur un nœud, évitez le partage de volume et disposez à la place d'un volume distinct par instance et par hôte pour faciliter la gestion des données.
 * Utilisez des points de montage NTFS au lieu de lettres de lecteur pour dépasser la limite de 26 lettres de lecteur dans Windows. Lorsque vous utilisez des points de montage de volume, il est généralement recommandé de donner au libellé de volume le même nom que le point de montage.
-* Le cas échéant, configurez une règle de dimensionnement automatique de volume pour éviter les conditions de manque d'espace. 17 Guide des meilleures pratiques pour Microsoft SQL Server avec ONTAP © 2022 NetApp, Inc Tous droits réservés.
+* Le cas échéant, configurez une règle de dimensionnement automatique de volume pour éviter les conditions de manque d'espace.
 * Si vous installez SQL Server sur un partage SMB, assurez-vous que Unicode est activé sur les volumes SMB pour la création de dossiers.
 * Définissez la valeur de la réserve d'instantanés dans le volume sur zéro pour faciliter la surveillance d'un point de vue opérationnel.
 * Désactivez les planifications d'instantanés et les stratégies de conservation. Utilisez plutôt SnapCenter pour coordonner les copies Snapshot des volumes de données SQL Server.
@@ -64,7 +64,7 @@ Avant de créer une conception de volume de base de données, il est important d
 
 * Assurez-vous que les fichiers de base de données utilisateur et le répertoire des journaux pour stocker la sauvegarde des journaux se trouvent sur des volumes distincts afin d'empêcher la règle de conservation d'écraser les snapshots lorsqu'ils sont utilisés avec la technologie SnapVault.
 * Ne mélangez pas des fichiers de base de données et des fichiers autres que des bases de données, tels que des fichiers de recherche en texte intégral, sur le même LUN.
-* Le placement de fichiers secondaires de base de données (dans le cadre d'un groupe de fichiers) sur des volumes distincts améliore les performances de la base de données SQL Server. Cette séparation est valide uniquement si le fichier de la base de données `.mdf`` ne partage pas son LUN avec d'autres `.mdf` fichiers.
+* Le placement de fichiers secondaires de base de données (dans le cadre d'un groupe de fichiers) sur des volumes distincts améliore les performances de la base de données SQL Server. Cette séparation est valide uniquement si le fichier de la base de données `.mdf` ne partage pas son LUN avec d'autres `.mdf` fichiers.
 * Si vous créez des LUN à l'aide de DiskManager ou d'autres outils, assurez-vous que la taille de l'unité d'allocation est définie sur 64 Ko pour les partitions lors du formatage des LUN.
 * Voir la link:https://www.netapp.com/media/10680-tr4080.pdf["Microsoft Windows et MPIO natif conformément aux meilleures pratiques ONTAP pour les SAN modernes"] Pour appliquer la prise en charge des chemins d'accès multiples sur Windows aux périphériques iSCSI dans les propriétés MPIO.
 
