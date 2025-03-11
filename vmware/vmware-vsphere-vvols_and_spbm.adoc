@@ -14,11 +14,36 @@ summary: 'Cette page décrit les bonnes pratiques d"implémentation d"une soluti
 
 
 [role="lead"]
-NetApp a été un partenaire de conception précoce avec VMware dans le développement de vSphere Virtual volumes (vvols), en fournissant des informations architecturales et une prise en charge précoce pour vvols et VMware vSphere API for Storage Awareness (VASA). Non seulement cette approche intègre la gestion du stockage granulaire des machines virtuelles à VMFS, mais elle prend également en charge l'automatisation du provisionnement du stockage via la gestion basée sur des règles de stockage (SPBM).
+Annoncé pour la première fois en 2012, NetApp a été l'un des premiers partenaires de conception avec VMware dans le développement de VMware vSphere APIs for Storage Awareness (VASA), la base de la gestion basée sur des règles de stockage (SPBM) avec des baies de stockage d'entreprise. Avec cette approche, la gestion du stockage granulaire des ordinateurs virtuels était limitée au stockage VMFS et NFS.
 
-Grâce à la gestion du stockage basée sur des règles, une structure sert de couche d'abstraction entre les services de stockage disponibles pour votre environnement de virtualisation et les éléments de stockage provisionnés via des règles. Cette approche permet aux architectes du stockage de concevoir des pools de stockage dont les capacités sont facilement utilisable par les administrateurs de machines virtuelles. Les administrateurs peuvent ensuite répondre aux exigences des charges de travail des machines virtuelles par rapport aux pools de stockage provisionnés, ce qui permet un contrôle granulaire des divers paramètres au niveau de chaque machine virtuelle ou disque virtuel.
+ As a technology design partner, NetApp provided architectural input and in 2015 announced support for vVols. This new technology now enabled the automation of VM-granular and truly array-native storage provisioning through SPBM.
 
-ONTAP est leader du secteur du stockage dans l'évolutivité de vvols, en gérant des centaines de milliers de vvols dans un seul cluster, alors que les fournisseurs de baies d'entreprise et de baies Flash plus petites prennent en charge aussi peu que plusieurs milliers de vvols par baie. NetApp pilotant également l'évolution de la gestion granulaire des machines virtuelles avec des fonctionnalités à venir en matière de prise en charge de vvols 3.0.
+
+== Volumes virtuels (vVols)
+
+Les vVols sont une architecture de stockage révolutionnaire qui permet la gestion granulaire du stockage des machines virtuelles. Le stockage peut ainsi être géré non seulement par machine virtuelle (y compris les métadonnées des machines virtuelles), mais également par VMDK. Les vVols sont un composant clé de la stratégie Software Defined Data Center (SDDC) qui constitue la base de VMware Cloud Foundation (VCF), fournissant ainsi une architecture de stockage plus efficace et évolutive pour les environnements virtualisés.
+
+Les vVols permettent aux machines virtuelles de consommer du stockage par machine virtuelle, car chaque objet de stockage de machine virtuelle est une entité unique dans NetApp ONTAP. Avec les systèmes ASA r2 qui ne nécessitent plus de gestion de volume, chaque objet de stockage VM est une unité de stockage unique sur la baie et peut être contrôlé de manière indépendante. Cela permet de créer des règles de stockage qui peuvent être appliquées aux machines virtuelles individuelles ou aux VMDK (et ainsi aux unités d'exploitation doubles), fournissant un contrôle granulaire sur les services de stockage tels que les performances, la disponibilité et la protection des données.
+
+
+
+== Gestion du stockage basée sur des règles (SBPM)
+
+Grâce à la gestion du stockage basée sur des règles, une structure sert de couche d'abstraction entre les services de stockage disponibles pour votre environnement de virtualisation et les éléments de stockage provisionnés via des règles. Cette approche permet aux architectes du stockage de concevoir des pools de stockage avec des fonctionnalités différentes. Ces pools peuvent être facilement consommés par les administrateurs des VM. Les administrateurs peuvent ensuite faire correspondre les besoins des charges de travail des machines virtuelles aux pools de stockage provisionnés. Cette approche simplifie la gestion du stockage et permet une utilisation plus efficace des ressources de stockage.
+
+Le SBPM est un composant clé des vVols qui fournit un framework basé sur des règles pour la gestion des services de stockage. Les règles sont créées par les administrateurs vSphere à l'aide de règles et de fonctionnalités exposées par le VASA Provider(VP) du fournisseur. Il est possible de créer des règles pour différents services de stockage, tels que les performances, la disponibilité et la protection des données. Il est possible d'attribuer des règles à des machines virtuelles ou des VMDK individuels pour assurer un contrôle granulaire des services de stockage.
+
+
+
+== NetApp ONTAP et vVols
+
+NetApp ONTAP est leader du secteur du stockage en vVols à l'échelle du cluster, prenant en charge des centaines de milliers de vVols* par cluster unique. En revanche, les fournisseurs de baies d'entreprise et de baies Flash plus petites prennent en charge jusqu'à plusieurs milliers de vVols par baie. ONTAP offre une solution de stockage évolutive et efficace pour les environnements VMware vSphere, prenant en charge les vVols avec un ensemble complet de services de stockage, dont la déduplication, la compression, le provisionnement fin et la protection des données. La gestion du stockage basée sur des règles facilite l'intégration transparente aux environnements VMware vSphere.
+
+Nous avons mentionné précédemment que les administrateurs des ordinateurs virtuels peuvent consommer de la capacité sous forme de pools de stockage. Pour ce faire, nous utilisons des conteneurs de stockage représentés dans vSphere en tant que datastores logiques.
+
+Les conteneurs de stockage sont créés par les administrateurs du stockage et servent à grouper les ressources de stockage consommées par les administrateurs des VM. Les conteneurs de stockage peuvent être créés différemment en fonction du type de système ONTAP que vous utilisez. Avec les clusters ONTAP 9 classiques, un ou plusieurs volumes FlexVol soutiennent ensemble le pool de stockage. Avec les systèmes ASA r2, l'intégralité du cluster correspond au pool de stockage.
 
 
 NOTE: Pour plus d'informations sur les volumes virtuels VMware vSphere, SPBM et ONTAP, voir link:vmware-vvols-overview.html["Tr-4400 : volumes virtuels VMware vSphere avec ONTAP"^].
+
+ \* Depending on platform and protocol

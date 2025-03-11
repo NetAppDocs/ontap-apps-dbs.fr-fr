@@ -1,0 +1,93 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-vvols-checklist.html 
+keywords: tr-4400, vvols, ontap, virtual volumes, protect 
+summary: 'Liste de contrôle d"installation des outils ONTAP 10' 
+---
+= Liste de contrôle
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Utilisez cette liste de contrôle d'installation pour garantir un déploiement réussi (mise à jour pour 10.3 et versions ultérieures).
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png["Une seule"] Planification initiale
+[role="quick-margin-list"]
+* Avant de commencer l'installation, vous devez vérifier https://imt.netapp.com/matrix/#search["Matrice d'interopérabilité"] que votre déploiement a été certifié.
+* Déterminez la taille et le type d'outils ONTAP nécessaires à la configuration de votre environnement. Pour plus d'informations, reportez-vous au https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/prerequisites.html["Limites de configuration pour le déploiement des outils ONTAP pour VMware vSphere"].
+* Déterminez si vous utiliserez des SVM mutualisés ou autorisez l'accès complet au cluster. En cas d'utilisation de SVM mutualisés, vous devrez disposer d'une LIF de gestion de SVM sur chaque SVM à utiliser. Cette LIF doit être accessible via le port 443 par les outils ONTAP.
+* Déterminez si vous allez utiliser ONTAP Tools Storage Replication adapter (SRA) pour VMware site Recovery Manager (SRM) ou Live site Recovery (VLSR). Si tel est le cas, vous devrez accéder à l'interface de gestion du serveur SRM/VLSR pour installer SRA.
+* Si vous utilisez la réplication SnapMirror gérée par les outils ONTAP (y compris, mais sans s'y limiter, la synchronisation active SnapMirror), votre administrateur ONTAP doit https://docs.netapp.com/us-en/ontap/peering/create-cluster-relationship-93-later-task.html["Créez une relation entre clusters dans ONTAP"] et https://docs.netapp.com/us-en/ontap/peering/create-intercluster-svm-peer-relationship-93-later-task.html["Créer une relation de pairs SVM intercluster dans ONTAP"] avant de pouvoir utiliser les outils ONTAP avec SnapMirror.
+* https://mysupport.netapp.com/site/products/all/details/otv10/downloads-tab["Télécharger"] Les outils ONTAP OVA et, si nécessaire, le fichier SRA tar.gz.
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-2.png["Deux"] Provisionnez les adresses IP et les enregistrements DNS
+[role="quick-margin-list"]
+* Demandez les informations IP suivantes à votre équipe réseau. Les trois premières adresses IP sont requises ; les nœuds deux et trois sont utilisés pour les déploiements scale-out de haute disponibilité (HA). Les enregistrements d'hôte DNS sont requis et toutes les adresses doivent se trouver sur le même VLAN.
+* Adresse de l'application des outils ONTAP \_____\_____ . \_____\_____ . \_____\_____ . \_____\____
+* Adresse des services internes \_____\_____ . \_____\_____ . \_____\_____ . \_____\____
+* Nom d'hôte DNS du nœud 1 \_____\_____\________\_______\________\________\_________
+* Adresse IP du nœud 1 \_____\_____ . \_____\_____ . \_____\_____ . \_____\____
+* Masque de sous-réseau \_____\____ . \_____\_____ . \_____\_____ . \_____\____
+* Passerelle par défaut \_____\_____ . \_____\_____ . \_____\_____ . \_____\____
+* Serveur DNS 1 \_____\_____ . \_____\_____ . \_____\_____ . \_____\____
+* Serveur DNS 2 \_____\_____ . \_____\_____ . \_____\_____ . \_____\____
+* Domaine de recherche DNS \_____\__________\_____\_______\_________\_________\_______
+* Nom d'hôte DNS du nœud deux (facultatif) \_____\_____\_____\____\_______\_______\________\_________
+* Adresse IP du nœud deux (facultative) \_____\_____ . \_____\_____ . \_____\_____ . \_____\____
+* Nom d'hôte DNS du nœud 3 (facultatif) \____\_____\______\____\_______\_______________\_________
+* Adresse IP du nœud 3 (facultative) \_____\_____ . \_____\_____ . \_____\_____ . \_____\____
+* Créez des enregistrements DNS pour toutes les adresses IP ci-dessus.
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-3.png["Trois"] Configuration du pare-feu réseau
+[role="quick-margin-list"]
+* Ouvrez les ports requis pour les adresses IP ci-dessus dans votre pare-feu réseau. Reportez-vous https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/prerequisites.html#port-requirements["Configuration requise pour les ports"] à pour connaître la dernière mise à jour.
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-4.png["Quatre"] Configuration des services de l'appliance (en option)
+[role="quick-margin-list"]
+* Pour utiliser vVols, vous devez d'abord https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/enable-services.html["Modifiez les paramètres de l'appliance et activez le service VASA"]. En même temps, passez en revue les deux éléments suivants.
+* Si vous prévoyez d'utiliser vVols en production, https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/edit-appliance-settings.html["haute disponibilité"] avec les deux adresses IP facultatives ci-dessus.
+* Si vous prévoyez d'utiliser ONTAP Tools Storage Replication adapter (SRA) pour VMware site Recovery Manager ou Live site Recovery, https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/edit-appliance-settings.html["Activation des services SRA"].
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-5.png["Cinq"] Certificats (facultatif)
+[role="quick-margin-list"]
+* Selon VMware, les certificats signés par une autorité de certification sont requis en cas d'utilisation de vVols avec plusieurs vCenters.
+* Services Vasa \_____\______\_____\____\_____\_______\___________\___________
+* Services administratifs \_____\__________\_______\__________________________________
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-6.png["Six"] Stockage
+[role="quick-margin-list"]
+* Un datastore sur un périphérique de stockage partagé est requis. Vous pouvez également utiliser une bibliothèque de contenu sur le même datastore que le nœud un pour faciliter le clonage rapide du modèle avec VAAI.
+* Bibliothèque de contenu (requise uniquement pour HA) \_____\______\_______\___________________________\_______
+* Nœud un magasin de données \_____\__________\_____\________\_______________________
+* Nœud deux datastore (facultatif, mais recommandé pour la haute disponibilité) \_____\________\_______\_______\_______\__________\________
+* Datastore du troisième nœud (facultatif, mais recommandé pour la haute disponibilité) \_____\________\______\_______\________\__________\_____
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-7.png["Sept"] Déployez l'OVA
+[role="quick-margin-list"]
+* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/ontap-tools-deployment.html["Déployez l'OVA"] À l'aide du client vSphere.
+
+
+.image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-8.png["Huit"] Tâches post-déploiement
+[role="quick-margin-list"]
+* Créez des règles d'affinité pour les machines virtuelles dans un déploiement haute disponibilité.
+* Si vous utilisez la haute disponibilité, Storage vMotion nœuds deux et trois vers des datastores séparés (facultatif, mais recommandé).
+* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/configure-user-role-and-privileges.html["Configurer les rôles et privilèges des utilisateurs ONTAP"] Utilisation du fichier JSON inclus.
+* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/certificate-manage.html["utilisez gérer les certificats"] Dans le gestionnaire d'outils ONTAP pour installer les certificats signés par l'autorité de certification requis.
+* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-vcenter.html["Ajouter des instances vCenter Server"] Dans le Gestionnaire d'outils ONTAP.
+* En cas d'utilisation de SVM mutualisés, https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["clusters intégrés"] dans le gestionnaire d'outils ONTAP et les associer à des vCenters.
+* En cas d'utilisation de SVM mutualisés, https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["Ports SVM intégrés"] dans l'interface utilisateur vCenter des outils ONTAP.
+* Si *NOT* utilise des SVM mutualisés, alors https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["clusters intégrés"] directement dans l'interface utilisateur vCenter des outils ONTAP. Dans ce scénario, il est également possible d'ajouter directement des SVM lorsque vous n'utilisez pas les vVols.
+* Si vous avez activé SRA pour SRM/VLSR pour protéger les datastores traditionnels, https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/protect/configure-on-srm-appliance.html["Configurez SRA sur l'appliance VMware Live site Recovery"].
+* Configurer les sauvegardes natives pour https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/enable-backup.html["RPO proche de zéro"].
+* Configurer des sauvegardes régulières sur d'autres supports de stockage.
+

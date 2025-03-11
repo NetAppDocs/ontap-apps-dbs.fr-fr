@@ -14,13 +14,11 @@ summary: 'Cette page décrit les bonnes pratiques d"implémentation d"une soluti
 
 
 [role="lead"]
-ONTAP fournit un stockage en mode bloc de grande qualité pour VMware vSphere via iSCSI, Fibre Channel Protocol(FCP ou FC pour Short) et NVMe over Fabrics (NVMe-of). Les meilleures pratiques suivantes sont appliquées pour l'implémentation de protocoles en mode bloc pour le stockage de machines virtuelles avec vSphere et ONTAP.
-
 Dans vSphere, il existe trois façons d'utiliser les LUN de stockage bloc :
 
 * Avec les datastores VMFS
 * Avec mappage de périphériques bruts (RDM)
-* En tant que LUN accessible et contrôlée par un initiateur logiciel à partir d'un système d'exploitation invité de machine virtuelle
+* En tant que LUN connectée iSCSI ou espace de noms connecté à NVMe/TCP, accessible et contrôlé par un initiateur logiciel à partir d'un système d'exploitation invité de machine virtuelle
 
 
 VMFS est un système de fichiers en cluster hautes performances qui fournit des datastores sous forme de pools de stockage partagés. Les datastores VMFS peuvent être configurés avec des LUN accessibles via FC, iSCSI, FCoE ou avec des espaces de noms NVMe accessibles via les protocoles NVMe/FC ou NVMe/TCP. VMFS permet à chaque serveur ESX d'un cluster d'accéder simultanément au stockage. La taille de LUN maximale est généralement de 128 To à partir de ONTAP 9.12.1P2 (et versions antérieures avec les systèmes ASA). Par conséquent, un datastore VMFS 5 ou 6 de 64 To de taille maximale peut être créé à l'aide d'une seule LUN.
@@ -29,7 +27,10 @@ VSphere inclut la prise en charge intégrée de plusieurs chemins d'accès aux p
 
 NMP et ONTAP prennent en charge le protocole ALUA (Asymmetric Logical Unit Access) pour négocier des chemins optimisés et non optimisés. Dans ONTAP, un chemin optimisé pour le protocole ALUA suit un chemin d'accès direct aux données, utilisant un port cible sur le nœud qui héberge la LUN accédée. ALUA est activé par défaut dans vSphere et ONTAP. Le NMP reconnaît le cluster ONTAP en tant que ALUA, et il utilise le plug-in ALUA de type baie de stockage (`VMW_SATP_ALUA`) et sélectionne le plug-in de sélection de chemin de tourniquet (`VMW_PSP_RR`).
 
-ESXi 6 prend en charge jusqu'à 256 LUN et jusqu'à 1,024 chemins d'accès aux LUN au total. ESXi ne voit pas de LUN ni de chemins au-delà de ces limites. En supposant un nombre maximum de LUN, la limite de chemin autorise quatre chemins par LUN. Dans un cluster ONTAP plus grand, il est possible d'atteindre la limite de chemin avant la limite de LUN. Pour résoudre cette limitation, ONTAP prend en charge le mappage de LUN sélectif (SLM) dans la version 8.3 et les versions ultérieures.
+ESXi 6 a également pris en charge jusqu'à 256 LUN et jusqu'à 1,024 chemins d'accès au total aux LUN. ESXi ne voit pas de LUN ni de chemins au-delà de ces limites. En supposant un nombre maximum de LUN, la limite de chemin autorise quatre chemins par LUN. Dans un cluster ONTAP plus grand, il est possible d'atteindre la limite de chemin avant la limite de LUN. Pour résoudre cette limitation, ONTAP prend en charge le mappage de LUN sélectif (SLM) dans la version 8.3 et les versions ultérieures.
+
+
+NOTE: Reportez-vous au link:https://configmax.broadcom.com/guest?vmwareproduct=vSphere&release=vSphere%208.0&categories=2-0["Outil VMware Configuration Maximums"^]pour connaître les limites les plus récentes prises en charge dans ESXi.
 
 SLM limite les nœuds qui annoncent les chemins vers une LUN donnée. Il est recommandé à NetApp d'utiliser au moins une LIF par nœud par SVM et SLM pour limiter les chemins annoncés vers le nœud hébergeant la LUN et son partenaire de haute disponibilité. Bien que d'autres chemins existent, ils ne sont pas annoncés par défaut. Il est possible de modifier les chemins annoncés avec les arguments de noeud de rapport ajouter et supprimer dans SLM. Notez que les LUN créées dans les versions antérieures à 8.3 annoncent tous les chemins et doivent être modifiés uniquement pour annoncer les chemins vers la paire HA d'hébergement. Pour plus d'informations sur SLM, consultez la section 5.9 de https://www.netapp.com/pdf.html?item=/media/10680-tr4080pdf.pdf["TR-4080"^]. La méthode précédente de ensembles de ports peut également être utilisée pour réduire davantage les chemins disponibles pour une LUN. Les jeux de ports permettent de réduire le nombre de chemins visibles via lesquels les initiateurs d'un groupe initiateur peuvent voir les LUN.
 
@@ -41,6 +42,7 @@ Des protocoles de bloc (iSCSI, FC et FCoE) accèdent aux LUN à l'aide d'identif
 
 D'autres meilleures pratiques à prendre en compte :
 
+* Vérifiez link:vmware-vsphere-settings.html["Hôte ESXi recommandé et autres paramètres ONTAP recommandés"^] les paramètres recommandés par NetApp en collaboration avec VMware.
 * Vérifier qu'une interface logique (LIF) est créée pour chaque SVM sur chaque nœud du cluster ONTAP pour optimiser la disponibilité et la mobilité. La meilleure pratique du SAN de ONTAP est d'utiliser deux ports physiques et LIF par nœud, un pour chaque structure. ALUA sert à analyser les chemins et à identifier les chemins (directs) optimisés actifs/actifs au lieu de chemins non optimisés actifs. ALUA est utilisé pour FC, FCoE et iSCSI.
 * Pour les réseaux iSCSI, utilisez plusieurs interfaces réseau VMkernel sur différents sous-réseaux du réseau avec le regroupement de cartes réseau lorsque plusieurs commutateurs virtuels sont présents. Vous pouvez également utiliser plusieurs cartes réseau physiques connectées à plusieurs commutateurs physiques pour fournir la haute disponibilité et un débit accru. La figure suivante fournit un exemple de connectivité multivoie. Dans ONTAP, configurez soit un groupe d'interface en mode unique pour basculement avec deux liaisons ou plus connectées à deux ou plusieurs switchs, soit au moyen de LACP ou d'une autre technologie d'agrégation de liens avec des groupes d'interfaces multimode afin d'assurer la haute disponibilité et les avantages de l'agrégation de liens.
 * Si le protocole CHAP (Challenge-Handshake Authentication Protocol) est utilisé dans ESXi pour l'authentification de la cible, il doit également être configuré dans ONTAP à l'aide de l'interface de ligne de commande (`vserver iscsi security create`) Ou avec System Manager (modifier la sécurité de l'initiateur sous Storage > SVM > SVM Settings > protocoles > iSCSI).

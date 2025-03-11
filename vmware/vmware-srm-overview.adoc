@@ -57,6 +57,9 @@ SRM peut tester votre plan de reprise après incident sans interruption grâce �
 En cas d'incident véritable ou même de migration planifiée, SRM vous permet d'envoyer les modifications de dernière minute au jeu de données via une mise à jour SnapMirror finale (si vous le souhaitez). Il interrompt ensuite le miroir et monte le datastore sur vos hôtes de reprise après incident. À ce stade, vos machines virtuelles peuvent être automatiquement alimentées dans l'ordre de votre stratégie prédéfinie.
 
 
+NOTE: Bien que les systèmes ONTAP vous permettent de coupler des SVM au sein du même cluster pour la réplication SnapMirror, ce scénario n'est pas testé et certifié avec SRM. Par conséquent, il est recommandé d'utiliser uniquement des SVM provenant de différents clusters lors de l'utilisation de SRM.
+
+
 
 == SRM avec ONTAP et autres cas d'utilisation : cloud hybride et migration
 
