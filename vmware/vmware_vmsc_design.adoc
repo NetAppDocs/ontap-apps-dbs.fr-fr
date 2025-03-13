@@ -137,13 +137,13 @@ image::../media/vmsc_3_6.png[Capture d'écran d'une description d'ordinateur gé
 
 Les événements d'isolation se produisent lorsque les hôtes d'un cluster haute disponibilité perdent la connectivité au réseau ou à d'autres hôtes du cluster. Par défaut, vSphere HA utilise la passerelle par défaut de son réseau de gestion comme adresse d'isolation par défaut. Toutefois, vous pouvez spécifier des adresses d'isolement supplémentaires pour que l'hôte puisse envoyer une requête ping afin de déterminer si une réponse d'isolement doit être déclenchée. Ajoutez deux adresses IP d'isolation pouvant être ping, une par site. N'utilisez pas l'adresse IP de la passerelle. Le paramètre avancé de vSphere HA utilisé est das.isolaaddress. Vous pouvez utiliser des adresses IP ONTAP ou Mediator à cette fin.
 
-Reportez-vous à la section https://core.vmware.com/resource/vmware-vsphere-metro-storage-cluster-recommended-practices#sec2-sub5["core.vmware.com"] pour plus d'informations_.__
+Pour plus d'informations, reportez-vous à la section https://www.vmware.com/docs/vmw-vmware-vsphere-metro-storage-cluster-recommended-practices["Bonnes pratiques pour VMware vSphere Metro Storage Cluster"]_.__
 
 image::../media/vmsc_3_7.png[Capture d'écran d'une description d'ordinateur générée automatiquement,624,545]
 
 L'ajout d'un paramètre avancé appelé das.heartbeatDsPerHost peut augmenter le nombre de datastores de pulsation. Utilisez quatre datastores de pulsation (DSS HB)—deux par site. Utilisez l'option « Sélectionner dans la liste mais compléter ». Ceci est nécessaire car si un site tombe en panne, vous avez toujours besoin de deux DSS HB. Toutefois, ceux-ci n'ont pas à être protégés avec la synchronisation active MCC ou SnapMirror.
 
-Reportez-vous à la section https://core.vmware.com/resource/vmware-vsphere-metro-storage-cluster-recommended-practices#sec2-sub5["core.vmware.com"] pour plus d'informations_.__
+Pour plus d'informations, reportez-vous à la section https://www.vmware.com/docs/vmw-vmware-vsphere-metro-storage-cluster-recommended-practices["Bonnes pratiques pour VMware vSphere Metro Storage Cluster"]_.__
 
 Affinité avec VMware DRS pour NetApp MetroCluster
 

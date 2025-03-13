@@ -35,8 +35,7 @@ Voici les paramètres d'hôte recommandés pour toutes les versions de ONTAP act
 | VMFS3.EnableBlockDelete | Conserver la valeur par défaut (0), mais peut être modifiée si nécessaire. Pour plus d'informations, voir link:https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-storage-8-0/storage-provisioning-and-space-reclamation-in-vsphere/storage-space-reclamation-in-vsphere/space-reclamation-for-guest-operating-systems.html["Récupération d'espace pour les machines virtuelles VMFS5"] | Non 
 
 
-| VMFS3.EnableVMFS6Unmap | Conserver la valeur par défaut (1)
-Pour plus d'informations, voir link:https://core.vmware.com/resource/vmware-vsphere-apis-array-integration-vaai#sec9426-sub4["API VMware vSphere : intégration des baies (VAAI)"] | Non 
+| VMFS3.EnableVMFS6Unmap | Conserver la valeur par défaut (1) pour plus d'informations, voir link:https://www.vmware.com/docs/vmw-vmware-vsphere-apis-array-integration-vaai["API VMware vSphere : intégration des baies (VAAI)"] | Non 
 
 
 3+| *Paramètres NFS* 
