@@ -61,7 +61,11 @@ Utilisez cette liste de contrôle d'installation pour garantir un déploiement r
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-5.png["Cinq"] Déployez l'OVA
 [role="quick-margin-list"]
+* Notez que cette étape peut prendre jusqu'à 45 minutes
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/ontap-tools-deployment.html["Déployez l'OVA"] À l'aide du client vSphere.
+* À l'étape 3 du déploiement d'OVA, sélectionnez l'option « personnaliser le matériel de cette machine virtuelle » et définissez les paramètres suivants à l'étape 10 :
+* « Activer l'ajout à chaud du processeur »
+* « Mémoire enfichable à chaud »
 
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-6.png["Six"] Ajouter des vCenters aux outils ONTAP
@@ -71,6 +75,7 @@ Utilisez cette liste de contrôle d'installation pour garantir un déploiement r
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-7.png["Sept"] Ajout de systèmes back-end de stockage aux outils ONTAP
 [role="quick-margin-list"]
+* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/configure-user-role-and-privileges.html["Configurer les rôles et privilèges des utilisateurs ONTAP"] Utilisation du fichier JSON inclus si vous n'utilisez pas admin.
 * En cas d'utilisation en cas d'utilisation de la colocation du stockage avec les SVM
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["clusters intégrés"] Dans le Gestionnaire d'outils ONTAP et les associer à des vCenters.
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["Ports SVM intégrés"] Dans l'interface utilisateur vCenter des outils ONTAP.
@@ -96,7 +101,6 @@ Utilisez cette liste de contrôle d'installation pour garantir un déploiement r
 [role="quick-margin-list"]
 * Créez des règles d'affinité pour les machines virtuelles dans un déploiement haute disponibilité.
 * Si vous utilisez la haute disponibilité, Storage vMotion nœuds deux et trois vers des datastores séparés (facultatif, mais recommandé).
-* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/configure-user-role-and-privileges.html["Configurer les rôles et privilèges des utilisateurs ONTAP"] Utilisation du fichier JSON inclus.
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/certificate-manage.html["utilisez gérer les certificats"] Dans le gestionnaire d'outils ONTAP pour installer les certificats signés par l'autorité de certification requis.
 * Si vous avez activé SRA pour SRM/VLSR pour protéger les datastores traditionnels, https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/protect/configure-on-srm-appliance.html["Configurez SRA sur l'appliance VMware Live site Recovery"].
 * Configurer les sauvegardes natives pour https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/enable-backup.html["RPO proche de zéro"].
