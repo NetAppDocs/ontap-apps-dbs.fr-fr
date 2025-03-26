@@ -23,7 +23,7 @@ Si la réplication SM-AS est interrompue, l'E/S d'écriture ne peut pas être te
 
 
 
-=== Site A (site préféré)
+== Site A (site préféré)
 
 Le résultat de l'échec de la liaison de réplication sur le site préféré sera une pause d'environ 15 secondes dans le traitement des E/S d'écriture, car ONTAP relance les opérations d'écriture répliquées avant de déterminer que la liaison de réplication est véritablement inaccessible. Au bout de 15 secondes, le site A du système reprend le traitement des E/S de lecture et d'écriture. Les chemins SAN ne changent pas et les LUN restent en ligne.
 

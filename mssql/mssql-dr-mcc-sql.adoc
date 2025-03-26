@@ -3,9 +3,13 @@ sidebar: sidebar
 permalink: mssql/mssql-dr-mcc-sql.html 
 keywords: MSSQL,SQL Server, MetroCluster 
 summary: Microsoft SQL Server avec NetApp MetroCluster 
+searchtitle: Microsoft SQL Server avec NetApp MetroCluster 
 ---
 = SQL Server avec MetroCluster
+:hardbreaks:
 :allow-uri-read: 
+:icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 
@@ -26,4 +30,4 @@ Par exemple, une procédure de reprise sur incident rapide de base après une pe
 
 Cette approche doit avant tout se passer d'un système d'exploitation en cours d'exécution sur le site distant. Il doit être préconfiguré avec la configuration de SQL Server et doit être mis à jour avec une version de build équivalente. Les bases de données système SQL Server peuvent également être mises en miroir sur le site distant et montées en cas d'incident.
 
-Si les volumes, les systèmes de fichiers et les datastores hébergeant des bases de données virtualisées ne sont pas utilisés sur le site de reprise d'activité avant le basculement, il n'est pas nécessaire de les définir `dr-force- nvfail` sur les volumes associés.
+Si les volumes, les systèmes de fichiers et les datastores hébergeant des bases de données virtualisées ne sont pas utilisés sur le site de reprise d'activité avant le basculement, il n'est pas nécessaire de les définir `dr-force-nvfail` sur les volumes associés.

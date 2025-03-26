@@ -29,4 +29,4 @@ L'objectif principal d'une configuration à bandes est de s'assurer que les E/S 
 
 La figure suivante présente trois options possibles pour le réglage de la taille et de la largeur des bandes. Le nombre de LUN est sélectionné pour répondre aux exigences de performances comme décrit ci-dessus, mais dans tous les cas, le total des données dans une seule bande est de 1 Mo.
 
-image:ontap-lvm-striping.png["Erreur : image graphique manquante"]
+image:../media/ontap-lvm-striping.png["Répartition LVM"]

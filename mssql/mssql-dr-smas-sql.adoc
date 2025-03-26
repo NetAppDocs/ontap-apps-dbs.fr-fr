@@ -3,10 +3,13 @@ sidebar: sidebar
 permalink: mssql/mssql-dr-smas-sql.html 
 keywords: MSSQL,SQL Server, SnapMirror active sync, ONTAP, SMBC, SMas, SnapMirror Business Continuity 
 summary: Synchronisation active de Microsoft SQL Server et SnapMirror 
-searchtitle: Microsoft SQL Server avec synchronisation active SnapMirror 
+searchtitle: Synchronisation active de Microsoft SQL Server et SnapMirror 
 ---
 = Présentation
+:hardbreaks:
 :allow-uri-read: 
+:icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 
@@ -21,7 +24,7 @@ Les meilleures pratiques en matière de mise en page des fichiers et de configur
 
 Avec une configuration autonome, SQL Server ne peut être exécuté que sur un site. L'accès serait probablement link:mssql-dr-smas-uniform.html["uniforme"]utilisé.
 
-image:smas-onehost.png["Un hôte unique avec accès uniforme"]
+image:../media/smas-onehost.png["Un hôte unique avec accès uniforme"]
 
 Avec un accès uniforme, une panne de stockage sur l'un ou l'autre site n'interromprait pas les opérations de la base de données. Une défaillance complète du site incluant le serveur de base de données entraînerait, bien sûr, une panne.
 

@@ -3,11 +3,13 @@ sidebar: sidebar
 permalink: mysql/mysql-schedulers.html 
 keywords: MySQL,MariaDB,schedulers 
 summary: Planificateurs MySQL et IO 
-searchtitle: 'Planificateurs d"E/S et MySQL' 
+searchtitle: Planificateurs MySQL et IO 
 ---
 = Planificateurs d'E/S.
+:hardbreaks:
 :allow-uri-read: 
 :icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 

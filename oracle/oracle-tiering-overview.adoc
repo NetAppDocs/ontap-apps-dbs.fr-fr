@@ -25,7 +25,7 @@ FabricPool est une technologie de hiérarchisation qui classe les blocs « actif
 
 Plusieurs règles de Tiering sont disponibles pour contrôler la façon dont les blocs sont classés comme actifs ou froids. Il est également possible de définir des règles par volume et de les modifier selon les besoins. Seuls les blocs de données sont déplacés entre les tiers de performance et de capacité. Les métadonnées qui définissent la structure des LUN et du système de fichiers restent toujours sur le Tier de performance. La gestion est ainsi centralisée sous ONTAP. Les fichiers et les LUN n'apparaissent pas différents des données stockées dans une autre configuration ONTAP. Le contrôleur NetApp AFF ou FAS applique les règles définies pour déplacer les données vers le Tier approprié.
 
-image:oracle-fp_image1.png["Erreur : image graphique manquante"]
+image:../media/oracle-fp_image1.png["Hiérarchisation FabricPool"]
 
 
 

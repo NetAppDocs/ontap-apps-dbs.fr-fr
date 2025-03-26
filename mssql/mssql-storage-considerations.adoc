@@ -6,7 +6,10 @@ summary: Considérations relatives au stockage Microsoft SQL Server
 searchtitle: Considérations relatives au stockage Microsoft SQL Server 
 ---
 = Présentation
+:hardbreaks:
 :allow-uri-read: 
+:icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 

@@ -3,10 +3,13 @@ sidebar: sidebar
 permalink: mysql/mysql-innodb_io_capacity.html 
 keywords: MySQL,MariaDB,innodb_io_capacity 
 summary: MySQL et innodb_io_Capacity 
+searchtitle: MySQL et innodb_io_Capacity 
 ---
 = innodb_io_capacity
+:hardbreaks:
 :allow-uri-read: 
 :icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 
@@ -26,4 +29,4 @@ CAUTION: N'utilisez pas de valeurs extrêmes telles que 20,000 ou plus, sauf si 
 Le paramètre InnoDB_IO_Capacity régule les débits de rinçage et les E/S associées
 
 
-CAUTION: Vous pouvez sérieusement nuire aux performances en définissant ce paramètre ou le paramètre innodb_io_Capacity_max trop élevé et en gaspillant les opérations d'E/S avec un rinçage prématuré.
+CAUTION: Vous pouvez sérieusement nuire aux performances en définissant ce paramètre ou le paramètre innodb_io_Capacity_max trop élevé et gaspillé

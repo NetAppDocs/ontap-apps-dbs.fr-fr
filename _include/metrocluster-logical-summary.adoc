@@ -24,7 +24,7 @@ SyncMirror est une technologie de mise en miroir qui améliore, mais ne remplace
 . Chaque jeu de disques d'un site donné est automatiquement configuré comme un ou plusieurs groupes RAID DP ou RAID-TEC entièrement redondants, indépendamment de l'utilisation de la mise en miroir. Cette utilisation de la mise en miroir RAID assure la protection des données même après la perte d'un site.
 
 
-image:syncmirror.png["Erreur : image graphique manquante"]
+image:../media/syncmirror.png["Configuration SyncMirror"]
 
 La figure ci-dessus illustre un exemple de configuration SyncMirror. Un agrégat de 24 disques a été créé sur le contrôleur avec 12 disques à partir d'un tiroir alloué sur le site A et 12 disques à partir d'un tiroir alloué sur le site B. Les disques ont été regroupés en deux groupes RAID en miroir. Le groupe RAID 0 comprend un plex de 6 disques sur le site A mis en miroir sur un plex de 6 disques sur le site B. De même, le groupe RAID 1 comprend un plex de 6 disques sur le site A mis en miroir sur un plex de 6 disques sur le site B.
 
@@ -106,13 +106,14 @@ Un système MetroCluster ne peut effectuer un basculement automatique en toute s
 
 === Disjoncteur d'attache MetroCluster avec MetroCluster FAS
 
-Le https://library.netapp.com/ecmdocs/ECMP12007400/html/GUID-3662A7CE-3AF2-4562-A11C-5C37DE0E3A87.html["NetApp MetroCluster Tiebreaker"^] Le logiciel peut s'exécuter sur un troisième site afin de contrôler l'état de santé de votre environnement MetroCluster, d'envoyer des notifications et de forcer un basculement en cas d'incident. Une description complète du disjoncteur d'attache se trouve sur le http://mysupport.netapp.com["Site de support NetApp"^], Mais le but principal du Tiebreaker de MetroCluster est de détecter la perte de site. Il doit également faire la distinction entre la perte du site et une perte de connectivité. Par exemple, le basculement ne doit pas se produire car le disjoncteur d'attache n'a pas pu atteindre le site principal. C'est pourquoi le disjoncteur d'attache surveille également la capacité du site distant à contacter le site principal.
+link:https://docs.netapp.com/us-en/ontap-metrocluster/install-ip/task_sw_config_configure_mediator.html["NetApp MetroCluster Tiebreaker"^]Exécuté sur un troisième site, le logiciel peut contrôler l'état de santé de l'environnement MetroCluster, envoyer des notifications et forcer un basculement en cas d'incident. Une description complète du Tiebreaker se trouve sur le link:http://mysupport.netapp.com["Site de support NetApp"^], mais le but principal du Tiebreaker MetroCluster est de détecter la perte du site. Il doit également faire la distinction entre la perte du site et une perte de connectivité. Par exemple, le basculement ne doit pas se produire car le disjoncteur d'attache n'a pas pu atteindre le site principal. C'est pourquoi le disjoncteur d'attache surveille également la capacité du site distant à contacter le site principal.
 
 Le basculement automatique avec AUSO est également compatible avec le MCTB. AUSO réagit très rapidement car il est conçu pour détecter des événements de défaillance spécifiques, puis n'invoque le basculement que lorsque les plexes NVRAM et SyncMirror sont synchronisés.
 
 En revanche, le disjoncteur principal est situé à distance et doit donc attendre qu'une minuterie s'écoule avant de déclarer un site mort. Le disjoncteur d'attache détecte finalement le type de défaillance de contrôleur couverte par l'AUSO, mais en général, l'AUSO a déjà commencé le basculement et éventuellement terminé le basculement avant que le disjoncteur d'attache n'agisse. La deuxième commande de basculement qui en résulte provient du Tiebreaker serait rejetée.
 
-*Attention : *le logiciel MCTB ne vérifie pas que la mémoire NVRAM était et/ou que les plexes sont synchronisés lorsque vous forcez un basculement. Le basculement automatique, s'il est configuré, doit être désactivé pendant les opérations de maintenance qui entraînent une perte de synchronisation des plexes NVRAM ou SyncMirror.
+
+CAUTION: Le logiciel MCTB ne vérifie pas que NVRAM était et/ou que les plexes sont synchronisés lorsqu'un basculement est forcé. Le basculement automatique, s'il est configuré, doit être désactivé pendant les opérations de maintenance qui entraînent une perte de synchronisation des plexes NVRAM ou SyncMirror.
 
 En outre, le MCTB peut ne pas traiter un désastre roulant qui conduit à la séquence d'événements suivante :
 
@@ -143,7 +144,7 @@ En revanche, l'architecture IP MetroCluster achemine toutes les E/S exclusivemen
 
 ClusterLion est un dispositif de surveillance MetroCluster avancé qui fonctionne comme un troisième site virtuel. Cette approche permet de déployer MetroCluster en toute sécurité dans une configuration à deux sites avec une fonctionnalité de basculement entièrement automatisée. De plus, ClusterLion peut effectuer un moniteur de niveau réseau supplémentaire et exécuter des opérations de post-basculement. La documentation complète est disponible auprès de ProLion.
 
-image:clusterlion.png["Erreur : image graphique manquante"]
+image:../media/clusterlion.png["Diagramme ClusterLion"]
 
 * Les appliances ClusterLion contrôlent l'état des contrôleurs à l'aide de câbles série et Ethernet directement connectés.
 * Les deux appareils sont connectés l'un à l'autre à l'aide de connexions 3G sans fil redondantes.

@@ -26,7 +26,7 @@ L'architecture est également plus simple, car les contrôleurs disposent des se
 
 Pour plus d'informations, consultez la documentation officielle de ONTAP et https://www.netapp.com/pdf.html?item=/media/13481-tr4689.pdf["Architecture et conception de la solution IP de MetroCluster"^].
 
-image:mccip.png["Erreur : image graphique manquante"]
+image:../media/mccip.png["Architecture IP de MetroCluster"]
 
 
 
@@ -34,7 +34,7 @@ image:mccip.png["Erreur : image graphique manquante"]
 
 La configuration MetroCluster FC à paire haute disponibilité utilise deux ou quatre nœuds par site. Cette option de configuration augmente la complexité et les coûts liés à l'option à deux nœuds, mais elle offre un avantage important : la redondance intrasite. Une simple panne de contrôleur ne nécessite pas l'accès aux données via le WAN. L'accès aux données reste local via l'autre contrôleur local.
 
-image:mcc-4-node.png["Erreur : image graphique manquante"]
+image:../media/mcc-4-node.png["MetroCluster à quatre nœuds"]
 
 Certaines infrastructures multisites ne sont pas conçues pour les opérations en mode actif-actif. Elles sont plutôt utilisées comme site principal et site de reprise après incident. Dans ce cas, il est généralement préférable d'utiliser une option MetroCluster à paire HA pour les raisons suivantes :
 
@@ -49,7 +49,7 @@ Certaines infrastructures multisites ne sont pas conçues pour les opérations e
 
 La configuration MetroCluster à deux nœuds n'utilise qu'un nœud par site. Cette conception est plus simple que l'option de paire haute disponibilité, car le nombre de composants à configurer et à gérer est inférieur. Elle a également réduit les besoins en infrastructure en termes de câblage et de commutation FC. Enfin, il réduit les coûts.
 
-image:mcc-2-node.png["Erreur : image graphique manquante"]
+image:../media/mcc-2-node.png["MetroCluster à deux nœuds"]
 
 L'impact évident de cette conception est que la défaillance du contrôleur sur un seul site signifie que les données sont disponibles depuis le site opposé. Cette restriction n'est pas nécessairement un problème. De nombreuses entreprises disposent d'opérations de data Center multisites avec des réseaux étendus, ultra-rapides et à faible latence qui fonctionnent essentiellement comme une infrastructure unique. Dans ce cas, la version à deux nœuds de MetroCluster est la configuration préférée. Plusieurs fournisseurs de services utilisent actuellement des systèmes à deux nœuds de plusieurs pétaoctets.
 

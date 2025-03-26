@@ -3,10 +3,13 @@ sidebar: sidebar
 permalink: mysql/mysql-innodb_log_file_size.html 
 keywords: MySQL,MariaDB,innodb_log_file_size 
 summary: MySQL et innodb_log_file_size 
+searchtitle: MySQL et innodb_log_file_size 
 ---
 = taille_fichier_log_innodb
+:hardbreaks:
 :allow-uri-read: 
 :icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 

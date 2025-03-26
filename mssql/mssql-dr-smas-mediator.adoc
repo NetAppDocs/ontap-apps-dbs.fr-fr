@@ -6,16 +6,19 @@ summary: Microsoft SQL Server et le médiateur ONTAP
 searchtitle: Microsoft SQL Server et le médiateur ONTAP 
 ---
 = ONTAP Médiateur
+:hardbreaks:
 :allow-uri-read: 
+:icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 
 [role="lead"]
-Le médiateur est requis pour automatiser le basculement en toute sécurité. Dans l'idéal, elle serait placée sur un site tiers indépendant, mais elle peut toujours fonctionner pour la plupart des besoins si elle est en colocation avec l'un des clusters participant à la réplication.
+Le Mediator est requis pour automatiser le basculement en toute sécurité. Dans l'idéal, elle serait placée sur un site tiers indépendant, mais elle peut toujours fonctionner pour la plupart des besoins si elle est en colocation avec l'un des clusters participant à la réplication.
 
 Le médiateur n'est pas vraiment un casse-barre, bien que c'est effectivement la fonction qu'il fournit. Il ne prend aucune action ; il fournit plutôt un canal de communication alternatif pour la communication cluster à cluster.
 
-image:smas-mediator.png["Diagramme de synchronisation active SnapMirror avec médiateur"]
+image:../media/smas-mediator.png["Diagramme de synchronisation active SnapMirror avec médiateur"]
 
 Le principal défi lié au basculement automatisé est le problème des réseaux partagés, qui se pose en cas de perte de connectivité entre les deux sites. Que doit-on faire ? Vous ne voulez pas que deux sites différents se désignent comme les copies restantes des données, mais comment un seul site peut-il faire la différence entre la perte réelle du site opposé et l'incapacité à communiquer avec le site opposé ?
 

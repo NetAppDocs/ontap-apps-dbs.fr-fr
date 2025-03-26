@@ -15,7 +15,7 @@ Le médiateur est requis pour automatiser le basculement en toute sécurité. Da
 
 Le médiateur n'est pas vraiment un casse-barre, bien que c'est effectivement la fonction qu'il fournit. Il ne prend aucune action ; il fournit plutôt un canal de communication alternatif pour la communication cluster à cluster.
 
-image:smas-mediator.png["Diagramme de synchronisation active SnapMirror avec médiateur"]
+image:../media/smas-mediator.png["Diagramme de synchronisation active SnapMirror avec médiateur"]
 
 Le principal défi lié au basculement automatisé est le problème des réseaux partagés, qui se pose en cas de perte de connectivité entre les deux sites. Que doit-on faire ? Vous ne voulez pas que deux sites différents se désignent comme les copies restantes des données, mais comment un seul site peut-il faire la différence entre la perte réelle du site opposé et l'incapacité à communiquer avec le site opposé ?
 

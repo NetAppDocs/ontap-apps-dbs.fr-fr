@@ -6,7 +6,10 @@ summary: Répertoire du journal Microsoft SQL Server
 searchtitle: Répertoire du journal Microsoft SQL Server 
 ---
 = Répertoire du journal
+:hardbreaks:
 :allow-uri-read: 
+:icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 

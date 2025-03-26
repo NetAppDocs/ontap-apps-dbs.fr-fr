@@ -24,7 +24,7 @@ Sans paramètres de proximité, cet hôte utilisera les deux systèmes de stocka
 
 Avec un système AFF, les chemins apparaissent comme indiqué ci-dessous lorsque la proximité de l'hôte a été configurée.
 
-image:smas-uniform-aff.png["SnapMirror actif Sync AFF uniforme de mise en réseau"]
+image:../media/smas-uniform-aff.png["SnapMirror actif Sync AFF uniforme de mise en réseau"]
 
 En fonctionnement normal, toutes les E/S sont des E/S locales. Les opérations de lecture et d'écriture sont gérées à partir de la baie de stockage locale. Bien entendu, les E/S en écriture devront également être répliquées par le contrôleur local sur le système distant avant d'être acquittées, mais toutes les E/S en lecture seront gérées localement et ne subiront pas de latence supplémentaire en traversant la liaison SAN entre les sites.
 
@@ -38,7 +38,7 @@ Il existe des chemins redondants à travers le cluster local qui ne sont pas ill
 
 Les systèmes NetApp ASA proposent des chemins d'accès multiples actif-actif sur tous les chemins d'accès à un cluster. Cela s'applique également aux configurations SM-AS.
 
-image:smas-uniform-asa.png["SnapMirror actif Sync ASA uniforme de mise en réseau"]
+image:../media/smas-uniform-asa.png["SnapMirror actif Sync ASA uniforme de mise en réseau"]
 
 Une configuration ASA avec un accès non uniforme fonctionnera en grande partie comme avec AFF. Avec un accès uniforme, l'E/S traverserait le WAN. Cela peut être souhaitable ou non.
 

@@ -14,7 +14,7 @@ En fonctionnement normal, une LUN est accessible à partir du réplica local ou 
 
 La ligne verte est un chemin actif, mais elle subirait plus de latence, car les E/S sur ce chemin devront être transmises sur le chemin de synchronisation actif SnapMirror. La latence supplémentaire dépend de la vitesse de l'interconnexion entre les sites utilisés pour la synchronisation active SnapMirror.
 
-image:smas-failover-1.png["Erreur : image graphique manquante"]
+image:../media/smas-failover-1.png["Synchronisation active SnapMirror en fonctionnement normal"]
 
 
 
@@ -22,7 +22,7 @@ image:smas-failover-1.png["Erreur : image graphique manquante"]
 
 Si la copie miroir active devient indisponible, en raison d'un basculement planifié ou non planifié, elle ne sera évidemment plus utilisable. Cependant, le système distant possède une réplique synchrone et des chemins SAN vers le site distant existent déjà. Le système distant peut traiter les E/S pour cette LUN.
 
-image:smas-failover-2.png["Erreur : image graphique manquante"]
+image:../media/smas-failover-2.png["Échec de la synchronisation active SnapMirror"]
 
 
 
@@ -30,7 +30,7 @@ image:smas-failover-2.png["Erreur : image graphique manquante"]
 
 Le basculement entraîne la copie distante en tant que copie active. Les chemins passent de actif à actif/optimisé et les E/S continuent d'être traitées sans perte de données.
 
-image:smas-failover-3.png["Erreur : image graphique manquante"]
+image:../media/smas-failover-3.png["Basculement de la synchronisation active SnapMirror"]
 
 
 
@@ -38,7 +38,7 @@ image:smas-failover-3.png["Erreur : image graphique manquante"]
 
 Une fois le système source remis en service, la synchronisation active SnapMirror peut resynchroniser la réplication, tout en exécutant l'autre direction. La configuration est maintenant essentiellement la même que le point de départ, sauf que les sites actifs-miroirs ont été inversés.
 
-image:smas-failover-4.png["Erreur : image graphique manquante"]
+image:../media/smas-failover-4.png["Réparation de la synchronisation active SnapMirror"]
 
 
 
@@ -46,4 +46,4 @@ image:smas-failover-4.png["Erreur : image graphique manquante"]
 
 Si vous le souhaitez, un administrateur peut effectuer un retour arrière et déplacer la copie active de la ou des LUN vers les contrôleurs d'origine.
 
-image:smas-failover-1.png["Erreur : image graphique manquante"]
+image:../media/smas-failover-1.png["Rétablissement de la synchronisation active SnapMirror"]

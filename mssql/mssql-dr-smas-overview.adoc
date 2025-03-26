@@ -3,10 +3,13 @@ sidebar: sidebar
 permalink: mssql/mssql-dr-smas-overview.html 
 keywords: MSSQL,SQL Server, SnapMirror active sync, SMBC, overview 
 summary: Synchronisation active de Microsoft SQL Server et SnapMirror 
-searchtitle: Synchronisation active SQL Server et SnapMirror 
+searchtitle: Synchronisation active de Microsoft SQL Server et SnapMirror 
 ---
 = Présentation
+:hardbreaks:
 :allow-uri-read: 
+:icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 
@@ -19,9 +22,9 @@ Les hôtes SQL Server accèdent au stockage via des LUN Fibre Channel (FC) ou iS
 
 
 
-== Architecture SnapMirror active avec symétrie actif-actif
+== Architecture de la synchronisation active SnapMirror avec actif-actif symétrique
 
-image:mssql-smas-architecture.png["Erreur : image graphique manquante"]
+image:../media/mssql-smas-architecture.png["Architecture de synchronisation active SnapMirror"]
 
 **Réplication synchrone**
 

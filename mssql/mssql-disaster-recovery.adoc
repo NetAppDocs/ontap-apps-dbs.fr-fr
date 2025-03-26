@@ -6,7 +6,10 @@ summary: Reprise après incident de Microsoft SQL Server avec ONTAP
 searchtitle: Reprise après incident de Microsoft SQL Server avec ONTAP 
 ---
 = Reprise après incident
+:hardbreaks:
 :allow-uri-read: 
+:icons: font
+:linkattrs: 
 :imagesdir: ../media/
 
 

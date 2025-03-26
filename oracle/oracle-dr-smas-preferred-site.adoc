@@ -19,7 +19,7 @@ La `source` désignation est le contrôle du site préféré. En cas de perte du
 
 La configuration source/destination peut être affichée via SystemManager :
 
-image:smas-source-systemmanager.png["Capture d'écran SM de SM-AS source"]
+image:../media/smas-source-systemmanager.png["Capture d'écran SM de SM-AS source"]
 
 Ou sur l'interface de ligne de commande :
 
