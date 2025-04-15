@@ -1,0 +1,57 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-storage-considerations-ASA.html 
+keywords: MSSQL,SQL Server, volumes, LUN, SnapCenter 
+summary: Considérations relatives au stockage Microsoft SQL Server sur les systèmes ASA 
+searchtitle: Considérations relatives au stockage Microsoft SQL Server 
+---
+= Présentation
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+NetApp ASA r2 est une solution puissante et simplifiée destinée aux clients SAN exécutant des workloads stratégiques. L'association de la plateforme ASA r2 qui exécute les solutions de stockage ONTAP et de Microsoft SQL Server permet de concevoir un stockage de base de données d'entreprise capable de répondre aux exigences des applications les plus exigeantes.
+
+Les plateformes ASA suivantes sont classifiées comme des systèmes ASA r2 prenant en charge tous les protocoles SAN (iSCSI, FC, NVMe/FC, NVMe/TCP). Les protocoles iSCSI, FC, NVMe/FC et NVMe/TCP prennent en charge une architecture actif-actif symétrique pour les chemins d'accès multiples, de sorte que tous les chemins entre les hôtes et le stockage soient actifs/optimisés :
+
+* ASA A1K
+* ASA A90
+* ASA A70
+* ASA A50
+* ASA A30
+* ASA A20
+
+
+Pour plus d'informations, voir link:https://docs.netapp.com/us-en/asa-r2/index.html["NetApp ASA"]
+
+Pour optimiser une solution SQL Server sur ONTAP, il est nécessaire de comprendre le modèle et les caractéristiques d'E/S SQL Server. Une infrastructure de stockage bien conçue pour une base de données SQL Server doit répondre aux besoins de performances de SQL Server, tout en assurant une gestion maximale de l'infrastructure dans son ensemble. Une bonne disposition du stockage permet également de réussir le déploiement initial et d'assurer une croissance progressive de l'environnement à mesure que l'entreprise se développe.
+
+
+
+== Conception du stockage des données
+
+Microsoft recommande de placer les fichiers de données et les fichiers journaux sur des lecteurs distincts. Pour les applications qui mettent à jour et demandent simultanément des données, le fichier journal est très gourmand en écriture et le fichier de données (selon votre application) consomme beaucoup de ressources en lecture/écriture. Pour la récupération des données, le fichier journal n'est pas nécessaire. Par conséquent, les demandes de données peuvent être satisfaites à partir du fichier de données placé sur son propre disque.
+
+Lorsque vous créez une nouvelle base de données, Microsoft recommande de spécifier des disques distincts pour les données et les journaux. Pour déplacer des fichiers après la création de la base de données, la base de données doit être mise hors ligne. Pour plus d'informations sur les recommandations de Microsoft, consultez la section link:https://docs.microsoft.com/en-us/sql/relational-databases/policy-based-management/place-data-and-log-files-on-separate-drives?view=sql-server-ver15["Placez les fichiers de données et les fichiers journaux sur des lecteurs distincts"^].
+
+
+
+=== Considérations relatives à l'unité de stockage
+
+Unité de stockage dans ASA désigne un LUN pour les hôtes SCSI/FC ou un namespace NVMe pour les hôtes NVMe. En fonction du protocole pris en charge, vous serez invité à créer une LUN, un espace de noms NVMe ou les deux. Avant de créer une unité de stockage pour le déploiement de la base de données, il est important de comprendre comment le modèle et les caractéristiques d'E/S SQL Server varient en fonction de la charge de travail et des exigences de sauvegarde et de restauration. Consultez les recommandations NetApp suivantes pour l'unité de stockage :
+
+* Évitez de partager la même unité de stockage entre plusieurs serveurs SQL Server s'exécutant sur le même hôte afin d'éviter une gestion complexe. Dans le cas d'une exécution de plusieurs instances SQL Server sur le même hôte, sauf si vous êtes proche de la limite de l'unité de stockage sur un nœud, évitez le partage et disposez plutôt d'une unité de stockage distincte par instance et par hôte pour faciliter la gestion des données.
+* Utilisez des points de montage NTFS au lieu de lettres de lecteur pour dépasser la limite de 26 lettres de lecteur dans Windows.
+* Désactivez les planifications d'instantanés et les stratégies de conservation. Utilisez plutôt SnapCenter pour coordonner les copies Snapshot de l'unité de stockage des données SQL Server.
+* Placez les bases de données système SQL Server sur une unité de stockage dédiée.
+* Tempdb est une base de données système utilisée par SQL Server comme espace de travail temporaire, en particulier pour les opérations DBCC CHECKDB exigeantes en E/S. Par conséquent, placez cette base de données sur une unité de stockage dédiée. Dans les grands environnements dans lesquels le nombre d'unités de stockage est un défi, vous pouvez consolider tempdb avec des bases de données système dans la même unité de stockage après une planification minutieuse. La protection des données pour tempdb n'est pas une priorité élevée car cette base de données est recréée à chaque redémarrage de SQL Server.
+* Placez les fichiers de données utilisateur (`.mdf`) sur une unité de stockage distincte car il s'agit de charges de travail en lecture/écriture aléatoires. Il est courant de créer des sauvegardes du journal de transactions plus fréquemment que les sauvegardes de bases de données. Pour cette raison, placez les fichiers journaux (`.ldf`de transactions ) sur une unité de stockage distincte ou un fichier VMDK à partir des fichiers de données afin que des planifications de sauvegarde indépendantes puissent être créées pour chaque. Cette séparation isole également les E/S d'écriture séquentielle des fichiers journaux des E/S de lecture/écriture aléatoires des fichiers de données et améliore considérablement les performances de SQL Server.
+* Assurez-vous que les fichiers de base de données utilisateur et le répertoire des journaux pour stocker la sauvegarde des journaux se trouvent sur une unité de stockage distincte afin d'empêcher la règle de rétention d'écraser les snapshots lorsqu'ils sont utilisés avec la fonction SnapMirror avec la règle de coffre-fort.
+* Ne mélangez pas les fichiers de base de données et les fichiers non liés à la base de données, tels que les fichiers de recherche en texte intégral, sur la même unité de stockage.
+* Le placement de fichiers secondaires de base de données (dans le cadre d'un groupe de fichiers) sur une unité de stockage distincte améliore les performances de la base de données SQL Server. Cette séparation est valide uniquement si le fichier de la base de données `.mdf` ne partage pas son unité de stockage avec d'autres `.mdf` fichiers.
+* Lors du formatage du disque à l'aide du gestionnaire de disques dans le serveur Windows, assurez-vous que la taille de l'unité d'allocation est définie sur 64 Ko pour la partition.
+* Ne placez pas de bases de données utilisateur ou de bases de données système sur une unité de stockage hébergeant des points de montage.
+* Voir la link:https://www.netapp.com/media/10680-tr4080.pdf["Microsoft Windows et MPIO natif conformément aux meilleures pratiques ONTAP pour les SAN modernes"] Pour appliquer la prise en charge des chemins d'accès multiples sur Windows aux périphériques iSCSI dans les propriétés MPIO.
+* Si vous utilisez une instance de cluster à basculement permanent, les bases de données utilisateur doivent être placées sur une unité de stockage partagée entre les nœuds de cluster de basculement du serveur Windows et les ressources de cluster de disques physiques sont affectées au groupe de clusters associé à l'instance SQL Server.
+

@@ -23,7 +23,6 @@ NetApp suppose que le lecteur a une connaissance pratique des éléments suivant
 
 * ONTAP
 * Architecture et administration de Microsoft SQL Server
-* Le logiciel de sauvegarde SnapCenter comprend les composants suivants :
 * NetApp SnapCenter en tant que logiciel de sauvegarde, qui inclut :
 +
 ** Plug-in SnapCenter pour Microsoft Windows

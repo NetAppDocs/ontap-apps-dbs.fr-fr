@@ -1,0 +1,38 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-dr-smas-sql-ASA.html 
+keywords: MSSQL,SQL Server, SnapMirror active sync, ONTAP, SMBC, SMas, SnapMirror Business Continuity 
+summary: Synchronisation active de Microsoft SQL Server et SnapMirror 
+searchtitle: Microsoft SQL Server avec synchronisation active SnapMirror 
+---
+= Présentation
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+SQL Server peut être configuré pour fonctionner avec la synchronisation active SnapMirror de plusieurs façons. La bonne réponse dépend de la connectivité réseau disponible, des exigences de RPO et de la disponibilité.
+
+
+
+== Instance autonome de SQL Server
+
+Les meilleures pratiques en matière de mise en page des fichiers et de configuration des serveurs sont les mêmes que celles recommandées dans link:mssql-storage-considerations.html["SQL Server sur ONTAP"] la documentation.
+
+Avec une configuration autonome, SQL Server ne peut être exécuté que sur un site. L'accès serait probablement link:mssql-dr-smas-uniform.html["uniforme"]utilisé.
+
+image:smas-onehost-ASA.png["Un hôte unique avec accès uniforme"]
+
+Avec un accès uniforme, une panne de stockage sur l'un ou l'autre site n'interromprait pas les opérations de la base de données. Une défaillance complète du site incluant le serveur de base de données entraînerait, bien sûr, une panne.
+
+Certains clients peuvent configurer un système d'exploitation s'exécutant sur le site distant avec une configuration SQL Server préconfigurée, mise à jour avec une version de build équivalente à celle de l'instance de production. Le basculement nécessite l'activation de cette instance autonome de SQL Server sur le site secondaire, la découverte des LUN et le démarrage de la base de données. Le processus complet peut être automatisé avec l'applet de commande Windows PowerShell, car aucune opération n'est requise côté stockage.
+
+link:mssql-dr-smas-nonuniform.html["Non uniforme"] l'accès peut également être utilisé, mais il en résulte une panne de la base de données si le système de stockage sur lequel était situé le serveur de base de données avait échoué car la base de données ne disposait pas de chemins d'accès au stockage. Cela peut toujours être acceptable dans certains cas. La synchronisation active SnapMirror offre toujours une protection des données avec un objectif de point de récupération de 0. En cas de défaillance du site, la copie restante est active et prête à reprendre les opérations en suivant la même procédure utilisée avec un accès uniforme que celle décrite ci-dessus.
+
+Un processus de basculement simple et automatisé peut être configuré plus facilement grâce à l'utilisation d'un hôte virtualisé. Par exemple, si les fichiers de données SQL Server sont répliqués de manière synchrone sur le stockage secondaire avec un VMDK de démarrage, l'environnement complet peut être activé sur l'autre site en cas d'incident. Un administrateur peut activer manuellement l'hôte sur le site survivant ou automatiser le processus via un service tel que VMware HA.
+
+
+
+== Instance de cluster de basculement SQL Server
+
+Les instances de basculement SQL Server peuvent également être hébergées sur un cluster de basculement Windows s'exécutant sur un serveur physique ou virtuel en tant que système d'exploitation invité. Cette architecture multi-hôtes fournit l'instance SQL Server et la résilience du stockage. Ce déploiement est utile dans les environnements très exigeants qui recherchent des processus de basculement robustes tout en maintenant des performances améliorées. Dans une configuration de cluster de basculement, lorsqu'un hôte ou un stockage primaire est affecté, SQL Services effectue un basculement vers l'hôte secondaire et, dans le même temps, le stockage secondaire est disponible pour transmettre les E/S. Aucun script d'automatisation ni aucune intervention de l'administrateur n'est nécessaire.

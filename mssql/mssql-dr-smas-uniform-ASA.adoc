@@ -1,15 +1,12 @@
 ---
 sidebar: sidebar 
-permalink: mssql/mssql-dr-smas-uniform.html 
+permalink: mssql/mssql-dr-smas-uniform-ASA.html 
 keywords: MSSQL,SQL Server, SnapMirror active sync, SMBC, overview 
 summary: 'Microsoft SQL Server et SM-en tant qu"accès uniforme' 
 searchtitle: 'Microsoft SQL Server et SM-en tant qu"accès uniforme' 
 ---
 = Accès uniforme
-:hardbreaks:
 :allow-uri-read: 
-:icons: font
-:linkattrs: 
 :imagesdir: ../media/
 
 
@@ -17,6 +14,16 @@ searchtitle: 'Microsoft SQL Server et SM-en tant qu"accès uniforme'
 Un réseau d'accès uniforme signifie que les hôtes peuvent accéder aux chemins sur les deux sites (ou domaines de défaillance au sein du même site).
 
 L'une des caractéristiques importantes de SM-AS est la capacité de configurer les systèmes de stockage pour savoir où se trouvent les hôtes. Lorsque vous mappez les LUN sur un hôte donné, vous pouvez indiquer si elles sont proximales ou non à un système de stockage donné.
+
+Les systèmes NetApp ASA proposent des chemins d'accès multiples actif-actif sur tous les chemins d'accès à un cluster. Cela s'applique également aux configurations SM-AS.
+
+image:smas-uniform-SQL-ASA.png["SnapMirror actif Sync ASA uniforme de mise en réseau"]
+
+Avec un accès uniforme, l'E/S traverserait le WAN. Il s'agit d'un cluster en réseau entièrement maillé, ce qui peut être souhaitable ou non pour tous les cas d'utilisation.
+
+Si les deux sites étaient distants de 100 mètres avec une connectivité à fibre optique, il ne devrait pas y avoir de latence supplémentaire détectable traversant le WAN, mais si les sites étaient éloignés, les performances de lecture seraient affectées sur les deux sites. ASA avec un réseau d'accès non uniforme serait une option pour bénéficier des avantages de ASA en termes de coûts et de fonctionnalités sans encourir de pénalités de latence intersites ou utiliser la fonction de proximité des hôtes pour autoriser l'accès en lecture/écriture locale des deux sites.
+
+ASA avec SM-as dans une configuration à faible latence offre deux avantages intéressants. Tout d'abord, elle double *les performances de n'importe quel hôte, car les E/S peuvent être traitées par deux fois plus de contrôleurs en utilisant deux fois plus de chemins. Ensuite, dans un environnement à site unique, elle offre une disponibilité extrême, car l'intégralité du système de stockage peut être perdue sans interrompre l'accès aux hôtes.
 
 
 
@@ -32,16 +39,6 @@ Par exemple, un hôte du site A peut être configuré pour accéder à une LUN p
 
 Sans paramètres de proximité, cet hôte utilisera les deux systèmes de stockage de la même manière, car les deux systèmes de stockage annonceront des chemins actifs/optimisés. Si la latence SAN et/ou la bande passante entre les sites est limitée, il se peut que cela ne soit pas désirable, et vous pouvez vous assurer que, pendant le fonctionnement normal, chaque hôte utilise de préférence des chemins vers le système de stockage local. Cette configuration s'effectue en ajoutant l'ID WWN/iSCSI de l'hôte au cluster local en tant qu'hôte proximal. Cette opération peut être effectuée à partir de l'interface de ligne de commande ou de SystemManager.
 
+Les chemins s'affichent comme indiqué ci-dessous lorsque la proximité de l'hôte a été configurée.
 
-
-== AFF
-
-Avec un système AFF, les chemins apparaissent comme indiqué ci-dessous lorsque la proximité de l'hôte a été configurée.
-
-image:smas-uniform-aff.png["SnapMirror actif Sync AFF uniforme de mise en réseau"]
-
-En fonctionnement normal, toutes les E/S sont des E/S locales. Les opérations de lecture et d'écriture sont gérées à partir de la baie de stockage locale. Bien entendu, les E/S en écriture devront également être répliquées par le contrôleur local sur le système distant avant d'être acquittées, mais toutes les E/S en lecture seront gérées localement et ne subiront pas de latence supplémentaire en traversant la liaison SAN entre les sites.
-
-Le seul moment où les chemins non optimisés seront utilisés est la perte de tous les chemins actifs/optimisés. Par exemple, si l'ensemble de la baie sur le site A est hors tension, les hôtes du site A peuvent toujours accéder aux chemins d'accès à la baie sur le site B et donc rester opérationnels, même s'ils connaissent une latence plus élevée.
-
-Il existe des chemins redondants à travers le cluster local qui ne sont pas illustrés sur ces schémas pour plus de simplicité. Les systèmes de stockage ONTAP étant dotés de la haute disponibilité, une panne du contrôleur ne devrait pas entraîner de panne sur le site. Il devrait simplement entraîner une modification dans laquelle les chemins locaux sont utilisés sur le site affecté.
+image:smas-uniform-SQL-ASA-Proximity.png["SnapMirror Active Sync ASA mise en réseau uniforme avec proximité"]

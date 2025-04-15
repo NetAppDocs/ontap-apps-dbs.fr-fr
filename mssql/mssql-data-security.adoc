@@ -45,6 +45,9 @@ NOTE: Les snapshots inviolables ne peuvent pas être hiérarchisés à l'aide du
 Pour plus d'informations sur les instantanés inviolables, consultez le link:https://docs.netapp.com/us-en/ontap/snaplock/snapshot-lock-concept.html["Documentation ONTAP."]
 
 
+NOTE: Dans la nouvelle plateforme ASA, répliquez les snapshots sur un cluster distant à l'aide de la règle _vault_, puis verrouillez la destination pour rendre les snapshots inviolables.
+
+
 
 == Réplication SnapMirror
 

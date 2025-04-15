@@ -1,15 +1,12 @@
 ---
 sidebar: sidebar 
-permalink: mssql/mssql-files-and-filegroups.html 
-keywords: MSSQL,SQL Server, backup, recovery, database file management 
-summary: Placement des fichiers de base de données Microsoft SQL Server 
-searchtitle: Placement des fichiers de base de données Microsoft SQL Server 
+permalink: mssql/mssql-files-and-filegroups-ASA.html 
+keywords: MSSQL,SQL Server, backup, recovery, database file management ,ASA 
+summary: Placement des fichiers de base de données Microsoft SQL Server sur ASA 
+searchtitle: Fichiers de base de données et groupes de fichiers Microsoft SQL Server 
 ---
 = Fichiers de base de données et groupes de fichiers
-:hardbreaks:
 :allow-uri-read: 
-:icons: font
-:linkattrs: 
 :imagesdir: ../media/
 
 
@@ -84,28 +81,17 @@ Une autre option de base de données importante qui contrôle la taille des fich
 
 === Répertoire du journal
 
-Le répertoire du journal est spécifié dans SQL Server pour stocker les données de sauvegarde du journal de transactions au niveau de l'hôte. Si vous utilisez SnapCenter pour sauvegarder les fichiers journaux, chaque hôte SQL Server utilisé par SnapCenter doit disposer d'un répertoire de journaux hôte configuré pour effectuer des sauvegardes de journaux. SnapCenter dispose d'un référentiel de base de données. Les métadonnées liées aux opérations de sauvegarde, de restauration ou de clonage sont donc stockées dans un référentiel de base de données central.
+Le répertoire du journal est spécifié dans SQL Server pour stocker les données de sauvegarde du journal de transactions au niveau de l'hôte. Si vous utilisez SnapCenter pour sauvegarder les fichiers journaux, chaque hôte SQL Server utilisé par SnapCenter doit disposer d'un répertoire de journaux hôte configuré pour effectuer des sauvegardes de journaux.
 
-La taille du répertoire de journaux hôte est calculée comme suit :
-Taille du répertoire des journaux hôtes = ( (taille LDF maximale de la base de données x taux de modification quotidien du journal %) x (rétention des snapshots) ÷ (1 - espace de surcharge de la LUN %)
-La formule de dimensionnement du répertoire des journaux hôte suppose un espace supplémentaire de 10 % pour les LUN
-
-Placez le répertoire des journaux sur un volume ou une LUN dédié. La quantité de données dans le répertoire du journal hôte dépend de la taille des sauvegardes et du nombre de jours pendant lesquels les sauvegardes sont conservées. SnapCenter n'autorise qu'un seul répertoire de journaux hôte par hôte SQL Server. Vous pouvez configurer les répertoires de journaux hôtes dans SnapCenter --> hôte --> configurer le plug-in.
+Placez le répertoire des journaux sur une unité de stockage dédiée. La quantité de données dans le répertoire du journal hôte dépend de la taille des sauvegardes et du nombre de jours pendant lesquels les sauvegardes sont conservées. SnapCenter n'autorise qu'un seul répertoire de journaux hôte par hôte SQL Server. Vous pouvez configurer les répertoires de journaux hôtes dans SnapCenter --> hôte --> configurer le plug-in.
 
 [TIP]
 ====
 *NetApp recommande* ce qui suit pour un répertoire de journaux hôte :
 
 * Assurez-vous que le répertoire du journal de l'hôte n'est partagé par aucun autre type de données pouvant potentiellement corrompre les données du snapshot de sauvegarde.
-* Ne placez pas de bases de données utilisateur ou de bases de données système sur un LUN qui héberge des points de montage.
-* Créez le répertoire des journaux hôtes sur un volume dédié sur lequel SnapCenter copie les journaux de transactions.
-* Utilisez les assistants SnapCenter pour migrer les bases de données vers le stockage NetApp de sorte que les bases de données soient stockées dans des emplacements valides, ce qui permet de réaliser les opérations de sauvegarde et de restauration SnapCenter. N'oubliez pas que le processus de migration est disruptif et peut mettre les bases de données hors ligne pendant la migration.
-* Les conditions suivantes doivent être en place pour les instances de cluster de basculement (FCI) de SQL Server :
-+
-** Si vous utilisez une instance de cluster de basculement, la LUN du répertoire de journalisation de l'hôte doit être une ressource de disque de cluster dans le même groupe de cluster que l'instance SQL Server en cours de sauvegarde SnapCenter.
-** Si vous utilisez une instance de cluster de basculement, les bases de données utilisateur doivent être placées sur des LUN partagées qui sont des ressources de cluster de disques physiques affectées au groupe de clusters associé à l'instance SQL Server.
-
-
+* Créez le répertoire des journaux hôtes sur une unité de stockage dédiée dans laquelle SnapCenter copie les journaux de transactions.
+* Si vous utilisez une instance de cluster de basculement toujours en service, l'unité de stockage utilisée pour le répertoire des journaux de l'hôte doit être une ressource de disque de cluster dans le même groupe que l'instance SQL Server sauvegardée dans SnapCenter.
 
 
 ====
