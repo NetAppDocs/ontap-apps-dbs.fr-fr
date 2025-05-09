@@ -26,6 +26,9 @@ entries:
     url: "/mssql/mssql-storage-efficiency.html"
   - title: Protection des données
     url: "/mssql/mssql-data-protection.html"
+    entries:
+    - title: Groupe de disponibilité SQL Server avec SnapCenter
+      url: "/mssql/mssql-ag-snapcenter.html"
   - title: Reprise après incident
     entries:
     - title: Présentation

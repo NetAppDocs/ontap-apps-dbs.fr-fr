@@ -2,11 +2,6 @@
 :allow-uri-read: 
 
 
-[role="lead"]
-Il est essentiel de placer correctement les fichiers de base de données SQL Server sur ONTAP lors de la phase de déploiement initiale. Vous bénéficiez ainsi de performances optimales, d'un temps de gestion de l'espace, de sauvegarde et de restauration qui peuvent être configurés pour répondre aux besoins de votre entreprise.
-
-En théorie, SQL Server (64 bits) prend en charge 32,767 bases de données par instance et 524 272 To de taille de base de données, bien que l'installation standard comporte généralement plusieurs bases de données. Cependant, le nombre de bases de données que SQL Server peut gérer dépend de la charge et du matériel. Il n'est pas rare que des instances SQL Server hébergent des dizaines, des centaines, voire des milliers de petites bases de données.
-
 
 
 === Fichiers de base de données et groupe de fichiers

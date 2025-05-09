@@ -116,7 +116,7 @@ Les volumes créés sur ONTAP et exécutés sur un système AFF 100 % Flash sont
 
 === Recommandations générales
 
-* Si les volumes et/ou les LUN ne sont pas à provisionnement fin, vous devez désactiver tous les paramètres d'efficacité car l'utilisation de ces fonctionnalités n'offre aucune économie et la combinaison du provisionnement lourd et de l'optimisation de l'espace peut provoquer des comportements inattendus, notamment des erreurs de manque d'espace.
+* Si les volumes et/ou les LUN ne sont pas à provisionnement fin, vous devez désactiver tous les paramètres d'efficacité car l'utilisation de ces fonctionnalités ne permet aucune économie et la combinaison du provisionnement lourd et de l'optimisation de l'espace peut provoquer des comportements inattendus, notamment des erreurs de manque d'espace.
 * Si les données ne sont pas sujettes à des écrasements, par exemple avec des sauvegardes ou des journaux de transactions de base de données, vous pouvez atteindre une meilleure efficacité en activant TSSE avec une période de refroidissement faible.
 * Certains fichiers peuvent contenir une quantité importante de données non compressibles, par exemple lorsque la compression est déjà activée au niveau de l'application, les fichiers sont cryptés. Si l'un de ces scénarios est vrai, envisagez de désactiver la compression pour permettre un fonctionnement plus efficace sur d'autres volumes contenant des données compressibles.
 * N'utilisez pas la compression et la déduplication de 32 Ko pour les sauvegardes de bases de données. Voir la section <<Compression adaptative>> pour plus d'informations.
@@ -139,7 +139,7 @@ Voici les recommandations pour la gestion de l'espace pour les fichiers de donn�
 ** Utilisez le croissance automatique dans la plupart des configurations de déploiement courantes, car l'administrateur du stockage ne doit contrôler l'utilisation de l'espace dans l'agrégat.
 
 
-* N'activez pas la déduplication sur les volumes contenant des fichiers de données SQL Server, sauf si le volume contient plusieurs copies des mêmes données, telles que la restauration de la base de données à partir de sauvegardes sur un seul volume.
+* N'activez pas la déduplication sur les volumes FAS contenant des fichiers de données SQL Server, sauf si le volume contient plusieurs copies des mêmes données, telles que la restauration d'une base de données à partir de sauvegardes sur un seul volume.
 
 
 

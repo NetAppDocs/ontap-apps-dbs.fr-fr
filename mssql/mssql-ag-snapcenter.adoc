@@ -1,0 +1,56 @@
+---
+sidebar: sidebar 
+permalink: mssql/mssql-ag-snapcenter.html 
+keywords: MSSQL,SQL Server, data protection, snapmirror, availability group 
+summary: Groupe de disponibilité Microsoft SQL Server avec SnapCenter 
+searchtitle: Groupe de disponibilité Microsoft SQL Server avec SnapCenter 
+---
+= Groupe de disponibilité SQL Server avec SnapCenter
+:allow-uri-read: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+SnapCenter prend en charge la sauvegarde de la base de données du groupe de disponibilité SQL Server configurée avec un cluster de basculement Windows.
+
+Le plug-in SnapCenter pour Microsoft SQL Server doit être installé sur tous les nœuds du cluster de basculement de serveur Windows. Reportez-vous à link:https://docs.netapp.com/us-en/snapcenter/protect-scsql/concept_prerequisites_for_using_snapcenter_plug_in_for_microsoft_sql_server.html["documentation"]la section sur les prérequis et aux étapes de configuration des plug-ins SnapCenter.
+
+SnapCenter découvre toutes les bases de données, instances et groupes de disponibilité des hôtes Windows et les ressources sont énumérées sur la page de ressources SnapCenter.
+
+
+
+=== Protection des bases de données dans le groupe disponibilité permanente
+
+Les bases de données du groupe de disponibilité peuvent être protégées de plusieurs façons.
+
+* Sauvegarde au niveau de la base de données : sélectionnez la base de données de la page de ressources de la base de données, ajoutez la stratégie consistant en une sauvegarde complète/journal, planifiez la sauvegarde. SnapCenter effectue la sauvegarde quel que soit le rôle de la base de données, qu'il s'agisse d'une réplique primaire ou secondaire. La protection peut également être configurée en ajoutant des bases de données au groupe de ressources.
+* Sauvegarde au niveau de l'instance : sélectionnez l'instance et toutes les bases de données exécutées sur l'instance sont protégées en fonction de la règle sélectionnée. Toutes les bases de données, y compris la base de données de disponibilité s'exécutant comme réplique primaire ou secondaire, sont sauvegardées à l'aide de SnapCenter. La protection peut également être configurée en ajoutant une instance au groupe de ressources.
+* Sauvegarde au niveau du groupe de disponibilité : lors de la configuration de la règle, SnapCenter dispose d'une option avancée pour la sauvegarde au niveau du groupe de disponibilité. Le paramètre de groupe de disponibilité dans la stratégie permet aux utilisateurs de sélectionner la préférence de réplique pour la sauvegarde. Vous pouvez sélectionner une réplique principale, secondaire ou toutes. L'option par défaut est basée sur le jeu de répliques de sauvegarde dans la configuration du groupe de disponibilité SQL Server.
+
+
+Le paramètre de groupe de disponibilité dans la stratégie SnapCenter s'applique uniquement si la sauvegarde au niveau du groupe de disponibilité est utilisée pour protéger les bases de données du groupe de disponibilité et ne s'applique pas à la sauvegarde au niveau de la base de données ou de l'instance.
+
+
+TIP: *NetApp recommande* d'utiliser la sauvegarde au niveau de la disponibilité pour sauvegarder toutes les répliques exécutées sur le stockage NetApp ONTAP.
+
+
+
+=== Configuration de la sauvegarde des journaux dans SnapCenter
+
+Si le groupe de disponibilité est configuré sur une configuration autonome de SQL Server, un disque dédié doit être monté sur chaque nœud d'un cluster de basculement de serveur Windows. Le disque dédié doit être utilisé pour configurer le répertoire des journaux afin d'enregistrer les sauvegardes du journal des transactions.
+
+Si le groupe de disponibilité est configuré sur le cluster de basculement SQL Server, le disque en cluster doit être créé sur l'instance de cluster de basculement SQL Server vers le répertoire de journalisation de l'hôte.
+
+
+
+=== Restauration de la base de données dans la configuration du groupe de disponibilité avec SnapCenter
+
+* SnapCenter fournit l'option de réamorçage pour restaurer automatiquement la base de données à partir du dernier snapshot disponible sur le réplica secondaire. L'opération de réamorçage restaure automatiquement et joint la sauvegarde de la base de données au groupe de disponibilité.
+* Une autre façon de restaurer la base de données de réplica dans le groupe de disponibilité consiste à rompre le groupe de disponibilité et à effectuer la restauration complète et complète du journal. Utilisez SnapCenter pour restaurer la base de données en mode norecovery, puis utilisez SQL Server Management Studio ou T-SQL pour rejoindre la base de données au groupe de disponibilité.
+* Pour restaurer un sous-ensemble de données uniquement, la fonctionnalité de clonage de SnapCenter peut être utilisée pour créer une copie de clone de la base de données. La copie de la base de données est créée en quelques minutes à l'aide de SnapCenter, puis exporte les données vers le réplica principal à l'aide des outils natifs du serveur SQL.
+
+
+Pour connaître les bonnes pratiques de configuration de l'infrastructure de stockage de la base de données afin de répondre aux exigences RTO et RPO, consultez link:https://www.netapp.com/pdf.html?item=/media/12400-tr4714.pdf["Tr-4714 meilleures pratiques pour Microsoft SQL Server avec NetApp SnapCenter"]la section .
+
+
+NOTE: SnapCenter ne prend pas en charge les groupes de disponibilité distribués et les groupes de disponibilité contenus.
