@@ -54,7 +54,7 @@ Cette annexe décrit le déploiement d'un cluster Hyper-V.
 +
 ... Mettre la LUN en ligne, initialiser le disque, créer un nouveau volume simple et le formater à l'aide de NTFS ou de ReFS.
 ... Dans le Gestionnaire de clusters de basculement, développez le cluster, développez stockage, cliquez avec le bouton droit de la souris sur disques, puis cliquez sur Ajouter des disques. L'assistant Ajouter des disques à un cluster s'ouvre alors et affiche la LUN comme disque. Cliquez sur OK pour ajouter la LUN en tant que disque.
-... La LUN s'appelle désormais disque en cluster et est affichée comme stockage disponible sous disques.
+... La LUN s'appelle désormais « disque en cluster » et est affichée comme stockage disponible sous disques.
 
 
 .. Cliquez avec le bouton droit de la souris sur la LUN (disque en cluster), puis cliquez sur Ajouter aux volumes partagés du cluster. La LUN s'affiche désormais au format CSV.

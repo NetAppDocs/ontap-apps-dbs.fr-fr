@@ -14,11 +14,11 @@ summary: 'SnapCenter vous permet de créer des règles de sauvegarde qui peuvent
 
 
 [role="lead"]
-Les API VMware vSphere pour Storage Awareness (VASA) permettent à un administrateur du stockage de configurer des datastores avec des fonctionnalités bien définies et de permettre à l'administrateur des VM de les utiliser chaque fois que nécessaire pour provisionner des machines virtuelles sans avoir à interagir les unes avec les autres.
+VMware vSphere APIs for Storage Awareness (VASA) permet aux administrateurs du stockage de configurer facilement des datastores avec des fonctionnalités bien définies et à l'administrateur des VM de les utiliser lorsque cela est nécessaire pour provisionner des VM sans avoir à interagir les uns avec les autres.
 
 Il est intéressant d'étudier cette approche pour savoir comment rationaliser vos opérations de stockage de virtualisation et éviter un travail insignifiant.
 
-Avant de procéder à VASA, les administrateurs des VM pouvaient définir des règles de stockage des VM, mais ils devaient travailler avec l'administrateur du stockage pour identifier les datastores appropriés, souvent à l'aide de la documentation ou des conventions de nom. Grâce à VASA, l'administrateur du stockage peut définir un éventail de fonctionnalités de stockage, notamment la performance, le Tiering, le chiffrement et la réplication. Un ensemble de capacités pour un volume ou un ensemble de volumes est appelé « profil de capacité de stockage » (SCP).
+Avant VASA, les administrateurs des VM pouvaient définir des règles de stockage des VM, mais ils devaient travailler avec l'administrateur du stockage pour identifier les datastores appropriés, souvent à l'aide de la documentation ou des conventions de nommage. Grâce à VASA, l'administrateur du stockage peut définir un éventail de fonctionnalités de stockage, notamment la performance, le Tiering, le chiffrement et la réplication. Un ensemble de capacités pour un volume ou un ensemble de volumes est appelé « profil de capacité de stockage » (SCP).
 
 Le SCP prend en charge la QoS minimale et/ou maximale pour les vVols de données d'une machine virtuelle. La QoS minimale est prise en charge uniquement sur les systèmes AFF. Les outils ONTAP pour VMware vSphere comprennent un tableau de bord affichant des performances granulaires de machine virtuelle et une capacité logique pour vVvols sur les systèmes ONTAP.
 

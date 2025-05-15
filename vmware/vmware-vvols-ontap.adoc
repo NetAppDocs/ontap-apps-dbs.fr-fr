@@ -47,7 +47,7 @@ Reportez-vous à link:vmware-vvols-deploy.html["Déploiement du stockage vVols"^
 Il est recommandé de stocker vos outils ONTAP et appliances vCenter sur des datastores NFS ou VMFS classiques afin d'éviter tout conflit d'interdépendance. Étant donné que les outils vCenter et ONTAP doivent communiquer entre eux lors des opérations vVols, n'installez pas et ne déplacez pas les appliances ONTAP Tools ou vCenter Server (VCSA) vers le stockage vVols qu'ils gèrent. Dans ce cas, le redémarrage de l'appliance vCenter ou des outils ONTAP peut entraîner une interruption de l'accès au plan de contrôle et une incapacité de l'appliance à démarrer.
 
 ====
-Les mises à niveau des outils ONTAP sans déplacement des données sont prises en charge grâce au fichier ISO de mise à niveau disponible au téléchargement https://mysupport.netapp.com/site/products/all/details/otv10/downloads-tab["Outils ONTAP pour VMware vSphere 10 - Téléchargements"] sur le site du support NetApp (identifiant NSS requis). Suivez les https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/upgrade/upgrade-ontap-tools.html["Mise à niveau des outils ONTAP pour VMware vSphere 10.x vers la version 10.3"] instructions du guide pour mettre à niveau l'appareil. Il est également possible d'effectuer une mise à niveau côte à côte des outils ONTAP 9.13 à 10.3. Reportez-vous https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/migrate/migrate-to-latest-ontaptools.html["Migrez des outils ONTAP pour VMware vSphere 9.x vers la version 10.3"] à la pour plus d'informations sur ce sujet.
+Les mises à niveau des outils ONTAP sans déplacement des données sont prises en charge grâce au fichier ISO de mise à niveau disponible en téléchargement https://mysupport.netapp.com/site/products/all/details/otv10/downloads-tab["Outils ONTAP pour VMware vSphere 10 - Téléchargements"] sur le site du support NetApp (connexion requise). Suivez les https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/upgrade/upgrade-ontap-tools.html["Mise à niveau des outils ONTAP pour VMware vSphere 10.x vers la version 10.3"] instructions du guide pour mettre à niveau l'appareil. Il est également possible d'effectuer une mise à niveau côte à côte des outils ONTAP 9.13 à 10.3. Reportez-vous https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/migrate/migrate-to-latest-ontaptools.html["Migrez des outils ONTAP pour VMware vSphere 9.x vers la version 10.3"] à la pour plus d'informations sur ce sujet.
 
 Pour le dimensionnement de votre appliance virtuelle et la compréhension des limites de configuration, reportez-vous à la section https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/prerequisites.html#configuration-limits-to-deploy-ontap-tools-for-vmware-vsphere["Limites de configuration pour le déploiement des outils ONTAP pour VMware vSphere"^]
 
@@ -73,7 +73,7 @@ https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/index.html["Document
 
 ==== Utilisez les outils ONTAP
 
-* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-vvols-datastore.html["Provisionner les datastores"^]
+* https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/create-datastore.html["Provisionner les datastores"^]
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/configure-user-role-and-privileges.html["Configurez le contrôle d'accès basé sur des rôles"^]
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/edit-appliance-settings.html["Configurez la haute disponibilité"^]
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/edit-esxi-host-settings.html["Modifier les paramètres de l'hôte VMware ESXi"^]
@@ -106,11 +106,11 @@ En général, ONTAP supporte les limites vVols définies par VMware (voir publi�
 
 *Utilisez les outils ONTAP pour les extensions d'interface utilisateur ou les API REST de VMware vSphere pour provisionner les datastores vVols* *et les terminaux de protocole.*
 
-Même s'il est possible de créer des datastores vVols avec l'interface vSphere générale, l'utilisation des outils ONTAP crée automatiquement des terminaux de protocole selon les besoins et crée des volumes FlexVol (non requis avec ASA r2) en utilisant les bonnes pratiques ONTAP. Il vous suffit de cliquer avec le bouton droit sur l'hôte/le cluster/le data Center, puis de sélectionner _ONTAP Tools_ et _provisioning datastore_. Ensuite, il vous suffit de choisir les options vVols souhaitées dans l'assistant.
+Même s'il est possible de créer des datastores vVols avec l'interface vSphere générale, l'utilisation des outils ONTAP crée automatiquement des terminaux de protocole selon les besoins et crée des volumes FlexVol (non requis avec ASA r2) en utilisant les bonnes pratiques ONTAP. Il vous suffit de cliquer avec le bouton droit de la souris sur l'hôte/le cluster/le data Center, puis de sélectionner _ONTAP Tools_ et _provisioning datastore_. Ensuite, il vous suffit de choisir les options vVols souhaitées dans l'assistant.
 
 *Ne stockez jamais l'appliance ONTAP Tools ou l'appliance vCenter Server (VCSA) sur un datastore vVols qu'ils gèrent.*
 
-Cela peut entraîner une « situation de poulet et d'œuf » si vous devez redémarrer les appareils parce qu'ils ne pourront pas réassocier leurs propres vVols pendant qu'ils redémarrent. Vous pouvez les stocker sur un datastore vVols géré par un autre outil ONTAP et un déploiement vCenter.
+Cela peut entraîner une « situation de poulet et d'œuf » si vous devez redémarrer les appareils car ils ne pourront pas réassocier leurs propres vVols pendant qu'ils redémarrent. Vous pouvez les stocker sur un datastore vVols géré par un autre outil ONTAP et un déploiement vCenter.
 
 *Évitez les opérations vVols sur différentes versions de ONTAP.*
 
@@ -130,7 +130,7 @@ https://www.netapp.com/media/10680-tr4080.pdf["_TR-4080 meilleures pratiques pou
 
 https://www.netapp.com/pdf.html?item=/media/10681-tr4684.pdf["_TR-4684 implémentation et configuration de SAN modernes avec NVMe-of_"^]
 
-*Planifier vos volumes FlexVol de soutien en fonction de vos besoins.*
+*Planifier vos volumes FlexVol de support en fonction de vos besoins.*
 
 Pour les systèmes non ASA r2, il peut être souhaitable d'ajouter plusieurs volumes de sauvegarde à votre datastore vVols pour répartir la charge de travail sur le cluster ONTAP, pour prendre en charge différentes options de règles ou pour augmenter le nombre de LUN ou de fichiers autorisés. Toutefois, si vous avez besoin d'une efficacité de stockage maximale, placez l'ensemble de vos volumes en arrière-forme sur un seul agrégat. Si des performances de clonage maximales sont requises, envisagez d'utiliser un seul volume FlexVol et de conserver vos modèles ou votre bibliothèque de contenu dans le même volume. Le fournisseur VASA délègue de nombreuses opérations de stockage vVols à ONTAP, notamment la migration, le clonage et les copies Snapshot. Cette opération est réalisée au sein d'un seul volume FlexVol, ce qui permet d'utiliser des clones de fichiers peu encombrants et de les mettre presque instantanément à disposition. Sur des volumes FlexVol, les copies sont rapidement disponibles et utilisent la déduplication et la compression à la volée. Toutefois, l'efficacité du stockage maximale ne peut pas être restaurée tant que des tâches en arrière-plan ne sont pas exécutées sur des volumes utilisant la déduplication et la compression en arrière-plan. Selon la source et la destination, une certaine efficacité peut être dégradée.
 

@@ -14,7 +14,7 @@ summary: 'SnapCenter vous permet de créer des règles de sauvegarde qui peuvent
 
 
 [role="lead"]
-VMware Storage Distributed Resource Scheduler (SDRS) est une fonctionnalité vSphere qui place les machines virtuelles sur un stockage en fonction de la latence d'E/S actuelle et de l'utilisation de l'espace.
+VMware Storage Distributed Resource Scheduler (SDRS) est une fonction vSphere qui place automatiquement les machines virtuelles dans un cluster de datastores en fonction de la latence d'E/S actuelle et de l'utilisation de l'espace.
 
 Il déplace ensuite la machine virtuelle ou les VMDK sans interruption entre les datastores d'un cluster de datastores (également appelé pod), en sélectionnant le meilleur datastore pour placer la machine virtuelle ou les VMDK dans le cluster de datastore. Un cluster de data stores est un ensemble de datastores similaires agrégés dans une unité de consommation unique du point de vue de l'administrateur vSphere.
 
@@ -22,12 +22,25 @@ Lorsque vous utilisez DES DTS avec les outils ONTAP pour VMware vSphere, vous de
 
 Les autres meilleures pratiques ONTAP en matière DE SDRS sont les suivantes :
 
+* N'utilisez pas DE DTS à moins d'avoir une exigence spécifique pour le faire.
++
+** LES DTS ne sont pas nécessaires lors de l'utilisation de ONTAP. LES SDRS n'ont pas connaissance des fonctionnalités d'efficacité du stockage ONTAP, telles que la déduplication et la compression, et peuvent donc prendre des décisions qui ne sont pas optimales pour votre environnement.
+** LES DTS n'ont pas connaissance des règles de QoS de ONTAP et peuvent donc prendre des décisions qui ne sont pas optimales pour la performance.
+** LES DTS ne connaissent pas les copies snapshot ONTAP et peuvent donc prendre des décisions qui entraînent une croissance exponentielle des snapshots. Par exemple, le déplacement d'une machine virtuelle vers un autre datastore crée de nouveaux fichiers dans le nouveau datastore, ce qui entraîne l'augmentation du snapshot. Cela est particulièrement vrai pour les machines virtuelles équipées de disques de grande taille ou de nombreux snapshots. Ensuite, si la machine virtuelle doit être replacée dans le datastore d'origine, le snapshot du datastore d'origine augmentera encore plus.
+
+
+
+
+Si vous utilisez DES DTS, tenez compte des meilleures pratiques suivantes :
+
 * Tous les datastores du cluster doivent utiliser le même type de stockage (SAS, SATA ou SSD, par exemple), être tous des datastores VMFS ou NFS et disposer des mêmes paramètres de réplication et de protection.
 * Envisagez d'utiliser DES DTS en mode par défaut (manuel). Cette approche vous permet d'examiner les recommandations et de décider s'il faut les appliquer ou non. Notez les effets suivants des migrations VMDK :
 +
-** Lorsque DES DTS déplacent des VMDK entre les datastores, les économies d'espace éventuelles obtenues grâce au clonage ou à la déduplication ONTAP sont perdues. Vous pouvez réexécuter la déduplication pour récupérer ces économies.
+** Lorsque LES DTS déplacent des VMDK entre les datastores, les économies d'espace éventuelles liées au clonage ou à la déduplication ONTAP peuvent être réduites selon la qualité de déduplication ou de compression sur la destination.
 ** Une fois que les DTS ont déplacé les VMDK, NetApp recommande de recréer les snapshots au niveau du datastore source car l'espace est autrement verrouillé par la machine virtuelle déplacée.
 ** Le déplacement des VMDK entre les datastores du même agrégat n'a que peu d'avantages et LES DTS n'ont pas de visibilité sur d'autres charges de travail qui pourraient partager l'agrégat.
 
 
 
+
+Pour plus d'informations sur les DTS, consultez la documentation VMware à l'adresse https://knowledge.broadcom.com/external/article/320864/storage-drs-faq.html["FAQ sur Storage DRS"^].

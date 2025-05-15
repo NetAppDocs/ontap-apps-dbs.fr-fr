@@ -4,7 +4,7 @@ permalink: vmware/vmware-otv-hardening-login-banner.html
 keywords: VMware, Data protection, security, OTV, Hardening, ONTAP Tools 
 summary: Guide de renforcement de la sécurité des outils ONTAP pour VMware vSphere, bannière de connexion. 
 ---
-= Bannière de connexion
+= Bannière de connexion Outils ONTAP 9.13
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

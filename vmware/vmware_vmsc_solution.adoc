@@ -1,7 +1,7 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmware_vmsc_solution.html 
-keywords: VMware, Data protection, MetroCluster, SMBC, SnapMirror active sync, vMSC 
+keywords: VMware, Data protection, MetroCluster, SMBC, SMas, SnapMirror active sync, vMSC, metro storage cluster, vSphere, vCenter, business continuity, disaster recovery, ONTAP 
 summary: Présentation de la solution VMware vSphere 
 ---
 = Présentation de la solution VMware vSphere
@@ -20,13 +20,13 @@ VCenter Server Appliance (VCSA) est le puissant système de gestion centralisée
 
 == Haute disponibilité vSphere
 
-La technologie de cluster de VMware regroupe les serveurs ESXi en pools de ressources partagées pour les machines virtuelles et fournit la haute disponibilité (HA) vSphere. VSphere HA offre une haute disponibilité et une simplicité d'utilisation pour les applications qui s'exécutent sur des machines virtuelles. Lorsque la fonction de haute disponibilité est activée sur le cluster, chaque serveur ESXi maintient la communication avec les autres hôtes de sorte que si un hôte ESXi ne répond plus ou est isolé, le cluster de haute disponibilité peut négocier la restauration des machines virtuelles qui s'exécutaient sur cet hôte ESXi parmi les hôtes survivants du cluster. En cas de défaillance d'un système d'exploitation invité, vSphere HA redémarre la machine virtuelle concernée sur le même serveur physique. La haute disponibilité vSphere permet de réduire les temps d'indisponibilité planifiés, d'éviter les temps d'indisponibilité non planifiés et de restaurer rapidement les données en cas de panne.
+La technologie de cluster de VMware regroupe les serveurs ESXi en pools de ressources partagées pour les machines virtuelles et fournit la haute disponibilité vSphere (HA). VSphere HA offre une haute disponibilité facile à utiliser pour les applications exécutées sur les machines virtuelles. Lorsque la fonction de haute disponibilité est activée sur le cluster, chaque serveur ESXi maintient la communication avec les autres hôtes de sorte que si un hôte ESXi ne répond plus ou est isolé, le cluster de haute disponibilité peut négocier la restauration des machines virtuelles qui s'exécutaient sur cet hôte ESXi parmi les hôtes survivants du cluster. En cas de panne du système d'exploitation invité, vSphere HA peut redémarrer l'ordinateur virtuel affecté sur le même serveur physique. VSphere HA permet de réduire les temps d'indisponibilité planifiés, d'éviter les temps d'indisponibilité non planifiés et de restaurer rapidement les données en cas de panne.
 
 Cluster vSphere HA qui récupère les machines virtuelles à partir d'un serveur défaillant.
 
 image::../media/vmsc_2_1.png[Schéma VMSC,624,301]
 
-Il est important de comprendre que VMware vSphere ne connaît pas la synchronisation active NetApp MetroCluster ou SnapMirror et que tous les hôtes ESXi du cluster vSphere sont identifiés comme des hôtes éligibles pour les opérations de cluster haute disponibilité selon les configurations d'affinité de l'hôte et du groupe de machines virtuelles.
+Il est important de comprendre que VMware vSphere ne connaît pas la synchronisation active NetApp MetroCluster ou SnapMirror et que tous les hôtes ESXi du cluster vSphere sont des hôtes éligibles pour les opérations de cluster haute disponibilité selon les configurations d'affinité des groupes de machines virtuelles et des hôtes.
 
 
 
@@ -56,7 +56,7 @@ NetApp recommande de spécifier au moins deux adresses d'isolement supplémentai
 
 Isolation Response est un paramètre de vSphere HA qui détermine l'action déclenchée sur les machines virtuelles lorsqu'un hôte d'un cluster vSphere HA perd ses connexions réseau de gestion mais continue à s'exécuter. Il existe trois options pour ce paramètre, « Désactivé », « Arrêter et redémarrer les machines virtuelles » et « Arrêter et redémarrer les machines virtuelles ».
 
-Il est préférable d'arrêter le système plutôt que de le mettre hors tension, qui ne vide pas les dernières modifications apportées au disque ou ne commet pas les transactions. Si les machines virtuelles ne s'arrêtent pas dans les 300 secondes, elles sont éteintes. Pour modifier le temps d'attente, utilisez l'option avancée das.isolashutdowntimeout.
+« Arrêter » est préférable à « éteindre », qui ne vide pas les modifications les plus récentes apportées au disque ou ne valide pas les transactions. Si les machines virtuelles ne s'arrêtent pas dans les 300 secondes, elles sont éteintes. Pour modifier le temps d'attente, utilisez l'option avancée das.isolashutdowntimeout.
 
 Avant que la haute disponibilité ne lance la réponse d'isolation, elle vérifie d'abord si l'agent principal vSphere HA possède le datastore qui contient les fichiers de configuration de la machine virtuelle. Si ce n'est pas le cas, l'hôte ne déclenchera pas la réponse d'isolation, car il n'y a pas de maître pour redémarrer les machines virtuelles. L'hôte vérifie régulièrement l'état du datastore pour déterminer s'il est demandé par un agent vSphere HA qui détient le rôle principal.
 
@@ -81,7 +81,7 @@ PDL est une condition qui se produit lorsqu'un périphérique de stockage tombe 
 
 [TIP]
 ====
-NetApp recommande de définir la "réponse du datastore avec PDL" sur "*éteindre et redémarrer les machines virtuelles*". Lorsque cette condition est détectée, une machine virtuelle est redémarrée instantanément sur un hôte sain dans le cluster vSphere HA.
+NetApp recommande de définir la "réponse pour le datastore avec PDL" sur "*éteindre et redémarrer les machines virtuelles*". Lorsque cette condition est détectée, une machine virtuelle est redémarrée instantanément sur un hôte sain dans le cluster vSphere HA.
 
 ====
 
@@ -94,19 +94,24 @@ Lorsqu'une condition APD est détectée, une minuterie démarre. Au bout de 140 
 
 [TIP]
 ====
-* NetApp recommande de configurer la « réponse pour le datastore avec APD » sur « * mettre hors tension et redémarrer les machines virtuelles (conservatrices)* ».
+* NetApp recommande de configurer la "réponse pour le datastore avec APD" sur "*éteindre et redémarrer les machines virtuelles (conservative)*".
 * Conservateur fait référence à la probabilité que la haute disponibilité soit capable de redémarrer les machines virtuelles. Si elle est définie sur conservateur, la haute disponibilité ne redémarrera la machine virtuelle concernée par l'APD que si elle sait qu'un autre hôte peut la redémarrer. Dans le cas d'un environnement agressif, la haute disponibilité essaiera de redémarrer la machine virtuelle même si elle ne connaît pas l'état des autres hôtes. Cela peut entraîner le redémarrage des machines virtuelles si aucun hôte n'a accès au datastore sur lequel elles se trouvent.
-* Si le statut APD est résolu et que l'accès au stockage est restauré avant le délai d'expiration, la haute disponibilité ne redémarrera pas inutilement la machine virtuelle, sauf si vous la configurez explicitement pour le faire. Si une réponse est souhaitée, même lorsque l'environnement a récupéré de la condition APD, la réponse pour la restauration APD après le délai APD doit être configurée pour réinitialiser les machines virtuelles.
+* Si l'état APD est résolu et que l'accès au stockage est restauré avant le délai d'expiration, HA ne redémarrera pas inutilement la machine virtuelle sauf si vous la configurez explicitement pour le faire. Si une réponse est souhaitée, même lorsque l'environnement a récupéré de la condition APD, la réponse pour la restauration APD après le délai APD doit être configurée pour réinitialiser les machines virtuelles.
 * NetApp recommande de configurer la réponse pour la récupération APD après le délai APD sur Désactivé.
 
 
 ====
 
 
+== Implémentation de VMware DRS pour NetApp SnapMirror Active Sync
+
+VMware DRS est une fonctionnalité qui regroupe les ressources hôtes dans un cluster et est principalement utilisée pour équilibrer la charge au sein d'un cluster dans une infrastructure virtuelle. VMware DRS calcule principalement les ressources CPU et mémoire pour effectuer l'équilibrage de charge dans un cluster. Étant donné que vSphere ne connaît pas la mise en cluster étendue, il prend en compte tous les hôtes des deux sites lors de l'équilibrage de charge.
+
+
+
 == Implémentation de VMware DRS pour NetApp MetroCluster
 
-VMware DRS est une fonctionnalité qui regroupe les ressources hôtes dans un cluster et est principalement utilisée pour équilibrer la charge au sein d'un cluster dans une infrastructure virtuelle. VMware DRS calcule principalement les ressources CPU et mémoire pour effectuer l'équilibrage de charge dans un cluster. Étant donné que vSphere ne connaît pas la mise en cluster étendue, il prend en compte tous les hôtes des deux sites lors de l'équilibrage de charge. Pour éviter le trafic intersite, NetApp recommande de configurer des règles d'affinité DRS pour gérer une séparation logique des machines virtuelles. Cela permet de garantir que, sauf en cas de défaillance complète du site, les systèmes HA et DRS n'utilisent que les hôtes locaux.
-
+ To avoid cross-site traffic, NetApp recommends configuring DRS affinity rules to manage a logical separation of VMs. This will ensure that unless there is a complete site failure, HA and DRS will only use local hosts.
 Si vous créez une règle d'affinité DRS pour votre cluster, vous pouvez spécifier comment vSphere applique cette règle lors du basculement d'une machine virtuelle.
 
 Vous pouvez spécifier deux types de règles pour le basculement de vSphere HA :
@@ -125,9 +130,9 @@ image::../media/vmsc_2_2.png[Groupes d'hôtes VM et règles d'affinité,528,369]
 
 === _Meilleure pratique_
 
-NetApp recommande de mettre en place des règles « a » plutôt que des règles « a », car elles sont violées par vSphere HA en cas de défaillance. L'utilisation de règles « must » peut entraîner des interruptions de service.
+NetApp recommande de mettre en place des règles « à respecter » plutôt que des règles « à respecter », car elles sont violées par vSphere HA en cas de défaillance. L'utilisation de règles « must » peut entraîner des interruptions de service.
 
-La disponibilité des services doit toujours prévaloir sur les performances. Lorsqu'un data Center complet tombe en panne, les règles « must » doivent choisir les hôtes du groupe d'affinité des hôtes de la machine virtuelle et, lorsque le data Center n'est pas disponible, les machines virtuelles ne redémarrent pas.
+La disponibilité des services doit toujours prévaloir sur les performances. Dans le cas où un data Center complet tombe en panne, les règles « must » doivent choisir des hôtes dans le groupe d'affinité des hôtes de la machine virtuelle, et lorsque le data Center n'est pas disponible, les machines virtuelles ne redémarrent pas.
 
 
 

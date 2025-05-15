@@ -23,7 +23,7 @@ NOTE: Cette documentation remplace les rapports techniques _TR-4400 : VMware vSp
 Les meilleures pratiques complètent d'autres documents, tels que des guides et des listes de compatibilité. Ils sont développés en fonction de tests effectués en laboratoire et d'une vaste expérience sur le terrain par les ingénieurs et les clients NetApp. Ce ne sont peut-être pas les seules pratiques qui fonctionnent ou sont prises en charge, mais sont généralement les solutions les plus simples qui répondent aux besoins de la plupart des clients.
 
 
-TIP: Ce document a été mis à jour pour inclure les nouvelles fonctionnalités vVols de vSphere 8.0 mise à jour 3 et de ONTAP Tools version 10.3.
+NOTE: Ce document a été mis à jour pour inclure les nouvelles fonctionnalités vVols de vSphere 8.0 mise à jour 3, la version 10.4 des outils ONTAP et les nouveaux systèmes NetApp ASA.
 
 
 
@@ -71,7 +71,7 @@ VVols sont les fichiers et disques de machines virtuelles réellement stockés d
 
 == Gestion stratégique
 
-Avec VMware vSphere APIs for Storage Awareness (VASA), un administrateur de serveurs virtuels peut facilement utiliser les fonctionnalités de stockage nécessaires pour provisionner des serveurs virtuels sans avoir à interagir avec son équipe de stockage. Avant VASA, les administrateurs de VM pouvaient définir des règles de stockage de VM, mais devaient travailler avec leurs administrateurs de stockage pour identifier les datastores appropriés, souvent à l'aide de la documentation ou des conventions de nommage. Dans VASA, les administrateurs de vCenter disposant des autorisations appropriées peuvent définir une gamme de fonctionnalités de stockage que les utilisateurs de vCenter peuvent ensuite utiliser pour provisionner des VM. Le mappage entre la règle de stockage de la machine virtuelle et les fonctionnalités du datastore permet à vCenter d'afficher une liste de datastores compatibles à sélectionner, ainsi que d'activer d'autres technologies telles que Aria (anciennement vRealize) Automation ou Tanzu Kubernetes Grid pour sélectionner automatiquement le stockage dans une règle attribuée. Cette approche est appelée gestion basée sur des règles de stockage. Si les règles VASA Provider et les politiques de stockage de VM peuvent également être utilisées avec les datastores traditionnels, notre attention se concentre sur les datastores vVols.
+Avec VMware vSphere APIs for Storage Awareness (VASA), un administrateur de serveurs virtuels peut facilement utiliser les fonctionnalités de stockage nécessaires pour provisionner des serveurs virtuels sans avoir à interagir avec son équipe de stockage. Avant VASA, les administrateurs des serveurs virtuels pouvaient définir des règles de stockage des serveurs virtuels, mais ils devaient travailler avec leurs administrateurs du stockage pour identifier les datastores appropriés, souvent à l'aide de la documentation ou des conventions de nommage. Dans VASA, les administrateurs de vCenter disposant des autorisations appropriées peuvent définir une gamme de fonctionnalités de stockage que les utilisateurs de vCenter peuvent ensuite utiliser pour provisionner des VM. Le mappage entre la règle de stockage de la machine virtuelle et les fonctionnalités du datastore permet à vCenter d'afficher une liste de datastores compatibles à sélectionner, ainsi que d'activer d'autres technologies telles que Aria (anciennement vRealize) Automation ou Tanzu Kubernetes Grid pour sélectionner automatiquement le stockage dans une règle attribuée. Cette approche est appelée gestion basée sur des règles de stockage. Si les règles VASA Provider et les politiques de stockage de VM peuvent également être utilisées avec les datastores traditionnels, notre attention se concentre sur les datastores vVols.
 
 
 
@@ -155,7 +155,7 @@ Outre ces avantages, plusieurs cas d'utilisation courants sont également mentio
 * *Provisionnement à la demande des machines virtuelles*
 +
 ** Cloud privé ou IaaS d'un Service Provider.
-** Exploitez l'automatisation et l'orchestration via la suite Aria (anciennement vRealize), OpenStack, etc
+** Exploitez l'automatisation et l'orchestration via la suite Aria (anciennement vRealize), OpenStack, etc.
 
 
 * *Disques de première classe (FCDS)*

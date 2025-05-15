@@ -6,6 +6,8 @@ entries:
   entries:
   - title: Présentation
     url: "/vmware/vmware-vsphere-overview.html"
+  - title: Pourquoi choisir ONTAP pour VMware
+    url: "/vmware/vmware-vsphere-why.html"
   - title: Le stockage unifié
     url: "/vmware/vmware-vsphere-unified.html"
   - title: Outils de virtualisation

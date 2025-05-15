@@ -53,7 +53,7 @@ Pour que la configuration CIFS fonctionne correctement, les contrôleurs de stoc
 
 ....
 $domainControllerIP = "<input IP Address of windows domain controller>"
-cluster::> system services ntp server create â€“server $domainControllerIP
+cluster::> system services ntp server create -server $domainControllerIP
 ....
 
 

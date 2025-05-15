@@ -81,9 +81,9 @@ L'IQN pour iSCSI sur Windows Server peut également être vérifié dans la conf
 
 Windows Server utilise l'extension ALUA (Asymmetrical Logical Unit Access) MPIO pour déterminer les chemins directs et indirects vers les LUN. Bien que chaque LIF appartenant à un SVM accepte des demandes de lecture/écriture pour ses LUN, seul un des nœuds du cluster possède les disques sur lesquels cette LUN est supports à un moment donné. Cela divise les chemins disponibles pour une LUN en deux types, directs ou indirects, comme indiqué dans la figure suivante.
 
-Un chemin direct pour une LUN est un chemin sur lequel résident les LIFs d'un SVM et la LUN accédée sur le même nœud. Pour passer d'un port cible physique à un disque, il n'est pas nécessaire de traverser le réseau de cluster.
+Un chemin direct pour une LUN est un chemin sur lequel résident les LIFs d'un SVM et la LUN accédée sur le même nœud. Pour passer d'un port cible physique à un disque, il n'est pas nécessaire de traverser l'interconnexion de cluster.
 
-Les chemins indirects sont des chemins de données sur lesquels les LIFs du SVM et la LUN accédée résident sur différents nœuds. Les données doivent traverser le réseau de cluster pour passer d'un port cible physique au disque.
+Les chemins indirects sont des chemins de données sur lesquels les LIFs du SVM et la LUN accédée résident sur différents nœuds. Les données doivent traverser l'interconnexion de cluster pour passer d'un port cible physique à un disque.
 
 image:win_image3.png["Chemins multiples dans l'environnement SAN,largeur=624,hauteur=232"]
 
@@ -196,7 +196,7 @@ Start-Service msiscsi
 +
 ....
 # Create a new iSCSI target portal
-New-IscsiTargetPortal â€“TargetPortalAddress <SVM LIF>
+New-IscsiTargetPortal -TargetPortalAddress <SVM LIF>
 ....
 +
 ....
@@ -242,12 +242,12 @@ Enable-WindowsOptionalFeature -Online -FeatureName MultipathIo
 +
 ....
 # Get the Network adapters and their IPs
-Get-NetIPAddress â€“AddressFamily IPv4 â€“PrefixOrigin <Dhcp or Manual>
+Get-NetIPAddress -AddressFamily IPv4 -PrefixOrigin <Dhcp or Manual>
 ....
 +
 ....
 # Create one MPIO-enabled iSCSI connection per network adapter
-Connect-IscsiTarget -NodeAddress <NodeAddress> -IsPersistent $True â€“IsMultipathEnabled $True â€“InitiatorPortalAddress <IP Address of ethernet adapter>
+Connect-IscsiTarget -NodeAddress <NodeAddress> -IsPersistent $True -IsMultipathEnabled $True -InitiatorPortalAddress <IP Address of ethernet adapter>
 ....
 +
 ....

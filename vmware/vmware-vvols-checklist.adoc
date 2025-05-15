@@ -17,9 +17,9 @@ Utilisez cette liste de contrôle d'installation pour garantir un déploiement r
 
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-1.png["Une seule"] Planification initiale
 [role="quick-margin-list"]
-* Avant de commencer l'installation, vous devez vérifier https://imt.netapp.com/matrix/#search["Matrice d'interopérabilité"] que votre déploiement a été certifié.
+* Avant de commencer l'installation, vous devez vérifier https://imt.netapp.com/matrix/#search["Matrice d'interopérabilité (IMT)"^] que votre déploiement a été certifié.
 * Déterminez la taille et le type d'outils ONTAP nécessaires à la configuration de votre environnement. Pour plus d'informations, reportez-vous au https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/prerequisites.html["Limites de configuration pour le déploiement des outils ONTAP pour VMware vSphere"].
-* Déterminez si vous utiliserez des SVM mutualisés ou autorisez l'accès complet au cluster. En cas d'utilisation de SVM mutualisés, vous devrez disposer d'une LIF de gestion de SVM sur chaque SVM à utiliser. Cette LIF doit être accessible via le port 443 par les outils ONTAP.
+* Déterminez si vous utiliserez des SVM mutualisés ou autorisez un accès complet au cluster. En cas d'utilisation de SVM mutualisés, vous devez disposer d'une LIF de gestion de SVM sur chaque SVM à utiliser. Cette LIF doit être accessible via le port 443 par les outils ONTAP.
 * Déterminez si vous allez utiliser Fibre Channel (FC) pour la connectivité de stockage. Si c'est le cas, vous devez https://docs.netapp.com/us-en/ontap/san-config/fibre-channel-fcoe-zoning-concept.html["configurer le zoning"] sur vos commutateurs FC pour activer la connectivité entre les hôtes ESXi et les LIF FC du SVM.
 * Déterminez si vous allez utiliser ONTAP Tools Storage Replication adapter (SRA) pour VMware site Recovery Manager (SRM) ou Live site Recovery (VLSR). Si tel est le cas, vous devrez accéder à l'interface de gestion du serveur SRM/VLSR pour installer SRA.
 * Si vous utilisez la réplication SnapMirror gérée par les outils ONTAP (y compris, mais sans s'y limiter, la synchronisation active SnapMirror), votre administrateur ONTAP doit https://docs.netapp.com/us-en/ontap/peering/create-cluster-relationship-93-later-task.html["Créez une relation entre clusters dans ONTAP"] et https://docs.netapp.com/us-en/ontap/peering/create-intercluster-svm-peer-relationship-93-later-task.html["Créer une relation de pairs SVM intercluster dans ONTAP"] avant de pouvoir utiliser les outils ONTAP avec SnapMirror.
@@ -76,10 +76,10 @@ Utilisez cette liste de contrôle d'installation pour garantir un déploiement r
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-7.png["Sept"] Ajout de systèmes back-end de stockage aux outils ONTAP
 [role="quick-margin-list"]
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/configure-user-role-and-privileges.html["Configurer les rôles et privilèges des utilisateurs ONTAP"] Utilisation du fichier JSON inclus si vous n'utilisez pas admin.
-* En cas d'utilisation en cas d'utilisation de la colocation du stockage avec les SVM
+* En cas d'utilisation en cas d'utilisation de la colocation du stockage avec des SVM
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["clusters intégrés"] Dans le Gestionnaire d'outils ONTAP et les associer à des vCenters.
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["Ports SVM intégrés"] Dans l'interface utilisateur vCenter des outils ONTAP.
-* Si *NOT* utilise des SVM mutualisées
+* Si *NOT* utilise des SVM mutualisés
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["clusters intégrés"] Directement dans l'interface utilisateur vCenter des outils ONTAP. Dans ce scénario, il est également possible d'ajouter directement des SVM lorsque vous n'utilisez pas les vVols.
 
 

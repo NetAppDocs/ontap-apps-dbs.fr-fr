@@ -18,9 +18,9 @@ La configuration des paramètres réseau lors de l'utilisation de vSphere avec d
 
 Voici quelques points à prendre en compte :
 
-* Trafic du réseau de stockage séparé des autres réseaux Un réseau distinct peut être obtenu à l'aide d'un VLAN dédié ou de commutateurs distincts pour le stockage. Si le réseau de stockage partage des chemins physiques, tels que des liaisons ascendantes, vous pouvez avoir besoin de la qualité de service ou de ports supplémentaires pour garantir une bande passante suffisante. Ne connectez pas les hôtes directement au stockage ; utilisez les commutateurs pour disposer de chemins redondants et permettez à VMware HA de fonctionner sans intervention. Voir link:vmware-vsphere-network.html["Connexion directe au réseau"] pour plus d'informations.
-* Les trames Jumbo peuvent être utilisées si vous le souhaitez et prises en charge par votre réseau, en particulier lors de l'utilisation d'iSCSI. Si elles sont utilisées, assurez-vous qu'elles sont configurées de manière identique sur tous les périphériques réseau, VLAN, etc. Dans le chemin entre le stockage et l'hôte ESXi. Vous pourriez voir des problèmes de performances ou de connexion. La MTU doit également être définie de manière identique sur le switch virtuel ESXi, le port VMkernel et également sur les ports physiques ou les groupes d'interface de chaque nœud ONTAP.
-* NetApp recommande uniquement la désactivation du contrôle de flux réseau sur les ports réseau du cluster dans un cluster ONTAP. NetApp ne recommande pas d'autres recommandations sur les meilleures pratiques pour les ports réseau restants utilisés pour le trafic de données. Vous devez l'activer ou la désactiver si nécessaire. Voir https://www.netapp.com/pdf.html?item=/media/16885-tr-4182pdf.pdf["TR-4182"^] pour plus d'informations sur le contrôle de flux.
+* Trafic du réseau de stockage séparé des autres réseaux Un réseau distinct peut être obtenu à l'aide d'un VLAN dédié ou de commutateurs distincts pour le stockage. Si le réseau de stockage partage des chemins physiques, tels que des liaisons ascendantes, vous pouvez avoir besoin de la qualité de service ou de ports supplémentaires pour garantir une bande passante suffisante. Ne connectez pas les hôtes directement au stockage, sauf si votre guide de solution le demande expressément ; utilisez les commutateurs pour disposer de chemins redondants et permettez à VMware HA de fonctionner sans intervention.
+* Les trames Jumbo doivent être utilisées si elles sont prises en charge par votre réseau. Si elles sont utilisées, assurez-vous qu'elles sont configurées de manière identique sur tous les périphériques réseau, VLAN, etc. Dans le chemin entre le stockage et l'hôte ESXi. Vous pourriez voir des problèmes de performances ou de connexion. La MTU doit également être définie de manière identique sur le switch virtuel ESXi, le port VMkernel et également sur les ports physiques ou les groupes d'interface de chaque nœud ONTAP.
+* NetApp recommande uniquement de désactiver le contrôle de flux réseau sur les ports d'interconnexion de cluster au sein d'un cluster ONTAP. NetApp ne formule aucune autre recommandation concernant les meilleures pratiques en matière de contrôle de flux pour les ports réseau restants utilisés pour le trafic de données. Vous devez l'activer ou la désactiver si nécessaire. Voir https://www.netapp.com/pdf.html?item=/media/16885-tr-4182pdf.pdf["TR-4182"^] pour plus d'informations sur le contrôle de flux.
 * Lorsque les baies de stockage ESXi et ONTAP sont connectées aux réseaux de stockage Ethernet, NetApp recommande de configurer les ports Ethernet auxquels ces systèmes se connectent en tant que ports de périphérie RSTP (Rapid Spanning Tree Protocol) ou en utilisant la fonctionnalité Cisco PortFast. NetApp recommande d'activer la fonction de jonction Spanning-Tree PortFast dans les environnements qui utilisent la fonction Cisco PortFast et dont le agrégation VLAN 802.1Q est activée soit au serveur ESXi, soit aux baies de stockage ONTAP.
 * NetApp recommande les meilleures pratiques suivantes pour l'agrégation de liens :
 +
@@ -64,7 +64,7 @@ Le tableau suivant fournit un récapitulatif des éléments de configuration ré
 
 
 
-== SAN (FC, FCoE, NVMe/FC, iSCSI), RDM
+== SAN (FC, NVMe/FC, iSCSI, NVMe/TCP), RDM
 
 ONTAP propose un stockage bloc haute performance pour VMware vSphere à l'aide d'iSCSI classiques et du protocole FCP (Fibre Channel Protocol). Il prend également en charge NVMe/FC et NVMe/TCP, le protocole bloc nouvelle génération hautement efficace et performant, NVMe over Fabrics (NVMe-of).
 
@@ -82,7 +82,7 @@ Pour connaître les meilleures pratiques recommandées, reportez-vous à la sect
 
 == Connexion directe au réseau
 
-Les administrateurs du stockage préfèrent parfois simplifier leurs infrastructures en supprimant les commutateurs réseau de la configuration. Cela peut être pris en charge dans certains scénarios.
+Les administrateurs du stockage préfèrent parfois simplifier leurs infrastructures en supprimant les commutateurs réseau de la configuration. Cela peut être pris en charge dans certains scénarios. Cependant, il y a quelques limitations et mises en garde à prendre en compte.
 
 
 
@@ -100,7 +100,7 @@ Ce qui complique la reprise après incident avec un stockage NFS à connexion di
 
 Le second NIC du système d'exploitation peut être configuré sur 19 2.168.1.2 et serait capable de communiquer avec l'adresse en panne sur 192.168.1.50, mais les tables de routage locales auraient par défaut l'utilisation d'une adresse *et d'une seule adresse* pour communiquer avec le sous-réseau 192.168.1.0/24. Un administrateur système pourrait créer un framework de scripts qui détecterait une connexion réseau défaillante et modifierait les tables de routage locales ou rendrait les interfaces « up and down ». La procédure exacte dépend du système d'exploitation utilisé.
 
-Dans la pratique, les clients NetApp disposent d'un protocole NFS à connexion directe, mais généralement uniquement pour les charges de travail où une pause des E/S est acceptable pendant les basculements. Lorsque des montages durs sont utilisés, aucune erreur d'E/S ne doit se produire lors de ces pauses. L'E/S doit se bloquer jusqu'à ce que les services soient restaurés, soit par un retour arrière, soit par une intervention manuelle pour déplacer les adresses IP entre les cartes réseau de l'hôte.
+Dans la pratique, les clients NetApp disposent d'un protocole NFS à connexion directe, mais généralement uniquement pour les charges de travail où une pause des E/S est acceptable pendant les basculements. Lorsque des montages durs sont utilisés, aucune erreur d'E/S ne doit se produire lors de ces pauses. L'E/S doit se bloquer jusqu'à ce que les services soient restaurés, soit par une restauration automatique, soit par une intervention manuelle pour déplacer les adresses IP entre les cartes réseau de l'hôte.
 
 
 

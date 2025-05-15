@@ -25,7 +25,7 @@ Un contrôleur de stockage NetApp exécutant ONTAP peut prendre en charge les ch
 * Autres charges de travail applicatives
 
 
-Par ailleurs, les fonctionnalités d'efficacité du stockage NetApp telles que la déduplication, les copies NetApp FlexClone ®, la technologie Snapshot NetApp, le provisionnement fin, la compression, de plus, le Tiering du stockage apporte une valeur ajoutée considérable aux charges de travail exécutées sur Windows Server.
+De plus, les fonctionnalités d'efficacité du stockage NetApp, telles que la déduplication, les copies NetApp FlexClone(R), la technologie Snapshot NetApp, le provisionnement fin, la compression et la hiérarchisation du stockage offrent des avantages significatifs pour les charges de travail exécutées sur Windows Server.
 
 
 
@@ -33,9 +33,9 @@ Par ailleurs, les fonctionnalités d'efficacité du stockage NetApp telles que l
 
 ONTAP est un logiciel de gestion qui s'exécute sur un contrôleur de stockage NetApp. Appelé nœud, le contrôleur de stockage NetApp est un périphérique matériel doté d'un processeur, d'une mémoire RAM et d'une mémoire NVRAM. Le nœud peut être connecté à des disques SATA, SAS ou SSD, ou à une combinaison de ces disques.
 
-Plusieurs nœuds sont agrégés dans un système en cluster. Les nœuds du cluster communiquent entre eux de manière continue pour coordonner les activités du cluster. Les nœuds peuvent également déplacer les données de manière transparente d'un nœud à l'autre à l'aide de chemins redondants vers un réseau de clusters dédié composé de deux commutateurs Ethernet 10 Gbit/s. Les nœuds du cluster peuvent se prendre en charge pour assurer une haute disponibilité dans tous les scénarios de basculement. Les clusters sont administrés dans l'ensemble du cluster plutôt que par nœud, tandis que les données sont servies depuis un ou plusieurs serveurs virtuels de stockage (SVM). Un cluster doit disposer d'au moins un SVM pour assurer le service des données.
+Plusieurs nœuds sont agrégés dans un système en cluster. Les nœuds du cluster communiquent entre eux de manière continue pour coordonner les activités du cluster. Les nœuds peuvent également déplacer les données de manière transparente d'un nœud à l'autre à l'aide de chemins redondants vers une interconnexion de cluster dédiée constituée de deux commutateurs Ethernet 10 Gbit/s. Les nœuds du cluster peuvent se prendre en charge pour assurer une haute disponibilité dans tous les scénarios de basculement. Les clusters sont administrés dans l'ensemble du cluster plutôt que par nœud, tandis que les données sont servies depuis un ou plusieurs serveurs virtuels de stockage (SVM). Un cluster doit disposer d'au moins un SVM pour assurer le service des données.
 
-L'unité de base d'un cluster est le nœud, et des nœuds sont ajoutés au cluster dans le cadre d'une paire haute disponibilité. Les paires HAUTE DISPONIBILITÉ assurent une haute disponibilité en communiquant les unes avec les autres via une interconnexion haute disponibilité (distincte du réseau de cluster dédié) et en maintenant des connexions redondantes aux disques de la paire haute disponibilité. Les disques ne sont pas partagés entre les paires haute disponibilité, bien que les tiroirs puissent contenir des disques appartenant à l'un ou l'autre des membres d'une paire haute disponibilité. La figure suivante illustre le déploiement d'un système de stockage NetApp dans un environnement Windows Server.
+L'unité de base d'un cluster est le nœud, et des nœuds sont ajoutés au cluster dans le cadre d'une paire haute disponibilité. Les paires HAUTE DISPONIBILITÉ assurent une haute disponibilité en communiquant les unes avec les autres via une interconnexion haute disponibilité (distincte de l'interconnexion de cluster dédiée) et en maintenant des connexions redondantes aux disques de la paire haute disponibilité. Les disques ne sont pas partagés entre les paires haute disponibilité, bien que les tiroirs puissent contenir des disques appartenant à l'un ou l'autre des membres d'une paire haute disponibilité. La figure suivante illustre le déploiement d'un système de stockage NetApp dans un environnement Windows Server.
 
 image:win_image1.png["Déploiement du stockage NetApp dans un environnement Windows Server,largeur=624,hauteur=479"]
 
@@ -77,7 +77,7 @@ Pour connecter, configurer et gérer le stockage NetApp à partir de Windows Ser
 
 == Kit NetApp PowerShell
 
-Le kit NetApp PowerShell (PSTK) est un module PowerShell qui offre une automatisation de bout en bout et permet d'administrer le stockage ONTAP. Le module ONTAP contient plus de 2,000 cmdlets et aide à l'administration de FAS, NetApp de AFF (FAS 100 % Flash), de matériel générique et de ressources cloud.
+Le kit NetApp PowerShell (PSTK) est un module PowerShell qui offre une automatisation de bout en bout et permet d'administrer le stockage ONTAP. Le module ONTAP contient plus de 2,000 cmdlets et aide à l'administration de NetApp AFF, FAS, du matériel générique et des ressources cloud.
 
 
 

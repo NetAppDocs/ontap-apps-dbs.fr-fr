@@ -1,10 +1,10 @@
 ---
 sidebar: sidebar 
 permalink: vmware/vmware-srm-vvol-troubleshooting.html 
-keywords: vmware, site, recovery manager, vsrm, hybrid, cloud, srm, vvols, replication 
+keywords: vmware, site, recovery manager, vlsr, hybrid, cloud, srm, vvols, replication 
 summary: La réplication des vVols avec VASA offre des fonctionnalités uniques par rapport à SRA et aux datastores classiques. 
 ---
-= Dépannage de SRM lors de l'utilisation de la réplication de vvols
+= Dépannage de VLSRM/SRM lors de l'utilisation de la réplication vVols
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 
@@ -14,7 +14,7 @@ summary: La réplication des vVols avec VASA offre des fonctionnalités uniques 
 
 
 [role="lead"]
-Le flux de travail de SRM est significativement différent lors de l'utilisation de la réplication vvols à partir de ce qui est utilisé avec SRA et les datastores traditionnels. Par exemple, il n'existe pas de concept de gestionnaire de baie. Comme c'est le cas, `discoverarrays` et `discoverdevices` les commandes ne sont jamais vues.
+Lors de l'utilisation des outils ONTAP 9.13P2, le workflow au sein de VLSR et de SRM est très différent lors de l'utilisation de la réplication vVols par rapport à l'utilisation de SRA et des datastores traditionnels. Par exemple, il n'existe pas de concept de gestionnaire de baie. Ainsi, `discoverarrays` les commandes et `discoverdevices` ne sont jamais vues.
 
 Lors du dépannage, il est utile de comprendre les nouveaux flux de travail répertoriés ci-dessous :
 

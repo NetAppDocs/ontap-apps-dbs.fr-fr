@@ -32,7 +32,7 @@ Le provisionnement fin constitue un moyen efficace de provisionner le stockage, 
 
 == Qualité de service
 
-La QoS du stockage de clustered ONTAP vous permet de regrouper des objets de stockage et de définir des limites de débit sur le groupe. La QoS du stockage peut être utilisée pour limiter le débit aux charges de travail et surveiller la performance des charges de travail. L'administrateur du stockage peut ainsi séparer les charges de travail par organisation, application, entité commerciale ou environnement de production ou de développement.
+La QoS du stockage dans NetApp ONTAP vous permet de regrouper des objets de stockage et de définir des limites de débit sur le groupe. La QoS du stockage peut être utilisée pour limiter le débit aux charges de travail et surveiller la performance des charges de travail. L'administrateur du stockage peut ainsi séparer les charges de travail par organisation, application, entité commerciale ou environnement de production ou de développement.
 
 Dans les environnements d'entreprise, la QoS du stockage contribue à atteindre les objectifs suivants :
 
