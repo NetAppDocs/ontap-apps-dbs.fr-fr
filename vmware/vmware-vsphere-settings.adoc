@@ -69,7 +69,7 @@ Toutes les autres configurations NFS définies sur 64. | Non
 | NFS.HeartbeatTimeout | Définissez sur 5 pour l'ensemble des configurations NFS. | Non 
 
 
-| Sunrpc.MaxConnPerIP | VSphere 7.0 ou version ultérieure, défini sur 128. | Non 
+| Sunrpc.MaxConnPerIP | vSphere 7.0 à 8.0, défini sur 128.  Ce paramètre est ignoré dans les versions ESXi ultérieures à 8.0. | Non 
 
 
 3+| *Paramètres FC/FCoE* 
@@ -154,8 +154,8 @@ Lors de la création de volumes et de LUN ONTAP FlexVol, les outils ONTAP permet
 
 Bien qu'il ne soit pas actuellement configuré par les outils ONTAP disponibles, NetApp suggère les options de configuration suivantes :
 
-* Dans les environnements hautes performances ou lors des tests de performances avec un seul datastore LUN, envisagez de modifier le paramètre d'équilibrage de charge de la règle de sélection de chemin Round-Robin (VMW_PSP_RR) entre la valeur de 1000 IOPS par défaut et la valeur de 1. Voir link:https://knowledge.broadcom.com/external/article?legacyId=2069356["VMware KB 2069356"^] pour plus d'informations.
-* Dans vSphere 6.7 mise à jour 1, VMware a introduit un nouveau mécanisme d'équilibrage de la charge de latence pour la PSP Round Robin. La nouvelle option prend en compte la bande passante d'E/S et la latence de chemin lors de la sélection du chemin optimal pour les E/S. Il peut être utile de l'utiliser dans des environnements avec une connectivité de chemin non équivalente, par exemple dans des cas où plusieurs sauts réseau sont sur un chemin plus grand que sur un autre, ou lors de l'utilisation d'un système NetApp All SAN Array (ASA). Voir https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-storage-8-0/understanding-multipathing-and-failover-in-the-esxi-environment/viewing-and-managing-storage-paths-on-esxi-hosts.html#GUID-1940AE9E-04CF-40BE-BB71-398621F0642E-en["Modifier les paramètres par défaut pour le tour de latence"^] pour plus d'informations.
+* Lorsque vous utilisez des systèmes non ASA dans des environnements hautes performances ou lorsque vous testez les performances avec une seule banque de données LUN, envisagez de modifier le paramètre d'équilibrage de charge de la stratégie de sélection de chemin (PSP) à tour de rôle (VMW_PSP_RR) du paramètre IOPS par défaut de 1 000 à une valeur de 1.  Voirlink:https://knowledge.broadcom.com/external/article?legacyId=2069356["VMware KB 2069356"^] pour plus d'infos.
+* Dans vSphere 6.7 Update 1, VMware a introduit un nouveau mécanisme d’équilibrage de charge de latence pour le Round Robin PSP.  L'option de latence est désormais également disponible lors de l'utilisation du HPP (High Performance Plugin) avec les espaces de noms NVMe et avec vSphere 8.0u2 et versions ultérieures, les LUN connectés iSCSI et FCP.  La nouvelle option prend en compte la bande passante d'E/S et la latence du chemin lors de la sélection du chemin optimal pour les E/S.  NetApp recommande d'utiliser l'option de latence dans les environnements avec une connectivité de chemin non équivalente, comme dans les cas avec plus de sauts réseau sur un chemin que sur un autre, ou lors de l'utilisation d'un système NetApp ASA .  Voir https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-storage-8-0/understanding-multipathing-and-failover-in-the-esxi-environment/viewing-and-managing-storage-paths-on-esxi-hosts.html#GUID-1940AE9E-04CF-40BE-BB71-398621F0642E-en["Modifier les paramètres par défaut pour le tour de latence"^] pour plus d'informations.
 
 
 
