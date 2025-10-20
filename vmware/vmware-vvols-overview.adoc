@@ -105,7 +105,7 @@ ONTAP prend en charge la spécification VASA depuis sa sortie initiale en 2012. 
 
 === ONTAP
 
-Outre ONTAP 9 sur les systèmes AFF, ASA et FAS, NetApp prend en charge les workloads VMware sur ONTAP Select, Amazon FSX pour NetApp avec VMware Cloud sur AWS, Azure NetApp Files avec la solution Azure VMware, Cloud Volumes Service avec Google Cloud VMware Engine et le stockage privé NetApp dans Equinix, mais certaines fonctionnalités peuvent varier en fonction du fournisseur de services et de la connectivité réseau disponible. L'accès, depuis les invités vSphere, aux données stockées dans ces configurations ainsi qu'à Cloud Volumes ONTAP est également disponible.
+Outre ONTAP 9 sur les systèmes AFF, ASA et FAS , NetApp prend en charge les charges de travail VMware sur ONTAP Select, Amazon FSx pour NetApp avec VMware Cloud sur AWS, Azure NetApp Files avec Azure VMware Solution, Google Cloud NetApp Volumes avec Google Cloud VMware Engine et NetApp Private Storage dans Equinix, mais les fonctionnalités spécifiques peuvent varier en fonction du fournisseur de services et de la connectivité réseau disponible.
 
 Au moment de la publication, les environnements hyperscale sont limités aux datastores NFS v3 classiques. Par conséquent, les vVols ne sont disponibles que pour les systèmes ONTAP sur site ou les systèmes connectés au cloud qui offrent l'ensemble des fonctionnalités d'un système sur site, tels que ceux hébergés par les partenaires et fournisseurs de services NetApp à travers le monde.
 
