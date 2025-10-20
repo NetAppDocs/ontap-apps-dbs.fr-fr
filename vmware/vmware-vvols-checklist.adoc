@@ -76,10 +76,10 @@ Utilisez cette liste de contrôle d'installation pour garantir un déploiement r
 .image:https://raw.githubusercontent.com/NetAppDocs/common/main/media/number-7.png["Sept"] Ajout de systèmes back-end de stockage aux outils ONTAP
 [role="quick-margin-list"]
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/configure-user-role-and-privileges.html["Configurer les rôles et privilèges des utilisateurs ONTAP"] Utilisation du fichier JSON inclus si vous n'utilisez pas admin.
-* En cas d'utilisation en cas d'utilisation de la colocation du stockage avec des SVM
+* Si vous envisagez d'attribuer des SVM spécifiques à des vCenters à l'aide de la multilocation de stockage plutôt que d'utiliser les informations d'identification du cluster ONTAP dans vCenter, veuillez suivre ces étapes :
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["clusters intégrés"] Dans le Gestionnaire d'outils ONTAP et les associer à des vCenters.
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["Ports SVM intégrés"] Dans l'interface utilisateur vCenter des outils ONTAP.
-* Si *NOT* utilise des SVM mutualisés
+* Si vous n'utilisez *pas* de SVM multilocataires dans vCenter :
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["clusters intégrés"] Directement dans l'interface utilisateur vCenter des outils ONTAP. Dans ce scénario, il est également possible d'ajouter directement des SVM lorsque vous n'utilisez pas les vVols.
 
 

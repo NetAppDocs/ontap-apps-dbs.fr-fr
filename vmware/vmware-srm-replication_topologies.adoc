@@ -16,7 +16,7 @@ summary: Topologies de réplication utilisant ONTAP avec SnapMirror et VMware VL
 [role="lead"]
 Dans ONTAP 9, les composants physiques d'un cluster sont visibles pour les administrateurs du cluster, mais ils ne sont pas directement visibles pour les applications et les hôtes qui utilisent le cluster. Les composants physiques offrent un pool de ressources partagées à partir duquel les ressources logiques du cluster sont créées. Les applications et les hôtes accèdent aux données uniquement au moyen de SVM qui contiennent des volumes et des LIF.
 
-Chaque SVM NetApp est traité comme une baie dans VMware vCenter site Recovery Manager. VLSR prend en charge certaines dispositions de réplication baie à baie (ou SVM à SVM).
+Chaque SVM NetApp est traitée comme une baie unique dans Site Recovery Manager. VLSR prend en charge certaines dispositions de réplication de tableau à tableau (ou SVM à SVM).
 
 Une seule machine virtuelle ne peut pas héberger de données (Virtual machine Disk (VMDK) ou RDM) sur plusieurs baies VLSR pour les raisons suivantes :
 
@@ -43,6 +43,20 @@ image:vsrm-ontap9_image8.png["La disposition des relations SnapMirror"]
 image:vsrm-ontap9_image9.png["La disposition des relations SnapMirror"]
 
 image:vsrm-ontap9_image10.png["La disposition des relations SnapMirror"]
+
+
+
+== Prise en charge de VMFS avec la synchronisation active SnapMirror
+
+Les outils ONTAP 10.3 et versions ultérieures prennent également en charge la protection de vos banques de données VMFS avec SnapMirror Active Sync (SMas). Cela permet un basculement transparent pour la continuité des activités entre deux centres de données (appelés domaines de défaillance) relativement proches l'un de l'autre. La reprise après sinistre longue distance peut ensuite être orchestrée à l'aide de SnapMirror de manière asynchrone via les outils ONTAP SRA avec VLSR.
+
+https://docs.netapp.com/us-en/ontap/snapmirror-active-sync/["En savoir plus sur la synchronisation active ONTAP SnapMirror"]
+
+Les banques de données sont regroupées dans un groupe de cohérence (CG) et les machines virtuelles de toutes les banques de données resteront toutes cohérentes en termes d'ordre d'écriture en tant que membres du même CG.
+
+Quelques exemples pourraient être d'avoir des sites à Berlin et Hambourg protégés par SMas, et une troisième réplique de site utilisant SnapMirror asynchrone et protégée par VLSR. Un autre exemple pourrait être de protéger des sites à New York et dans le New Jersey en utilisant des SMas, avec un troisième site à Chicago.
+
+image:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-104/media/fan-out-protection.png["Disposition SMas"]
 
 
 
