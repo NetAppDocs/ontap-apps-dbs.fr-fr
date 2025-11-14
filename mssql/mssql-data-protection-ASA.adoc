@@ -44,6 +44,3 @@ Pour en savoir plus, voir link:https://learn.microsoft.com/en-us/sql/relational-
 
 
 TIP: *NetApp recommande* d'utiliser SnapCenter pour créer des copies Snapshot. La méthode T-SQL décrite ci-dessus fonctionne également, mais SnapCenter offre une automatisation complète du processus de sauvegarde, de restauration et de clonage. Il effectue également une découverte pour s'assurer que les snapshots corrects sont créés.
-
-
-NOTE: Utilisez SnapCenter si les bases de données SQL Server sont hébergées sur un disque virtuel exécuté dans un environnement virtualisé VMware. Si les bases de données sont hébergées sur un serveur physique bare Metal ou sur un SCSI Guest-Connect, sauvegardez la base de données à l'aide de la commande T-SQL snapshot.
