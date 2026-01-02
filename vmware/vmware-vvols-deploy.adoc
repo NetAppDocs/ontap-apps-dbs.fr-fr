@@ -23,31 +23,31 @@ Le provisionnement des datastores vVols implique plusieurs étapes. Les système
 
 Vous pouvez ignorer les deux premières étapes du processus de déploiement si vous utilisez déjà les outils ONTAP pour gérer, automatiser et générer des rapports sur votre stockage VMFS ou NFS classique existant. Vous pouvez également vous référer à ce document complet link:vmware-vvols-checklist.html["liste de contrôle"] pour le déploiement et la configuration des outils ONTAP.
 
-. Créer la machine virtuelle de stockage (SVM) et sa configuration de protocole. Notez que cela n'est pas forcément nécessaire pour les systèmes ASA r2, car ils disposent généralement d'un SVM unique pour les services de données. Vous sélectionnerez NVMe/FC (outils ONTAP 9.13 uniquement), NFS v3, NFS v4.1, iSCSI, FCP ou un mélange de ces options. Les protocoles NVMe/TCP et NVMe/FC peuvent également être utilisés pour les datastores VMFS classiques avec les outils ONTAP version 10.3 et ultérieures. Vous pouvez utiliser les assistants ONTAP System Manager ou la ligne de commande du cluster shell.
+. Créez la machine virtuelle de stockage (SVM) et sa configuration de protocole. Notez que cela peut ne pas être nécessaire pour les systèmes ASA r2, car ils disposent généralement déjà d'une seule SVM pour les services de données. Vous sélectionnerez NVMe/FC (outils ONTAP 9.13 uniquement), NFSv3, NFSv4.1, iSCSI, FCP ou une combinaison de ces options. NVMe/TCP et NVMe/FC peuvent également être utilisés pour les banques de données VMFS traditionnelles avec les outils ONTAP 10.3 et versions ultérieures. Vous pouvez utiliser soit les assistants de ONTAP System Manager, soit la ligne de commande du shell du cluster.
 +
 ** https://docs.netapp.com/us-en/ontap/disks-aggregates/assign-aggregates-svms-task.html["Attribuez des tiers locaux (agrégats) aux SVM"] Pour tous les systèmes non ASA r2.
 ** Au moins une LIF par nœud pour chaque connexion switch/fabric. Il est recommandé de créer au moins deux par nœud pour les protocoles FCP, iSCSI ou NVMe. Une LIF par nœud est suffisante pour les vVols basés sur NFS, mais cette LIF doit être protégée par un ifgroup LACP. Reportez-vous aux sections https://docs.netapp.com/us-en/ontap/networking/configure_lifs_cluster_administrators_only_overview.html["Configurer la présentation des LIFs"] et https://docs.netapp.com/us-en/ontap/networking/combine_physical_ports_to_create_interface_groups.html["Combinaison de ports physiques pour créer des groupes d'interfaces"] pour plus de détails.
-** Si vous avez l'intention d'utiliser les identifiants SVM scoped pour vos vCenters locataires, au moins une LIF de gestion par SVM.
+** Au moins une LIF de gestion par SVM si vous prévoyez d'utiliser des informations d'identification à portée SVM pour vos vCenters locataires.
 ** Si vous prévoyez d'utiliser SnapMirror, assurez-vous que votre source et votre cible https://docs.netapp.com/us-en/ontap/peering/["Les clusters ONTAP et les SVM sont peering"].
-** Pour les systèmes non ASA r2, des volumes peuvent être créés à ce stade, mais il est recommandé de laisser l'assistant _provisioning datastore_ dans les outils ONTAP les créer. La seule exception à cette règle est que vous prévoyez d'utiliser la réplication vVols avec VMware site Recovery Manager et les outils ONTAP 9,13. Cette configuration est plus simple avec des volumes FlexVol préexistants avec des relations SnapMirror existantes. N'oubliez pas d'activer la QoS sur les volumes à utiliser pour les vVols, car ceux-ci doivent être gérés par les outils SPBM et ONTAP.
+** Pour les systèmes non ASA r2, les volumes peuvent être créés à ce stade, mais il est préférable de laisser l'assistant _Provision Datastore_ des outils ONTAP les créer. La seule exception à cette règle est si vous prévoyez d'utiliser la réplication vVols avec VMware Site Recovery Manager et les outils ONTAP 9.13. C’est plus facile à configurer avec des volumes FlexVol préexistants ayant des relations SnapMirror existantes. Veillez à ne pas activer la QoS sur les volumes destinés à être utilisés pour les vVols, car celle-ci est censée être gérée par les outils SPBM et ONTAP .
 
 
 . https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/deploy/ontap-tools-deployment.html["Déployez les outils ONTAP pour VMware vSphere"] Utilisation du fichier OVA téléchargé depuis le site de support NetApp.
 +
-** Les outils ONTAP 10.0 et versions ultérieures prennent en charge plusieurs serveurs vCenter par appliance. Il n'est plus nécessaire de déployer une appliance d'outils ONTAP par serveur vCenter.
+** ONTAP tools 10.0 et versions ultérieures prennent en charge plusieurs serveurs vCenter par appliance ; vous n’êtes plus tenu de déployer une appliance ONTAP tools par vCenter.
 +
-*** Si vous prévoyez de connecter plusieurs vCenters à une seule instance d'outils ONTAP, vous devez créer et installer des certificats signés par une autorité de certification. Reportez-vous https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/certificate-manage.html["Gérer les certificats"] à pour les étapes.
+*** Si vous prévoyez de connecter plusieurs vCenters à une seule instance d'outils ONTAP , vous devez créer et installer des certificats signés par une autorité de certification. Se référer à https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/certificate-manage.html["Gérer les certificats"] pour les étapes.
 
 
-** Depuis 10.3, les outils ONTAP se déploient désormais en tant qu'appliance petit type à nœud unique, adaptée à la plupart des workloads non vVols.
+** À partir de la version 10.3, les outils ONTAP se déploient désormais sous la forme d'un petit appareil à nœud unique adapté à la plupart des charges de travail non vVols.
 
 
 
 
 [TIP]
 ====
-* Il est recommandé https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/edit-appliance-settings.html["Outils ONTAP scale-out"] de passer à la version 10.3 et ultérieures de la configuration haute disponibilité (HA) à 3 nœuds pour toutes les charges de travail de production. Dans les laboratoires ou à des fins de test, il est possible d'utiliser un déploiement à un seul nœud.
-* La meilleure pratique recommandée pour l'utilisation des vVols de production est d'éliminer tout point de défaillance unique. Créez des règles d'anti-affinité pour empêcher les machines virtuelles des outils ONTAP de s'exécuter ensemble sur le même hôte. Après le déploiement initial, il est également recommandé d'utiliser Storage vMotion pour placer les machines virtuelles des outils ONTAP dans différents datastores. En savoir plus sur https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-resource-management-8-0/using-drs-clusters-to-manage-resources/using-affinity-rules-without-vsphere-drs.html["Utilisation des règles d'affinité sans vSphere DRS"] ou https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-resource-management-8-0/using-drs-clusters-to-manage-resources/create-a-vm-vm-affinity-rule.html["Créez une règle d'affinité VM-VM"]. Vous devez également planifier des sauvegardes fréquentes, et/ou https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/enable-backup.html#create-backup-and-download-the-backup-file["utilisez l'utilitaire de sauvegarde de configuration intégré"].
+* La meilleure pratique recommandée est de https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/edit-appliance-settings.html["Outils ONTAP scale-out"] 10.3 et versions ultérieures à la configuration haute disponibilité (HA) à 3 nœuds pour toutes les charges de travail de production. Pour les laboratoires ou les tests, il est possible d'utiliser un déploiement à nœud unique.
+* La meilleure pratique recommandée pour l'utilisation de vVols en production consiste à éliminer tout point de défaillance unique. Créez des règles d'anti-affinité pour empêcher les machines virtuelles des outils ONTAP de s'exécuter simultanément sur le même hôte. Après le déploiement initial, il est également recommandé d'utiliser Storage vMotion pour placer les machines virtuelles des outils ONTAP dans différents datastores. En savoir plus https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-resource-management-8-0/using-drs-clusters-to-manage-resources/using-affinity-rules-without-vsphere-drs.html["Utilisation des règles d'affinité sans vSphere DRS"] ou https://techdocs.broadcom.com/us/en/vmware-cis/vsphere/vsphere/8-0/vsphere-resource-management-8-0/using-drs-clusters-to-manage-resources/create-a-vm-vm-affinity-rule.html["Créez une règle d'affinité VM-VM"]. Vous devriez également programmer des sauvegardes fréquentes, et/ou https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/backup-settings.html["utilisez l'utilitaire de sauvegarde de configuration intégré"].
 
 
 ====
@@ -60,7 +60,7 @@ Vous pouvez ignorer les deux premières étapes du processus de déploiement si 
 *** Connectez-vous à l'interface du gestionnaire d'outils ONTAP
 *** https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/add-storage-backend.html["Intégration du cluster de stockage"]
 *** https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/associate-storage-backend.html["Associer un back-end de stockage à une instance vCenter Server"]
-*** Fournir les informations d'identification de SVM spécifiques à l'administrateur vCenter qui ajoutera ensuite la SVM en tant que back-end de stockage dans le menu ONTAP Tools Storage backend de vCenter.
+*** Fournissez les informations d'identification spécifiques de la SVM à l'administrateur vCenter, qui ajoutera ensuite la SVM en tant que backend de stockage dans le menu des backends de stockage des outils ONTAP dans vCenter.
 
 
 
@@ -70,13 +70,13 @@ Vous pouvez ignorer les deux premières étapes du processus de déploiement si 
 [TIP]
 ====
 * Il est recommandé de créer des rôles RBAC pour vos comptes de stockage.
-* Les outils ONTAP incluent un fichier JSON contenant les autorisations de rôle requises par les comptes d'accès au stockage des outils ONTAP. Vous pouvez télécharger le fichier JSON vers ONTAP System Manager pour simplifier la création des rôles et utilisateurs RBAC.
+* Les outils ONTAP incluent un fichier JSON contenant les autorisations de rôle nécessaires aux comptes de stockage des outils ONTAP . Vous pouvez télécharger le fichier JSON sur ONTAP System Manager pour simplifier la création des rôles et des utilisateurs RBAC.
 * Pour en savoir plus sur les rôles RBAC de ONTAP, rendez-vous sur https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/configure-user-role-and-privileges.html#svm-aggregate-mapping-requirements["Configurer les rôles et privilèges des utilisateurs ONTAP"].
 
 
 ====
 
-NOTE: Parce que de nombreuses API utilisées pour les vVols ne sont disponibles qu'au niveau du cluster, l'intégralité du cluster doit être intégrée dans l'interface utilisateur du gestionnaire des outils ONTAP.
+NOTE: La raison pour laquelle l'ensemble du cluster doit être intégré à l'interface utilisateur du gestionnaire d'outils ONTAP est que de nombreuses API utilisées pour les vVols ne sont disponibles qu'au niveau du cluster.
 
 
 
@@ -120,7 +120,7 @@ image:vvols-deploy-5.png["Role=« pouce » « Assistant de provisionnement de da
 
 image:vvols-deploy-5a.png["Role=« pouce » « Assistant de provisionnement de datastore », 300"]
 
-* Cliquez sur _add New volumes_ ou _use existing volume_ et spécifiez les attributs. Notez que dans les outils ONTAP 10.3 vous pouvez demander la création simultanée de plusieurs volumes. Vous pouvez également ajouter manuellement plusieurs volumes pour les équilibrer dans le cluster ONTAP. Cliquez sur _Next_
+* Cliquez sur _Ajouter de nouveaux volumes_ ou _Utiliser un volume existant_ et spécifiez les attributs. Notez que dans ONTAP tools 10.3, vous pouvez demander la création de plusieurs volumes simultanément. Vous pouvez également ajouter manuellement plusieurs volumes pour les répartir sur le cluster ONTAP . Cliquez sur _suivant_
 
 
 image:vvols-deploy-6.png["Role=« pouce » « Assistant de provisionnement de datastore », 300"]
@@ -150,7 +150,7 @@ La migration des machines virtuelles des datastores traditionnels vers un datast
 
 == Gestion des machines virtuelles avec des règles
 
-Pour automatiser le provisionnement du stockage avec la gestion basée sur des règles, vous devez créer des règles de stockage de machines virtuelles mappées sur les capacités de stockage souhaitées.
+Pour automatiser le provisionnement du stockage grâce à une gestion basée sur des politiques, vous devez créer des politiques de stockage de machines virtuelles qui correspondent aux capacités de stockage souhaitées.
 
 
 NOTE: Les outils ONTAP 10.0 et versions ultérieures n'utilisent plus les profils de capacité de stockage comme les versions précédentes. Au contraire, les fonctionnalités de stockage sont directement définies dans la stratégie de stockage de la machine virtuelle.
@@ -159,7 +159,7 @@ NOTE: Les outils ONTAP 10.0 et versions ultérieures n'utilisent plus les profil
 
 === Création de stratégies de stockage de machine virtuelle
 
-Les règles de stockage des machines virtuelles sont utilisées dans vSphere pour gérer les fonctionnalités facultatives telles que le contrôle des E/S du stockage ou le chiffrement vSphere. Ils sont également utilisés avec les vVols pour appliquer des fonctionnalités de stockage spécifiques à la machine virtuelle. Utilisez le type de stockage « NetApp.clustered.Data.ONTAP.VP.vvol ». Voir le lien:vmware-vvols-ontap.html#Best Practices[exemple de configuration réseau avec vVols sur NFS v3] pour un exemple de ceci avec les outils ONTAP VASA Provider. Les règles pour le stockage « NetApp.clustered.Data.ONTAP.VP.VASA10 » doivent être utilisées avec les datastores non basés sur vVols.
+Les stratégies de stockage des machines virtuelles sont utilisées dans vSphere pour gérer des fonctionnalités optionnelles telles que le contrôle des E/S de stockage ou le chiffrement vSphere. Ils sont également utilisés avec les vVols pour appliquer des capacités de stockage spécifiques à la machine virtuelle. Utilisez le type de stockage «NetApp.clustered.Data. ONTAP.VP.vvol ». Voir le lien : vmware-vvols-ontap.html#Best Practices[exemple de configuration réseau utilisant vVols sur NFS v3] pour un exemple de ceci avec le fournisseur VASA des outils ONTAP . Les règles relatives au stockage «NetApp.clustered.Data. ONTAP.VP.VASA10 » doivent être utilisées avec des banques de données non basées sur vVols.
 
 Une fois la règle de stockage créée, elle peut être utilisée lors du provisionnement de nouvelles machines virtuelles.
 
@@ -171,12 +171,12 @@ image:vmware-vvols-deploy-vmsp-01.png["Role=« pouce » « création de la strat
 
 Les outils ONTAP utilisent leur propre algorithme de placement équilibré pour placer un nouveau VVol dans le meilleur FlexVol volume avec des systèmes ASA unifiés ou classiques, ou dans une zone de disponibilité du stockage (SAZ) avec des systèmes ASA r2, dans un datastore vVols. Le placement est basé sur la correspondance entre le stockage de sauvegarde et la règle de stockage des machines virtuelles. Cela permet de s'assurer que le datastore et le stockage de sauvegarde peuvent répondre aux exigences de performances spécifiées.
 
-La modification des capacités de performance telles que les IOPS min et max requiert une certaine attention particulière à la configuration spécifique.
+La modification des capacités de performance, telles que les IOPS minimales et maximales, nécessite une attention particulière à la configuration spécifique.
 
 * *Les valeurs min et Max IOPS* peuvent être spécifiées dans une stratégie VM.
 +
-** La modification des IOPS de la règle ne modifiera pas la QoS sur les vVols tant que la règle de machine virtuelle ne sera pas réappliquée aux machines virtuelles qui l'utilisent. Vous pouvez également créer une nouvelle règle avec les IOPS souhaitées et l'appliquer aux machines virtuelles cibles. Il est généralement recommandé de définir simplement des règles de stockage VM distinctes pour les différents niveaux de service et de modifier simplement la règle de stockage VM sur la VM.
-** Les personnalités ASA, ASA r2, AFF et FAS ont des paramètres d'IOPS différents. Les valeurs min et Max sont disponibles sur tous les systèmes Flash. Toutefois, les systèmes non AFF peuvent uniquement utiliser les paramètres Max IOPS.
+** Modifier les IOPS dans la stratégie ne modifiera pas la QoS sur les vVols tant que la stratégie de machine virtuelle n'aura pas été réappliquée aux machines virtuelles qui l'utilisent. Vous pouvez également créer une nouvelle stratégie avec le nombre d'IOPS souhaité et l'appliquer aux machines virtuelles cibles. En règle générale, il est recommandé de définir des politiques de stockage de VM distinctes pour différents niveaux de service et de modifier simplement la politique de stockage de la VM sur la VM.
+** Les profils ASA, ASA r2, AFF et FAS ont des paramètres IOPS différents. Les valeurs Min et Max sont toutes deux disponibles sur tous les systèmes flash ; cependant, les systèmes non AFF ne peuvent utiliser que les paramètres IOPS Max.
 
 
 * Les outils ONTAP créent des règles de QoS individuelles non partagées avec les versions de ONTAP actuellement prises en charge. Par conséquent, chaque VMDK individuel recevra sa propre allocation d'IOPS.

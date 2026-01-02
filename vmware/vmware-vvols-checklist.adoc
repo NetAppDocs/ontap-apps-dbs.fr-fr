@@ -103,6 +103,6 @@ Utilisez cette liste de contrôle d'installation pour garantir un déploiement r
 * Si vous utilisez la haute disponibilité, Storage vMotion nœuds deux et trois vers des datastores séparés (facultatif, mais recommandé).
 * https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/certificate-manage.html["utilisez gérer les certificats"] Dans le gestionnaire d'outils ONTAP pour installer les certificats signés par l'autorité de certification requis.
 * Si vous avez activé SRA pour SRM/VLSR pour protéger les datastores traditionnels, https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/protect/configure-on-srm-appliance.html["Configurez SRA sur l'appliance VMware Live site Recovery"].
-* Configurer les sauvegardes natives pour https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/enable-backup.html["RPO proche de zéro"].
+* Configurer les sauvegardes natives pour https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/manage/backup-settings.html["RPO proche de zéro"].
 * Configurer des sauvegardes régulières sur d'autres supports de stockage.
 

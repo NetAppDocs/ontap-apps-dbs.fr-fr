@@ -105,7 +105,7 @@ Dans un environnement dans lequel SnapVault est utilisé, des snapshots nommés 
 
 Un volume source peut être créé dans une configuration en cascade, dans laquelle un volume est répliqué vers une destination SnapMirror dans le site de reprise après incident, et depuis ce volume est copié vers une destination SnapVault. Un volume source peut également être créé au sein d'une relation « fan-out » où une destination est une destination SnapMirror et l'autre destination est une destination SnapVault. Toutefois, SRA ne reconfigurez pas automatiquement la relation SnapVault pour utiliser le volume de destination SnapMirror comme source du coffre-fort en cas de basculement ou d'inversion de réplication VLSR.
 
-Pour connaître les dernières informations concernant SnapMirror et SnapVault pour ONTAP 9, consultez https://www.netapp.com/media/17229-tr4015.pdf?v=127202175503P["Tr-4015 Guide des meilleures pratiques en matière de configuration de SnapMirror pour ONTAP 9."^]
+Pour obtenir les informations les plus récentes concernant SnapMirror et SnapVault pour ONTAP 9, consultez https://www.netapp.com/pdf.html?item=/media/17229-tr-4015-snapmirror-configuration-ontap.pdf["Tr-4015 Guide des meilleures pratiques en matière de configuration de SnapMirror pour ONTAP 9."^]
 
 |===
 | Meilleure pratique 
