@@ -1,0 +1,50 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-host-config-hp-ux.html 
+keywords: oracle, database, ASA r2, ontap, hp-ux 
+summary: Bases de données Oracle avec HP-UX sur ASA r2 
+searchtitle: Bases de données Oracle avec HP-UX sur ASA r2 
+---
+= HP-UX
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Sujets de configuration pour la base de données Oracle sur HP-UX avec ASA r2 ONTAP.
+
+[NOTE]
+====
+HP-UX est pris en charge avec NetApp ASA r2 pour l'hébergement de bases de données Oracle, à condition que :
+
+* La version ONTAP est 9.16.x ou ultérieure.
+* Utilisez les protocoles SAN (FC/iSCSI/NVMe). Le NAS n'est pas pris en charge sur ASA r2.
+* Appliquez les meilleures pratiques de montage et de réglage des E/S spécifiques à HP-UX.
+
+
+====
+
+
+== Options de montage HP-UX VxFS
+
+Utilisez les options de montage suivantes pour les systèmes de fichiers hébergeant les binaires Oracle :
+
+....
+delaylog,nodatainlog
+....
+Utilisez les options de montage suivantes pour les systèmes de fichiers contenant des fichiers de données, des journaux de reprise, des journaux d'archivage et des fichiers de contrôle dans lesquels la version de HP-UX ne prend pas en charge les E/S simultanées :
+
+....
+nodatainlog,mincache=direct,convosync=direct
+....
+Lorsque des E/S simultanées sont prises en charge (VxFS 5.0.1 et versions ultérieures, ou avec ServiceGuard Storage Management Suite), utilisez ces options de montage pour les systèmes de fichiers contenant des fichiers de données, des journaux de reprise, des journaux d'archivage et des fichiers de contrôle :
+
+....
+delaylog,cio
+....
+
+NOTE: Le paramètre `db_file_multiblock_read_count` Est particulièrement critique dans les environnements VxFS. Oracle recommande que ce paramètre ne soit pas défini dans Oracle 10g R1 et versions ultérieures, sauf indication contraire. La taille de bloc Oracle de 8 Ko par défaut est 128. Si la valeur de ce paramètre est forcée à 16 ou moins, retirer le `convosync=direct` Option de montage car elle peut endommager les performances des E/S séquentielles. Cette étape nuit à d'autres aspects de la performance et ne doit être prise que si la valeur de `db_file_multiblock_read_count` doit être modifié par rapport à la valeur par défaut.

@@ -1,0 +1,68 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-config-thin-provisioning.html 
+keywords: thin provisioning, oracle, ASA r2 
+summary: 'Provisionnement fin d"Oracle et ONTAP avec ASA r2' 
+searchtitle: Provisionnement fin avec des bases de données Oracle sur ASA r2 
+---
+= Provisionnement fin
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le provisionnement fin d'une base de données Oracle sur ASA r2 nécessite une planification minutieuse car il implique la configuration d'un espace logique supérieur à celui physiquement disponible. Lorsqu'elle est correctement mise en œuvre, l'allocation dynamique de ressources permet de réaliser d'importantes économies et d'améliorer la facilité de gestion.
+
+Le provisionnement fin fait partie intégrante d' ASA r2 et est étroitement lié aux technologies d'efficacité ONTAP , car les deux permettent de stocker plus de données logiques que la capacité physique du système. Les systèmes ASA r2 sont exclusivement SAN, et le provisionnement fin s'applique aux unités de stockage et aux LUN au sein des zones de disponibilité de stockage (SAZ).
+
+
+NOTE: Les unités de stockage ASA r2 sont provisionnées dynamiquement par défaut.
+
+Presque toutes les utilisations des snapshots impliquent un provisionnement fin. Par exemple, une base de données classique de 10 Tio avec 30 jours d'instantanés peut apparaître comme 310 Tio de données logiques, mais seulement 12 à 15 Tio d'espace physique sont consommés car les instantanés ne stockent que les blocs modifiés.
+
+De même, le clonage est une autre forme d'approvisionnement léger. Un environnement de développement avec 40 clones d'une base de données de 80 Tio nécessiterait 3,2 PiB s'il était entièrement écrit, mais en pratique il consomme beaucoup moins car seules les modifications sont stockées.
+
+
+
+== Gestion de l'espace
+
+Il convient d'être prudent avec le provisionnement fin dans un environnement applicatif car les taux de modification des données peuvent augmenter de manière inattendue. Par exemple, la consommation d'espace due aux instantanés peut augmenter rapidement si les tables de base de données sont réindexées ou si des correctifs à grande échelle sont appliqués aux machines virtuelles VMware. Une sauvegarde mal placée peut écrire une grande quantité de données en très peu de temps. Enfin, il peut être difficile de récupérer certaines applications si un LUN vient à manquer d'espace libre de manière inattendue.
+
+Dans ASA r2, ces risques sont atténués grâce à *l'allocation dynamique*, *la surveillance proactive* et *les politiques de redimensionnement des LUN*, plutôt qu'à des fonctionnalités ONTAP comme l'extension automatique des volumes ou la suppression automatique des instantanés. Les administrateurs doivent :
+
+* Activer le provisionnement fin sur les LUN (`space-reserve disabled`) - il s'agit du paramètre par défaut dans ASA r2
+* Surveillez la capacité à l'aide des alertes du gestionnaire système ou de l'automatisation basée sur une API
+* Utilisez le redimensionnement LUN planifié ou scripté pour accompagner la croissance
+* Configurer la réserve de snapshots et la suppression automatique des snapshots via System Manager (GUI)
+
+
+
+CAUTION: Une planification minutieuse des seuils d'espace et des scripts d'automatisation est essentielle car ASA r2 ne prend pas en charge la croissance automatique des volumes ni la suppression des instantanés via l'interface de ligne de commande.
+
+ASA r2 n'utilise pas de paramètres de réserve fractionnaire car il s'agit d'une architecture SAN uniquement qui abstrait les options de volume basées sur WAFL. L’efficacité de l’espace et la protection contre l’écrasement sont gérées au niveau du LUN. Par exemple, si vous disposez d'un LUN de 250 Gio provisionné à partir d'une unité de stockage, les snapshots consomment de l'espace en fonction des modifications réelles des blocs plutôt que de réserver une quantité d'espace égale à l'avance. Cela élimine le besoin de réservations statiques importantes, qui étaient courantes dans les environnements ONTAP traditionnels utilisant la réserve fractionnaire.
+
+
+NOTE: Si une protection contre l'écrasement garanti est requise et que la surveillance n'est pas possible, les administrateurs doivent prévoir une capacité suffisante dans l'unité de stockage et configurer la réserve de snapshots en conséquence. Cependant, la conception de ASA r2 rend la réserve fractionnaire inutile pour la plupart des charges de travail.
+
+
+
+== Compression et déduplication
+
+La compression et la déduplication dans ASA r2 sont des technologies d'optimisation de l'espace, et non des mécanismes de provisionnement fin traditionnels. Ces fonctionnalités réduisent l'encombrement physique du stockage en éliminant les données redondantes et en compressant les blocs, ce qui permet de stocker davantage de données logiques que ne le permettrait la capacité brute.
+
+Par exemple, un ensemble de données de 50 Tio peut être compressé à 30 Tio, économisant ainsi 20 Tio d'espace physique. Du point de vue de l'application, il reste 50 Tio de données, même si elles n'occupent que 30 Tio sur le disque.
+
+
+NOTE: La compressibilité d'un ensemble de données peut évoluer au fil du temps, ce qui peut augmenter l'espace physique consommé. Par conséquent, la compression et la déduplication doivent être gérées de manière proactive grâce à une surveillance et une planification des capacités.
+
+
+
+== Allocation d'espace libre et d'espace LVM
+
+Le provisionnement fin dans les environnements ASA r2 peut perdre en efficacité au fil du temps si les blocs supprimés ne sont pas récupérés. À moins que l'espace ne soit libéré à l'aide de TRIM/UNMAP ou écrasé avec des zéros (via ASMRU - Automatic Space Management and Reclamation Utility), les données supprimées continuent de consommer de la capacité physique. Dans de nombreux environnements de bases de données Oracle, le provisionnement fin offre un avantage limité car les fichiers de données sont généralement pré-alloués à leur taille maximale lors de leur création.
+
+Une planification minutieuse de la configuration LVM peut améliorer l'efficacité et minimiser le besoin de provisionnement de stockage et de redimensionnement des LUN. Lorsqu'un LVM tel que Veritas VxVM ou Oracle ASM est utilisé, les LUN sous-jacents sont divisés en extensions qui ne sont utilisées qu'en cas de besoin. Par exemple, si un ensemble de données commence à 2 Tio mais peut atteindre 10 Tio au fil du temps, cet ensemble de données pourrait être placé sur 10 Tio de LUN à provisionnement fin organisés dans un groupe de disques LVM. Il n'occuperait que 2 Tio d'espace au moment de sa création et ne réclamerait d'espace supplémentaire qu'à mesure que des extensions seraient allouées pour absorber la croissance des données. Ce procédé est sûr tant que l'espace est surveillé.

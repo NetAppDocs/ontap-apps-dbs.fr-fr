@@ -1,0 +1,49 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-config-qos.html 
+keywords: qos, bandwidth, minimum, guaranteed, adaptive, ASA r2, oracle 
+summary: Gestion des performances de la base de données Oracle avec ONTAP QoS sur ASA r2 
+searchtitle: Gestion des performances de la base de données Oracle avec ONTAP QoS sur ASA r2 
+---
+= Gestion des performances avec ONTAP QoS sur les systèmes ASA r2
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La gestion sûre et efficace de plusieurs bases de données Oracle sur ASA r2 nécessite une stratégie QoS efficace. Ceci est particulièrement important car les systèmes ASA r2 sont des plateformes SAN tout flash conçues pour des performances extrêmement élevées et la consolidation des charges de travail.
+
+Un nombre relativement restreint de SSD peut saturer même les contrôleurs les plus puissants ; les contrôles QoS sont donc essentiels pour garantir des performances prévisibles sur de multiples charges de travail. À titre de référence, les systèmes ASA r2 tels que l' ASA A1K ou l'A90 peuvent fournir des centaines de milliers à plus d'un million d'IOPS avec une latence inférieure à la milliseconde. Très peu de charges de travail uniques consommeraient ce niveau de performance ; une utilisation optimale implique donc généralement l'hébergement de plusieurs bases de données ou applications. Pour ce faire en toute sécurité, des politiques QoS sont nécessaires afin d'éviter la contention des ressources.
+
+La QoS ONTAP sur ASA r2 fonctionne de la même manière que sur les systèmes AFF/ FAS , avec deux types de contrôles principaux : IOPS et bande passante. Les contrôles QoS peuvent être appliqués aux SVM et aux LUN.
+
+
+
+== QoS des IOPS
+
+La QoS basée sur les IOPS limite le nombre total d'IOPS pour une ressource donnée. Dans ASA r2, les politiques QoS peuvent être appliquées au niveau SVM et à des objets de stockage individuels tels que les LUN. Lorsqu'une charge de travail atteint sa limite d'IOPS, des requêtes d'E/S supplémentaires sont mises en file d'attente pour les jetons, ce qui introduit une latence. Il s'agit d'un comportement normal qui empêche toute charge de travail unique de monopoliser les ressources du système.
+
+
+NOTE: Soyez prudent lorsque vous appliquez des contrôles QoS aux données de journalisation des transactions/restauration de la base de données. Ces charges de travail sont irrégulières, et une limite de QoS qui semble raisonnable pour une activité moyenne peut être trop basse lors des pics de charge, entraînant de graves problèmes de performance. En général, la journalisation des modifications et des archives ne devrait pas être limitée par la QoS.
+
+
+
+== QoS de la bande passante
+
+La QoS basée sur la bande passante limite le débit en Mbps. Ceci est utile lorsque les charges de travail effectuent des lectures ou des écritures de blocs importants, comme des analyses complètes de tables ou des opérations de sauvegarde, qui consomment une bande passante importante mais relativement peu d'IOPS. La combinaison des limites d'IOPS et de bande passante permet un contrôle plus précis.
+
+
+
+== QoS minimale/garantie
+
+Les politiques QoS minimales réservent les performances aux charges de travail critiques. Par exemple, dans un environnement mixte avec des bases de données de production et de développement, appliquez une QoS maximale aux charges de travail de développement et une QoS minimale aux charges de travail de production afin de garantir des performances prévisibles.
+
+
+
+== La QoS adaptative
+
+La QoS adaptative ajuste les limites en fonction de la taille de l'objet de stockage. Bien que rarement utilisée pour les bases de données (car la taille n'est pas corrélée aux besoins de performance), elle peut s'avérer utile pour les charges de travail de virtualisation où les exigences de performance évoluent avec la capacité.

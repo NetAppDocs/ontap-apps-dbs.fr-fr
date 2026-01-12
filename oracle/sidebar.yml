@@ -4,7 +4,8 @@ title: Base de données Oracle
 entries:
 - title: Présentation
   url: "/oracle/oracle-overview.html"
-- title: Configuration ONTAP
+- title: Configuration ONTAP sur les systèmes AFF/ FAS
+  pdf-filename: Configuration ONTAP pour la base de données Oracle
   entries:
   - title: RAID
     url: "/oracle/oracle-ontap-config-raid.html"
@@ -20,7 +21,25 @@ entries:
     url: "/oracle/oracle-ontap-config-thin-provisioning.html"
   - title: Basculement et basculement
     url: "/oracle/oracle-ontap-config-failover.html"
-- title: Configuration de la base de données
+- title: Configuration ONTAP sur les systèmes ASA r2
+  pdf-filename: Configuration ONTAP pour les bases de données Oracle avec les systèmes
+    ASA r2
+  entries:
+  - title: RAID
+    url: "/oracle/oracle-asar2-config-raid.html"
+  - title: Limites de capacité
+    url: "/oracle/oracle-asar2-config-capacity-limits.html"
+  - title: Ordinateurs virtuels de stockage
+    url: "/oracle/oracle-asar2-config-svm.html"
+  - title: La qualité de service (QoS)
+    url: "/oracle/oracle-asar2-config-qos.html"
+  - title: Efficacité
+    url: "/oracle/oracle-asar2-config-efficiency.html"
+  - title: Provisionnement fin
+    url: "/oracle/oracle-asar2-config-thin-provisioning.html"
+  - title: Basculement
+    url: "/oracle/oracle-asar2-config-failover.html"
+- title: Configuration de la base de données avec les systèmes AFF/ FAS
   pdf-filename: Configuration de la base de données pour Oracle Database
   entries:
   - title: Tailles des fichiers de données et des blocs de reprise
@@ -31,7 +50,18 @@ entries:
     url: "/oracle/oracle-app-config-filesystemio_options.html"
   - title: RAC Oracle
     url: "/oracle/oracle-app-config-rac.html"
-- title: Configuration de l'hôte
+- title: Configuration de la base de données avec les systèmes ASA r2
+  pdf-filename: Configuration de la base de données Oracle avec les systèmes ASA r2
+  entries:
+  - title: Tailles des fichiers de données et des blocs de reprise
+    url: "/oracle/oracle-asar2-app-config-block-sizes.html"
+  - title: db_file_multibloc_read_count
+    url: "/oracle/oracle-asar2-app-config-mbr.html"
+  - title: filesytemio_options
+    url: "/oracle/oracle-asar2-app-config-filesystemio_options.html"
+  - title: RAC Oracle
+    url: "/oracle/oracle-asar2-app-config-rac.html"
+- title: Configuration de l'hôte avec les systèmes AFF/ FAS
   pdf-filename: Configuration de l'hôte pour Oracle Database
   entries:
   - title: AIX
@@ -46,7 +76,23 @@ entries:
     url: "/oracle/oracle-host-config-windows.html"
   - title: Solaris
     url: "/oracle/oracle-host-config-solaris.html"
-- title: Configuration du réseau
+- title: Configuration de l'hôte avec les systèmes ASA r2
+  pdf-filename: Configuration hôte pour la base de données Oracle avec les systèmes
+    ASA r2
+  entries:
+  - title: AIX
+    url: "/oracle/oracle-asar2-host-config-aix.html"
+  - title: HP-UX
+    url: "/oracle/oracle-asar2-host-config-hp-ux.html"
+  - title: Linux
+    url: "/oracle/oracle-asar2-host-config-linux.html"
+  - title: Linux avec ASMlib et AFD
+    url: "/oracle/oracle-asar2-host-config-asmlib-afd.html"
+  - title: Microsoft Windows
+    url: "/oracle/oracle-asar2-host-config-windows.html"
+  - title: Solaris
+    url: "/oracle/oracle-asar2-host-config-solaris.html"
+- title: Configuration réseau sur les systèmes AFF/ FAS
   pdf-filename: Configuration réseau pour Oracle Database
   entries:
   - title: Interfaces logiques
@@ -57,7 +103,18 @@ entries:
     url: "/oracle/oracle-network-config-fc.html"
   - title: Réseau à connexion directe
     url: "/oracle/oracle-network-config-direct-connect.html"
-- title: Configuration de stockage sous-jacente
+- title: Configuration réseau sur les systèmes ASA r2
+  pdf-filename: Configuration réseau pour Oracle Database avec les systèmes ASA r2
+  entries:
+  - title: Interfaces logiques
+    url: "/oracle/oracle-asar2-network-config-lifs.html"
+  - title: Configuration Ethernet
+    url: "/oracle/oracle-asar2-network-config-ethernet.html"
+  - title: Configuration FC SAN
+    url: "/oracle/oracle-asar2-network-config-fc.html"
+  - title: Réseau à connexion directe
+    url: "/oracle/oracle-asar2-network-config-direct-connect.html"
+- title: Configuration du stockage sur les systèmes AFF/FAS
   pdf-filename: Configuration du stockage pour Oracle Database
   entries:
   - title: SAN FC
@@ -88,6 +145,26 @@ entries:
     url: "/oracle/oracle-dp-nvfail.html"
   - title: Utilitaire de récupération ASM
     url: "/oracle/oracle-storage-san-config-asmru.html"
+- title: Configuration du stockage sur les systèmes ASA r2
+  pdf-filename: Configuration du stockage pour les systèmes Oracle Database avec ASA
+    r2
+  entries:
+  - title: SAN FC
+    entries:
+    - title: Alignement LUN
+      url: "/oracle/oracle-asar2-storage-san-config-lun-alignment.html"
+    - title: Nombre de LUN et taille de LUN
+      url: "/oracle/oracle-asar2-storage-san-config-lun-sizing.html"
+    - title: Placement des LUN
+      url: "/oracle/oracle-asar2-storage-san-config-lun-placement.html"
+    - title: Redimensionnement de la LUN
+      url: "/oracle/oracle-asar2-storage-san-config-lun-resizing.html"
+    - title: Répartition LVM
+      url: "/oracle/oracle-asar2-storage-san-config-lvm-striping.html"
+  - title: Oracle et NVFAIL
+    url: "/oracle/oracle-asar2-dp-nvfail.html"
+  - title: Utilitaire de récupération ASM
+    url: "/oracle/oracle-asar2-storage-san-config-asru.html"
 - title: Virtualisation
   url: "/oracle/oracle-virtualization-introduction.html"
 - title: Tiering

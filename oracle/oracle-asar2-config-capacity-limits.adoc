@@ -1,0 +1,33 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-config-capacity-limits.html 
+keywords: capacity, ASA r2, oracle 
+summary: Bases de données et capacité de stockage ASA r2 ONTAP , et espace libre sur ASA r2 
+searchtitle: Gestion des bases de données Oracle et de la capacité de stockage sur ASA r2 
+---
+= Gestion de la capacité
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+La gestion d'une base de données ou d'une autre application d'entreprise avec un stockage d'entreprise prévisible, gérable et haute performance requiert de l'espace libre sur les disques pour la gestion des données et des métadonnées. La quantité d'espace libre requise dépend du type de disque utilisé et des processus métier.
+
+ASA r2 utilise des zones de disponibilité de stockage (SAZ) au lieu d'agrégats, mais le principe reste le même : l'espace libre comprend toute capacité physique non consommée par les données réelles, les instantanés ou la surcharge du système. Il faut également tenir compte du provisionnement fin : les allocations logiques ne reflètent pas l’utilisation physique réelle.
+
+Les recommandations de NetApp concernant les systèmes de stockage ASA r2 utilisés pour les applications d'entreprise sont les suivantes :
+
+
+
+== Pools SSD dans les systèmes ASA r2
+
+
+TIP: * NetApp recommande* de maintenir un minimum de 10 % d'espace physique libre dans les environnements ASA r2. Cette directive s'applique aux pools composés uniquement de SSD utilisés par les systèmes ASA r2 et inclut tout l'espace inutilisé dans la SAZ et les unités de stockage. L'espace logique n'a pas d'importance ; l'essentiel est de se concentrer sur l'espace physique libre réellement disponible pour le stockage des données.
+
+Bien que ASA r2 puisse supporter une utilisation élevée sans dégradation des performances, un fonctionnement proche de sa pleine capacité augmente le risque d'épuisement de l'espace et les frais administratifs lors de l'extension du stockage. Un taux d'utilisation supérieur à 90 % peut ne pas avoir d'impact sur les performances, mais peut compliquer la gestion et retarder la mise à disposition de disques supplémentaires.
+
+Les systèmes ASA r2 prennent en charge des unités de stockage jusqu'à 128 To et des tailles SAZ jusqu'à 2 Po par paire HA, avec ONTAP qui équilibre automatiquement la capacité entre les nœuds. Il est essentiel de surveiller l'utilisation au niveau du cluster, de la SAZ et de l'unité de stockage afin de garantir un espace libre suffisant pour les instantanés, les charges de travail à provisionnement fin et la croissance future. Si la capacité approche des seuils critiques (~ 90 % d'utilisation), des SSD supplémentaires doivent être ajoutés par groupes (minimum six disques) pour maintenir les performances et la résilience.

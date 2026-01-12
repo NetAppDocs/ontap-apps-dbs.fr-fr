@@ -1,0 +1,41 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-storage-san-config-lun-resizing.html 
+keywords: SAN, ASM, LVM, oracle, LUN, ASA r2 
+summary: Redimensionnement des LUN et LVM avec les bases de données Oracle sur ASA r2 
+searchtitle: Redimensionnement des LUN et des LVM de la base de données Oracle avec ASA r2 
+---
+= Redimensionnement des LUN et LVM
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Lorsqu'un système de fichiers SAN ou un groupe de disques Oracle ASM atteint sa limite de capacité sur ASA r2, deux options permettent d'augmenter l'espace disponible :
+
+* Augmenter la taille des LUN (unités de stockage) existantes
+* Ajoutez un nouveau LUN à un groupe de disques ASM ou à un groupe de volumes LVM existant et étendez le volume logique qu'il contient.
+
+
+Bien que le redimensionnement des LUN soit pris en charge sur ASA r2, il est généralement préférable d'utiliser un gestionnaire de volumes logiques (LVM) tel qu'Oracle ASM. L'une des principales raisons d'être des LVM est d'éviter la nécessité de redimensionner fréquemment les LUN. Avec LVM, plusieurs LUN sont combinés en un pool de stockage virtuel. Les volumes logiques extraits de ce pool peuvent être facilement redimensionnés sans impacter la configuration de stockage sous-jacente.
+
+L'utilisation de LVM ou d'ASM présente également les avantages suivants :
+
+* Optimisation des performances : répartit les E/S sur plusieurs LUN, réduisant ainsi les points chauds.
+* Flexibilité : Ajoutez de nouveaux LUN sans perturber les charges de travail existantes.
+* Migration transparente : ASM ou LVM peuvent déplacer des étendues vers de nouveaux LUN à des fins d’équilibrage ou de hiérarchisation sans interruption de service de l’hôte.
+
+
+[NOTE]
+====
+Principaux points à prendre en compte concernant ASA r2 :
+
+* Le redimensionnement LUN est effectué au niveau de l'unité de stockage au sein d'une machine virtuelle de stockage (SVM) en utilisant la capacité de la zone de disponibilité de stockage (SAZ).
+* Pour Oracle, la meilleure pratique consiste à ajouter des LUN aux groupes de disques ASM plutôt qu'à redimensionner les LUN existants, afin de maintenir le striping et le parallélisme.
+
+
+====

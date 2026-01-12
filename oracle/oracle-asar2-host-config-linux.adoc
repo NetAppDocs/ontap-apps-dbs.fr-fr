@@ -1,0 +1,84 @@
+---
+sidebar: sidebar 
+permalink: oracle/oracle-asar2-host-config-linux.html 
+keywords: oracle, database, ASA r2, ontap, linux, nfs, xfs, ext4, slot tables 
+summary: Bases de données Oracle avec Linux sur ASA r2 
+searchtitle: Bases de données Oracle avec Linux sur ASA r2 
+---
+= Linux
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Sujets de configuration spécifiques au système d'exploitation Linux avec ASA r2 ONTAP.
+
+[NOTE]
+====
+Linux (Oracle Linux, RHEL, SUSE) est pris en charge avec ASA r2 pour les bases de données Oracle. Utilisez les protocoles SAN, configurez correctement le multipathing et appliquez les meilleures pratiques Oracle pour l'optimisation ASM et E/S.
+
+====
+
+
+== Planificateur d'E/S.
+
+Le noyau Linux permet un contrôle de bas niveau sur la façon dont les E/S sont planifiées pour bloquer les périphériques. Les valeurs par défaut sur les différentes distributions de Linux varient considérablement. Les tests montrent que la date limite offre habituellement les meilleurs résultats, mais il arrive que le NOOP ait été légèrement meilleur. La différence de performance est minime, mais testez les deux options s'il est nécessaire d'extraire les performances maximales d'une configuration de base de données. Dans de nombreuses configurations, le paramètre CFQ est le paramètre par défaut. Il a démontré des problèmes de performances significatifs avec les charges de travail de la base de données.
+
+Pour plus d'informations sur la configuration du planificateur d'E/S, reportez-vous à la documentation du fournisseur Linux correspondant.
+
+
+
+== Chemins d'accès multiples
+
+Certains clients ont rencontré des pannes durant une interruption du réseau, car le démon multivoie ne s'exécutait pas sur leur système. Sur les versions récentes de Linux, le processus d'installation du système d'exploitation et le démon de chemins d'accès multiples peuvent exposer ces systèmes d'exploitation à ce problème. Les packages sont installés correctement, mais ils ne sont pas configurés pour un démarrage automatique après un redémarrage.
+
+Par exemple, la configuration par défaut du démon multipath sur RHEL 9.7 pourrait ressembler à ceci :
+
+....
+[root@host1 ~]# systemctl list-unit-files --type=service | grep multipathd
+multipathd.service                      disabled
+....
+Ceci peut être corrigé à l'aide des commandes suivantes :
+
+....
+[root@host1 ~]# systemctl enable multipathd.service
+[root@host1 ~]# systemctl list-unit-files --type=service | grep multipathd
+multipathd.service                      enabled
+....
+
+
+== Profondeur de la file d'attente
+
+Définissez une profondeur de file d'attente appropriée pour les périphériques SAN afin d'éviter les goulots d'étranglement d'E/S. La profondeur de file d'attente par défaut sous Linux est souvent fixée à 128, ce qui peut entraîner des problèmes de performance avec les bases de données Oracle. Un niveau de profondeur de file d'attente trop élevé peut entraîner une mise en file d'attente excessive des E/S, ce qui augmente la latence et réduit le débit. Un réglage trop bas peut limiter le nombre de requêtes d'E/S en attente, réduisant ainsi les performances globales. Une profondeur de file d'attente de 64 est souvent un bon point de départ pour les charges de travail de base de données Oracle sur ASA r2, mais elle peut devoir être ajustée en fonction des caractéristiques spécifiques de la charge de travail et des tests de performance.
+
+
+
+== Mise en miroir ASM
+
+La mise en miroir ASM peut nécessiter des modifications des paramètres de chemins d'accès multiples Linux pour permettre à ASM de reconnaître un problème et de basculer vers un autre groupe de pannes. La plupart des configurations ASM sur ONTAP reposent sur une redondance externe. La protection des données est assurée par la baie externe et ASM ne met pas en miroir les données. Certains sites utilisent ASM avec redondance normale pour fournir une mise en miroir bidirectionnelle, généralement entre différents sites.
+
+Pour les systèmes ASA r2 prenant en charge le multipathing actif-actif, ces paramètres multipath doivent être ajustés. Comme tous les chemins sont actifs et à charge équilibrée, une mise en file d'attente indéfinie n'est pas nécessaire. Les paramètres multipath devraient plutôt privilégier les performances et la restauration rapide en cas de panne. Ce comportement est important pour la mise en miroir ASM car ASM doit recevoir une défaillance d'E/S pour pouvoir réessayer l'E/S sur un LUN alternatif. Si les E/S sont mises en file d'attente indéfiniment, ASM ne peut pas déclencher de basculement.
+
+Définissez les paramètres suivants dans Linux `multipath.conf` Fichier pour les LUN ASM utilisés avec la mise en miroir ASM :
+
+....
+polling_interval 5
+no_path_retry 24
+failback immediate
+path_grouping_policy multibus
+path_selector "service-time 0"
+....
+Ces paramètres créent une temporisation de 120 secondes pour les périphériques ASM. Le délai d'attente est calculé comme étant le `polling_interval` * `no_path_retry` en secondes. Il peut être nécessaire d'ajuster la valeur exacte dans certaines circonstances, mais un délai de 120 secondes doit être suffisant pour la plupart des utilisations. En particulier, 120 secondes doivent permettre un basculement ou un retour du contrôleur sans générer d'erreur d'E/S susceptible de mettre le groupe défaillant hors ligne.
+
+Un plus bas `no_path_retry` La valeur peut réduire le temps nécessaire à ASM pour passer à un autre groupe de pannes, mais augmente également le risque de basculement indésirable lors des activités de maintenance, telles qu'une prise de contrôle. Le risque peut être atténué par une surveillance attentive de l'état de mise en miroir ASM. Si un basculement indésirable se produit, les miroirs peuvent être rapidement resynchronisés si la resynchronisation est effectuée relativement rapidement. Pour plus d'informations, consultez la documentation Oracle sur ASM Fast Mirror Resync pour la version du logiciel Oracle utilisé.
+
+
+
+== Options de montage Linux xfs, ext3 et ext4
+
+
+TIP: * NetApp recommande* d'utiliser les options de montage par défaut. Veillez à un alignement correct lors de la création de systèmes de fichiers sur les LUN.
