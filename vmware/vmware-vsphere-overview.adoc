@@ -4,7 +4,7 @@ permalink: vmware/vmware-vsphere-overview.html
 keywords: introduction, unified storage, virtual volumes, storage efficiency, hybrid cloud 
 summary: 'ONTAP est une solution de stockage leader pour les environnements VMware vSphere depuis près de vingt ans et continue d"ajouter des fonctionnalités innovantes pour simplifier la gestion tout en réduisant les coûts. Ce document présente la solution ONTAP pour vSphere, comprenant les dernières informations sur les produits et les meilleures pratiques, afin de rationaliser le déploiement, de réduire les risques et de simplifier la gestion.' 
 ---
-= VMware vSphere avec ONTAP
+= Guide des bonnes pratiques VMware vSphere avec ONTAP
 :hardbreaks:
 :allow-uri-read: 
 :nofooter: 

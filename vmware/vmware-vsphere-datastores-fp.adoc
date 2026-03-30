@@ -1,0 +1,64 @@
+---
+sidebar: sidebar 
+permalink: vmware/vmware-vsphere-datastores-fp.html 
+keywords: vSphere, datastore, FabricPool 
+summary: Cette page décrit les bonnes pratiques de mise en œuvre de FabricPool pour les datastores VMware. 
+---
+= FabricPool for les datastores VMware
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
+
+
+[role="lead"]
+Le stockage des machines virtuelles transite des couches du système d'exploitation invité et de l'hyperviseur vers ONTAP, où la hiérarchisation FabricPool et WAFL assurent l'optimisation des performances, de l'efficacité et des coûts.
+
+À partir de la version ONTAP 9.6, FabricPool prend en charge les charges de travail virtualisées, y compris les datastores VMware. Vous pouvez désormais tier les blocs froids des volumes FlexVol qui prennent en charge les datastores VMware (modèles de VM, VM hors tension, snapshots, sauvegardes, etc.) vers le stockage objet tout en conservant les données chaudes localement.
+
+Cela dit, il y a certaines nuances dont vous devez être conscient.
+
+image:vmware-vsphere-datastores-fp-1.png["alt=Pile de stockage hyperviseur avec FabricPool,width=525,height=500"]
+
+
+
+== Couches de calcul et de disque virtuel
+
+Le système d'exploitation invité s'exécute sur des formats de disque virtuel tels que VMDK, QCOW2 ou VHDX, qui créent les couches de calcul et de périphérique de bloc accessibles aux applications et aux utilisateurs.
+
+Il est important de noter que le système d'exploitation invité considère les disques virtuels comme des périphériques de blocs ; par conséquent, les délais d'expiration des périphériques de blocs du système invité doivent être pris en compte lors de la planification de la tolérance aux pannes pendant les mises à niveau non disruptives, les pannes matérielles ou d'autres événements imprévus.
+
+
+TIP: Following the link:https://www.netapp.com/pdf.html?item=/media/17239-tr-4598.pdf["FabricPool bonnes pratiques"], vous devez traiter les volumes FlexVol hébergeant des datastores de machines virtuelles comme un stockage SAN, même lors de l'utilisation de protocoles NAS, en raison de la nature bloc des fichiers de disque virtuel par rapport aux systèmes d'exploitation invités. Par conséquent, NetApp recommande d'utiliser la stratégie de hiérarchisation basée uniquement sur les instantanés. La stratégie automatique peut être utilisée pour les données non critiques, mais attention : une déconnexion du niveau cloud peut entraîner le plantage des machines ou leur passage en mode lecture seule.
+
+
+
+== Rôle de l'hyperviseur
+
+L'hyperviseur assure la communication entre les machines virtuelles en cours d'exécution et les ressources physiques telles que le processeur, la mémoire et le stockage. Dans le cas d'utilisation NAS, l'hyperviseur monte le partage NAS et présente les fichiers du disque virtuel aux machines virtuelles comme des périphériques de stockage par blocs.
+
+Le chemin du système de fichiers de l'hyperviseur implique le stockage de la VM via des LUN connectés iSCSI/FCP ou des espaces de noms NVMe formatés par des systèmes de fichiers spécifiques à l'hyperviseur comme VMFS, NTFS, EXT4, etc.
+
+Le chemin du système de fichiers NAS offre un accès au niveau du fichier via les protocoles NFS ou SMB aux volumes ONTAP pour le stockage des machines virtuelles.
+
+Les deux voies convergent au niveau de la couche WAFL d'ONTAP, permettant des services de données cohérents tels que les instantanés et la gestion des métadonnées.
+
+
+
+== Intégration de hiérarchisation FabricPool
+
+FabricPool gère intelligemment le placement des données entre le stockage local haute performance et les niveaux d'objets cloud à moindre coût.
+
+FabricPool répartit automatiquement les données entre le stockage local haute performance et le stockage d'objets cloud évolutif, en fonction de la politique de hiérarchisation FabricPool appliquée à l'ensemble de données.
+
+L'intégration de FabricPool d'ONTAP permet un placement efficace des données dans des environnements de cloud hybride sans sacrifier les performances des lectures locales.
+
+
+
+== Efficacité et gestion du stockage
+
+Il est important de comprendre le fonctionnement de FabricPool avant de l'activer. Une configuration appropriée vous aide à améliorer les performances, à réduire les risques et à optimiser le TCO en stockant les bonnes données dans le bon niveau.
+
+Les chemins de protocoles de fichiers SAN/NVMe et NAS convergent au niveau de la couche WAFL. Le système de fichiers WAFL garantit la cohérence des métadonnées, prend en charge les instantanés, le clonage et optimise les écritures pour les supports SSD, HDD et de stockage objet.
