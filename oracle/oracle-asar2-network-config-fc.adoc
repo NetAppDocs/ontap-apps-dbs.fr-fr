@@ -1,36 +1,9 @@
 ---
 sidebar: sidebar 
 permalink: oracle/oracle-asar2-network-config-fc.html 
-keywords: SAN, zoning, ASA r2 
-summary: Configuration réseau FC pour les bases de données Oracle avec ASA r2 
-searchtitle: Configuration FC SAN pour les bases de données Oracle avec ASA r2 
+redirect: oracle/oracle-network-config-fc.html 
 ---
-= Configuration FC SAN
-:hardbreaks:
+= 
 :allow-uri-read: 
-:nofooter: 
-:icons: font
-:linkattrs: 
-:imagesdir: ../media/
 
 
-[role="lead"]
-La configuration d'un SAN FC pour les bases de données Oracle sur les systèmes ASA r2 consiste principalement à suivre les meilleures pratiques SAN standard.
-
-ASA r2 est optimisée pour les charges de travail SAN uniquement, les principes restent donc les mêmes que pour AFF/ FAS, avec un accent mis sur les performances, la résilience et la simplicité. Cela inclut des mesures de planification classiques telles que s'assurer de l'existence d'une bande passante suffisante sur le SAN entre l'hôte et le système de stockage, vérifier que tous les chemins SAN existent entre tous les périphériques requis, utiliser les paramètres de port FC requis par votre fournisseur de commutateur FC, éviter la contention ISL et utiliser une surveillance appropriée de la structure SAN.
-
-
-
-== Segmentation
-
-Une zone FC ne doit jamais contenir plusieurs initiateurs. Un tel arrangement peut sembler fonctionner au départ, mais la diaphonie entre les initiateurs finit par interférer avec la performance et la stabilité.
-
-Les zones à cibles multiples sont généralement considérées comme sûres, bien que dans de rares circonstances le comportement des ports cibles FC de fournisseurs différents ait causé des problèmes. Par exemple, évitez d'inclure les ports cibles d'une baie de stockage NetApp et non NetApp dans la même zone. En outre, le fait de placer un système de stockage NetApp et un dispositif de bande dans la même zone est encore plus susceptible de causer des problèmes.
-
-[NOTE]
-====
-* ASA r2 utilise des zones de disponibilité de stockage au lieu d'agrégats, mais cela ne change pas les principes de zonage FC.
-* Le multipathing (MPIO) reste le principal mécanisme de résilience ; cependant, pour les systèmes ASA r2 qui prennent en charge le multipathing actif-actif symétrique, tous les chemins vers un LUN sont actifs et utilisés simultanément pour les E/S.
-
-
-====

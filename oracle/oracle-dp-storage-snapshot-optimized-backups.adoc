@@ -36,15 +36,15 @@ Pour plus de détails, consultez la documentation d'Oracle sur la rubrique « Re
 
 == Disposition des données
 
-La disposition la plus simple consiste à isoler les fichiers de données dans un ou plusieurs volumes dédiés. Ils doivent être non contaminés par tout autre type de fichier. Cela permet de s'assurer que les volumes de fichiers de données peuvent être rapidement restaurés lors d'une opération SnapRestore sans détruire un journal de reprise, un fichier de contrôle ou un journal d'archivage important.
+La solution la plus simple consiste à isoler les fichiers de données dans des volumes dédiés, des LUN ou des espaces de noms NVMe. Les ressources de stockage ne doivent contenir aucun autre type de fichier. Ceci afin de garantir que les fichiers de données puissent être rapidement restaurés grâce à une opération SnapRestore sans endommager un journal de restauration important, un fichier de contrôle ou un journal d'archivage.
 
-LE SYSTÈME SAN présente des exigences similaires en matière d'isolation des fichiers de données dans des volumes dédiés. Avec un système d'exploitation tel que Microsoft Windows, un seul volume peut contenir plusieurs LUN de fichiers de données, chacune avec un système de fichiers NTFS. Avec d'autres systèmes d'exploitation, il existe généralement un gestionnaire de volumes logiques. Par exemple, avec Oracle ASM, l'option la plus simple consiste à limiter les groupes de disques à un volume unique pouvant être sauvegardé et restauré comme une unité. Si des volumes supplémentaires sont nécessaires pour des raisons de performance ou de gestion de la capacité, la création d'un groupe de disques supplémentaire sur le nouveau volume simplifie la gestion.
+Les SAN ont des exigences similaires en matière d'isolation des fichiers de données au sein de ressources dédiées. Avec un système d'exploitation tel que Microsoft Windows utilisant le stockage AFF, un seul volume peut contenir plusieurs LUN de fichiers de données, chacune avec un système de fichiers NTFS. Avec d'autres systèmes d'exploitation, il existe généralement un gestionnaire de volumes logiques. Par exemple, avec Oracle ASM, l'option la plus simple consiste à regrouper les LUN d'un groupe de disques ASM sur un seul volume pouvant être sauvegardé et restauré comme une seule unité. Si des volumes supplémentaires sont nécessaires pour des raisons de performance ou de gestion de la capacité, la création d'un groupe de disques supplémentaire sur ce nouveau volume simplifie la gestion.
 
-Si ces instructions sont respectées, les snapshots peuvent être planifiés directement sur ONTAP sans avoir à créer de snapshot de groupe de cohérence. En effet, les sauvegardes optimisées pour les snapshots ne nécessitent pas la sauvegarde simultanée de fichiers de données.
+ASA ne propose pas d'abstraction au niveau du volume. Il utilise plutôt des groupes de cohérence. Dans de nombreux cas, un seul LUN ou espace de noms NVMe suffit aux exigences de gestion et de performance d'une base de données. Si plusieurs LUN ou espaces de noms sont nécessaires, des ressources supplémentaires peuvent être ajoutées et regroupées au sein d'un groupe de cohérence qui devient le conteneur des fichiers de données.
 
-Une complication se produit dans des situations telles qu'un groupe de disques ASM distribué sur des volumes. Dans ce cas, un snapshot de groupe de cohérence doit être réalisé pour s'assurer que les métadonnées ASM sont cohérentes sur tous les volumes constitutifs.
+Si ces instructions sont respectées, les instantanés peuvent être programmés directement sur le système de stockage.
 
-[Remarque]Vérifiez que les fichiers spfile et passwd ASM ne se trouvent pas dans le groupe de disques hébergeant les fichiers de données. Cela interfère avec la capacité à restaurer de manière sélective les fichiers de données et uniquement les fichiers de données.
+*Attention :* Vérifiez que l'ASM `spfile` et `passwd` les fichiers ne se trouvent pas dans le groupe de disques hébergeant les fichiers de données. Cela interfère avec la capacité à restaurer de manière sélective les fichiers de données et uniquement les fichiers de données.
 
 
 
@@ -53,7 +53,7 @@ Une complication se produit dans des situations telles qu'un groupe de disques A
 Cette procédure peut être conduite manuellement ou via une application telle que SnapCenter. La procédure de base est la suivante :
 
 . Arrêtez la base de données.
-. Restaurez le ou les volumes de fichiers de données sur l'instantané immédiatement avant le point de restauration souhaité.
+. Restaurez les volumes de fichiers de données, les LUN ou les espaces de noms à l’instantané précédant immédiatement le point de restauration souhaité.
 . Réexécutez les journaux d'archivage au point souhaité.
 
 
@@ -74,7 +74,7 @@ Cette procédure peut être conduite manuellement ou via une application telle q
 . Réexécutez les journaux d'archivage au point souhaité.
 
 
-Cette procédure suppose que les journaux d'archive souhaités sont toujours présents dans le système de fichiers actif. Si ce n'est pas le cas, les journaux d'archivage doivent être restaurés en mettant les LUN du journal d'archivage hors ligne et en effectuant une restauration. Il s'agit également d'un exemple dans lequel il est utile de diviser les journaux d'archivage en volumes dédiés. Si les journaux d'archivage partagent un groupe de volumes avec les journaux de reprise, les journaux de reprise doivent être copiés ailleurs avant la restauration de l'ensemble global de LUN afin d'éviter de perdre les transactions enregistrées finales.
+Cette procédure suppose que les journaux d'archivage souhaités sont toujours présents dans le système de fichier actif. S'ils ne le sont pas, les journaux d'archivage doivent être restaurés en mettant hors ligne les LUN de journaux d'archivage et en effectuant une restauration. Ceci est également un exemple où il est utile de séparer les journaux d'archivage dans des volumes, LUN ou espaces de noms dédiés. Si les journaux d'archivage partagent un groupe de volumes avec les journaux de redo, ces derniers doivent être copiés ailleurs avant la restauration de l'ensemble des LUN afin d'éviter de perdre les dernières transactions enregistrées.
 
 
 

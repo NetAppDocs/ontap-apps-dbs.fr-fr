@@ -35,7 +35,7 @@ Pour plus d'informations sur les instantanés, reportez-vous au link:https://doc
 
 == Des snapshots inviolables
 
-Depuis ONTAP 9.12.1, les snapshots ne sont pas uniquement en lecture seule et peuvent également être protégés contre la suppression accidentelle ou intentionnelle. Cette fonctionnalité s'appelle des snapshots inviolables. Une période de conservation peut être définie et appliquée via une règle Snapshot. Les snapshots obtenus ne peuvent pas être supprimés tant qu'ils n'ont pas atteint leur date d'expiration. Il n'y a pas de substitution administrative ou de centre de support.
+Depuis la version ONTAP 9.12.1, les snapshots ne sont plus seulement en lecture seule, ils peuvent également être protégés contre toute suppression accidentelle ou intentionnelle. Cette fonctionnalité est appelée snapshots inviolables. Une période de conservation peut être définie et appliquée via la politique de snapshots. Les snapshots ainsi créés ne peuvent pas être supprimés avant d'avoir atteint leur date d'expiration. Il n'existe aucune dérogation administrative ou via le centre de support.
 
 Cela permet de s'assurer qu'un intrus, un collaborateur malveillant ou même une attaque par ransomware ne peut pas compromettre les sauvegardes, même s'il a pu accéder au système ONTAP lui-même. Associée à une planification Snapshot fréquente, cette solution offre une protection des données extrêmement puissante avec un RPO très faible.
 

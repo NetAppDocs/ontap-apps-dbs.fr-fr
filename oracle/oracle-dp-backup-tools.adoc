@@ -15,7 +15,7 @@ searchtitle: 'Outils d"automatisation et de gestion des bases de données Oracle
 
 
 [role="lead"]
-Dans un environnement de base de données Oracle, la principale valeur de ONTAP provient des principales technologies ONTAP, telles que les copies Snapshot instantanées, la réplication simple SnapMirror et la création efficace de volumes FlexClone.
+La principale valeur d'ONTAP dans un environnement de base de données Oracle provient des technologies de base d'ONTAP telles que les copies Snapshot instantanées, la réplication simple SnapMirror et la création efficace de volumes clonés, de LUN et d'espaces de noms.
 
 Dans certains cas, une configuration simple de ces fonctionnalités principales directement sur ONTAP répond aux exigences, mais les besoins plus complexes requièrent une couche d'orchestration.
 

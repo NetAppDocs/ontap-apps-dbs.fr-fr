@@ -108,15 +108,15 @@ CAUTION: Si un volume est configuré en mode « Thick provisioning », veillez �
 
 
 
-=== AFF par défaut
+=== Valeurs par défaut AFF et ASA
 
-Les volumes créés sur ONTAP et exécutés sur un système AFF 100 % Flash sont à allocation dynamique, avec l'activation de toutes les fonctionnalités d'efficacité à la volée. Bien que les bases de données ne bénéficient généralement pas de la déduplication et puissent inclure des données non compressibles, les paramètres par défaut conviennent néanmoins à la plupart des charges de travail. ONTAP est conçu pour traiter efficacement tous les types de données et de modèles d'E/S, qu'ils entraînent ou non des économies. Les valeurs par défaut ne doivent être modifiées que si les raisons sont parfaitement comprises et si un écart est bénéfique.
+Les volumes créés sur ONTAP exécuté sur des systèmes AFF et les LUN/espaces de noms sur des systèmes ASA sont provisionnés de façon fine avec toutes les fonctionnalités d'efficacité en ligne activées. Bien que les bases de données ne tirent généralement pas profit de la déduplication et puissent contenir des données non compressibles, les paramètres par défaut conviennent néanmoins à la quasi-totalité des charges de travail. ONTAP est conçu pour traiter efficacement tous les types de données et de modèles d'E/S, qu'ils génèrent ou non des économies. Les paramètres par défaut ne doivent être modifiés que si les raisons sont parfaitement comprises et qu'il y a un avantage à s'en écarter.
 
 
 
 === Recommandations générales
 
-* Si les volumes et/ou les LUN ne sont pas à provisionnement fin, vous devez désactiver tous les paramètres d'efficacité car l'utilisation de ces fonctionnalités ne permet aucune économie et la combinaison du provisionnement lourd et de l'optimisation de l'espace peut provoquer des comportements inattendus, notamment des erreurs de manque d'espace.
+* Si les volumes AFF, les LUN ou les espaces de noms ne sont pas provisionnés de manière fine, vous devez désactiver tous les paramètres d'efficacité, car l'utilisation de ces fonctionnalités n'apporte aucune économie et la combinaison du provisionnement épais avec l'efficacité de l'espace activée peut entraîner un comportement inattendu, y compris des erreurs de manque d'espace.
 * Si les données ne sont pas sujettes à des écrasements, par exemple avec des sauvegardes ou des journaux de transactions de base de données, vous pouvez atteindre une meilleure efficacité en activant TSSE avec une période de refroidissement faible.
 * Certains fichiers peuvent contenir une quantité importante de données non compressibles, par exemple lorsque la compression est déjà activée au niveau de l'application, les fichiers sont cryptés. Si l'un de ces scénarios est vrai, envisagez de désactiver la compression pour permettre un fonctionnement plus efficace sur d'autres volumes contenant des données compressibles.
 * N'utilisez pas la compression et la déduplication de 32 Ko pour les sauvegardes de bases de données. Voir la section <<Compression adaptative>> pour plus d'informations.

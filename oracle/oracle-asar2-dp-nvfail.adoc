@@ -1,40 +1,9 @@
 ---
 sidebar: sidebar 
 permalink: oracle/oracle-asar2-dp-nvfail.html 
-keywords: oracle, nvfail, ASA r2 
-summary: Configuration de NVFAIL pour protéger les bases de données Oracle sur ASA r2 
-searchtitle: Bases de données Oracle et NVFAIL sur ASA r2 
+redirect: oracle/oracle-dp-nvfail.html 
 ---
-= NVFAIL
-:hardbreaks:
+= 
 :allow-uri-read: 
-:nofooter: 
-:icons: font
-:linkattrs: 
-:imagesdir: ../media/
 
 
-[role="lead"]
-NVFAIL est une fonctionnalité ONTAP qui garantit l'intégrité des données lors de scénarios de basculement catastrophiques.
-
-Cette fonctionnalité reste applicable sur les systèmes ASA r2, même si ASA r2 utilise une architecture SAN simplifiée (SAZ et unités de stockage au lieu de volumes).
-
-Les bases de données sont vulnérables à la corruption lors des basculements de stockage car elles conservent d'importants caches internes. Si un événement catastrophique nécessite de forcer un basculement ONTAP , indépendamment de l'état de la configuration globale, il en résulte que des modifications précédemment reconnues peuvent être effectivement abandonnées. Le contenu de la baie de stockage remonte dans le temps, et l'état du cache de la base de données ne reflète plus l'état des données sur le disque. Cette incohérence entraîne une corruption des données.
-
-La mise en cache peut avoir lieu au niveau de l'application ou du serveur. Par exemple, une configuration Oracle Real Application Cluster (RAC) avec des serveurs actifs à la fois sur un site principal et un site distant met en cache les données dans l'Oracle SGA. Une opération de basculement forcé entraînant une perte de données exposerait la base de données à un risque de corruption, car les blocs stockés dans la SGA pourraient ne pas correspondre aux blocs sur le disque.
-
-Une utilisation moins évidente de la mise en cache se situe au niveau du système de fichiers du système d'exploitation. Un système de fichiers en cluster basé sur des LUN situés sur le site principal pourrait être monté sur des serveurs du site distant, et les données pourraient à nouveau être mises en cache. Une défaillance de la NVRAM ou une prise de contrôle forcée dans ces situations pourrait entraîner une corruption du système de fichiers.
-
-ONTAP protège les bases de données et les systèmes d'exploitation contre ce scénario grâce à NVFAIL et à ses paramètres associés, qui signalent à l'hôte d'invalider les données mises en cache et de remonter les systèmes de fichiers affectés après le basculement. Ce mécanisme s'applique aux LUN et aux espaces de noms ASA r2 de la même manière qu'à AFF/ FAS.
-
-[NOTE]
-====
-Principaux points à prendre en compte concernant ASA r2 :
-
-* NVFAIL fonctionne au niveau LUN (unité de stockage), et non au niveau SAZ.
-* Pour les bases de données Oracle, NVFAIL doit être activé sur tous les LUN hébergeant des composants critiques (fichiers de données, journaux de restauration, fichiers de contrôle).
-* MetroCluster n'est pas pris en charge sur ASA r2, NVFAIL s'applique donc principalement aux scénarios de basculement HA locaux.
-* NFS n'est pas pris en charge sur ASA r2, les considérations NVFAIL ne s'appliquent donc qu'aux charges de travail basées sur SAN (FC/iSCSI/NVMe).
-
-
-====

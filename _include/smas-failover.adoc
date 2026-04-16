@@ -4,7 +4,7 @@
 
 La synchronisation active SnapMirror prend en charge deux types d'opérations de basculement du stockage, planifiées et non planifiées, qui fonctionnent de manières légèrement différentes. Un basculement planifié est initié manuellement par l'administrateur pour permettre un basculement rapide vers un site distant, tandis que le basculement non planifié est automatiquement initié par le médiateur sur le troisième site. L'objectif principal d'un basculement planifié est d'effectuer des correctifs et des mises à niveau incrémentiels, d'effectuer des tests de reprise après incident ou d'adopter une politique formelle de basculement des opérations entre les sites tout au long de l'année afin de démontrer la capacité de synchronisation active complète.
 
-Les diagrammes présentent ce qui se produit pendant les opérations normales, de basculement et de restauration. Pour plus de clarté, ils représentent un LUN répliqué. Dans une configuration de synchronisation active SnapMirror, la réplication est basée sur des volumes, où chaque volume contient une ou plusieurs LUN, mais pour simplifier l'image, la couche du volume a été supprimée.
+Les schémas illustrent ce qui se passe lors des opérations normales, de basculement et de retour arrière. Par souci de simplification, ils représentent un LUN répliqué. Dans une configuration SnapMirror active sync réelle, la réplication est basée sur des volumes AFF, chaque volume contenant un ou plusieurs LUN, mais pour simplifier la représentation, la couche volume a été omise.
 
 
 

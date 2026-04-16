@@ -4,9 +4,9 @@
 
 Plus précisément, l'adoption croissante des systèmes de stockage 100 % Flash a permis de consolider les charges de travail. Les baies de stockage qui reposent sur des supports rotatifs ne prennent généralement en charge qu'un nombre limité de charges de travail exigeantes en E/S, car leurs capacités IOPS sont limitées par rapport aux anciens disques rotatifs. Une ou deux bases de données fortement actives saturaient les disques sous-jacents bien avant que les contrôleurs de stockage n'atteignent leurs limites. Cela a changé. Il est possible de saturer les contrôleurs de stockage les plus puissants, car le nombre de disques SSD requis est relativement faible. Cela signifie que vous pouvez exploiter pleinement les capacités des contrôleurs sans craindre un effondrement soudain des performances lors de pics de latence des supports rotatifs.
 
-À titre d'exemple de référence, un simple système AFF A800 HA à deux nœuds est capable de traiter jusqu'à un million d'IOPS aléatoires avant que la latence ne dépasse la milliseconde. On pourrait s'attendre à ce que très peu de charges de travail atteignent de tels niveaux. L'utilisation optimale de cette baie AFF A800 implique l'hébergement de plusieurs workloads. Pour ce faire, la sécurité et la prévisibilité exigent des contrôles de QoS.
+À titre d'exemple, un ancien système AFF A800 HA à deux nœuds peut gérer jusqu'à un million d'IOPS aléatoires avant que la latence ne dépasse une milliseconde. Rares sont les charges de travail uniques qui atteindraient de tels niveaux. Pour exploiter pleinement ce système AFF A800, il faut héberger plusieurs charges de travail, et le faire en toute sécurité tout en assurant la prévisibilité nécessite des contrôles QoS.
 
-Il existe deux types de qualité de service (QoS) dans ONTAP : les IOPS et la bande passante. Les contrôles de QoS peuvent être appliqués aux SVM, volumes, LUN et fichiers.
+Il existe deux types de qualité de service (QoS) dans ONTAP : les IOPS et la bande passante. Les contrôles QoS peuvent être appliqués aux SVM AFF, aux volumes AFF, aux fichiers AFF, ainsi qu’aux LUN et espaces de noms AFF/ASA.
 
 
 

@@ -16,7 +16,7 @@ Rubriques de configuration pour la base de données Oracle sous Microsoft Window
 
 == NFS
 
-Oracle prend en charge l'utilisation de Microsoft Windows avec le client NFS direct. Cette fonctionnalité offre les avantages de NFS en termes de gestion, notamment la possibilité d'afficher les fichiers dans les différents environnements, de redimensionner les volumes de façon dynamique et d'exploiter un protocole IP moins onéreux. Pour plus d'informations sur l'installation et la configuration d'une base de données sous Microsoft Windows à l'aide de dNFS, reportez-vous à la documentation officielle d'Oracle. Il n'existe pas de meilleures pratiques spéciales.
+Oracle prend en charge l'utilisation de Microsoft Windows avec le client NFS direct. Cette fonctionnalité permet de bénéficier des avantages de gestion du NFS, notamment la possibilité de consulter des fichiers dans différents environnements, de redimensionner dynamiquement les volumes NFS et d'utiliser un protocole IP moins coûteux. Consultez la documentation officielle Oracle pour des informations sur l'installation et la configuration d'une base de données sur Microsoft Windows à l'aide de DNFS. Aucune bonne pratique particulière n'existe.
 
 
 

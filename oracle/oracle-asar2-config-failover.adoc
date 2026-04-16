@@ -1,39 +1,9 @@
 ---
 sidebar: sidebar 
 permalink: oracle/oracle-asar2-config-failover.html 
-keywords: failover, takeover, ASA r2, oracle 
-summary: 'Il est nécessaire de comprendre la fonction de reprise de stockage pour s"assurer que les opérations de la base de données Oracle ne soient pas perturbées par ces opérations. De plus, les arguments utilisés lors d"une opération de prise de contrôle peuvent affecter l"intégrité des données s"ils sont utilisés incorrectement.' 
-searchtitle: Basculement des bases de données Oracle et du contrôleur ONTAP dans ASA r2 
+redirect: oracle/oracle-ontap-config-failover.html 
 ---
-= basculement ONTAP
-:hardbreaks:
+= 
 :allow-uri-read: 
-:nofooter: 
-:icons: font
-:linkattrs: 
-:imagesdir: ../media/
 
 
-[role="lead"]
-Une bonne compréhension des fonctions de reprise de stockage est nécessaire pour garantir que les opérations de la base de données Oracle ne soient pas interrompues pendant ces opérations. De plus, les arguments utilisés lors des opérations de rachat peuvent affecter l'intégrité des données s'ils sont utilisés incorrectement.
-
-Dans des conditions normales, les écritures entrantes destinées à un contrôleur donné sont répliquées de manière synchrone sur son partenaire HA. Dans un environnement ASA r2 avec SnapMirror Active Sync (SM-as), les écritures sont également répliquées sur un contrôleur distant du site secondaire. Tant qu'une écriture n'est pas enregistrée sur un support non volatil à tous les emplacements, elle n'est pas confirmée à l'application hôte.
-
-Le support de stockage des données écrites est appelé mémoire non volatile (NVMEM). On l'appelle parfois mémoire vive non volatile (NVRAM) et on peut la considérer comme un journal d'écriture plutôt que comme un cache. En fonctionnement normal, les données stockées sur la NVMEM ne sont pas lues ; elle sert uniquement à protéger les données en cas de panne logicielle ou matérielle. Lorsque des données sont écrites sur des disques, elles sont transférées depuis la RAM système, et non depuis la NVMEM.
-
-Lors d'une opération de prise de contrôle, un nœud d'une paire HA prend le relais des opérations de son partenaire. Dans ASA r2, le basculement n'est pas applicable car MetroCluster n'est pas pris en charge ; à la place, SnapMirror Active Sync assure la redondance au niveau du site. Les opérations de prise de contrôle du stockage lors de la maintenance de routine doivent être transparentes, hormis une brève interruption des opérations lors du changement des chemins réseau. La mise en réseau peut être complexe et les erreurs sont faciles à commettre ; c'est pourquoi NetApp recommande fortement de tester minutieusement les opérations de reprise avant de mettre un système de stockage en production. C’est le seul moyen de garantir que tous les chemins réseau sont correctement configurés. Dans un environnement SAN, vérifiez l'état du chemin à l'aide de la commande `sanlun lun show -p` ou les outils de gestion de chemins multiples natifs du système d'exploitation pour garantir la disponibilité de tous les chemins attendus. Les systèmes ASA r2 fournissent tous les chemins optimisés actifs pour les LUN, et les clients utilisant des espaces de noms NVMe doivent s'appuyer sur des outils natifs du système d'exploitation, car les chemins NVMe ne sont pas couverts par sanlun.
-
-Il convient d'être prudent lors du déclenchement d'une prise de contrôle forcée. Forcer une modification de la configuration de stockage signifie que l'état du contrôleur propriétaire des disques est ignoré et que le nœud alternatif prend de force le contrôle des disques. Un forçage incorrect d'une prise de contrôle peut entraîner une perte ou une corruption de données, car une prise de contrôle forcée peut supprimer le contenu de la NVMEM. Une fois la prise de contrôle terminée, la perte de ces données signifie que les données stockées sur les disques pourraient revenir à un état légèrement antérieur du point de vue de la base de données.
-
-Une prise de contrôle forcée avec une paire HA normale devrait rarement être nécessaire. Dans la quasi-totalité des scénarios de panne, un nœud s'arrête et en informe le partenaire afin qu'un basculement automatique ait lieu. Il existe certains cas particuliers, comme une panne en cascade où l'interconnexion entre les nœuds est perdue puis un contrôleur tombe en panne, nécessitant une prise de contrôle forcée. Dans une telle situation, la réplication entre les nœuds est perdue avant la défaillance du contrôleur, ce qui signifie que le contrôleur survivant ne dispose plus d'une copie des écritures en cours. Il faut alors forcer le rachat, ce qui signifie qu'il y a potentiellement un risque de perte de données.
-
-[TIP]
-====
-NetApp recommande de prendre les précautions suivantes :
-
-* Veillez à ne pas provoquer accidentellement une prise de contrôle. Normalement, il ne devrait pas être nécessaire de forcer la modification, et forcer le changement peut entraîner une perte de données.
-* Si une prise de contrôle forcée est nécessaire, assurez-vous que les applications sont arrêtées, que tous les systèmes de fichiers sont démontés et que les groupes de volumes LVM (Logical Volume Manager) sont désactivés. Les groupes de disques ASM doivent être démontés.
-* En cas de défaillance au niveau du site lors de l'utilisation de SM-as, le basculement automatique non planifié assisté par ONTAP Mediator sera lancé sur le cluster survivant, ce qui entraînera une brève pause d'E/S, puis les transitions de base de données reprendront à partir du cluster survivant. Pour plus d'informations, consultez le https://docs.netapp.com/us-en/asa-r2/data-protection/configure-snapmirror-active-sync.html["Synchronisation active SnapMirror sur les systèmes ASA r2"] pour les étapes de configuration détaillées.
-
-
-====

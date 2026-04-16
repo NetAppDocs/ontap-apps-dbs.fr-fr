@@ -1,49 +1,9 @@
 ---
 sidebar: sidebar 
 permalink: oracle/oracle-asar2-storage-san-config-lun-sizing.html 
-keywords: SAN, ASM, LVM, oracle, lun, sizing, count, ASA r2 
-summary: Dimensionnement et nombre de LUN pour la base de données Oracle avec ASA r2 
-searchtitle: Dimensionnement et nombre de LUN de base de données Oracle avec ASA r2 
+redirect: oracle/oracle-storage-san-config-lun-sizing.html 
 ---
-= Dimensionnement des LUN et nombre de LUN
-:hardbreaks:
+= 
 :allow-uri-read: 
-:nofooter: 
-:icons: font
-:linkattrs: 
-:imagesdir: ../media/
 
 
-[role="lead"]
-Il est essentiel de sélectionner la taille de LUN optimale et le nombre de LUN à utiliser pour optimiser les performances et la gestion des bases de données Oracle.
-
-Un LUN est un objet virtualisé sur ONTAP qui existe sur tous les disques de la zone de disponibilité de stockage (SAZ) hôte sur les systèmes ASA r2. Par conséquent, les performances du LUN ne sont pas affectées par sa taille car le LUN exploite pleinement le potentiel de performance du SAZ, quelle que soit la taille choisie.
-
-À titre de commodité, les clients peuvent souhaiter utiliser un LUN de taille spécifique. Par exemple, si une base de données est construite sur un groupe de disques LVM ou Oracle ASM composé de deux LUN de 1 To chacune, ce groupe de disques doit être développé par incréments de 1 To. Il peut être préférable de créer le groupe de disques à partir de huit LUN de 500 Go chacune, de sorte que le groupe de disques puisse être augmenté par incréments plus petits.
-
-Il n'est pas recommandé d'établir une taille de LUN standard universelle, car cela peut compliquer la gestion. Par exemple, une taille de LUN standard de 100 Go peut fonctionner correctement lorsqu'une base de données ou un datastore se situe entre 1 et 2 To, mais qu'une base de données ou un datastore de 20 To nécessite 200 LUN. Cela signifie que les délais de redémarrage du serveur sont plus longs, que les différents utilisateurs doivent gérer davantage d'objets et que des produits tels que SnapCenter doivent effectuer des recherches sur de nombreux objets. L'utilisation d'un nombre inférieur de LUN de plus grande taille permet d'éviter de tels problèmes.
-
-* Considérations relatives à ASA r2 :*
-
-* La taille maximale d'un LUN pour ASA r2 est de 128 To, ce qui permet d'utiliser moins de LUN, mais plus volumineux, sans impact sur les performances.
-* ASA r2 utilise des zones de disponibilité de stockage (SAZ) au lieu d'agrégats, mais cela ne modifie pas la logique de dimensionnement des LUN pour les charges de travail Oracle.
-* Le provisionnement fin est activé par défaut ; le redimensionnement des LUN est non perturbateur et ne nécessite pas leur mise hors ligne.
-
-
-
-
-== Nombre de LUN
-
-Contrairement à la taille de LUN, le nombre de LUN affecte les performances. La performance des applications dépend souvent de la capacité à réaliser des E/S parallèles via la couche SCSI. Ainsi, deux LUN offrent de meilleures performances qu'une seule LUN. L'utilisation d'un LVM tel que Veritas VxVM, Linux LVM2 ou Oracle ASM est la méthode la plus simple pour augmenter le parallélisme.
-
-Avec ASA r2, les principes de comptage des LUN restent les mêmes qu'avec AFF/ FAS car ONTAP gère les E/S parallèles de manière similaire sur toutes les plateformes. Cependant, l'architecture exclusivement SAN et les chemins symétriques actifs-actifs de ASA r2 garantissent des performances constantes sur tous les LUN.
-
-Les clients NetApp n'ont généralement pas eu l'avantage d'augmenter le nombre de LUN au-delà de seize. Toutefois, le test d'environnements 100 % SSD avec des E/S aléatoires très lourdes a permis d'améliorer encore jusqu'à 64 LUN.
-
-[TIP]
-====
-*NetApp recommande* ce qui suit :
-
-En général, quatre à seize LUN suffisent pour prendre en charge les besoins d'E/S de toute charge de travail de base de données Oracle donnée. L'utilisation de moins de quatre LUN peut entraîner des limitations de performances en raison des limitations des implémentations SCSI de l'hôte. Augmenter le nombre de LUN au-delà de seize améliore rarement les performances, sauf dans des cas extrêmes (comme des charges de travail SSD d'E/S aléatoires très élevées).
-
-====

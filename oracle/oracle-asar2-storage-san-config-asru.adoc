@@ -1,34 +1,9 @@
 ---
 sidebar: sidebar 
 permalink: oracle/oracle-asar2-storage-san-config-asru.html 
-keywords: ontap, thin provisioning, oracle, ASRU, ASA r2 
-summary: Utilitaire de récupération ASM avec détection de blocage zéro ONTAP sur ASA r2 
-searchtitle: 'Utilitaire de récupération ASM (ASRU) avec ONTAP sur ASA r2' 
+redirect: oracle/oracle-storage-san-config-asmru.html 
 ---
-= Utilitaire de récupération ASM (ASRU)
-:hardbreaks:
+= 
 :allow-uri-read: 
-:nofooter: 
-:icons: font
-:linkattrs: 
-:imagesdir: ../media/
 
 
-[role="lead"]
-ONTAP sur ASA r2 supprime efficacement les blocs de zéros écrits sur un LUN (unité de stockage) lorsque la compression en ligne est activée. Les utilitaires tels que l'utilitaire de récupération Oracle ASM (ASRU) fonctionnent en écrivant des zéros dans les étendues ASM inutilisées.
-
-Cela permet aux administrateurs de bases de données de récupérer de l'espace sur la baie de stockage après la suppression de données. ONTAP intercepte les zéros et libère l'espace du LUN. Le processus de récupération est extrêmement rapide car aucune donnée n'est réellement écrite dans le système de stockage.
-
-Du point de vue de la base de données, le groupe de disques ASM contient des zéros et la lecture de ces régions des LUN entraîne un flux de zéros, mais ONTAP ne stocke pas les zéros sur les disques. Des modifications simples des métadonnées sont effectuées en interne pour marquer les régions mises à zéro de la LUN comme vides de toutes les données.
-
-Pour des raisons similaires, le test de performance impliquant des données mises à zéro n'est pas valide, car les blocs de zéros ne sont pas réellement traités comme des écritures dans la baie de stockage.
-
-Principales considérations relatives à l'ASRU avec ASA r2 ONTAP:
-
-* Fonctionne de la même manière AFF/ FAS pour les charges de travail SAN car ASA r2 est uniquement de type bloc.
-* S'applique aux LUN et aux espaces de noms NVMe provisionnés dans les SAZ.
-* Il n'existe pas de volumes FlexVol , mais le comportement de récupération des blocs nuls est identique.
-
-
-
-NOTE: Lorsque vous utilisez ASRU, assurez-vous que tous les correctifs recommandés par Oracle sont installés.

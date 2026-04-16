@@ -1,14 +1,14 @@
-= Des agrégats SSD, y compris les systèmes AFF
+= Agrégats SSD AFF et zones de disponibilité de stockage ASA
 :allow-uri-read: 
 
 
-L'espace libre est défini comme tout espace qui n'est pas utilisé pour les données réelles et inclut l'espace non alloué sur l'agrégat lui-même et l'espace inutilisé au sein des volumes constitutifs. Le provisionnement fin doit également être envisagé. Par exemple, un volume peut contenir une LUN de 1 To, dont seulement 50 % sont utilisés par des données réelles. Dans un environnement à provisionnement fin, cet espace semble être consommé de 500 Go. Toutefois, dans un environnement entièrement provisionné, la capacité totale de 1 To semble être utilisée. Les 500 Go d'espace non alloué sont masqués. Cet espace n'est pas utilisé par les données réelles et doit donc être inclus dans le calcul de l'espace libre total.
+L'espace libre est défini comme tout espace non utilisé pour des données réelles et comprend l'espace non alloué sur l'agrégat lui-même ainsi que l'espace inutilisé au sein des volumes qui le composent. Le provisionnement fin doit également être pris en compte. Par exemple, un volume AFF peut contenir un LUN de 1 To dont seulement 50 % est utilisé par des données réelles. Dans un environnement à provisionnement fin, cela apparaîtrait correctement comme consommant 500 Go d'espace. Cependant, dans un environnement à provisionnement complet, la totalité de la capacité de 1 To semble être utilisée. Les 500 Go d'espace non alloué sont masqués. Cet espace n'est pas utilisé par des données réelles et doit donc être inclus dans le calcul de l'espace libre total.
 
 Les recommandations de NetApp pour les systèmes de stockage utilisés pour les applications d'entreprise sont les suivantes :
 
 
 
-== Des agrégats SSD, y compris les systèmes AFF
+== Agrégats SSD AFF et zones de disponibilité de stockage ASA
 
 
 TIP: *NetApp recommande* un minimum de 10% d'espace libre. Cela inclut tout l'espace inutilisé, y compris l'espace libre au sein de l'agrégat ou d'un volume, ainsi que tout espace libre alloué en raison de l'utilisation du provisionnement complet, mais qui n'est pas utilisé par les données réelles. L'espace logique n'est pas important, la question est de savoir quelle quantité d'espace physique réellement disponible pour le stockage des données.

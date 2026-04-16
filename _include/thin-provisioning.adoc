@@ -24,7 +24,10 @@ Voir la link:https://docs.netapp.com/us-en/ontap/volumes/index.html["documentati
 
 La réserve fractionnaire fait référence au comportement d'une LUN dans un volume en ce qui concerne l'efficacité de l'espace. Lorsque l'option `fractional-reserve` est défini sur 100 %. toutes les données du volume peuvent connaître un taux de rotation de 100 % avec n'importe quel modèle de données, sans épuiser l'espace sur le volume.
 
-Par exemple, prenons l'exemple d'une base de données située sur une seule LUN de 250 Go dans un volume de 1 To. La création d'un snapshot entraînerait immédiatement la réservation d'un espace supplémentaire de 250 Go dans le volume, garantissant ainsi que l'espace disponible sur le volume ne serait pas insuffisant pour quelque raison que ce soit. L'utilisation de réserves fractionnaires est généralement inutile car il est très peu probable que chaque octet du volume de base de données ait besoin d'être écrasé. Il n'y a aucune raison de réserver de l'espace pour un événement qui ne se produit jamais. Cependant, si un client ne peut pas surveiller la consommation d'espace dans un système de stockage et doit être certain que l'espace ne sera jamais épuisé, des réservations fractionnaires de 100 % seront nécessaires pour utiliser les snapshots.
+Prenons l'exemple d'une base de données stockée sur un LUN unique de 250 Go au sein d'un volume de 1 To sur un système AFF. La création d'un instantané entraînerait immédiatement la réservation de 250 Go supplémentaires dans le volume afin de garantir que le volume ne soit jamais saturé pour quelque raison que ce soit. L'utilisation de réserves fractionnaires est généralement inutile, car il est extrêmement improbable que chaque octet du volume de la base de données doive être réécrit. Il n'y a aucune raison de réserver de l'espace pour un événement qui ne se produit jamais. Toutefois, si un client ne peut pas surveiller la consommation d'espace dans un système de stockage et doit être certain que l'espace ne sera jamais saturé, des réserves fractionnaires à 100 % seront nécessaires pour utiliser les instantanés.
+
+
+TIP: L'abstraction de volume n'est pas présente sur SAN-only l'ASA, et par conséquent cette plateforme n'utilise pas de réserves fractionnaires.
 
 
 
@@ -32,7 +35,7 @@ Par exemple, prenons l'exemple d'une base de données située sur une seule LUN 
 
 La compression et la déduplication sont deux formes de provisionnement fin. Par exemple, une empreinte des données de 50 To peut être compressée jusqu'à 30 To, ce qui permet d'économiser 20 To. Pour que la compression offre tous les avantages, il faut utiliser quelques 20 To pour d'autres données ou acheter le système de stockage avec moins de 50 To. Il en résulte une quantité de données stockées supérieure à ce qui n'est techniquement disponible sur le système de stockage. Du point de vue des données, il y a 50 To de données, même si celles-ci ne occupent que 30 To sur les disques.
 
-Il est toujours possible que la compressibilité d'un dataset change, ce qui entraîne une consommation accrue de l'espace réel. Cette augmentation de la consommation signifie que la compression doit être gérée comme avec les autres formes de provisionnement fin en termes de surveillance et d'utilisation `volume-autogrow` et `snapshot-autodelete`.
+Il est toujours possible que la compressibilité d'un ensemble de données change, ce qui entraînerait une augmentation de la consommation d'espace réel. Cette augmentation de la consommation signifie que la compression doit être gérée comme pour les autres formes de provisionnement fin en termes de surveillance et, sur un système AFF, à l'aide de  `volume-autogrow` et  `snapshot-autodelete`.
 
 La compression et la déduplication sont présentées plus en détail dans la section link:efficiency.html
 
@@ -54,7 +57,7 @@ Bien que cette situation puisse sembler confuse, il est peu probable qu'elle soi
 
 [TIP]
 ====
-*NetApp recommande* les configurations de réserve suivantes :
+*NetApp recommande* les configurations de réserve suivantes avec les plateformes AFF et FAS :
 
 * Réglez `fractional-reserve` à 0 lorsque la surveillance de la capacité de base est en place avec `volume-autogrow` et `snapshot-autodelete`.
 * Réglez `fractional-reserve` à 100 s'il n'y a pas de capacité de surveillance ou s'il est impossible d'évacuer l'espace en quelque circonstance que ce soit.
