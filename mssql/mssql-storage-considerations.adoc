@@ -28,11 +28,11 @@ Lorsque vous créez une nouvelle base de données, Microsoft recommande de spéc
 
 
 
-== 64 bits
+== Agrégats AFF
 
-Les agrégats constituent les conteneurs de stockage de niveau le plus bas pour les configurations de stockage NetApp. Il existe sur Internet une documentation existante qui recommande de séparer les E/S sur différents jeux de disques sous-jacents. Ceci n'est pas recommandé avec ONTAP. NetApp a effectué plusieurs tests de caractérisation des charges de travail d'E/S à l'aide d'agrégats partagés et dédiés, avec des fichiers de données et des fichiers journaux de transactions séparés. Les tests montrent qu'un grand agrégat avec plus de disques et de groupes RAID optimise et améliore les performances du stockage et est plus facile à gérer pour les administrateurs pour deux raisons :
+Les agrégats constituent le niveau de stockage le plus bas pour les configurations de stockage AFF. Certaines documentations anciennes disponibles sur Internet recommandent de séparer les E/S sur différents ensembles de disques sous-jacents. Cette approche est déconseillée avec ONTAP. NetApp a réalisé divers tests de caractérisation de la charge de travail d’E/S à l’aide d’agrégats partagés et dédiés, avec des fichiers de données et des fichiers journaux de transactions séparés. Les tests démontrent qu’un agrégat de grande taille, comportant davantage de groupes RAID et de disques, optimise et améliore les performances de stockage et simplifie la gestion pour les administrateurs, et ce pour deux raisons :
 
-* Un grand agrégat rend les capacités d'E/S de tous les disques disponibles pour tous les fichiers.
+* Un seul agrégat/SA de grande taille met les capacités d'E/S de tous les disques à la disposition de tous les fichiers.
 * Un seul grand agrégat permet d'optimiser l'utilisation de l'espace disque.
 
 

@@ -85,7 +85,7 @@ La qualité de service minimale et/ou maximale peut être facilement définie su
 Lors de la création du profil de capacité de stockage pour le conteneur vVol, spécifiez une valeur IOPS max et/ou min sous la fonctionnalité de performance, puis indiquez ce SCP avec la stratégie de stockage de la VM. Utilisez cette règle lors de la création de la machine virtuelle ou appliquez-la à une machine virtuelle existante.
 
 
-NOTE: VVols a besoin des outils ONTAP pour VMware vSphere qui fonctionnent comme le VASA Provider pour ONTAP. Reportez-vous à link:/vmware/vmware-vvols-overview.html["VMware vSphere Virtual volumes (vVols) avec ONTAP"] la pour connaître les bonnes pratiques vVols.
+NOTE: vVols nécessite l'utilisation des ONTAP tools for VMware vSphere, qui fonctionnent comme le fournisseur VASA pour ONTAP. Consultez link:vmware-vvols-overview.html["VMware vSphere Virtual volumes (vVols) avec ONTAP"] pour les bonnes pratiques vVols.
 
 
 
