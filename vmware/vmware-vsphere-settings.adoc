@@ -150,6 +150,7 @@ Lors de la création de volumes et de LUN ONTAP FlexVol, les outils ONTAP permet
 |===
 
 
+[[multipath-settings-for-performance]]
 == Paramètres de chemins d'accès multiples pour les performances
 
 Bien qu'il ne soit pas actuellement configuré par les outils ONTAP disponibles, NetApp suggère les options de configuration suivantes :
@@ -160,6 +161,7 @@ Bien qu'il ne soit pas actuellement configuré par les outils ONTAP disponibles,
 
 
 
+[[additional-documentation]]
 == Documentation complémentaire
 
 Pour FCP et iSCSI avec vSphere 7, des informations supplémentaires sont disponibles à l'adresse link:https://docs.netapp.com/us-en/ontap-sanhost/hu_vsphere_7.html["Utilisez VMware vSphere 7.x avec ONTAP"^] pour FCP et iSCSI avec vSphere 8. Vous trouverez plus de détails à l'adresse link:https://docs.netapp.com/us-en/ontap-sanhost/hu_vsphere_8.html["Utilisez VMware vSphere 8.x avec ONTAP"^] concernant NVMe-of avec vSphere 7. Des informations plus détaillées sont disponibles à l'adresse link:https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_7.html["Pour plus de détails sur NVMe-of, consultez la page Configuration d'hôte NVMe-of pour ESXi 7.x avec ONTAP"^] concernant NVMe-of avec vSphere 8. Des informations plus détaillées sont disponibles à l'adresse link:https://docs.netapp.com/us-en/ontap-sanhost/nvme_esxi_8.html["Pour plus de détails sur NVMe-of, consultez la page Configuration d'hôte NVMe-of pour ESXi 8.x avec ONTAP"^]

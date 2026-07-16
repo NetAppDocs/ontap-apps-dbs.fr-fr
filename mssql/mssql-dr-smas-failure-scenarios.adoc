@@ -20,30 +20,35 @@ Pour les exemples suivants, supposons que le site A est configuré comme le site
 
 
 
+[[loss-of-replication-connectivity]]
 == Perte de la connectivité de réplication
 
 Si la réplication SM-AS est interrompue, l'E/S d'écriture ne peut pas être terminée, car un cluster ne peut pas répliquer les modifications sur le site opposé.
 
 
 
+[[site-a-preferred-site]]
 == Site A (site préféré)
 
 Le résultat de l'échec de la liaison de réplication sur le site préféré sera une pause d'environ 15 secondes dans le traitement des E/S d'écriture, car ONTAP relance les opérations d'écriture répliquées avant de déterminer que la liaison de réplication est véritablement inaccessible. Au bout de 15 secondes, le site A du système reprend le traitement des E/S de lecture et d'écriture. Les chemins SAN ne changent pas et les LUN restent en ligne.
 
 
 
+[[site-b]]
 == Site B
 
 Le site B n'étant pas le site privilégié de synchronisation active SnapMirror, ses chemins de LUN deviennent indisponibles au bout de 15 secondes environ.
 
 
 
+[[storage-system-failure]]
 == Panne du système de stockage
 
 Le résultat d'une défaillance du système de stockage est presque identique au résultat de la perte du lien de réplication. Le site survivant devrait subir une pause d'E/S d'environ 15 seconde. Une fois cette période de 15 secondes écoulée, l'E/S reprend sur ce site comme d'habitude.
 
 
 
+[[loss-of-the-mediator]]
 == Perte du médiateur
 
 Le service médiateur ne contrôle pas directement les opérations de stockage. Il fonctionne comme un chemin de contrôle alternatif entre les clusters. Il existe principalement pour automatiser le basculement sans les risques associés à un scénario « split-brain ». En conditions normales de fonctionnement, chaque cluster réplique les modifications apportées à son partenaire et chaque cluster peut donc vérifier que le cluster partenaire est en ligne et qu'il transmet les données. Si le lien de réplication échoue, la réplication s'arrête.
@@ -66,6 +71,7 @@ Si le médiateur n'est pas disponible :
 
 
 
+[[restoring-services]]
 == Restauration des services
 
 Après résolution d'une panne, par exemple lors de la restauration de la connectivité site à site ou de la mise sous tension d'un système défaillant, les terminaux de synchronisation active SnapMirror détectent automatiquement la présence d'une relation de réplication défectueuse et la raverront à l'état RPO=0. Une fois la réplication synchrone rétablie, les chemins défaillants se reconnectent.
@@ -74,6 +80,7 @@ Dans de nombreux cas, les applications en cluster détectent automatiquement le 
 
 
 
+[[manual-failover]]
 == Basculement manuel
 
 La modification du site préféré nécessite une opération simple. L'E/S s'interrompt pendant une ou deux secondes car l'autorité sur le comportement de réplication change entre les clusters, mais l'E/S n'est pas affectée.

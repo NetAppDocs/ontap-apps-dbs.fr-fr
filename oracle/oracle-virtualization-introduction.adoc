@@ -14,6 +14,7 @@ La virtualisation des bases de données avec VMware, Oracle OLVM ou KVM est un c
 
 
 
+[[supportability]]
 == Prise en charge
 
 Il existe de nombreuses idées fausses sur les politiques de prise en charge d'Oracle pour la virtualisation, en particulier pour les produits VMware. Il n'est pas rare d'entendre qu'Oracle ne prend pas en charge la virtualisation. Cette notion est incorrecte et ne permet pas de bénéficier de la virtualisation. Oracle Doc ID 249212.1 traite des besoins réels et est rarement considéré par les clients comme un problème.
@@ -22,6 +23,7 @@ Si un problème se produit sur un serveur virtualisé et que ce problème n'est 
 
 
 
+[[storage-presentation]]
 == Présentation du stockage
 
 Les clients qui envisagent de virtualiser leurs bases de données doivent baser leurs décisions de stockage sur leurs besoins métier. Bien qu'il s'agisse généralement d'une véritable déclaration pour toutes les décisions IT, elle est particulièrement importante pour les projets de base de données, car la taille et le champ d'application des exigences varient considérablement.
@@ -36,12 +38,14 @@ Il existe trois options de base pour la présentation du stockage :
 
 
 
+[[performance]]
 === Performance
 
 La méthode de présentation du stockage à un invité virtualisé n'a généralement pas d'incidence sur les performances. Les systèmes d'exploitation hôtes, les pilotes réseau virtualisés et les implémentations de datastores d'hyperviseurs sont tous optimisés et peuvent généralement utiliser toute la bande passante réseau FC ou IP disponible entre l'hyperviseur et le système de stockage, dans la mesure où les meilleures pratiques de base sont respectées. Dans certains cas, il peut être légèrement plus facile d'obtenir des performances optimales en utilisant une approche de présentation du stockage par rapport à une autre, mais le résultat final devrait être comparable.
 
 
 
+[[manageability]]
 === Gestion aisée
 
 Le facteur clé dans la décision de présenter le stockage à un invité virtualisé est la mangeabilité. Il n'y a pas de bonne ou de mauvaise méthode. La meilleure approche dépend des besoins, des compétences et des préférences opérationnels de l'IT.
@@ -64,18 +68,21 @@ L'utilisation de systèmes de fichiers détenus par les clients facilite parfois
 
 
 
+[[paravirtualized-drivers]]
 == Pilotes paravirtualisés
 
 Pour des performances optimales, l'utilisation de pilotes de réseau paravirtualisés est essentielle. Lorsqu'un datastore est utilisé, un pilote SCSI paravirtualisé est requis. Un pilote de périphérique paravirtualisé permet à un invité de s'intégrer plus profondément dans l'hyperviseur, au lieu d'un pilote émulé dans lequel l'hyperviseur passe plus de temps CPU à imiter le comportement du matériel physique.
 
 
 
+[[overcommitting-ram]]
 == Saturation de la mémoire RAM
 
 La saturation de la mémoire RAM implique la configuration d'une quantité de mémoire RAM virtualisée supérieure à celle qui existe sur le matériel physique sur différents hôtes. Cela peut entraîner des problèmes de performances inattendus. Lors de la virtualisation d'une base de données, les blocs sous-jacents de la SGA d'Oracle ne doivent pas être remplacés par l'hyperviseur vers le stockage. Cela entraîne des résultats de performances très instables.
 
 
 
+[[datastore-striping]]
 == Répartition des datastores
 
 Lorsque vous utilisez des bases de données avec des datastores, un facteur critique est à prendre en compte en ce qui concerne la répartition des performances.

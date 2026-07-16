@@ -16,6 +16,7 @@ NOTE: Depuis la version ONTAP 9.7, le chiffrement des agrégats et des volumes e
 
 
 
+[[autodelete-snapshots]]
 == Suppression automatique des instantanés
 
 Pour supprimer automatiquement des instantanés : https://docs.netapp.com/us-en/ontap-cli-9141//volume-snapshot-autodelete-modify.html[]

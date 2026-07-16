@@ -19,6 +19,7 @@ Les règles de Tiering contrôlent quels blocs de base de données Oracle sont h
 
 
 
+[[default]]
 == Valeur par défaut
 
 Tous les volumes FabricPool sont initialement définis sur `default`, ce qui signifie que le comportement est contrôlé par la `cloud-retrieval-policy. `le comportement exact dépend de la règle de hiérarchisation utilisée.
@@ -31,6 +32,7 @@ Tous les volumes FabricPool sont initialement définis sur `default`, ce qui sig
 
 
 
+[[on-read]]
 == En lecture
 
 Réglage `cloud-retrieval-policy` la lecture remplace le comportement par défaut, de sorte qu'une lecture de toutes les données hiérarchisées entraîne le renvoi de ces données vers le niveau de performance.
@@ -41,6 +43,7 @@ Si une modification inattendue des besoins de l'entreprise nécessitait l'analys
 
 
 
+[[promote]]
 == Promouvoir
 
 Le comportement de la règle de promotion dépend de la règle de hiérarchisation. Si la règle de hiérarchisation est `auto`, puis réglage du `cloud-retrieval-policy `to `promote` ramène tous les blocs du tier de capacité à l'analyse de tiering suivante.
@@ -51,6 +54,7 @@ Toutefois, si une SnapRestore de volume ou une opération de clonage de fichiers
 
 
 
+[[never]]
 == Jamais
 
 Ne récupérez pas les blocs du niveau de capacité.

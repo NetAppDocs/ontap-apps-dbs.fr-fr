@@ -4,6 +4,7 @@
 
 
 
+[[efficiency-and-thin-provisioning]]
 == Efficacité et provisionnement fin
 
 Les fonctions d'efficacité sont des formes de provisionnement fin. Par exemple, une LUN de 100 Go occupant un volume de 100 Go peut compresser à 50 Go. Aucune économie réelle n'est encore réalisée, car le volume est toujours de 100 Go. Le volume doit d'abord être réduit afin que l'espace économisé puisse être utilisé ailleurs sur le système. Si des modifications ultérieures de la LUN de 100 Go réduisent la taille des données compressibles, la LUN augmente et le volume pourrait se remplir.

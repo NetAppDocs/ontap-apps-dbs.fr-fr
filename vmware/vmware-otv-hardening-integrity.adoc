@@ -24,6 +24,7 @@ Les sommes de contrôle sont fournies sur les pages de téléchargement des paqu
 
 
 
+[[verifying-the-signature-of-the-ontap-tools-ova]]
 == Vérification de la signature des outils ONTAP OVA
 
 Le paquet d'installation de vApp est livré sous la forme d'une boule de commande. Ce tarball contient des certificats intermédiaires et racine pour l'appliance virtuelle, ainsi qu'un fichier README et un package OVA. Le fichier README guide les utilisateurs sur la façon de vérifier l'intégrité du progiciel VApp OVA.
@@ -32,6 +33,7 @@ Les clients doivent également télécharger les certificats racine et interméd
 
 
 
+[[uploading-the-trusted-root-certificate-to-vcenter]]
 === Téléchargement du certificat racine sécurisé vers vCenter
 
 . Connectez-vous à vCenter Server à l'aide du client VMware vSphere.
@@ -49,6 +51,7 @@ image:vmware-otv-hardening-trusted-publisher.png["Certificat de confiance"]
 
 
 
+[[verifying-the-signature-of-the-ontap-tools-iso-and-sra-tar-gz]]
 == Vérification de la signature des outils ONTAP ISO et SRA tar.gz
 
 NetApp partage son certificat de signature de code avec les clients sur la page de téléchargement du produit, ainsi que les fichiers zip du produit pour OTV-ISO et SRA.tgz.

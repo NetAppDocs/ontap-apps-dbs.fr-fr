@@ -14,6 +14,7 @@ Comme indiqué précédemment, la présence d'un système MetroCluster n'ajoute 
 
 
 
+[[failover-with-a-preconfigured-os]]
 == Basculement avec un système d'exploitation préconfiguré
 
 SyncMirror livre une copie synchrone des données au niveau du site de reprise d'activité. La mise à disposition des données requiert un système d'exploitation et les applications associées. L'automatisation de base peut considérablement améliorer le délai de basculement de l'environnement global. Les produits Clusterware tels que Veritas Cluster Server (VCS) sont souvent utilisés pour créer un cluster sur les sites et, dans la plupart des cas, le processus de basculement peut être piloté par des scripts simples.
@@ -32,6 +33,7 @@ La procédure d'activation réelle est simple. Les commandes telles que la déco
 
 
 
+[[failover-with-a-virtualized-os]]
 == Basculement avec un système d'exploitation virtualisé
 
 Le basculement des environnements de base de données peut être étendu pour inclure le système d'exploitation lui-même. En théorie, ce basculement peut être effectué avec des LUN de démarrage, mais le plus souvent avec un système d'exploitation virtualisé. La procédure est similaire aux étapes suivantes :

@@ -14,6 +14,7 @@ Rubriques de configuration spécifiques au système d'exploitation Solaris.
 
 
 
+[[solaris-nfs-mount-options]]
 == Options de montage Solaris NFS
 
 Le tableau suivant répertorie les options de montage Solaris NFS pour une seule instance.
@@ -74,18 +75,21 @@ La raison `actimeo=0` est requis pour le partage `ORACLE_HOME` Les déploiements
 
 
 
+[[solaris-ufs-mount-options]]
 == Options de montage Solaris UFS
 
 NetApp recommande fortement d'utiliser l'option de montage de journalisation afin de préserver l'intégrité des données en cas de panne de l'hôte Solaris ou d'interruption de la connectivité FC. L'option de montage de la journalisation préserve également l'utilisation des sauvegardes Snapshot.
 
 
 
+[[solaris-zfs]]
 == ZFS Solaris
 
 Solaris ZFS doit être installé et configuré avec soin pour offrir des performances optimales.
 
 
 
+[[mvector]]
 === mvector
 
 Solaris 11 a inclus un changement dans la façon dont il traite les opérations d'E/S importantes, ce qui peut entraîner de graves problèmes de performances sur les baies de stockage SAN. Le problème est documenté NetApp suivi bug report 630173, "Solaris 11 ZFS Performance regression".
@@ -106,12 +110,14 @@ En cas de problème inattendu résultant de cette modification, vous pouvez faci
 ....
 
 
+[[kernel]]
 == Noyau
 
 Pour des performances ZFS fiables, un noyau Solaris est nécessaire pour résoudre les problèmes d'alignement des LUN. Le correctif a été introduit avec le correctif 147440-19 dans Solaris 10 et avec SRU 10.5 pour Solaris 11. Utilisez uniquement Solaris 10 et versions ultérieures avec ZFS.
 
 
 
+[[lun-configuration]]
 == Configuration du LUN
 
 Pour configurer une LUN, effectuez les opérations suivantes :
@@ -130,6 +136,7 @@ Pour configurer une LUN, effectuez les opérations suivantes :
 
 
 
+[[zpools]]
 === zpools
 
 Un zpool ne doit être créé qu'après les étapes de la link:oracle-host-config-solaris.html#lun-configuration["Configuration du LUN"] sont effectuées. Si la procédure n'est pas effectuée correctement, les performances risquent d'être sérieusement dégradées en raison de l'alignement des E/S. Pour des performances optimales sur ONTAP, les E/S doivent être alignées sur une limite de 4 Ko sur un disque. Les systèmes de fichiers créés sur un zpool utilisent une taille de bloc effective qui est contrôlée par un paramètre appelé `ashift`, qui peut être affiché en exécutant la commande `zdb -C`.
@@ -140,6 +147,7 @@ Après avoir créé un zpool, vérifiez la valeur de `ashift` avant de continuer
 
 
 
+[[zpools-and-solaris-ldoms]]
 === Zpools et LDOMS Solaris
 
 Les LDOMS Solaris créent une exigence supplémentaire pour s'assurer que l'alignement des E/S est correct. Bien qu'un LUN soit correctement découvert en tant que périphérique 4K, un périphérique virtuel vdsk sur un LDOM n'hérite pas de la configuration du domaine d'E/S. Le vdsk basé sur cette LUN revient par défaut à un bloc de 512 octets.
@@ -215,12 +223,14 @@ block-size-list="1:8192","2:8192","3:8192","4:8192","5:8192","6:8192";
 
 
 
+[[zfs-intent-log-zil]]
 === Journal des intentions ZFS (ZIL)
 
 En général, il n'y a aucune raison de localiser le ZFS Intent Log (ZIL) sur un autre périphérique. Le journal peut partager de l'espace avec le pool principal. L'utilisation principale d'une ZIL distincte est l'utilisation de disques physiques qui n'offrent pas les fonctionnalités de mise en cache des écritures dans les baies de stockage modernes.
 
 
 
+[[logbias]]
 === biais logique
 
 Réglez le `logbias` Paramètre sur les systèmes de fichiers ZFS hébergeant les données Oracle.
@@ -234,18 +244,21 @@ Lorsque vous utilisez une baie de stockage moderne qui inclut sa propre capacit�
 
 
 
+[[direct-io]]
 === E/S directes
 
 De nombreuses applications, y compris les produits Oracle, peuvent contourner le cache du tampon hôte en activant des E/S directes Cette stratégie ne fonctionne pas comme prévu avec les systèmes de fichiers ZFS. Bien que le cache du tampon hôte soit contourné, ZFS lui-même continue à mettre en cache les données. Cette action peut entraîner des résultats trompeurs lors de l'utilisation d'outils tels que fio ou Sio pour effectuer des tests de performances. En effet, il est difficile de prévoir si les E/S atteignent le système de stockage ou si elles sont mises en cache localement au sein du système d'exploitation. Cette action rend également très difficile l'utilisation de tels tests synthétiques pour comparer les performances ZFS aux autres systèmes de fichiers. D'un point de vue pratique, les performances du système de fichiers varient considérablement, voire nulle, pour les charges de travail réelles des utilisateurs.
 
 
 
+[[multiple-zpools]]
 === Plusieurs zpools
 
 Les sauvegardes, les restaurations, les clones et l'archivage des données ZFS basés sur des snapshots doivent être effectués au niveau du zpool et requièrent généralement plusieurs zpools. Un zpool est similaire à un groupe de disques LVM et doit être configuré à l'aide des mêmes règles. Par exemple, il est probablement préférable de définir au mieux une base de données avec les fichiers de données résidant sur `zpool1` ainsi que les journaux d'archivage, les fichiers de contrôle et les journaux de reprise qui résident sur `zpool2`. Cette approche permet une sauvegarde à chaud standard dans laquelle la base de données est placée en mode de sauvegarde à chaud, suivie d'un snapshot de `zpool1`. La base de données est alors supprimée du mode de sauvegarde à chaud, l'archivage des journaux est forcé et un instantané de `zpool2` est créé. Une opération de restauration nécessite de démonter les systèmes de fichiers zfs et de mettre hors ligne le zpool dans son intégralité, après une opération de restauration SnapRestore. Le zpool peut alors être remis en ligne et la base de données récupérée.
 
 
 
+[[filesystemiooptions]]
 === filesytemio_options
 
 Le paramètre Oracle `filesystemio_options` Fonctionne différemment avec ZFS. Si `setall` ou `directio` Est utilisé, les opérations d'écriture sont synchrones et contournent le cache du tampon du système d'exploitation, mais les lectures sont mises en tampon par ZFS. Cette action engendre des difficultés dans l'analyse des performances, car les E/S sont parfois interceptées et traitées par le cache ZFS, ce qui rend la latence du stockage et les E/S totales inférieures à ce qu'elles semblent être.

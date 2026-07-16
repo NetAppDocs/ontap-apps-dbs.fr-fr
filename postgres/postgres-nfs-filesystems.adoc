@@ -32,6 +32,7 @@ Si des E/S séquentielles lourdes sont attendues, la taille du transfert NFS peu
 
 
 
+[[nfs-transfer-sizes]]
 == Tailles de transfert NFS
 
 Par défaut, ONTAP limite la taille des E/S NFS à 64 Ko.
@@ -59,6 +60,7 @@ rw,hard,nointr,bg,vers=[3|4],proto=tcp,rsize=262144,wsize=262144
 ....
 
 
+[[nfsv3-tcp-slot-tables]]
 == Tables d'emplacements TCP NFSv3
 
 Si NFSv3 est utilisé avec Linux, il est essentiel de définir correctement les tables d'emplacements TCP.

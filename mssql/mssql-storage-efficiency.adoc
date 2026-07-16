@@ -25,6 +25,7 @@ NOTE: Reportez-vous aux sections ci-dessous sur le provisionnement fin pour une 
 
 
 
+[[compression]]
 == Compression
 
 Avant la disponibilité des systèmes de stockage 100 % Flash, la compression basée sur les baies était d'une valeur limitée, car la plupart des charges de travail exigeantes en E/S nécessitaient un très grand nombre de piles pour obtenir une performance acceptable. Les systèmes de stockage contenaient invariablement beaucoup plus de capacité que nécessaire, ce qui a pour effet d'augmenter le nombre de disques. La situation a changé avec la montée du stockage Solid-State. Il n'est plus nécessaire de surprovisionner des disques uniquement pour obtenir de bonnes performances. L'espace disque d'un système de stockage peut être adapté aux besoins réels en termes de capacité.
@@ -35,6 +36,7 @@ Il existe plusieurs façons de compresser les données. De nombreuses bases de d
 
 
 
+[[adaptive-compression]]
 === Compression adaptative
 
 La compression adaptative a été testée en profondeur avec des charges de travail exigeantes sans effet sur les performances, même dans un environnement 100 % Flash où la latence se mesure en microsecondes. Certains clients ont même signalé une augmentation des performances due à l'utilisation de la compression, car les données restent compressées dans le cache, augmentant ainsi la quantité de cache disponible dans un contrôleur.
@@ -49,6 +51,7 @@ CAUTION: Les tailles de bloc de compression supérieures à 8 Ko ne doivent pas 
 
 
 
+[[compression-alignment]]
 === Alignement de compression
 
 La compression adaptative dans un environnement de base de données nécessite un certain respect de l'alignement des blocs de compression. Cela ne préoccupe que les données soumises à des écrasements aléatoires de blocs très spécifiques. Cette approche est similaire à l'alignement global du système de fichiers, où le début d'un système de fichiers doit être aligné sur une limite de périphérique de 4 Ko et la taille de bloc d'un système de fichiers doit être un multiple de 4 Ko.
@@ -59,6 +62,7 @@ Les données telles que les sauvegardes ou les journaux de transactions sont des
 
 
 
+[[data-compaction]]
 == Compaction
 
 La compaction est une technologie qui améliore l'efficacité de la compression. Comme indiqué précédemment, la compression adaptative à elle seule permet d'économiser 2:1 au maximum, car elle se limite au stockage d'une E/S de 8 Ko dans un bloc WAFL de 4 Ko. Les méthodes de compression avec des blocs de taille supérieure améliorent l'efficacité. Cependant, elles ne conviennent pas aux données soumises à des remplacements de blocs de petite taille. La décompression d'unités de données de 32 Ko, la mise à jour d'une partie de 8 Ko, la recompression et l'écriture sur les disques entraînent une surcharge.
@@ -69,12 +73,14 @@ Le degré d'économie obtenu varie. En général, les données déjà compressé
 
 
 
+[[temperature-sensitive-storage-efficiency]]
 === Efficacité du stockage sensible à la température
 
 L'efficacité de stockage sensible à la température (TSSE) est disponible dans ONTAP 9.8 et versions ultérieures. Il s'appuie sur des cartes thermiques d'accès aux blocs pour identifier les blocs peu utilisés et les compresser à l'aide d'une meilleure efficacité.
 
 
 
+[[deduplication]]
 == Déduplication
 
 La déduplication permet de supprimer les tailles de bloc dupliquées d'un dataset. Par exemple, si le même bloc de 4 Ko existe dans 10 fichiers différents, la déduplication redirige ce bloc de 4 Ko au sein des 10 fichiers vers le même bloc physique de 4 Ko. Résultat : une amélioration de l'efficacité de ces données de 10:1.
@@ -89,6 +95,7 @@ De nombreuses baies concurrentes prétendent être capables de dédupliquer des 
 
 
 
+[[efficiency-and-thin-provisioning]]
 == Efficacité et provisionnement fin
 
 Les fonctions d'efficacité sont des formes de provisionnement fin. Par exemple, une LUN de 100 Go occupant un volume de 100 Go peut compresser à 50 Go. Aucune économie réelle n'est encore réalisée, car le volume est toujours de 100 Go. Le volume doit d'abord être réduit afin que l'espace économisé puisse être utilisé ailleurs sur le système. Si des modifications ultérieures de la LUN de 100 Go réduisent la taille des données compressibles, la LUN augmente et le volume pourrait se remplir.
@@ -102,18 +109,21 @@ CAUTION: Si un volume est configuré en mode « Thick provisioning », veillez �
 
 
 
+[[efficiency-best-practices]]
 == Meilleures pratiques en matière d'efficacité
 
 *NetApp recommande* ce qui suit :
 
 
 
+[[aff-and-asa-defaults]]
 === Valeurs par défaut AFF et ASA
 
 Les volumes créés sur ONTAP exécuté sur des systèmes AFF et les LUN/espaces de noms sur des systèmes ASA sont provisionnés de façon fine avec toutes les fonctionnalités d'efficacité en ligne activées. Bien que les bases de données ne tirent généralement pas profit de la déduplication et puissent contenir des données non compressibles, les paramètres par défaut conviennent néanmoins à la quasi-totalité des charges de travail. ONTAP est conçu pour traiter efficacement tous les types de données et de modèles d'E/S, qu'ils génèrent ou non des économies. Les paramètres par défaut ne doivent être modifiés que si les raisons sont parfaitement comprises et qu'il y a un avantage à s'en écarter.
 
 
 
+[[general-recommendations]]
 === Recommandations générales
 
 * Si les volumes AFF, les LUN ou les espaces de noms ne sont pas provisionnés de manière fine, vous devez désactiver tous les paramètres d'efficacité, car l'utilisation de ces fonctionnalités n'apporte aucune économie et la combinaison du provisionnement épais avec l'efficacité de l'espace activée peut entraîner un comportement inattendu, y compris des erreurs de manque d'espace.
@@ -124,6 +134,7 @@ Les volumes créés sur ONTAP exécuté sur des systèmes AFF et les LUN/espaces
 
 
 
+[[database-compression]]
 == Compression des bases de données
 
 SQL Server lui-même dispose également de fonctionnalités pour compresser et gérer efficacement les données. SQL Server prend actuellement en charge deux types de compression de données : la compression de ligne et la compression de page.
@@ -144,6 +155,7 @@ Voici les recommandations pour la gestion de l'espace pour les fichiers de donn�
 
 
 
+[[space-reclamation]]
 == Réclamations d'espace
 
 La récupération d'espace peut être lancée régulièrement pour restaurer l'espace inutilisé d'une LUN. Avec SnapCenter, vous pouvez utiliser la commande PowerShell suivante pour démarrer la récupération d'espace.

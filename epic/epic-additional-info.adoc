@@ -20,6 +20,7 @@ Pour en savoir plus sur les informations fournies dans ce document, consultez ce
 
 
 
+[[epic-customer-guidance-documents]]
 == Documents d'orientation client Epic
 
 Epic fournit aux clients les documents suivants à des fins d'assistance sur les serveurs, le stockage et le réseau. Ces documents sont référencés dans ce rapport technique.

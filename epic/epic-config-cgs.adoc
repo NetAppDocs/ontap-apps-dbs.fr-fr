@@ -21,6 +21,7 @@ image:epic-cg-layout.png["Disposition des groupes de cohérence Epic"]
 
 
 
+[[consistency-group-snapshots]]
 == Snapshots de groupes de cohérence
 
 Un planning de snapshots de groupe de cohérence doit être défini chaque jour sur les groupes de cohérence enfant associés aux volumes fournissant du stockage pour la base de données de production. Cela donnera lieu à un nouvel ensemble de sauvegardes cohérentes de ces CGS chaque nuit. Vous pouvez ensuite les utiliser pour cloner la base de données de production afin de les utiliser dans des environnements hors production, tels que le développement et le test. NetApp a développé des workflows Ansible automatisés basés sur un groupe de cohérence propriétaire pour Epic afin d'automatiser la sauvegarde des bases de données de production, l'actualisation et les environnements de test.

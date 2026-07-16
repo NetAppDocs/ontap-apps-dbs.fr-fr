@@ -24,6 +24,7 @@ Ce document vous aidera à construire et à mettre en œuvre avec succès des DM
 
 
 
+[[purpose]]
 == Objectif
 
 Ce document présente les bonnes pratiques d'intégration du stockage NetApp dans un environnement logiciel Epic. Il contient les sections suivantes :
@@ -35,6 +36,7 @@ Ce document présente les bonnes pratiques d'intégration du stockage NetApp dan
 
 
 
+[[scope]]
 == Portée
 
 Ce document ne couvre pas les sujets suivants :
@@ -44,6 +46,7 @@ Ce document ne couvre pas les sujets suivants :
 
 
 
+[[audience]]
 == Public
 
 NetApp suppose que le lecteur possède les connaissances de base suivantes :

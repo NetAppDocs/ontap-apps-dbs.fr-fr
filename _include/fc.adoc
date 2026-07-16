@@ -6,6 +6,7 @@ Il s'agit notamment de mesures de planification courantes, telles que l'assuranc
 
 
 
+[[zoning]]
 == Segmentation
 
 Une zone FC ne doit jamais contenir plusieurs initiateurs. Un tel arrangement peut sembler fonctionner au départ, mais la diaphonie entre les initiateurs finit par interférer avec la performance et la stabilité.

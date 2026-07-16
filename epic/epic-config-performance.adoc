@@ -13,6 +13,7 @@ La plupart des baies 100 % Flash offrent les performances requises pour les work
 
 
 
+[[quality-of-service-qos]]
 == Qualité de service (QoS)
 
 NetApp recommande d'utiliser la QoS. Le bénéfice de la QoS est la possibilité de consolider tous les workloads Epic. Tous les protocoles et les pools de stockage peuvent résider sur moins de matériel. Il n'est pas nécessaire de séparer les pools de stockage.

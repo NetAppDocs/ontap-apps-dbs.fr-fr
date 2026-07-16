@@ -18,10 +18,12 @@ Les SVM ONTAP prennent en charge les protocoles de niveau bloc iSCSI et FC. Lors
 
 
 
+[[provisioning-netapp-lun-on-windows-server]]
 == Provisionnement de LUN NetApp sur Windows Server
 
 
 
+[[prerequisites]]
 === Prérequis
 
 L'utilisation d'un stockage NetApp dans des environnements SAN sous Windows Server présente les conditions suivantes :
@@ -36,6 +38,7 @@ L'utilisation d'un stockage NetApp dans des environnements SAN sous Windows Serv
 
 
 
+[[deployment]]
 === Déploiement
 
 . Créez un SVM avec le protocole de bloc iSCSI et/ou FC activé. Il est possible de créer un SVM avec l'une des méthodes suivantes :
@@ -77,6 +80,7 @@ L'IQN pour iSCSI sur Windows Server peut également être vérifié dans la conf
 
 
 
+[[host-integration]]
 === Intégration de l'hôte
 
 Windows Server utilise l'extension ALUA (Asymmetrical Logical Unit Access) MPIO pour déterminer les chemins directs et indirects vers les LUN. Bien que chaque LIF appartenant à un SVM accepte des demandes de lecture/écriture pour ses LUN, seul un des nœuds du cluster possède les disques sur lesquels cette LUN est supports à un moment donné. Cela divise les chemins disponibles pour une LUN en deux types, directs ou indirects, comme indiqué dans la figure suivante.
@@ -89,12 +93,14 @@ image:win_image3.png["Chemins multiples dans l'environnement SAN,largeur=624,hau
 
 
 
+[[mpio]]
 === MPIO
 
 ONTAP fournit un stockage hautement disponible dans lequel plusieurs chemins d'accès peuvent exister entre le contrôleur de stockage et le serveur Windows. Les chemins d'accès multiples correspondent à la capacité d'avoir plusieurs chemins de données entre un serveur et une baie de stockage. Les chemins d'accès multiples protègent contre les pannes matérielles (coupures de câbles, défaillance du switch et de l'adaptateur de bus hôte [HBA], etc.). Ils peuvent également offrir des limites de performances plus élevées en utilisant les performances d'agrégat de plusieurs connexions. Lorsqu'un chemin ou une connexion devient indisponible, le logiciel de chemins d'accès multiples déplace automatiquement la charge vers l'un des autres chemins disponibles. La fonctionnalité MPIO combine les chemins physiques multiples vers le stockage comme un chemin logique unique utilisé pour l'accès aux données, afin d'assurer la résilience du stockage et l'équilibrage de la charge. Pour utiliser cette fonctionnalité, la fonctionnalité MPIO doit être activée sur Windows Server.
 
 
 
+[[enable-mpio]]
 === Activez MPIO
 
 Pour activer MPIO sur Windows Server, procédez comme suit :
@@ -109,6 +115,7 @@ Pour activer MPIO sur Windows Server, procédez comme suit :
 
 
 
+[[configure-mpio]]
 === Configurer MPIO
 
 Lorsque vous utilisez le protocole iSCSI, vous devez demander à Windows Server d'appliquer la prise en charge des chemins d'accès multiples aux périphériques iSCSI dans les propriétés MPIO.
@@ -126,6 +133,7 @@ Pour configurer MPIO sur Windows Server, procédez comme suit :
 
 
 
+[[configure-iscsi]]
 === Configurez iSCSI
 
 Pour détecter le stockage en mode bloc iSCSI sur Windows Server, procédez comme suit :
@@ -151,6 +159,7 @@ Pour détecter le stockage en mode bloc iSCSI sur Windows Server, procédez comm
 
 
 
+[[detect-block-storage]]
 === Détecter le stockage bloc
 
 Pour détecter un stockage en mode bloc iSCSI ou FC sur Windows Server, effectuez les opérations suivantes :
@@ -162,6 +171,7 @@ Pour détecter un stockage en mode bloc iSCSI ou FC sur Windows Server, effectue
 
 
 
+[[best-practices]]
 === Et des meilleures pratiques
 
 * NetApp recommande d'activer le provisionnement fin sur les volumes hébergeant les LUN.
@@ -172,16 +182,19 @@ Pour détecter un stockage en mode bloc iSCSI ou FC sur Windows Server, effectue
 
 
 
+[[provisioning-netapp-luns-on-nano-server]]
 == Provisionnement des LUN NetApp sur le serveur Nano
 
 
 
+[[prerequisites]]
 === Prérequis
 
 En plus des conditions préalables mentionnées dans la section précédente, le rôle de stockage doit être activé du côté Nano Server. Par exemple, Nano Server doit être déployé à l'aide de l'option -Storage. Pour déployer Nano Server, reportez-vous à la section "link:win_deploy_nano.html["Déployez Nano Server."]«
 
 
 
+[[deployment]]
 === Déploiement
 
 Pour provisionner des LUN NetApp sur un serveur Nano, procédez comme suit :
@@ -298,12 +311,14 @@ Format-Volume -DriveLetter <DriveLetter> -FileSystem <FAT32 or NTFS or REFS>
 
 
 
+[[boot-from-san]]
 == Démarrage à partir du réseau SAN
 
 Un hôte physique (serveur) ou une machine virtuelle Hyper-V peut démarrer le système d'exploitation Windows Server directement à partir d'un LUN NetApp au lieu de son disque dur interne. Dans l'approche de démarrage à partir du SAN, l'image du système d'exploitation à partir de réside sur un LUN NetApp connecté à un hôte physique ou à une machine virtuelle. Dans le cas d'un hôte physique, le HBA de l'hôte physique est configuré pour utiliser le LUN NetApp pour le démarrage. Dans le cas d'une machine virtuelle, le LUN NetApp est connecté en tant que disque pass-through pour le démarrage.
 
 
 
+[[netapp-flexclone-approach]]
 === Approche NetApp FlexClone
 
 Grâce à la technologie NetApp FlexClone, les LUN de démarrage avec une image du système d'exploitation peuvent être clonées instantanément et reliées aux serveurs et aux serveurs virtuels pour fournir rapidement des images de système d'exploitation propres, comme illustré dans la figure suivante.
@@ -312,6 +327,7 @@ image:win_image4.png["Démarrage de LUN à l'aide de NetApp FlexClone,width=561,
 
 
 
+[[boot-from-san-for-physical-host]]
 === Démarrage à partir du SAN pour l'hôte physique
 
 
@@ -345,6 +361,7 @@ Pour configurer le démarrage à partir du réseau SAN pour un hôte physique, p
 
 
 
+[[boot-from-san-for-virtual-machine]]
 === Démarrage à partir du SAN pour la machine virtuelle
 
 Pour configurer le démarrage à partir du SAN pour une machine virtuelle, procédez comme suit :
@@ -370,6 +387,7 @@ Pour configurer le démarrage à partir du SAN pour une machine virtuelle, proc�
 
 
 
+[[best-practices]]
 === Et des meilleures pratiques
 
 * Assurez-vous que les LUN sont hors ligne. Sinon, le disque ne peut pas être ajouté en tant que disque pass-through à une machine virtuelle.

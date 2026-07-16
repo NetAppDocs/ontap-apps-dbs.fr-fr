@@ -14,6 +14,7 @@ ONTAP utilise en interne une taille de bloc variable, ce qui signifie que les ba
 
 
 
+[[datafile-block-sizes]]
 == Tailles des blocs de fichiers de données
 
 Certains systèmes d'exploitation offrent un choix de tailles de blocs de système de fichiers. Pour les systèmes de fichiers prenant en charge les fichiers de données Oracle, la taille de bloc doit être de 8 Ko lorsque la compression est utilisée. Lorsque la compression n'est pas requise, vous pouvez utiliser une taille de bloc de 8 Ko ou 4 Ko.
@@ -24,6 +25,7 @@ Les systèmes de fichiers prenant en charge les journaux de reprise doivent util
 
 
 
+[[redo-block-sizes]]
 == Rétablir les tailles des blocs
 
 Avec des taux de reprise très élevés, il est possible que des tailles de bloc de 4 Ko soient plus performantes, car les taux de reprise élevés permettent d'exécuter les E/S en moins d'opérations et de manière plus efficace. Si les taux de reprise sont supérieurs à 50 Mbit/s, envisagez de tester une taille de bloc de 4 Ko.

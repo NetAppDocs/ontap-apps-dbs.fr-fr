@@ -18,6 +18,7 @@ Les sections suivantes présentent les meilleures pratiques de déploiement avec
 
 
 
+[[use-the-latest-version-of-ontap-tools-10]]
 == Utiliser la dernière version des outils ONTAP 10
 
 Les outils ONTAP 10 offrent des améliorations significatives par rapport aux versions précédentes, notamment :
@@ -33,6 +34,7 @@ Les outils ONTAP 10 offrent des améliorations significatives par rapport aux ve
 
 
 
+[[svm-layout-and-segmentation-for-smt]]
 == Disposition des SVM et segmentation pour la colocation sécurisée
 
 Avec ONTAP, le concept de machine virtuelle de stockage (SVM) offre une segmentation stricte dans les environnements mutualisés sécurisés. Les utilisateurs des SVM situés sur un SVM ne peuvent ni accéder aux ressources d'un autre ni les gérer. De cette façon, vous pouvez exploiter la technologie ONTAP en créant des SVM distincts pour différentes unités commerciales qui gèrent leurs propres flux de travail SRM sur le même cluster, pour une efficacité globale supérieure du stockage.
@@ -41,6 +43,7 @@ Envisagez de gérer ONTAP avec des comptes SVM-scoped et des LIF de management S
 
 
 
+[[best-practices-for-managing-ontap-9-systems]]
 == Meilleures pratiques pour la gestion des systèmes ONTAP 9
 
 Comme mentionné précédemment, il est possible de gérer des clusters ONTAP avec des identifiants cluster ou SVM évalués et des LIF de gestion. Pour des performances optimales, il peut être intéressant d'utiliser des identifiants SVM- scoped lorsque vous n'utilisez pas les vVols. Cependant, ce faisant, vous devriez être conscient de certaines exigences, et que vous perdez certaines fonctionnalités.

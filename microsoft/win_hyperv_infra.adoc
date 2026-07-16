@@ -20,6 +20,7 @@ image:win_image5.png["Infrastructure de stockage Hyper-V sur NetApp, largeur=624
 
 
 
+[[hyper-v-storage-on-netapp-luns]]
 == Stockage Hyper-V sur LUN NetApp
 
 * Provisionner un LUN NetApp sur le serveur Hyper-V. Pour plus d'informations, reportez-vous à la section «link:win_san.html["Le provisionnement dans des environnements SAN"]."
@@ -30,6 +31,7 @@ image:win_image5.png["Infrastructure de stockage Hyper-V sur NetApp, largeur=624
 
 
 
+[[hyper-v-storage-on-netapp-cifs]]
 == Stockage Hyper-V sur NetApp CIFS
 
 Avant de commencer les étapes énumérées dans cette section, passez en revue la section «link:win_smb.html["Le provisionnement dans les environnements SMB"]." Pour configurer le stockage Hyper-V sur le partage CIFS NetApp, effectuez les opérations suivantes :
@@ -49,6 +51,7 @@ Chaque machine virtuelle d'Hyper-V peut à son tour être fournie avec les LUN N
 
 
 
+[[best-practices]]
 === Et des meilleures pratiques
 
 * Lorsqu'un serveur virtuel et ses données sont stockés sur un système de stockage NetApp, NetApp recommande d'exécuter régulièrement la déduplication NetApp au niveau du volume. Cette pratique permet de réaliser d'importantes économies d'espace lorsque des machines virtuelles identiques sont hébergées sur un partage CSV ou SMB. La déduplication s'exécute sur le contrôleur de stockage et n'affecte pas le système hôte ni les performances des machines virtuelles.
@@ -58,6 +61,7 @@ Chaque machine virtuelle d'Hyper-V peut à son tour être fournie avec les LUN N
 
 
 
+[[things-to-remember]]
 === Choses à retenir
 
 * Le provisionnement d'une machine virtuelle à l'aide de la technologie Fibre Channel virtuelle nécessite une carte HBA FC compatible avec la virtualisation N_Port ID. Quatre ports FC au maximum sont pris en charge.
@@ -68,6 +72,7 @@ Chaque machine virtuelle d'Hyper-V peut à son tour être fournie avec les LUN N
 
 
 
+[[further-reading]]
 === Lecture ultérieure
 
 * Pour plus d'informations sur les HBA FC, reportez-vous au http://mysupport.netapp.com/matrix/["Matrice d'interopérabilité (IMT)"] .
@@ -76,6 +81,7 @@ Chaque machine virtuelle d'Hyper-V peut à son tour être fournie avec les LUN N
 
 
 
+[[offloaded-data-transfer]]
 == Transfert de données allégé
 
 Microsoft ODX, également appelé allègement de la charge des copies, permet des transferts directs de données au sein d'un dispositif de stockage ou entre des dispositifs de stockage compatibles sans transférer les données via l'ordinateur hôte. ONTAP prend en charge la fonction ODX pour les protocoles CIFS et SAN. ODX peut améliorer les performances si les copies se trouvent dans le même volume, réduire l'utilisation du processeur et de la mémoire sur le client et réduire l'utilisation de la bande passante des E/S réseau.
@@ -116,6 +122,7 @@ cluster::> set privilege admin
 
 
 
+[[things-to-remember]]
 === Choses à retenir
 
 * Pour CIFS, ODX est disponible uniquement lorsque le client et le serveur de stockage prennent en charge SMB 3.0 et la fonction ODX.
@@ -124,12 +131,14 @@ cluster::> set privilege admin
 
 
 
+[[further-reading]]
 === Lecture ultérieure
 
 Pour plus d'informations sur ODX, voir https://docs.netapp.com/us-en/ontap/smb-admin/improve-microsoft-remote-copy-performance-concept.html["Amélioration des performances de Microsoft Remote Copy"] et https://docs.netapp.com/us-en/ontap/san-admin/microsoft-offloaded-data-transfer-odx-concept.html["Transferts de données allégés par Microsoft"] .
 
 
 
+[[hyper-v-clustering-high-availability-and-scalability-for-virtual-machines]]
 == Mise en cluster Hyper-V : haute disponibilité et évolutivité pour les machines virtuelles
 
 Les clusters de basculement offrent une haute disponibilité et une évolutivité aux serveurs Hyper-V. Un cluster de basculement est un groupe de serveurs Hyper-V indépendants qui fonctionnent ensemble pour améliorer la disponibilité et l'évolutivité des machines virtuelles.
@@ -138,6 +147,7 @@ Les serveurs en cluster Hyper-V (appelés nœuds) sont connectés par le réseau
 
 
 
+[[cluster-shared-volumes]]
 === Volumes partagés de cluster
 
 Les CSV permettent à plusieurs nœuds d'un cluster de basculement de disposer simultanément d'un accès en lecture/écriture vers le même LUN NetApp provisionné en tant que volume NTFS ou ReFS. Avec les CSV, les rôles en cluster peuvent basculer rapidement d'un nœud à un autre sans nécessiter de changement de propriétaire de disque, ni de démontage/remontage d'un volume. Les CSV simplifient également la gestion d'un nombre potentiellement important de LUN dans un cluster de basculement. Les CSV proposent un système de fichiers en cluster à usage général qui se superpose au-dessus de NTFS ou ReFS.
@@ -146,6 +156,7 @@ image:win_image6.png["Cluster de basculement Hyper-V et NetApp,largeur=624,haute
 
 
 
+[[best-practices]]
 === Et des meilleures pratiques
 
 * NetApp recommande de désactiver les communications de cluster sur le réseau iSCSI pour empêcher les communications de cluster internes et le trafic CSV de circuler sur le même réseau.
@@ -154,6 +165,7 @@ image:win_image6.png["Cluster de basculement Hyper-V et NetApp,largeur=624,haute
 
 
 
+[[things-to-remember]]
 === Choses à retenir
 
 * Les disques utilisés pour CSV doivent être partitionnés avec NTFS ou ReFS. Les disques formatés avec FAT ou FAT32 ne peuvent pas être utilisés pour un CSV.
@@ -162,18 +174,21 @@ image:win_image6.png["Cluster de basculement Hyper-V et NetApp,largeur=624,haute
 
 
 
+[[further-reading]]
 === Lecture ultérieure
 
 Pour plus d'informations sur le déploiement d'un cluster Hyper-V, reportez-vous à l'Annexe B : link:win_deploy_hyperv.html["Déployez le cluster Hyper-V."].
 
 
 
+[[hyper-v-live-migration-migration-of-vms]]
 == Hyper-V Live migration : migration de machines virtuelles
 
 Il est parfois nécessaire pendant toute la durée de vie des machines virtuelles de les déplacer vers un autre hôte du cluster Windows. Cela peut être nécessaire si l'hôte manque de ressources système ou si l'hôte doit redémarrer pour des raisons de maintenance. De même, il peut être nécessaire de déplacer une machine virtuelle vers une autre LUN ou un autre partage SMB. Cette condition peut être nécessaire si l'espace du LUN ou du partage actuel est insuffisant ou présente des performances inférieures à la valeur attendue. La migration dynamique Hyper-V déplace les machines virtuelles en cours d'exécution d'un serveur Hyper-V physique vers un autre sans affecter la disponibilité des machines virtuelles pour les utilisateurs. Vous pouvez migrer en direct des machines virtuelles entre des serveurs Hyper-V faisant partie d'un cluster de basculement ou entre des serveurs Hyper-V indépendants qui ne font pas partie d'un cluster.
 
 
 
+[[live-migration-in-a-clustered-environment]]
 === Migration dynamique dans un environnement en cluster
 
 Les machines virtuelles peuvent être déplacées de manière transparente entre les nœuds d'un cluster. La migration des machines virtuelles est instantanée, car tous les nœuds du cluster partagent le même stockage et ont accès à la machine virtuelle et à son disque. La figure suivante illustre la migration en direct dans un environnement en cluster.
@@ -182,6 +197,7 @@ image:win_image7.png["Migration dynamique dans un environnement en cluster,large
 
 
 
+[[best-practice]]
 === Et des meilleures pratiques
 
 * Disposer d'un port dédié pour le trafic de migration en direct.
@@ -190,12 +206,14 @@ image:win_image7.png["Migration dynamique dans un environnement en cluster,large
 
 
 
+[[further-reading]]
 === Lecture ultérieure
 
 Pour plus d'informations sur le déploiement de la migration dynamique dans un environnement en cluster, reportez-vous à la section link:win_deploy_hyperv_lmce.html["Annexe C : déploiement de la migration dynamique Hyper-V dans un environnement en cluster"].
 
 
 
+[[live-migration-outside-a-clustered-environment]]
 === Migration dynamique en dehors d'un environnement en cluster
 
 Il est possible de migrer un serveur virtuel en direct entre deux serveurs Hyper-V indépendants non mis en cluster. Ce processus peut utiliser une migration dynamique sans partage ou partagée.
@@ -214,12 +232,14 @@ image:win_image10.png["Migration dynamique sans partage dans un environnement no
 
 
 
+[[further-reading]]
 === Lecture ultérieure
 
 Pour plus d'informations sur le déploiement de la migration dynamique en dehors d'un environnement en cluster, reportez-vous à la section link:win_deploy_hyperv_lmoce.html["Annexe D : déploiement de la migration dynamique Hyper-V en dehors d'un environnement en cluster"].
 
 
 
+[[hyper-v-storage-live-migration]]
 === Hyper-V Storage Live migration
 
 Au cours de la durée de vie d'un serveur virtuel, vous devrez peut-être déplacer le stockage du serveur virtuel (VHD/VHDX) vers un autre LUN ou partage SMB. Cette condition peut être nécessaire si l'espace du LUN ou du partage actuel est insuffisant ou présente des performances inférieures à la valeur attendue.
@@ -257,12 +277,14 @@ image:win_image11.png["Migration dynamique du stockage Hyper-V, largeur=339, hau
 
 
 
+[[further-reading]]
 === Lecture ultérieure
 
 Pour plus d'informations sur le déploiement de la migration dynamique du stockage, reportez-vous à la section link:win_deploy_hyperv_slm.html["Annexe E : déploiement de la migration dynamique du stockage Hyper-V."].
 
 
 
+[[hyper-v-replica-disaster-recovery-for-virtual-machines]]
 == Hyper-V Replica : reprise après incident pour les machines virtuelles
 
 Le réplica Hyper-V réplique les machines virtuelles Hyper-V depuis un site principal vers des machines virtuelles de réplica sur un site secondaire, assurant ainsi une reprise après incident asynchrone pour les machines virtuelles. Le serveur Hyper-V sur le site principal hébergeant les machines virtuelles est appelé serveur principal ; le serveur Hyper-V sur le site secondaire qui reçoit les machines virtuelles répliquées est appelé serveur de réplica. Un exemple de scénario de réplica Hyper-V est illustré dans la figure suivante. Vous pouvez utiliser Hyper-V Replica pour les machines virtuelles entre des serveurs Hyper-V faisant partie d'un cluster de basculement ou entre des serveurs Hyper-V indépendants qui ne font pas partie d'un cluster.
@@ -271,18 +293,21 @@ image:win_image12.png["Réplique Hyper-V,largeur=624,hauteur=201"]
 
 
 
+[[replication]]
 === La réplication
 
 Lorsque Hyper-V Replica est activé pour une machine virtuelle sur le serveur principal, la réplication initiale crée une machine virtuelle identique sur le serveur de réplica. Après la réplication initiale, Hyper-V Replica conserve un fichier journal pour les VHD de la machine virtuelle. Le fichier journal est relu dans l'ordre inverse vers le VHD de réplica en fonction de la fréquence de réplication. Ce journal et l'utilisation de l'ordre inverse permettent de s'assurer que les dernières modifications sont stockées et répliquées de manière asynchrone. Si la réplication ne se produit pas conformément à la fréquence attendue, une alerte est émise.
 
 
 
+[[extended-replication]]
 === Réplication étendue
 
 Hyper-V Replica prend en charge la réplication étendue dans laquelle un serveur de réplica secondaire peut être configuré pour la reprise après incident. Un serveur de réplica secondaire peut être configuré pour que le serveur de réplica reçoive les modifications sur les machines virtuelles de réplica. Dans un scénario de réplication étendue, les modifications apportées aux machines virtuelles primaires du serveur principal sont répliquées sur le serveur de réplica. Les modifications sont ensuite répliquées sur le serveur de réplica étendu. Les machines virtuelles peuvent être défaillantes vers le serveur de réplica étendu uniquement lorsque les serveurs principal et de réplica sont en panne.
 
 
 
+[[failover]]
 === Basculement
 
 Le basculement n'est pas automatique. Le processus doit être déclenché manuellement. Il existe trois types de basculement :
@@ -294,12 +319,14 @@ Le basculement n'est pas automatique. Le processus doit être déclenché manuel
 
 
 
+[[recovery]]
 === Reprise après incident
 
 Lorsque vous configurez la réplication pour une machine virtuelle, vous pouvez spécifier le nombre de points de restauration. Les points de restauration représentent des points dans le temps à partir desquels les données peuvent être récupérées à partir d'une machine répliquée.
 
 
 
+[[further-reading]]
 === Lecture ultérieure
 
 * Pour plus d'informations sur le déploiement d'un réplica Hyper-V en dehors d'un environnement en cluster, reportez-vous à la section «link:win_deploy_hyperv_replica_oce.html["Déploiement d'un réplica Hyper-V en dehors d'un environnement en cluster"]."

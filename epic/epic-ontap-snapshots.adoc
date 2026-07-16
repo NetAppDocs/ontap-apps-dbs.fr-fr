@@ -17,6 +17,7 @@ Write anwhere File Layout, ou WAFL, est un système de fichiers en écriture seu
 
 
 
+[[flexclone]]
 == FlexClone
 
 Un volume NetApp ONTAP FlexClone est un clone d'un volume existant ou un snapshot d'un volume existant. Il s'agit autrement d'un volume ONTAP comme tout autre, et il peut lui-même être cloné, protégé par des copies Snapshot et configuré avec une règle de qualité de service.

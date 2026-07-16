@@ -23,6 +23,7 @@ L'installation des outils ONTAP pour VMware vSphere crée et utilise trois types
 
 
 
+[[1-system-user]]
 == 1. Utilisateur du système
 
 L'utilisateur System(root) est créé par l'installation des outils ONTAP sur le système d'exploitation sous-jacent (Debian).
@@ -32,6 +33,7 @@ L'utilisateur System(root) est créé par l'installation des outils ONTAP sur le
 
 
 
+[[2-application-user]]
 == 2. Utilisateur de l'application
 
 L'utilisateur de l'application est nommé en tant qu'utilisateur local dans les outils ONTAP. Il s'agit d'utilisateurs créés dans l'application Outils ONTAP. Le tableau ci-dessous répertorie les types d'utilisateurs d'applications :
@@ -51,6 +53,7 @@ L'utilisateur de l'application est nommé en tant qu'utilisateur local dans les 
 |===
 
 
+[[3-support-userdiag-user]]
 == 3. Support user(diag user)
 
 Lors de l'installation des outils ONTAP, un utilisateur du support est créé. Cet utilisateur peut accéder aux outils ONTAP en cas de problème ou de panne du serveur et collecter les journaux. Par défaut, cet utilisateur est désactivé, mais il peut être activé sur une base ad hoc via la console « maint ». Il est important de noter que cet utilisateur sera automatiquement désactivé après une certaine période.

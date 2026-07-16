@@ -18,6 +18,7 @@ Les limites de débit sont utiles pour contrôler les niveaux de service, gérer
 
 
 
+[[ontap-qos-policy-support]]
 == Prise en charge des règles de QoS de ONTAP
 
 Les systèmes qui exécutent ONTAP peuvent utiliser la fonction QoS du stockage pour limiter le débit en Mbit/s et/ou en E/S par seconde (IOPS) de différents objets de stockage comme les fichiers, les LUN, les volumes ou des SVM entiers.
@@ -42,6 +43,7 @@ Reportez-vous à la section link:https://docs.netapp.com/us-en/ontap/performance
 
 
 
+[[non-vvols-nfs-datastores]]
 == Datastores NFS non vVols
 
 Une règle de qualité de service ONTAP peut être appliquée au datastore entier ou aux fichiers VMDK individuels qu'il contient. Toutefois, il est important de comprendre que toutes les machines virtuelles d'un datastore NFS traditionnel (non vVols) partagent une file d'attente d'E/S commune à partir d'un hôte donné. Si une règle de qualité de service ONTAP limite un ordinateur virtuel, toutes les E/S de ce datastore semblent alors restreintes pour cet hôte.
@@ -72,12 +74,14 @@ Les datastores FlexGroup offrent des fonctionnalités QoS améliorées lors de l
 
 
 
+[[vmfs-datastores]]
 == Datastores VMFS
 
 Avec des LUN ONTAP, les règles de qualité de service peuvent être appliquées au volume FlexVol qui contient les LUN ou les LUN individuelles, mais pas aux fichiers VMDK individuels car ONTAP ne connaît pas le système de fichiers VMFS.
 
 
 
+[[vvols-datastores]]
 == Datastores vVols
 
 La qualité de service minimale et/ou maximale peut être facilement définie sur des machines virtuelles individuelles ou des VMDK sans affecter les autres machines virtuelles ou VMDK à l'aide de la gestion basée sur des règles de stockage et des vVols.
@@ -89,6 +93,7 @@ NOTE: vVols nécessite l'utilisation des ONTAP tools for VMware vSphere, qui fon
 
 
 
+[[ontap-qos-and-vmware-sioc]]
 == QoS ONTAP et SIOC VMware
 
 La QoS ONTAP et le contrôle des E/S du stockage VMware vSphere sont des technologies complémentaires que les administrateurs de stockage et vSphere peuvent utiliser conjointement pour gérer les performances des VM vSphere hébergées sur les systèmes exécutant ONTAP. Chaque outil a ses propres forces, comme le montre le tableau suivant. En raison des différents champs d'application de VMware vCenter et de ONTAP, certains objets peuvent être vus et gérés par un système et non par l'autre.
@@ -128,6 +133,7 @@ La QoS ONTAP et le contrôle des E/S du stockage VMware vSphere sont des technol
 |===
 
 
+[[vmware-storage-distributed-resource-scheduler]]
 == Planificateur de ressources distribué de stockage VMware
 
 VMware Storage Distributed Resource Scheduler (SDRS) est une fonctionnalité vSphere qui place les machines virtuelles sur un stockage en fonction de la latence d'E/S actuelle et de l'utilisation de l'espace. Il déplace ensuite la machine virtuelle ou les VMDK sans interruption entre les datastores d'un cluster de datastores (également appelé pod), en sélectionnant le meilleur datastore pour placer la machine virtuelle ou les VMDK dans le cluster de datastore. Un cluster de data stores est un ensemble de datastores similaires agrégés dans une unité de consommation unique du point de vue de l'administrateur vSphere.
@@ -148,6 +154,7 @@ Les autres meilleures pratiques ONTAP en matière DE SDRS sont les suivantes :
 
 
 
+[[storage-policy-based-management-and-vvols]]
 == Gestion basée sur des règles de stockage et vVols
 
 VMware vSphere APIs for Storage Awareness (VASA) permet aux administrateurs du stockage de configurer facilement des datastores avec des fonctionnalités bien définies et à l'administrateur des VM de les utiliser lorsque cela est nécessaire pour provisionner des VM sans avoir à interagir les uns avec les autres. Il est intéressant d'étudier cette approche pour savoir comment rationaliser vos opérations de stockage de virtualisation et éviter un travail insignifiant.

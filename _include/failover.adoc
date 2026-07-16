@@ -27,6 +27,7 @@ La même logique s'applique à un basculement MetroCluster. Dans des conditions 
 ====
 
 
+[[metrocluster-and-multiple-aggregates]]
 == MetroCluster et plusieurs agrégats
 
 MetroCluster est une technologie de réplication synchrone qui passe en mode asynchrone en cas d'interruption de la connectivité. Cette demande est la plus courante de la part des clients, car une réplication synchrone garantie signifie que l'interruption de la connectivité du site entraîne un blocage complet des E/S de la base de données, ce qui la met hors service.

@@ -25,6 +25,7 @@ Lors de l'installation initiale, ESX ne possède pas de fonctionnalités précon
 
 
 
+[[svms]]
 == SVM
 
 Il n'existe aucune bonne pratique officielle de provisionnement des SVM pour ONTAP. La bonne approche dépend des exigences en matière de gestion et de sécurité.

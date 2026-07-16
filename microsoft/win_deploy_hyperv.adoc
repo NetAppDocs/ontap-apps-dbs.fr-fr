@@ -18,6 +18,7 @@ Cette annexe décrit le déploiement d'un cluster Hyper-V.
 
 
 
+[[prerequisites]]
 == Prérequis
 
 * Au moins deux serveurs Hyper-V sont connectés l'un à l'autre.
@@ -30,6 +31,7 @@ Cette annexe décrit le déploiement d'un cluster Hyper-V.
 
 
 
+[[deployment]]
 == Déploiement
 
 . Connectez-vous à l'un des serveurs Windows Hyper-V en tant que membre du groupe d'administrateurs.

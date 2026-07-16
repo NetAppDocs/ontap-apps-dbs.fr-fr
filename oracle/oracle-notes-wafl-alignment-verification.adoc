@@ -29,6 +29,7 @@ Les exemples suivants sont spécifiques à Linux, mais la procédure peut être 
 
 
 
+[[aligned]]
 == Aligné
 
 L'exemple suivant montre une vérification d'alignement sur une seule LUN avec une seule partition.
@@ -135,6 +136,7 @@ lun:ed95d953-1560-4f74-9006-85b352f58fcd:read_align_histo.7:0%
 
 
 
+[[misaligned]]
 == Mauvais alignement
 
 L'exemple suivant illustre un mauvais alignement des E/S :
@@ -183,6 +185,7 @@ De plus, le `read_partial_blocks` Ces statistiques ne sont pas égales à zéro,
 
 
 
+[[redo-logging]]
 == Fichiers de reprise
 
 Les procédures décrites ici s'appliquent aux fichiers de données. Les journaux de reprise et d'archivage Oracle ont différents modèles d'E/S. Par exemple, la journalisation de reprise est un remplacement circulaire d'un seul fichier. Si la taille de bloc par défaut de 512 octets est utilisée, les statistiques d'écriture se ressemblent à ceci :

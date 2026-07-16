@@ -18,6 +18,7 @@ Découvrez comment déployer et configurer une réplique Hyper-V avec le cluster
 
 
 
+[[prerequisites]]
 == Prérequis
 
 * Vous devez disposer de clusters Hyper-V situés dans le même emplacement ou dans des emplacements géographiques distincts, et servant de clusters principal et de clusters de réplica. Révision link:win_deploy_hyperv.html["Déployez le cluster Hyper-V."] pour en savoir plus.
@@ -27,6 +28,7 @@ Découvrez comment déployer et configurer une réplique Hyper-V avec le cluster
 
 
 
+[[deployment]]
 == Déploiement
 
 . Activez les règles de pare-feu sur tous les nœuds d'un cluster. Exécutez l'applet de commande PowerShell suivante avec des privilèges d'administrateur sur tous les nœuds des clusters principal et de réplica.
@@ -65,6 +67,7 @@ get-clusternode | ForEach-Object \{Invoke-command -computername $_.name -scriptb
 
 
 
+[[replication]]
 == La réplication
 
 La réplication est similaire au processus décrit dans la section link:win_deploy_hyperv_replica_oce.html["Réplique hors d'un environnement en cluster"].

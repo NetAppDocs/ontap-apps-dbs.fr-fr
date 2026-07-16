@@ -18,6 +18,7 @@ Le paramètre innodb_flush_method indique comment InnoDB ouvre et vide les fichi
 
 
 
+[[optimizations]]
 == Optimisations
 
 Dans l'optimisation InnoDB, la définition de ce paramètre permet de régler les performances de la base de données, le cas échéant.
@@ -32,6 +33,7 @@ Les options suivantes permettent de vider les fichiers via InnoDB :
 
 
 
+[[observation]]
 == Observation
 
 Dans les tests de laboratoire NetApp, le `fsync` L'option par défaut a été utilisée sur NFS et SAN, et il s'agissait d'un outil d'amélioration des performances par rapport à `O_DIRECT`. Lors de l'utilisation de la méthode de rinçage comme `O_DIRECT` Avec ONTAP, nous avons observé que le client écrit beaucoup d'écritures sur un seul octet à la frontière du bloc 4096 en série. Ces écritures ont augmenté la latence sur le réseau et dégradé les performances.

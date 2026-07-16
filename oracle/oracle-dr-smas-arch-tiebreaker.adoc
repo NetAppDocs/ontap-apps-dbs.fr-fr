@@ -18,12 +18,14 @@ Le système link:oracle-dr-smas-mediator.html["Médiateur de ONTAP"] répond à 
 
 
 
+[[oracle-tiebreakers]]
 == Disjoncteurs Oracle
 
 La meilleure méthode pour gérer les risques Oracle RAC split-brain consiste à utiliser un nombre impair de nœuds RAC, de préférence à l'aide d'un Tiebreaker 3rd site. Si un troisième site n'est pas disponible, l'instance Tiebreaker pourrait être placée sur un site des deux sites, ce qui la désignerait en fait un site de survivant préféré.
 
 
 
+[[oracle-and-csscritical]]
 == Oracle et CSS_Critical
 
 Avec un nombre pair de nœuds, le comportement par défaut d'Oracle RAC est que l'un des nœuds du cluster sera considéré plus important que les autres nœuds. Le site avec ce nœud de priorité supérieure survivra à l'isolation du site tandis que les nœuds de l'autre site seront supprimés. La hiérarchisation est basée sur plusieurs facteurs, mais vous pouvez également contrôler ce comportement à l'aide du `css_critical` paramètre.

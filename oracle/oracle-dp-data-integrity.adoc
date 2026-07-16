@@ -23,6 +23,7 @@ Ces trois besoins sont abordés dans les sections suivantes.
 
 
 
+[[network-corruption-checksums]]
 == Corruption du réseau : checksums
 
 Le niveau de protection de données le plus élémentaire est la somme de contrôle, qui est un code spécial de détection d'erreur stocké avec les données. La corruption des données lors de la transmission du réseau est détectée grâce à l'utilisation d'un checksum et, dans certains cas, de multiples checksums.
@@ -31,12 +32,14 @@ Par exemple, une trame FC inclut une forme de somme de contrôle appelée contr�
 
 
 
+[[drive-corruption-checksums]]
 == Corruption de disque : checksums
 
 Des checksums sont également utilisés pour vérifier l'intégrité des données stockées sur les disques. Les blocs de données écrits sur les disques sont stockés avec une fonction de checksum qui génère un nombre imprévisible lié aux données d'origine. Lorsque les données sont lues à partir du lecteur, la somme de contrôle est recalculée et comparée à la somme de contrôle stockée. Si elle ne correspond pas, les données sont corrompues et doivent être restaurées par la couche RAID.
 
 
 
+[[data-corruption-lost-writes]]
 == Corruption des données : écritures perdues
 
 L'un des types de corruption les plus difficiles à détecter est une écriture perdue ou mal placée. Lorsqu'une écriture est reconnue, elle doit être écrite sur le support à l'emplacement correct. La corruption des données sur place est relativement facile à détecter à l'aide d'une simple somme de contrôle stockée avec les données. Cependant, si l'écriture est simplement perdue, alors la version précédente des données peut toujours exister et le total de contrôle serait correct. Si l'écriture est placée au mauvais emplacement physique, la somme de contrôle associée sera à nouveau valide pour les données stockées, même si l'écriture a détruit d'autres données.
@@ -55,6 +58,7 @@ La corruption des écritures perdues ou déplacées est extrêmement rare. Cepen
 
 
 
+[[drive-failures-raid-raid-dp-and-raid-tec]]
 == Panne de disque : RAID, RAID DP et RAID-TEC
 
 Si un bloc de données sur un disque est détecté comme étant corrompu, ou si l'ensemble du disque tombe en panne et est totalement indisponible, les données doivent être reconstituées. Cette opération est réalisée dans ONTAP à l'aide de disques de parité. Les données sont réparties sur plusieurs disques, puis des données de parité sont générées. Ces données sont stockées séparément des données d'origine.
@@ -75,6 +79,7 @@ En résumé, par rapport à RAID 10, les systèmes RAID DP et RAID-TEC fournisse
 
 
 
+[[hardware-failure-protection-nvram]]
 == Protection contre les pannes matérielles : NVRAM
 
 Toute baie de stockage servant de charge de travail de base de données doit traiter les opérations d'écriture le plus rapidement possible. En outre, une opération d'écriture doit être protégée contre la perte d'un événement inattendu tel qu'une coupure de courant. Cela signifie que toute opération d'écriture doit être stockée en toute sécurité dans au moins deux emplacements.
@@ -92,6 +97,7 @@ En cas de panne de contrôleur, le contrôleur partenaire prend possession des d
 
 
 
+[[hardware-failure-protection-nvfail]]
 == Protection contre les défaillances matérielles : NVFAIL
 
 Comme nous l'avons vu précédemment, une écriture n'est pas validée tant qu'elle n'a pas été connectée à la NVRAM et à la NVRAM locales sur au moins un autre contrôleur. Cette approche évite toute panne matérielle ou de courant qui entraîne une perte des E/S à la volée En cas de panne de la mémoire NVRAM locale ou de la connectivité au partenaire de haute disponibilité, ces données à la volée ne seront plus mises en miroir.
@@ -108,6 +114,7 @@ L'étape suivante consiste généralement pour un administrateur à arrêter com
 
 
 
+[[site-and-shelf-failure-protection-syncmirror-and-plexes]]
 == Protection contre les pannes de site et de tiroir : SyncMirror et plexes
 
 SyncMirror est une technologie de mise en miroir qui améliore, mais ne remplace pas, RAID DP ou RAID-TEC. Il met en miroir le contenu de deux groupes RAID indépendants. La configuration logique est la suivante :
@@ -125,6 +132,7 @@ SyncMirror est généralement utilisé pour assurer la mise en miroir à distanc
 
 
 
+[[checksums]]
 == Checksums
 
 Le thème des checksums est particulièrement intéressant pour les administrateurs de bases de données habitués à l'utilisation de sauvegardes en continu Oracle RMAN qui migrent vers des sauvegardes basées sur des snapshots. RMAN permet notamment de procéder à des contrôles d'intégrité lors des opérations de sauvegarde. Bien que cette fonctionnalité présente un certain intérêt, son principal avantage est une base de données qui n'est pas utilisée sur une baie de stockage moderne. Lorsque des disques physiques sont utilisés pour une base de données Oracle, il est presque certain que la corruption finit par se produire lorsque les disques vieillissent, un problème qui est résolu par les checksums basés sur les baies dans les baies de stockage réelles.

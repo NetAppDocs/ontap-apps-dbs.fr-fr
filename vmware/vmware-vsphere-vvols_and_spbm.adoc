@@ -20,6 +20,7 @@ En tant que partenaire de conception technologique, NetApp a apporté son avis s
 
 
 
+[[virtual-volumes-vvols]]
 == Volumes virtuels (vVols)
 
 Les vVols sont une architecture de stockage révolutionnaire qui permet la gestion granulaire du stockage des machines virtuelles. Le stockage peut ainsi être géré non seulement par machine virtuelle (y compris les métadonnées des machines virtuelles), mais également par VMDK. Les vVols sont un composant clé de la stratégie Software Defined Data Center (SDDC) qui constitue la base de VMware Cloud Foundation (VCF), fournissant ainsi une architecture de stockage plus efficace et évolutive pour les environnements virtualisés.
@@ -28,6 +29,7 @@ Les vVols permettent aux machines virtuelles de consommer du stockage par machin
 
 
 
+[[storage-policy-based-management-spbm]]
 == Gestion du stockage basée sur des règles (SBPM)
 
 Grâce à la gestion du stockage basée sur des règles, une structure sert de couche d'abstraction entre les services de stockage disponibles pour votre environnement de virtualisation et les éléments de stockage provisionnés via des règles. Cette approche permet aux architectes du stockage de concevoir des pools de stockage avec des fonctionnalités différentes. Ces pools peuvent être facilement consommés par les administrateurs des VM. Les administrateurs peuvent ensuite faire correspondre les besoins des charges de travail des machines virtuelles aux pools de stockage provisionnés. Cette approche simplifie la gestion du stockage et permet une utilisation plus efficace des ressources de stockage.
@@ -36,6 +38,7 @@ Le SBPM est un composant clé des vVols qui fournit un framework basé sur des r
 
 
 
+[[netapp-ontap-and-vvols]]
 == NetApp ONTAP et vVols
 
 NetApp ONTAP est leader du secteur du stockage en vVols à l'échelle du cluster, prenant en charge des centaines de milliers de vVols* par cluster unique. En revanche, les fournisseurs de baies d'entreprise et de baies Flash plus petites prennent en charge jusqu'à plusieurs milliers de vVols par baie. ONTAP offre une solution de stockage évolutive et efficace pour les environnements VMware vSphere, prenant en charge les vVols avec un ensemble complet de services de stockage, dont la déduplication, la compression, le provisionnement fin et la protection des données. La gestion du stockage basée sur des règles facilite l'intégration transparente aux environnements VMware vSphere.

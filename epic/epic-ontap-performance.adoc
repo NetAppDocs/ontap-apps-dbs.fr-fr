@@ -24,6 +24,7 @@ Depuis l'année 2020, tous les workloads ODB d'Epic doivent être hébergés sur
 
 
 
+[[nvme]]
 == NVMe
 
 Lorsque les performances sont primordiales, NetApp prend également en charge NVMe/FC, le protocole FC SAN nouvelle génération.

@@ -19,6 +19,7 @@ ONTAP est conçu pour offrir une disponibilité maximale des bases de données O
 
 
 
+[[ha-pairs]]
 == Paires HA
 
 L'unité de base de la haute disponibilité est la paire haute disponibilité. Chaque paire contient des liens redondants pour prendre en charge la réplication des données vers la mémoire NVRAM. La NVRAM n'est pas un cache d'écriture. La RAM à l'intérieur du contrôleur sert de cache d'écriture. L'objectif de la mémoire NVRAM est de journaliser temporairement les données afin de prévenir toute panne système inattendue. À cet égard, il est similaire à un fichier redo log de base de données.
@@ -29,6 +30,7 @@ Si un contrôleur tombe en panne brusquement, des modifications sont susceptible
 
 
 
+[[takeover-and-giveback]]
 == Takeover et Giveback
 
 Le basculement et le rétablissement font référence au processus de transfert de la responsabilité des ressources de stockage entre les nœuds d'une paire HA. Le basculement et le rétablissement sont deux aspects :
@@ -48,6 +50,7 @@ Le deuxième aspect du Takeover et Giveback est le transfert de la propriété d
 
 
 
+[[takeover-time]]
 == Temps de reprise
 
 Les E/S de l'hôte font l'objet d'une courte pause au niveau des E/S lors des opérations de basculement et de rétablissement. Cependant, la configuration de l'environnement ne doit pas provoquer d'interruption des applications. Le processus de transition réel dans lequel les E/S sont retardées se mesure généralement en secondes, mais l'hôte peut avoir besoin de plus de temps pour reconnaître la modification des chemins de données et renvoyer les opérations d'E/S.

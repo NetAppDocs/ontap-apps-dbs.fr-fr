@@ -32,6 +32,7 @@ Une seule machine virtuelle ne peut pas héberger de données (Virtual machine D
 |===
 
 
+[[supported-snapmirror-layouts]]
 == Dispositions SnapMirror prises en charge
 
 Les figures suivantes présentent les scénarios de disposition des relations SnapMirror pris en charge par VLSR et SRA. Chaque machine virtuelle des volumes répliqués est propriétaire de données sur une seule baie VLSR (SVM) sur chaque site.
@@ -46,6 +47,7 @@ image:vsrm-ontap9_image10.png["La disposition des relations SnapMirror"]
 
 
 
+[[vmfs-support-with-snapmirror-active-sync]]
 == Prise en charge de VMFS avec la synchronisation active SnapMirror
 
 Les outils ONTAP 10.3 et versions ultérieures prennent également en charge la protection de vos banques de données VMFS avec SnapMirror Active Sync (SMas). Cela permet un basculement transparent pour la continuité des activités entre deux centres de données (appelés domaines de défaillance) relativement proches l'un de l'autre. La reprise après sinistre longue distance peut ensuite être orchestrée à l'aide de SnapMirror de manière asynchrone via les outils ONTAP SRA avec VLSR.
@@ -60,6 +62,7 @@ image:https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-104/media/fan-out
 
 
 
+[[supported-array-manager-layouts]]
 == Mises en page de Array Manager prises en charge
 
 Lorsque vous utilisez la réplication basée sur la baie (ABR) dans VLSR, les groupes de protection sont isolés vers une seule paire de baies, comme l'illustre la capture d'écran suivante. Dans ce scénario, `SVM1` et `SVM2` sont associés à `SVM3` et `SVM4` sur le site de reprise. Cependant, vous ne pouvez sélectionner qu'une des deux paires de matrices lorsque vous créez un groupe de protection.
@@ -68,6 +71,7 @@ image:vsrm-ontap9_image11.png["paires de baies"]
 
 
 
+[[unsupported-layouts]]
 == Présentations non prises en charge
 
 Les configurations non prises en charge possèdent des données (VMDK ou RDM) sur plusieurs SVM appartenant à une machine virtuelle individuelle. Dans les exemples présentés dans les figures suivantes, `VM1` ne peut pas être configuré pour une protection avec VLSR car `VM1` possède des données sur deux SVM.
@@ -82,6 +86,7 @@ image:vsrm-ontap9_image14.png["Configurations non prises en charge"]
 
 
 
+[[snapmirror-cascade]]
 == SnapMirror en cascade
 
 VLSR ne prend pas en charge le cascade des relations SnapMirror, dans lesquelles un volume source est répliqué sur un volume de destination, et ce volume de destination est également répliqué avec SnapMirror vers un autre volume de destination. Dans le scénario illustré dans la figure suivante, VLSR ne peut pas être utilisé pour le basculement entre des sites.
@@ -90,6 +95,7 @@ image:vsrm-ontap9_image15.png["Cascade de relations SnapMirror"]
 
 
 
+[[snapmirror-and-snapvault]]
 == SnapMirror et SnapVault
 
 Le logiciel NetApp SnapVault permet de sauvegarder les données d'entreprise sur disque entre les systèmes de stockage NetApp. SnapVault et SnapMirror peuvent coexister dans un même environnement, mais VLSR prend en charge le basculement de uniquement les relations SnapMirror.
@@ -127,12 +133,14 @@ Une fois que vsrm a effectué le retour arrière et une seconde inversion des re
 
 
 
+[[use-of-qtrees-in-site-recovery-manager-environments]]
 == Utilisation de qtrees dans les environnements site Recovery Manager
 
 Les qtrees sont des répertoires spéciaux qui permettent l'application de quotas de système de fichiers pour NAS. ONTAP 9 permet la création de qtrees et peut exister dans les volumes répliqués avec SnapMirror. Toutefois, SnapMirror ne permet pas la réplication de qtrees individuels ni de réplication au niveau qtree. Toute la réplication SnapMirror se fait au niveau du volume uniquement. C'est pour cette raison que NetApp ne recommande pas l'utilisation de qtrees avec VLSR.
 
 
 
+[[mixed-fc-and-iscsi-environments]]
 == Environnements FC et iSCSI mixtes
 
 Grâce à la prise en charge des protocoles SAN (FC, FCoE et iSCSI), ONTAP 9 propose des services LUN, à savoir la création de LUN et leur mappage vers les hôtes associés. Dans la mesure où le cluster compte plusieurs contrôleurs, il existe plusieurs chemins logiques gérés par les E/S multivoies vers une LUN individuelle. L'accès ALUA (Asymmetric Logical Unit Access) est utilisé sur les hôtes pour que le chemin optimisé vers un LUN soit sélectionné et activé pour le transfert de données. Si ce chemin change (par exemple, en raison du déplacement du volume qui y est associé), ONTAP 9 reconnaît automatiquement cette modification et s'ajuste de façon non disruptive. S'il devient indisponible, ONTAP peut également basculer sans interruption sur un autre chemin.

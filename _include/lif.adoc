@@ -15,6 +15,7 @@ Ces rubriques s'appliquent à la solution de bout en bout, de l'hôte aux commut
 
 
 
+[[lif-types]]
 == Types de LIF
 
 Il existe plusieurs types de LIF. link:https://docs.netapp.com/us-en/ontap/networking/lif_compatibility_with_port_types.html["Documentation ONTAP sur les types de LIF"] Fournir des informations plus complètes à ce sujet, mais d'un point de vue fonctionnel, les LIF peuvent être divisées en plusieurs groupes :
@@ -29,6 +30,7 @@ NOTE: Une LIF de données utilisée pour le trafic NFS peut également être uti
 
 
 
+[[san-lif-design]]
 == Conception de SAN LIF
 
 La conception de LIF dans un environnement SAN est relativement simple pour une raison : les chemins d'accès multiples. Toutes les implémentations SAN modernes permettent à un client d'accéder aux données sur plusieurs chemins réseau indépendants et de sélectionner le ou les chemins d'accès les plus adaptés. Par conséquent, les performances du design LIF sont plus simples à gérer, car les clients SAN équilibrent automatiquement la charge en E/S sur les meilleurs chemins disponibles.
@@ -37,24 +39,28 @@ Si un chemin devient indisponible, le client sélectionne automatiquement un aut
 
 
 
+[[performance]]
 === Performance
 
 La bande passante est l'élément le plus important à prendre en compte dans les performances de LIF dans un environnement SAN. Par exemple, un cluster ONTAP AFF à deux nœuds doté de deux ports FC 16 Gb par nœud permet d'obtenir jusqu'à 32 Go de bande passante vers/depuis chaque nœud.
 
 
 
+[[resiliency]]
 === Résilience
 
 Les LIF SAN ne basculent pas sur un système de stockage AFF. Si une LIF SAN échoue en raison du basculement du contrôleur, le logiciel de chemins d'accès multiples du client détecte la perte d'un chemin et redirige les E/S vers une autre LIF. Avec les systèmes de stockage ASA, les LIF basculent après un court délai, mais cela n'interrompt pas les E/S, car il existe déjà des chemins actifs sur l'autre contrôleur. Le processus de basculement a lieu afin de restaurer l'accès de l'hôte sur tous les ports définis.
 
 
 
+[[manageability]]
 === Gestion aisée
 
 La migration des LIF est une tâche beaucoup plus courante dans un environnement NFS, car elle est souvent associée au déplacement des volumes au sein du cluster. Il n'est pas nécessaire de migrer une LIF dans un environnement SAN lorsque les volumes sont déplacés au sein de la paire HA. En effet, une fois le déplacement de volume terminé, ONTAP envoie une notification au SAN concernant un changement de chemins et les clients SAN se réoptimisent automatiquement. La migration de LIF avec SAN est principalement associée à des modifications matérielles physiques majeures. Par exemple, si une mise à niveau des contrôleurs sans interruption est requise, une LIF SAN est migrée vers le nouveau matériel. Si un port FC est défectueux, une LIF peut être migrée vers un port non utilisé.
 
 
 
+[[design-recommendations]]
 === Recommandations de conception
 
 NetApp fait les recommandations suivantes :
@@ -69,12 +75,14 @@ NetApp fait les recommandations suivantes :
 
 
 
+[[nfs-lif-design]]
 == Conception de LIF NFS
 
 Contrairement aux protocoles SAN, NFS dispose d'une capacité limitée de définir plusieurs chemins d'accès aux données. Les extensions NFS parallèles (pNFS) à NFSv4 répondent à cette limitation, mais l'ajout de chemins d'accès supplémentaires devient rarement intéressant dans la mesure où les vitesses ethernet atteignent 100 Go et au-delà.
 
 
 
+[[performance-and-resiliency]]
 === Performances et résilience
 
 Bien que la mesure des performances d'une LIF SAN consiste principalement à calculer la bande passante totale à partir de tous les chemins principaux, la détermination des performances d'une LIF NFS nécessite d'étudier de plus près la configuration réseau exacte. Par exemple, deux ports 10 Gbit peuvent être configurés comme ports physiques bruts ou en tant que groupe d'interface LACP (Link Aggregation Control Protocol). S'ils sont configurés en tant que groupe d'interface, plusieurs stratégies d'équilibrage de charge sont disponibles et fonctionnent différemment selon que le trafic est commuté ou routé. Enfin, Oracle Direct NFS (dNFS) propose des configurations d'équilibrage de charge qui n'existent pour le moment dans aucun client OS NFS.

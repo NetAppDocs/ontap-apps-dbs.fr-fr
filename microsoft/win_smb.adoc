@@ -28,10 +28,12 @@ Lorsqu'un SVM est créé avec le protocole CIFS, un serveur CIFS s'exécute en p
 
 
 
+[[provisioning-smb-shares-on-windows-server]]
 == Provisionnement des partages SMB sur Windows Server
 
 
 
+[[prerequisites]]
 === Prérequis
 
 L'utilisation d'un stockage NetApp dans des environnements NAS sous Windows Server présente les conditions suivantes :
@@ -45,6 +47,7 @@ L'utilisation d'un stockage NetApp dans des environnements NAS sous Windows Serv
 
 
 
+[[active-directory-domain-controller]]
 === Contrôleur de domaine Active Directory
 
 Il est possible de joindre un contrôleur de stockage NetApp à un serveur Active Directory similaire à un serveur Windows et de le faire fonctionner au sein de celui-ci. Lors de la création du SVM, vous pouvez configurer le DNS en fournissant le nom de domaine et les détails du serveur de noms. Le SVM tente de rechercher un contrôleur de domaine Active Directory en interrogeant le DNS pour un serveur LDAP (Active Directory/Lightweight Directory Access Protocol) d'une manière similaire à Windows Server.
@@ -57,6 +60,7 @@ cluster::> system services ntp server create -server $domainControllerIP
 ....
 
 
+[[deployment]]
 === Déploiement
 
 . Créer un SVM avec le protocole NAS CIFS activé Il est possible de créer un SVM avec l'une des méthodes suivantes :
@@ -82,6 +86,7 @@ cluster::> system services ntp server create -server $domainControllerIP
 
 
 
+[[host-integration]]
 === Intégration de l'hôte
 
 Le protocole NAS CIFS est intégré en mode natif à ONTAP. Par conséquent, Windows Server n'a pas besoin d'un logiciel client supplémentaire pour accéder aux données sur ONTAP. Un contrôleur de stockage NetApp apparaît sur le réseau en tant que serveur de fichiers natif et prend en charge l'authentification Microsoft Active Directory.
@@ -103,6 +108,7 @@ Pour détecter le partage CIFS créé précédemment avec Windows Server, procé
 
 
 
+[[best-practices]]
 === Et des meilleures pratiques
 
 * Pour vérifier qu'il n'y a pas de temps d'indisponibilité lorsqu'un volume est déplacé d'un nœud vers un autre ou en cas de défaillance d'un nœud, NetApp vous recommande d'activer l'option de disponibilité continue sur le partage de fichiers.
@@ -114,6 +120,7 @@ Pour détecter le partage CIFS créé précédemment avec Windows Server, procé
 
 
 
+[[things-to-remember]]
 === Choses à retenir
 
 * Lorsque vous provisionnez des volumes pour les environnements SMB, les volumes doivent être créés avec le style de sécurité NTFS.
@@ -128,6 +135,7 @@ Pour détecter le partage CIFS créé précédemment avec Windows Server, procé
 
 
 
+[[provisioning-smb-shares-on-nano-server]]
 == Provisionnement des partages SMB sur Nano Server
 
 Le serveur nano n'a pas besoin d'un logiciel client supplémentaire pour accéder aux données du partage CIFS sur un contrôleur de stockage NetApp.

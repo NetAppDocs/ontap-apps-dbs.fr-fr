@@ -36,6 +36,7 @@ La majorité des clients de base de données choisissent désormais des baies 10
 
 
 
+[[oracle-automatic-workload-repository-and-benchmarking]]
 == Référentiel automatique de workloads Oracle et banc d'essai
 
 Pour les comparaisons de performances Oracle, il est référence dans le rapport Oracle Automatic Workload Repository (AWR).
@@ -51,6 +52,7 @@ NOTE: Lorsque les rapports AWR ne sont pas disponibles, les rapports Oracle stat
 
 
 
+[[oracle-awr-and-troubleshooting]]
 == Oracle AWR et dépannage
 
 Un rapport AWR est également l'outil le plus important pour analyser un problème de performances.
@@ -69,6 +71,7 @@ Lorsque vous fournissez des données AWR, tenez compte des exigences suivantes :
 
 
 
+[[calibrateio]]
 == etalonnez_io
 
 Le `calibrate_io` command ne doit jamais être utilisé pour tester, comparer ou tester les systèmes de stockage. Comme indiqué dans la documentation Oracle, cette procédure permet d'étalonner les capacités d'E/S du stockage.
@@ -77,24 +80,28 @@ L'étalonnage n'est pas le même que l'étalonnage. L'objectif de cette commande
 
 
 
+[[slob2]]
 == SLOB2
 
 SLOB2, le très petit banc d'essai Oracle, est devenu l'outil privilégié pour évaluer les performances des bases de données. Il a été développé par Kevin Closson et est disponible à l'adresse link:https://kevinclosson.net/slob/["https://kevinclosson.net/slob/"^]. L'installation et la configuration ne prennent que quelques minutes et une base de données Oracle génère des modèles d'E/S sur un espace de table définissable par l'utilisateur. Il s'agit de l'une des rares options de test disponibles permettant de saturer une baie 100 % Flash par E/S. Il est également utile de générer des niveaux d'E/S beaucoup plus bas pour simuler des charges de travail de stockage qui font partie des IOPS faibles, mais qui sont sensibles à la latence.
 
 
 
+[[swingbench]]
 == Swingbench
 
 Swingbench peut être utile pour tester les performances des bases de données, mais il est extrêmement difficile d'utiliser Swingbench sous un contrainte de stockage. NetApp n'a constaté aucun test de Swingbench ayant produit suffisamment d'E/S pour être une charge significative sur n'importe quelle baie AFF. Dans certains cas limités, le test OET (Order Entry Test) peut être utilisé pour évaluer le stockage du point de vue de la latence. Cela peut s'avérer utile lorsqu'une base de données a une dépendance connue en termes de latence pour des requêtes particulières. Assurez-vous que l'hôte et le réseau sont correctement configurés pour atteindre les potentiels de latence d'une baie 100 % Flash.
 
 
 
+[[hammerdb]]
 == HammerDB
 
 HammerDB est un outil de test de base de données qui simule les bancs d'essai TPC-C et TPC-H, entre autres. La construction d'un jeu de données suffisamment volumineux pour exécuter correctement un test peut prendre beaucoup de temps, mais elle peut constituer un outil efficace pour évaluer les performances des applications OLTP et d'entrepôt de données.
 
 
 
+[[orion]]
 == Orion
 
 L'outil Oracle Orion a été couramment utilisé avec Oracle 9, mais il n'a pas été maintenu pour assurer la compatibilité avec les modifications apportées aux différents systèmes d'exploitation hôtes. Il est rarement utilisé avec Oracle 10 ou Oracle 11 en raison d'incompatibilités avec le système d'exploitation et la configuration du stockage.

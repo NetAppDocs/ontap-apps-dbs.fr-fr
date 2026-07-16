@@ -19,6 +19,7 @@ Dans le cas d'un nouveau projet de base de données, cela ne pose pas de problè
 
 
 
+[[scripts]]
 == Scripts
 
 Des exemples de scripts sont fournis dans cette documentation. Ces scripts fournissent des exemples de méthodes d'automatisation de divers aspects de la migration afin de réduire le risque d'erreurs des utilisateurs. Les scripts réduisent les demandes globales de l'équipe INFORMATIQUE responsable de la migration et accélèrent le processus global. Ces scripts sont issus de projets de migration réalisés par les services professionnels de NetApp et les partenaires NetApp. Des exemples de leur utilisation sont présentés dans cette documentation.

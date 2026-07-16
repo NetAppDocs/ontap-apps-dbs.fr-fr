@@ -4,6 +4,7 @@
 
 
 
+[[database-files-filegroup]]
 == Fichiers de base de données et groupe de fichiers
 
 Chaque base de données se compose d'un ou plusieurs fichiers de données et d'un ou plusieurs fichiers journaux de transactions. Le journal de transactions stocke les informations sur les transactions de base de données et toutes les modifications de données effectuées par chaque session. Chaque fois que les données sont modifiées, SQL Server stocke suffisamment d'informations dans le journal de transactions pour annuler (revenir en arrière) ou rétablir (relire) l'action. Un journal de transactions SQL Server fait partie intégrante de la réputation de SQL Server en matière d'intégrité et de robustesse des données. Le journal de transactions est essentiel aux capacités d'atomicité, de cohérence, d'isolation et de durabilité (ACIDE) de SQL Server. SQL Server écrit dans le journal de transactions dès qu'une modification de la page de données se produit. Chaque instruction Data manipulation Language (DML) (par exemple, Select, INSERT, Update ou DELETE) est une transaction complète, et le journal de transactions s'assure que l'opération basée sur l'ensemble a lieu, en s'assurant de l'atomicité de la transaction.
@@ -23,6 +24,7 @@ TIP: *NetApp recommande* d'éviter l'utilisation du groupe de fichiers principal
 
 
 
+[[database-instance-file-initialization]]
 == Initialisation du fichier d'instance de base de données
 
 Vous pouvez spécifier la taille initiale du fichier et les paramètres de croissance automatique au moment de la création de la base de données ou de l'ajout de nouveaux fichiers à une base de données existante. SQL Server utilise un algorithme de remplissage proportionnel lors du choix du fichier de données dans lequel il doit écrire des données. Elle écrit une quantité de données proportionnellement à l'espace libre disponible dans les fichiers. Plus l'espace libre dans le fichier est important, plus il traite d'écritures.

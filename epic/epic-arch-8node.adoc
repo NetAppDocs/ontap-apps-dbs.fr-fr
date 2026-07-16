@@ -15,12 +15,14 @@ Dans cette conception, les environnements de test sont clonés à partir du rapp
 
 
 
+[[eight-node-architecture]]
 == Architecture à huit nœuds
 
 image:epic-8node.png["Architecture Epic à 4 nœuds"]
 
 
 
+[[eight-node-workload-placement]]
 == Placement des workloads à huit nœuds
 
 image:epic-8node-design.png["Placement Epic à 8 nœuds"]

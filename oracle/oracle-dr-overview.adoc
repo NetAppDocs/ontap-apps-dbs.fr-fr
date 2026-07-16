@@ -30,6 +30,7 @@ La synchronisation active SnapMirror (SM-AS) est basée sur la synchronisation S
 
 
 
+[[sm-as-and-mcc-comparison]]
 == Comparaison SM-AS et MCC
 
 Si les solutions SM-AS et MetroCluster sont similaires en termes de fonctionnalité globale, elles présentent d'importantes différences dans la mise en œuvre de la réplication avec un objectif de point de récupération de 0 et sa gestion. Les modes asynchrone et synchrone de SnapMirror peuvent également être utilisés dans le cadre d'un plan de reprise d'activité, mais ils ne sont pas conçus pour être utilisés en tant que technologies de réplication haute disponibilité.

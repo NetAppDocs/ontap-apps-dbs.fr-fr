@@ -21,6 +21,7 @@ ONTAP dispose de certaines fonctionnalités qui enregistreront les tentatives de
 
 
 
+[[nfsv4-statefulness]]
 == État NFSv4
 
 En revanche, NFSv4 est avec état. Le serveur NFSv4 suit les clients qui utilisent les systèmes de fichiers, les fichiers existants, les fichiers et/ou les régions de fichiers verrouillés, etc Cela signifie qu'une communication régulière entre un serveur NFSv4 doit être établie pour maintenir les données d'état à jour.
@@ -29,6 +30,7 @@ Les États les plus importants gérés par le serveur NFS sont les verrous NFSv4
 
 
 
+[[nfsv4-locks]]
 == Verrous NFSv4
 
 Avec NFSv3, les verrous sont consultatifs. Un client NFS peut toujours modifier ou supprimer un fichier « verrouillé ». Un verrou NFSv3 n'expire pas de lui-même, il doit être supprimé. Cela crée des problèmes. Par exemple, si une application en cluster crée des verrous NFSv3 et que l'un des nœuds tombe en panne, que faire ? Vous pouvez coder l'application sur les nœuds survivants pour supprimer les verrous, mais comment savoir que c'est sûr ? Le nœud « en panne » est peut-être opérationnel, mais ne communique pas avec le reste du cluster ?
@@ -37,6 +39,7 @@ Avec NFSv4, les verrous ont une durée limitée. Tant que le client tenant les L
 
 
 
+[[nfsv4-leases]]
 == Locations NFSv4
 
 Les verrous NFSv4 sont associés à un bail NFSv4. Lorsqu'un client NFSv4 établit une connexion avec un serveur NFSv4, il obtient un bail. Si le client obtient un verrou (il existe plusieurs types de verrous), le verrou est associé au bail.
@@ -97,6 +100,7 @@ Que se passe-t-il si un délai de 30 secondes n'est pas acceptable ? Que se pass
 
 
 
+[[nfsv4-grace-periods]]
 == Périodes de grâce NFSv4
 
 Lorsqu'un serveur NFSv3 est redémarré, il est prêt à transmettre les E/S presque instantanément. Il ne maintenait aucune sorte d'état concernant les clients. Le résultat est qu'une opération de basculement ONTAP semble souvent proche de l'instantané. Dès qu'un contrôleur est prêt à commencer à transmettre des données, il envoie un ARP au réseau qui signale le changement de topologie. En règle générale, les clients le détectent presque instantanément et le flux des données reprend.
@@ -130,6 +134,7 @@ Ne modifiez ces valeurs qu'avec prudence et après avoir parfaitement compris le
 
 
 
+[[lease-timeouts-vs-grace-periods]]
 == Délais de location par rapport aux délais de grâce
 
 Le délai de grâce et la période de location sont connectés. Comme mentionné ci-dessus, le délai de bail par défaut est de 30 secondes, ce qui signifie que les clients NFSv4 doivent s'enregistrer auprès du serveur au moins toutes les 30 secondes, sinon ils perdent leur bail et, à leur tour, leurs verrous. Le délai de grâce existe pour permettre à un serveur NFS de reconstruire les données de bail/verrouillage, et il prend par défaut 45 secondes. Le délai de grâce doit être plus long que la période de location. Cela permet de s'assurer qu'un environnement client NFS conçu pour renouveler les contrats de location au moins toutes les 30 secondes aura la possibilité d'archiver avec le serveur après un redémarrage. Un délai de grâce de 45 secondes garantit que tous les clients qui s'attendent à renouveler leur contrat de location au moins toutes les 30 secondes ont certainement l'occasion de le faire.

@@ -22,6 +22,7 @@ Une migration au niveau de la base de données fait généralement référence �
 
 
 
+[[planning-considerations]]
 == Planification
 
 La meilleure option de migration dépend de plusieurs facteurs, notamment de l'étendue de l'environnement à migrer, de la nécessité d'éviter les temps d'indisponibilité et des efforts globaux requis pour effectuer la migration. Les bases de données volumineuses nécessitent évidemment plus de temps et d'efforts pour la migration, mais la complexité de cette migration est minimale. Les petites bases de données peuvent être migrées rapidement. Toutefois, si des milliers d'entre elles doivent être migrées, l'ampleur des efforts peut engendrer des complications. Enfin, plus la base de données est volumineuse, plus elle est susceptible d'être stratégique, ce qui entraîne la nécessité de minimiser les temps d'indisponibilité tout en préservant un chemin « back-out ».
@@ -30,6 +31,7 @@ Voici quelques-uns des éléments à prendre en compte lors de la planification 
 
 
 
+[[data-size]]
 == Taille des données
 
 La taille des bases de données à migrer a de toute évidence un impact sur la planification de la migration, bien que la taille n'ait pas nécessairement un impact sur le délai de mise en service. Lorsqu'une grande quantité de données doit être migrée, la principale considération est la bande passante. Les opérations de copie s'effectuent généralement via des E/S séquentielles efficaces En guise d'estimation prudente, on suppose une utilisation de 50 % de la bande passante réseau disponible pour les opérations de copie. Par exemple, un port FC de 8 Go peut en théorie transférer environ 800 Mbit/s. Si l'on suppose une utilisation de 50 %, une base de données peut être copiée à un taux d'environ 400 Mbit/s. Ainsi, une base de données de 10 To peut être copiée en sept heures environ à ce rythme.
@@ -38,6 +40,7 @@ La migration sur de longues distances nécessite généralement une approche plu
 
 
 
+[[database-count]]
 == Nombre de bases de données
 
 Dans de nombreux cas, le problème du déplacement d'une grande quantité de données n'est pas la taille des données, mais plutôt la complexité de la configuration qui prend en charge la base de données. Savoir qu'il faut migrer 50 To de bases de données n'est pas suffisant. Il peut s'agir d'une seule base de données stratégique de 50 To, d'un ensemble de 4 000 bases de données héritées ou d'un mélange de données de production et de données hors production. Dans certains cas, une grande partie des données est constituée de clones d'une base de données source. Il n'est pas nécessaire de migrer ces clones car ils peuvent être recréés facilement, notamment lorsque la nouvelle architecture est conçue pour exploiter les volumes NetApp FlexClone.
@@ -50,6 +53,7 @@ Enfin, si 500 bases de données réparties sur 200 serveurs doivent être migré
 
 
 
+[[rearchitecture-requirements]]
 == Exigences en matière d'architecture
 
 En général, l'organisation d'un fichier de base de données doit être modifiée pour exploiter les fonctionnalités de la nouvelle baie de stockage. Toutefois, ce n'est pas toujours le cas. Par exemple, les fonctionnalités des baies 100 % Flash EF-Series se concentrent sur les performances SAN et la fiabilité SAN. Dans la plupart des cas, les bases de données peuvent être migrées vers une baie EF-Series sans tenir compte particulière de la disposition des données. Les seules exigences sont un nombre élevé d'IOPS, une faible latence et une fiabilité robuste. Bien que certaines pratiques d'excellence soient liées à des facteurs tels que la configuration RAID ou les pools de disques dynamiques, les projets EF-Series nécessitent rarement des modifications importantes de l'architecture de stockage globale pour exploiter ces fonctionnalités.
@@ -62,6 +66,7 @@ Les technologies comme les contrôles de qualité de service, la relocalisation 
 
 
 
+[[cutover-time]]
 == Délai de mise en service
 
 Vous devez déterminer la durée maximale autorisée de l'interruption de service pendant la mise en service. C'est une erreur courante de supposer que l'ensemble du processus de migration provoque des perturbations. De nombreuses tâches peuvent être effectuées avant le début d'une interruption de service, et de nombreuses options permettent d'effectuer la migration sans interruption ni panne. Même si une interruption est inévitable, vous devez toujours définir le temps d'interruption de service maximal autorisé, car la durée de la mise en service varie d'une procédure à l'autre.
@@ -70,12 +75,14 @@ Par exemple, la copie d'une base de données de 10 To nécessite généralement 
 
 
 
+[[back-out-path]]
 == Chemin de retour arrière
 
 Aucune migration n'est totalement sans risque. Même si la technologie fonctionne parfaitement, il y a toujours une possibilité d'erreur de l'utilisateur. Le risque associé au chemin de migration choisi doit être pris en compte parallèlement aux conséquences d'un échec de la migration. Par exemple, la fonctionnalité de migration transparente du stockage en ligne d'Oracle ASM est l'une de ses principales fonctionnalités, et cette méthode est l'une des plus fiables connues. Cependant, les données sont copiées de manière irréversible avec cette méthode. Dans le cas peu probable où un problème se produit avec ASM, il n'y a pas de chemin de sortie simple. La seule option consiste à restaurer l'environnement d'origine ou à utiliser ASM pour restaurer la migration vers les LUN d'origine. Le risque peut être réduit, mais pas éliminé, en effectuant une sauvegarde de type Snapshot sur le système de stockage d'origine, à condition que le système soit capable d'effectuer une telle opération.
 
 
 
+[[rehearsal]]
 == Répétition
 
 Certaines procédures de migration doivent être entièrement vérifiées avant leur exécution. La nécessité d'une migration et d'une répétition du processus de mise en service est courante dans les bases de données stratégiques pour lesquelles la migration doit réussir et où les temps d'indisponibilité doivent être minimisés. En outre, les tests d'acceptation par l'utilisateur sont fréquemment inclus dans le travail de post-migration et le système global ne peut être remis en production qu'une fois ces tests terminés.

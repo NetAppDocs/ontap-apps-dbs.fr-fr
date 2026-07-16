@@ -16,6 +16,7 @@ La mise en cluster RAC étendue traditionnelle s'est appuyée sur la mise en mir
 
 
 
+[[replication]]
 == La réplication
 
 Pour comprendre la fonctionnalité RAC sur SnapMirror Active Sync, il est essentiel de considérer le stockage comme un ensemble unique de LUN hébergés sur un stockage en miroir. Par exemple :
@@ -26,12 +27,14 @@ Il n'y a pas de copie principale ou miroir. Pour schématiser, il n'y a qu'une s
 
 
 
+[[storage-configuration]]
 == Configuration de stockage sous-jacente
 
 Dans cet exemple de configuration, les disques ASM sont configurés de la même manière que dans n'importe quelle configuration RAC à site unique sur le stockage d'entreprise. Étant donné que le système de stockage assure la protection des données, la redondance ASM externe est utilisée.
 
 
 
+[[uniform-vs-nonuninform-access]]
 == Accès uniforme ou non informé
 
 L'élément le plus important à prendre en compte avec Oracle RAC sur SnapMirror Active Sync est de savoir s'il faut utiliser un accès uniforme ou non.
@@ -42,6 +45,7 @@ Aucune de ces options n'est spécifiquement recommandée ou déconseillée. Cert
 
 
 
+[[nonuniform-access]]
 == Accès non uniforme
 
 L'accès non uniforme est plus simple à configurer du point de vue du SAN.
@@ -52,6 +56,7 @@ L'inconvénient principal de cette link:oracle-dr-smas-nonuniform.html["accès n
 
 
 
+[[uniform-access]]
 == Accès uniforme
 
 L'accès uniforme requiert l'extension du SAN sur les sites. Le principal avantage est que la perte d'un système de stockage n'entraîne pas la perte d'une instance de base de données. Au lieu de cela, cela entraînerait une modification des chemins d'accès multiples dans lesquels les chemins sont actuellement utilisés.
@@ -63,6 +68,7 @@ NOTE: Dans les schémas ci-dessous, il existe également des chemins actifs mais
 
 
 
+[[aff-with-proximity-settings]]
 === AFF avec paramètres de proximité
 
 En cas de latence importante entre les sites, les systèmes AFF peuvent être configurés avec des paramètres de proximité des hôtes. Cela permet à chaque système de stockage d'identifier les hôtes locaux et distants, et d'attribuer les priorités de chemin en conséquence.
@@ -73,6 +79,7 @@ En fonctionnement normal, chaque instance Oracle utilisera de préférence les c
 
 
 
+[[asa-aff-without-proximity-settings]]
 === ASA / AFF sans paramètres de proximité
 
 S'il n'y a pas de latence significative entre les sites, les systèmes AFF peuvent être configurés sans paramètres de proximité des hôtes, ou ASA peut être utilisé.

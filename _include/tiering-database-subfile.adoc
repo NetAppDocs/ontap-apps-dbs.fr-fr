@@ -11,6 +11,7 @@ CAUTION: Le `auto` la politique doit être utilisée avec soin pour les bases de
 
 
 
+[[policies]]
 == Stratégies
 
 Le `tiering-minimum-cooling-days` la règle doit être définie de manière suffisamment élevée pour conserver les fichiers qui peuvent être requis sur le niveau de performance. Par exemple, une base de données dans laquelle les 60 derniers jours de données peuvent être requis avec des performances optimales justifierait de définir le `tiering-minimum-cooling-days` période à 60 jours. Des résultats similaires pourraient également être obtenus en fonction des modèles d'accès aux fichiers. Par exemple, si les 90 derniers jours de données sont requis et que l'application accède à cette période de 90 jours, les données restent sur le Tier de performance. Réglage du `tiering-minimum-cooling-days` une période de 2 jours permettrait de hiérarchiser les données rapidement lorsque celles-ci deviennent moins actives.

@@ -21,6 +21,7 @@ NOTE: Cette documentation remplace le rapport technique _TR-4591 : protection de
 
 
 
+[[planning]]
 == Planification
 
 Une architecture de protection des données d'entreprise adaptée dépend des exigences de l'entreprise concernant la conservation des données, la restauration et la tolérance aux perturbations à divers moments.

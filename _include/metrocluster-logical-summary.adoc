@@ -4,6 +4,7 @@
 
 
 
+[[site-failure-protection-nvram-and-metrocluster]]
 == Protection contre les défaillances de site : NVRAM et MetroCluster
 
 MetroCluster étend la protection des données NVRAM de plusieurs manières :
@@ -15,6 +16,7 @@ MetroCluster étend la protection des données NVRAM de plusieurs manières :
 
 
 
+[[site-and-shelf-failure-protection-syncmirror-and-plexes]]
 == Protection contre les pannes de site et de tiroir : SyncMirror et plexes
 
 SyncMirror est une technologie de mise en miroir qui améliore, mais ne remplace pas, RAID DP ou RAID-TEC. Il met en miroir le contenu de deux groupes RAID indépendants. La configuration logique est la suivante :
@@ -32,6 +34,7 @@ SyncMirror est généralement utilisé pour assurer la mise en miroir à distanc
 
 
 
+[[redundancy-failure-nvfail]]
 == Échec de la redondance : NVFAIL
 
 Comme nous l'avons vu précédemment, une écriture n'est pas validée tant qu'elle n'a pas été connectée à la NVRAM et à la NVRAM locales sur au moins un autre contrôleur. Cette approche évite toute panne matérielle ou de courant qui entraîne une perte des E/S à la volée En cas de panne de la mémoire NVRAM locale ou de la connectivité aux autres nœuds, les données ne seront plus mises en miroir.
@@ -50,6 +53,7 @@ Afin d'éviter ce genre de situation, ONTAP permet de configurer les volumes pou
 
 
 
+[[ha-pairs-and-metrocluster]]
 === Paires HAUTE DISPONIBILITÉ et MetroCluster
 
 MetroCluster est disponible dans deux configurations : deux nœuds et paire haute disponibilité. La configuration à deux nœuds se comporte de la même manière qu'une paire haute disponibilité par rapport à la mémoire NVRAM. En cas de défaillance soudaine, le nœud partenaire peut relire les données NVRAM pour assurer la cohérence des disques et garantir la perte d'aucune écriture reconnue.
@@ -60,12 +64,14 @@ Un aspect important de MetroCluster est que les nœuds distants ne peuvent pas a
 
 
 
+[[switchover-and-switchback]]
 == Basculement et rétablissement
 
 Les termes « switchover and switchoback » font référence au processus de transition des volumes entre des contrôleurs distants dans une configuration MetroCluster. Ce processus s'applique uniquement aux nœuds distants. Lorsque MetroCluster est utilisé dans une configuration à quatre volumes, le basculement de nœud local est le même processus de basculement et de rétablissement que celui décrit précédemment.
 
 
 
+[[planned-switchover-and-switchback]]
 === Basculement et rétablissement planifiés
 
 Un basculement ou rétablissement planifié est similaire à un basculement ou un rétablissement entre les nœuds. Ce processus comporte plusieurs étapes et peut sembler prendre plusieurs minutes, mais il s'agit d'une transition progressive et progressive des ressources de stockage et de réseau. Le moment où les transferts de contrôle se produisent beaucoup plus rapidement que le temps nécessaire à l'exécution de la commande complète.
@@ -74,6 +80,7 @@ La principale différence entre le basculement/rétablissement et le basculement
 
 
 
+[[syncmirror-timeouts]]
 === SyncMirror expire
 
 SyncMirror est une technologie de mise en miroir ONTAP qui offre une protection contre les défaillances de tiroirs. Lorsque les tiroirs sont séparés sur une distance, les données sont protégées à distance.
@@ -88,6 +95,7 @@ Notamment, dans de nombreux cas, ce type de réplication universelle en mode dom
 
 
 
+[[automatic-unattended-switchover-with-fabric-attached-metrocluster]]
 === Basculement automatique sans surveillance avec Fabric Attached MetroCluster
 
 Le basculement automatique sans surveillance (AUSO) est une fonctionnalité MetroCluster intégrée au fabric qui offre une forme de haute disponibilité intersite. Comme évoqué précédemment, MetroCluster est disponible en deux types : un contrôleur unique sur chaque site ou une paire haute disponibilité sur chaque site. L'avantage principal de l'option haute disponibilité est que l'arrêt planifié ou non planifié du contrôleur permet toujours une E/S locale. L'avantage de l'option à nœud unique est de réduire les coûts, la complexité et l'infrastructure.
@@ -104,6 +112,7 @@ Un système MetroCluster ne peut effectuer un basculement automatique en toute s
 
 
 
+[[metrocluster-tiebreaker-with-fabric-attached-metrocluster]]
 === Disjoncteur d'attache MetroCluster avec MetroCluster FAS
 
 link:https://docs.netapp.com/us-en/ontap-metrocluster/install-ip/task_sw_config_configure_mediator.html["NetApp MetroCluster Tiebreaker"^]Exécuté sur un troisième site, le logiciel peut contrôler l'état de santé de l'environnement MetroCluster, envoyer des notifications et forcer un basculement en cas d'incident. Une description complète du Tiebreaker se trouve sur le link:http://mysupport.netapp.com["Site de support NetApp"^], mais le but principal du Tiebreaker MetroCluster est de détecter la perte du site. Il doit également faire la distinction entre la perte du site et une perte de connectivité. Par exemple, le basculement ne doit pas se produire car le disjoncteur d'attache n'a pas pu atteindre le site principal. C'est pourquoi le disjoncteur d'attache surveille également la capacité du site distant à contacter le site principal.
@@ -130,6 +139,7 @@ En outre, le MCTB peut ne pas traiter un désastre roulant qui conduit à la sé
 
 
 
+[[ontap-mediator-with-metrocluster-ip]]
 === Mediator ONTAP avec MetroCluster IP
 
 Le médiateur ONTAP est utilisé avec MetroCluster IP et certaines autres solutions ONTAP. Il fonctionne comme un service disjoncteur d'attache classique, tout comme le logiciel disjoncteur d'attache MetroCluster mentionné ci-dessus, mais comprend également une fonctionnalité essentielle, qui effectue un basculement automatique sans surveillance.
@@ -140,6 +150,7 @@ En revanche, l'architecture IP MetroCluster achemine toutes les E/S exclusivemen
 
 
 
+[[virtual-third-site-with-clusterlion]]
 === Troisième site virtuel avec ClusterLion
 
 ClusterLion est un dispositif de surveillance MetroCluster avancé qui fonctionne comme un troisième site virtuel. Cette approche permet de déployer MetroCluster en toute sécurité dans une configuration à deux sites avec une fonctionnalité de basculement entièrement automatisée. De plus, ClusterLion peut effectuer un moniteur de niveau réseau supplémentaire et exécuter des opérations de post-basculement. La documentation complète est disponible auprès de ProLion.

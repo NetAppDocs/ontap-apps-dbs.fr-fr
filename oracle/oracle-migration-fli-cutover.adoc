@@ -30,6 +30,7 @@ Inutile d'attendre la fin du processus de migration. Dès que la migration d'une
 
 
 
+[[shut-down-database]]
 == Arrêtez la base de données
 
 Dans cet exemple, la première étape de la mise en veille de l'environnement consiste à arrêter la base de données.
@@ -53,6 +54,7 @@ SQL>
 ....
 
 
+[[shut-down-grid-services]]
 == Fermez les services de grille
 
 L'un des systèmes de fichiers SAN en cours de migration inclut également les services Oracle ASM. La mise en veille des LUN sous-jacentes nécessite la suspension des systèmes de fichiers, ce qui signifie l'arrêt des processus avec des fichiers ouverts sur ce système de fichiers.
@@ -76,6 +78,7 @@ CRS-4133: Oracle High Availability Services has been stopped.
 ....
 
 
+[[dismount-file-systems]]
 == Démonter les systèmes de fichiers
 
 Si tous les processus sont arrêtés, l'opération de montage a réussi. Si l'autorisation est refusée, il doit y avoir un processus avec un verrou sur le système de fichiers. Le `fuser` permet d'identifier ces processus.
@@ -86,6 +89,7 @@ Si tous les processus sont arrêtés, l'opération de montage a réussi. Si l'au
 ....
 
 
+[[deactivate-volume-groups]]
 == Désactiver les groupes de volumes
 
 Une fois tous les systèmes de fichiers d'un groupe de volumes donné démontés, le groupe de volumes peut être désactivé.
@@ -97,12 +101,14 @@ Une fois tous les systèmes de fichiers d'un groupe de volumes donné démontés
 ....
 
 
+[[fc-network-changes]]
 == Modifications du réseau FC
 
 Les zones FC peuvent maintenant être mises à jour pour supprimer tout accès de l'hôte à la baie étrangère et établir l'accès à ONTAP.
 
 
 
+[[start-import-process]]
 == Démarrer le processus d'importation
 
 Pour démarrer les processus d'importation de LUN, exécutez `lun import start` commande.
@@ -117,6 +123,7 @@ Cluster01::lun import*>
 ....
 
 
+[[monitor-import-progress]]
 == Surveiller la progression de l'importation
 
 L'opération d'importation peut être surveillée avec `lun import show` commande. Comme indiqué ci-dessous, l'importation des 20 LUN est en cours, ce qui signifie que les données sont désormais accessibles via ONTAP, même si la copie des données progresse.
@@ -153,6 +160,7 @@ Si vous avez besoin d'une migration en ligne, redécouvrez les LUN de leur nouve
 
 
 
+[[scan-for-scsi-device-changes]]
 == Recherchez les modifications de périphérique SCSI
 
 Dans la plupart des cas, l'option la plus simple pour redécouvrir de nouvelles LUN consiste à redémarrer l'hôte. Cela supprime automatiquement les anciens périphériques obsolètes, détecte correctement toutes les nouvelles LUN et construit les périphériques associés, tels que les périphériques multivoies. L'exemple ci-dessous montre un processus entièrement en ligne à des fins de démonstration.
@@ -203,6 +211,7 @@ OLD: Host: scsi9 Channel: 00 Id: 01 Lun: 19
 ....
 
 
+[[check-for-multipath-devices]]
 == Vérifiez la présence de périphériques multivoies
 
 Le processus de découverte des LUN déclenche également la recréation des périphériques multivoies, mais il est connu que le pilote de chemins d'accès multiples Linux présente des problèmes occasionnels. La sortie de `multipath - ll` doit être vérifié pour vérifier que la sortie semble correcte. Par exemple, le résultat ci-dessous affiche les périphériques à chemins d'accès multiples associés à un `NETAPP` chaîne du fournisseur. Chaque périphérique a quatre chemins, dont deux avec une priorité de 50 et deux avec une priorité de 10. Bien que le résultat exact puisse varier selon les versions de Linux, ce résultat semble normal.
@@ -248,6 +257,7 @@ size=10G features='4 queue_if_no_path pg_init_retries 50 retain_attached_hw_hand
 ....
 
 
+[[reactivate-lvm-volume-group]]
 == Réactiver le groupe de volumes LVM
 
 Si les LUN LVM ont été correctement découvertes, le système `vgchange --activate y` la commande doit réussir. C'est un bon exemple de la valeur d'un gestionnaire de volumes logiques. Une modification du WWN d'une LUN ou même d'un numéro de série n'est pas importante, car les métadonnées du groupe de volumes sont écrites sur la LUN elle-même.
@@ -262,6 +272,7 @@ Le système d'exploitation a analysé les LUN et découvert une petite quantité
 ....
 
 
+[[remount-file-systems]]
 == Remonter les systèmes de fichiers
 
 Une fois le groupe de volumes réactivé, les systèmes de fichiers peuvent être montés avec toutes les données d'origine intactes. Comme nous l'avons vu précédemment, les systèmes de fichiers sont pleinement opérationnels, même si la réplication des données est toujours active dans le groupe en arrière-plan.
@@ -286,6 +297,7 @@ tmpfs                             13179736         0  13179736   0% /run/user/0
 ....
 
 
+[[rescan-for-asm-devices]]
 == Rechercher à nouveau les périphériques ASM
 
 Les périphériques ASMlib auraient dû être redécouverts lorsque les périphériques SCSI ont été renumérisés. La redécouverte peut être vérifiée en ligne en redémarrant ASMlib puis en analysant les disques.
@@ -322,6 +334,7 @@ Instantiating disk "ASM9"
 ....
 
 
+[[restart-grid-services]]
 == Redémarrez les services de grille
 
 Maintenant que les périphériques LVM et ASM sont en ligne et disponibles, les services de grille peuvent être redémarrés.
@@ -332,6 +345,7 @@ Maintenant que les périphériques LVM et ASM sont en ligne et disponibles, les 
 ....
 
 
+[[restart-database]]
 == Redémarrez la base de données
 
 Une fois les services de grille redémarrés, la base de données peut être ouverte. Il peut être nécessaire d'attendre quelques minutes que les services ASM soient entièrement disponibles avant d'essayer de démarrer la base de données.

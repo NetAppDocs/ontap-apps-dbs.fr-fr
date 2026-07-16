@@ -18,6 +18,7 @@ La documentation MySQL recommande d'utiliser NFSv4 pour les déploiements NAS.
 
 
 
+[[ontap-nfs-transfer-sizes]]
 == Tailles de transfert NFS ONTAP
 
 Par défaut, ONTAP limite les tailles d'E/S NFS à 64 Ko. Les E/S aléatoires avec une base de données MySQL utilisent une taille de bloc bien inférieure à la taille maximale de 64 Ko. Les E/S de bloc volumineux sont généralement parallélisées de sorte que le maximum de 64 000 ne constitue pas non plus une limitation.

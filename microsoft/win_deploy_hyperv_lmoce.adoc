@@ -18,6 +18,7 @@ Cette section décrit le déploiement de la migration dynamique Hyper-V en dehor
 
 
 
+[[prerequisites]]
 == Prérequis
 
 * Serveurs Hyper-V autonomes avec stockage indépendant ou stockage SMB partagé.
@@ -27,6 +28,7 @@ Cette section décrit le déploiement de la migration dynamique Hyper-V en dehor
 
 
 
+[[deployment]]
 == Déploiement
 
 Pour effectuer une migration en direct dans un environnement non mis en cluster, configurez les serveurs Hyper-V source et de destination afin qu'ils puissent envoyer et recevoir des opérations de migration en direct. Sur les deux serveurs Hyper-V, procédez comme suit :

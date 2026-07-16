@@ -25,6 +25,7 @@ Le clonage est également un exemple de provisionnement fin. Un client NetApp ma
 
 
 
+[[space-management]]
 == Gestion de l'espace
 
 Le provisionnement fin d'un environnement applicatif doit être extrêmement prudent, car les taux de modification des données peuvent augmenter de manière inattendue. Par exemple, la consommation d'espace due aux snapshots peut augmenter rapidement si les tables de base de données sont réindexées ou si des correctifs à grande échelle sont appliqués aux invités VMware. Une sauvegarde mal placée peut écrire une grande quantité de données dans un délai très court. Enfin, il peut être difficile de restaurer certaines applications si un système de fichiers manque d'espace de façon inattendue.
@@ -35,6 +36,7 @@ Voir la link:https://docs.netapp.com/us-en/ontap/volumes/index.html["documentati
 
 
 
+[[fractional-reservations]]
 == Réservations fractionnaires
 
 La réserve fractionnaire fait référence au comportement d'une LUN dans un volume en ce qui concerne l'efficacité de l'espace. Lorsque l'option `fractional-reserve` est défini sur 100 %. toutes les données du volume peuvent connaître un taux de rotation de 100 % avec n'importe quel modèle de données, sans épuiser l'espace sur le volume.
@@ -46,6 +48,7 @@ TIP: L'abstraction de volume n'est pas présente sur SAN-only l'ASA, et par cons
 
 
 
+[[compression-and-deduplication]]
 == Compression et déduplication
 
 La compression et la déduplication sont deux formes de provisionnement fin. Par exemple, une empreinte des données de 50 To peut être compressée jusqu'à 30 To, ce qui permet d'économiser 20 To. Pour que la compression offre tous les avantages, il faut utiliser quelques 20 To pour d'autres données ou acheter le système de stockage avec moins de 50 To. Il en résulte une quantité de données stockées supérieure à ce qui n'est techniquement disponible sur le système de stockage. Du point de vue des données, il y a 50 To de données, même si celles-ci ne occupent que 30 To sur les disques.
@@ -56,6 +59,7 @@ La compression et la déduplication sont présentées plus en détail dans la se
 
 
 
+[[compression-and-fractional-reservations]]
 === Compression et réservations fractionnaires
 
 La compression est une forme d'allocation dynamique. Les réservations fractionnaires affectent l'utilisation de la compression, avec une remarque importante ; l'espace est réservé avant la création du snapshot. Normalement, la réserve fractionnaire n'est importante que si un instantané existe. S'il n'y a pas de snapshot, la réserve fractionnaire n'est pas importante. Ce n'est pas le cas avec la compression. Si une LUN est créée sur un volume avec compression, ONTAP conserve l'espace nécessaire pour prendre en charge un snapshot. Ce comportement peut être déroutant pendant la configuration, mais il est normal.
@@ -81,6 +85,7 @@ Bien que cette situation puisse sembler confuse, il est peu probable qu'elle soi
 ====
 
 
+[[free-space-and-lvm-space-allocation]]
 == Allocation d'espace libre et d'espace LVM
 
 L'efficacité du provisionnement fin des LUN actifs dans un environnement de système de fichiers peut diminuer au fil du temps à mesure que des données sont supprimées. À moins que les données supprimées ne soient écrasées par des zéros (voir aussi link:oracle-storage-san-config-asm ru.html[ASMRU]) ou que l'espace ne soit libéré avec la récupération d'espace TRIM/UNMAP, les données « effacées » occupent de plus en plus d'espace blanc non alloué dans le système de fichiers. De plus, le provisionnement fin des LUN actifs est d'une utilité limitée dans de nombreux environnements de bases de données, car les fichiers de données sont initialisés à leur taille maximale au moment de leur création.

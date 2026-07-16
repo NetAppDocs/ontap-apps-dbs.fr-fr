@@ -17,6 +17,7 @@ L'une des caractéristiques importantes de SM-AS est la capacité de configurer 
 
 
 
+[[proximity-settings]]
 == Paramètres de proximité
 
 La proximité fait référence à une configuration par cluster qui indique qu'un WWN d'hôte ou un ID d'initiateur iSCSI appartient à un hôte local. Il s'agit d'une deuxième étape facultative de configuration de l'accès aux LUN.
@@ -31,6 +32,7 @@ Sans paramètres de proximité, cet hôte utilisera les deux systèmes de stocka
 
 
 
+[[aff]]
 == AFF
 
 Avec un système AFF, les chemins apparaissent comme indiqué ci-dessous lorsque la proximité de l'hôte a été configurée.
@@ -45,6 +47,7 @@ Il existe des chemins redondants à travers le cluster local qui ne sont pas ill
 
 
 
+[[asa]]
 == ASA
 
 Les systèmes NetApp ASA proposent des chemins d'accès multiples actif-actif sur tous les chemins d'accès à un cluster. Cela s'applique également aux configurations SM-AS.

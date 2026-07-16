@@ -6,6 +6,7 @@ De nombreux jeux de données d'applications sont organisés par date, et ces don
 
 
 
+[[policies]]
 == Stratégies
 
 Pour mettre en œuvre une approche de hiérarchisation basée sur des fichiers, vous devez avoir des fichiers écrits et non modifiés par la suite. Le `tiering-minimum-cooling-days` la règle doit être définie suffisamment haut pour que les fichiers dont vous avez besoin restent sur le tier de performance. Par exemple, un jeu de données pour lequel les 60 derniers jours de données sont requis avec des performances optimales garantit le paramétrage du `tiering-minimum-cooling-days` période jusqu'en 60. Des résultats similaires peuvent également être obtenus en fonction des modèles d'accès aux fichiers. Par exemple, si les 90 derniers jours de données sont requis et que l'application accède à cette période de 90 jours, les données restent sur le Tier de performance. En réglant le `tiering-minimum-cooling-days` sur 2, le tiering s'affiche rapidement une fois les données moins actives.

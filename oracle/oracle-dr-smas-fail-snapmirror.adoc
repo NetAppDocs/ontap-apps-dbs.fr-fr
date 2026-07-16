@@ -15,12 +15,14 @@ Si la liaison de réplication SnapMirror active Sync, l'E/S d'écriture ne peut 
 
 
 
+[[site-a]]
 == Site A
 
 Le site A qui présente une défaillance de liaison de réplication entraînera une pause d'environ 15 secondes dans le traitement des E/S d'écriture au fur et à mesure que ONTAP tente de répliquer des écritures avant de déterminer que la liaison de réplication est réellement inutilisable. Au bout de 15 secondes, le cluster ONTAP sur le site A reprend le traitement des E/S de lecture et d'écriture. Les chemins SAN ne changent pas et les LUN restent en ligne.
 
 
 
+[[site-b]]
 == Site B
 
 Le site B n'étant pas le site privilégié de synchronisation active SnapMirror, ses chemins de LUN deviennent indisponibles au bout de 15 secondes environ.

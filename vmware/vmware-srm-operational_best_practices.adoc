@@ -18,6 +18,7 @@ Les sections suivantes présentent les meilleures pratiques opérationnelles pou
 
 
 
+[[datastores-and-protocols]]
 == Datastores et protocoles
 
 * Si possible, utilisez toujours les outils ONTAP pour provisionner les datastores et les volumes. Cela vérifie que les volumes, les chemins de jonction, les LUN, les igroups, les règles d'exportation, et d'autres paramètres sont configurés de manière compatible.
@@ -39,6 +40,7 @@ snap autodelete modify -volume -commitment try
 
 
 
+[[about-array-pairs]]
 == À propos des paires de baies
 
 Un gestionnaire de matrices est créé pour chaque paire de matrices. Avec les outils SRM et ONTAP, chaque association de baie s'effectue au sein d'un SVM, même si vous utilisez les identifiants du cluster. Vous pouvez ainsi segmenter les flux de travail de reprise après incident entre des locataires, en fonction des SVM qu'ils ont affectés à la gestion. Vous pouvez créer plusieurs gestionnaires de baies pour un cluster donné, qui peuvent être asymétriques. Vous pouvez « Fan-Out » ou « Fan-In » sur différents clusters ONTAP 9. Par exemple, il peut y avoir des SVM-A et SVM-B dans le Cluster-1 en cours de réplication vers SVM-C dans le Cluster-2, SVM-D dans le Cluster-3 ou vice-versa.
@@ -49,6 +51,7 @@ image:vsrm-ontap9_image6.jpg["cluster"]
 
 
 
+[[about-replication-groups]]
 == À propos des groupes de réplication
 
 Les groupes de réplication contiennent des ensembles logiques de machines virtuelles qui sont restaurées ensemble. Étant donné que la réplication SnapMirror de ONTAP se produit au niveau du volume, toutes les machines virtuelles d'un volume se trouvent dans le même groupe de réplication.
@@ -59,12 +62,14 @@ Dernier point à prendre en compte pour les groupes de réplication : chacun d'e
 
 
 
+[[about-protection-groups]]
 == À propos des groupes de protection
 
 Les groupes de protection définissent les VM et les datastores dans des groupes restaurés à partir du site protégé. Le site protégé est là où existent les VM configurées dans un groupe de protection pendant les opérations stables. Il est important de noter que même si SRM peut afficher plusieurs gestionnaires de baies pour un groupe de protection, un groupe de protection ne peut pas s'étendre sur plusieurs gestionnaires de baies. Pour cette raison, vous ne devez pas couvrir les fichiers de machine virtuelle sur plusieurs datastores sur différents SVM.
 
 
 
+[[about-recovery-plans]]
 == À propos des plans de reprise
 
 Les plans de reprise définissent les groupes de protection qui sont restaurés au cours du même processus. Plusieurs groupes de protection peuvent être configurés dans le même plan de reprise. Par ailleurs, pour activer davantage d'options pour l'exécution des plans de reprise, un seul groupe de protection peut être inclus dans plusieurs plans de restauration.
@@ -77,6 +82,7 @@ NetApp recommande fortement de travailler avec vos équipes en charge des applic
 
 
 
+[[test-failover]]
 == Tester le basculement
 
 Il est recommandé d'effectuer systématiquement un basculement de test lorsqu'une modification est apportée à la configuration du stockage protégé des machines virtuelles. Ainsi, en cas d'incident, vous avez l'assurance que site Recovery Manager peut restaurer les services au sein de la cible de délai de restauration prévue.
@@ -89,6 +95,7 @@ Une fois le test validé et n'est plus nécessaire, effectuez une opération de 
 
 
 
+[[failover-considerations]]
 == Considérations relatives au basculement
 
 Il y a plusieurs autres considérations lorsqu'il s'agit de basculer sur un site en plus de l'ordre des opérations mentionné dans ce guide.
@@ -103,12 +110,14 @@ Pour configurer SRM de façon à appliquer différents paramètres réseau à pl
 
 
 
+[[reprotect]]
 == Reprotéger
 
 Après une restauration, le site de reprise devient le nouveau site de production. Comme l'opération de reprise a rompue la réplication SnapMirror, le nouveau site de production n'est pas protégé contre un futur incident. Il est recommandé de protéger le nouveau site de production sur un autre site immédiatement après une restauration. Si le site de production d'origine est opérationnel, l'administrateur VMware peut utiliser le site de production d'origine comme nouveau site de reprise pour protéger le nouveau site de production, ce qui inversera efficacement la direction de la protection. La reprotection est disponible uniquement en cas de défaillance majeure. Par conséquent, les serveurs vCenter d'origine, les serveurs ESXi, les serveurs SRM et les bases de données correspondantes doivent être récupérables. S'ils ne sont pas disponibles, un nouveau groupe de protection et un nouveau plan de récupération doivent être créés.
 
 
 
+[[failback]]
 == Du rétablissement
 
 Une opération de retour arrière est fondamentalement un basculement dans une direction différente de celle précédente. Il est recommandé de vérifier que le site d'origine fonctionne à un niveau de fonctionnalité acceptable avant de tenter un retour arrière ou, en d'autres termes, un basculement vers le site d'origine. Si le site d'origine est toujours compromis, vous devez reporter la restauration jusqu'à ce que la défaillance soit suffisamment remédiée.
@@ -117,6 +126,7 @@ Une autre meilleure pratique de restauration consiste à toujours effectuer un b
 
 
 
+[[reprotecting-the-original-site]]
 == Reprotéger le site d'origine
 
 Après la restauration, vous devez confirmer auprès de toutes les parties prenantes que leurs services ont été renvoyés à la normale avant d'exécuter à nouveau reprotéger.

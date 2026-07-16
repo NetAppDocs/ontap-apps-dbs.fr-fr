@@ -18,6 +18,7 @@ Les versions 9.7 et ultérieures de ONTAP prennent en charge les communications 
 
 
 
+[[ontap]]
 == ONTAP
 
 Pour tous les systèmes de stockage précédemment ajoutés : lors d'une mise à niveau, tous les systèmes de stockage ajoutés font l'objet d'une fiabilité automatique et les mécanismes d'authentification basés sur des certificats sont configurés.
@@ -28,6 +29,7 @@ image:vmware-otv-hardening-mutual-tls-image2.png["image2,largeur=468,hauteur=158
 
 
 
+[[cluster-add]]
 === *Cluster Add*
 
 Lors du workflow d'ajout de cluster, si le cluster ajouté prend en charge MTLS, MTLS sera configuré par défaut. L'utilisateur n'a pas besoin d'effectuer de configuration pour cela. La capture d'écran ci-dessous présente l'écran présenté à l'utilisateur lors de l'ajout d'un cluster.
@@ -42,6 +44,7 @@ image:vmware-otv-hardening-mutual-tls-image6.png["Ajouter un système de stockag
 
 
 
+[[cluster-edit]]
 === Modification du cluster
 
 Lors de l'opération d'édition de cluster, il existe deux scénarios :

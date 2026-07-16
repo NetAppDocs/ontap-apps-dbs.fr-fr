@@ -18,6 +18,7 @@ Découvrez comment déployer Microsoft Windows Nano Server.
 
 
 
+[[deployment]]
 == Déploiement
 
 Pour déployer un Nano Server en tant qu'hôte Hyper-V, procédez comme suit :
@@ -91,6 +92,7 @@ Invoke-Command -VMName $nanoserver -Credential $nanosecurecred -ArgumentList @($
 
 
 
+[[connect-to-nano-server]]
 == Connectez-vous au Nano Server
 
 Pour vous connecter au Nano Server à distance à l'aide de PowerShell, procédez comme suit :

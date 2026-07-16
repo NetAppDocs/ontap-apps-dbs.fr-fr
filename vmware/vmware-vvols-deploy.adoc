@@ -19,6 +19,7 @@ Le provisionnement des datastores vVols implique plusieurs étapes. Les système
 
 
 
+[[preparing-to-create-vvols-datastores-with-ontap-tools]]
 == Préparation à la création de datastores vVols avec les outils ONTAP
 
 Vous pouvez ignorer les deux premières étapes du processus de déploiement si vous utilisez déjà les outils ONTAP pour gérer, automatiser et générer des rapports sur votre stockage VMFS ou NFS classique existant. Vous pouvez également vous référer à ce document complet link:vmware-vvols-checklist.html["liste de contrôle"] pour le déploiement et la configuration des outils ONTAP.
@@ -80,6 +81,7 @@ NOTE: La raison pour laquelle l'ensemble du cluster doit être intégré à l'in
 
 
 
+[[creating-vvols-datastores-with-ontap-tools]]
 == Création de datastores vVols avec les outils ONTAP
 
 Cliquez avec le bouton droit de la souris sur l'hôte, le cluster ou le data Center sur lequel vous souhaitez créer le datastore vVols, puis sélectionnez _ONTAP Tools_ > _Provision datastore_.
@@ -142,12 +144,14 @@ image:vvols-deploy-9.png["Role=« pouce » « Assistant de provisionnement de da
 
 
 
+[[migrating-vms-from-traditional-datastores-to-vvols]]
 == Migration des machines virtuelles des datastores classiques vers des vVols
 
 La migration des machines virtuelles des datastores traditionnels vers un datastore vVols est aussi simple que le déplacement de machines virtuelles entre des datastores traditionnels. Il vous suffit de sélectionner la ou les machines virtuelles, puis de sélectionner migrer dans la liste actions et de sélectionner un type de migration de _modifier le stockage uniquement_. Lorsque vous y êtes invité, sélectionnez une règle de stockage de machine virtuelle correspondant à votre datastore vVols. Les opérations de copie de migration peuvent être déchargées à l'aide de vSphere 6.0 et versions ultérieures pour les migrations de SAN VMFS vers des vVols, mais pas des VMDK NAS vers des vVols.
 
 
 
+[[managing-vms-with-policies]]
 == Gestion des machines virtuelles avec des règles
 
 Pour automatiser le provisionnement du stockage grâce à une gestion basée sur des politiques, vous devez créer des politiques de stockage de machines virtuelles qui correspondent aux capacités de stockage souhaitées.
@@ -157,6 +161,7 @@ NOTE: Les outils ONTAP 10.0 et versions ultérieures n'utilisent plus les profil
 
 
 
+[[creating-vm-storage-policies]]
 === Création de stratégies de stockage de machine virtuelle
 
 Les stratégies de stockage des machines virtuelles sont utilisées dans vSphere pour gérer des fonctionnalités optionnelles telles que le contrôle des E/S de stockage ou le chiffrement vSphere. Ils sont également utilisés avec les vVols pour appliquer des capacités de stockage spécifiques à la machine virtuelle. Utilisez le type de stockage «NetApp.clustered.Data. ONTAP.VP.vvol ». Voir le lien : vmware-vvols-ontap.html#Best Practices[exemple de configuration réseau utilisant vVols sur NFS v3] pour un exemple de ceci avec le fournisseur VASA des outils ONTAP . Les règles relatives au stockage «NetApp.clustered.Data. ONTAP.VP.VASA10 » doivent être utilisées avec des banques de données non basées sur vVols.

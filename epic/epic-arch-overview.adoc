@@ -17,6 +17,7 @@ Il n'est pas question du champ d'application de ce document de couvrir le large 
 
 
 
+[[intersystems-iris]]
 == Iris InterSystems
 
 InterSystems Iris est la base de données utilisée par l'application Epic. Dans cette base de données, le serveur de données est le point d'accès des données stockées de manière persistante. Le serveur d'applications gère les requêtes de base de données et envoie des requêtes de données au serveur de données. Pour la plupart des environnements logiciels Epic, l'utilisation de l'architecture multiprocesseur symétrique (SMP) dans un seul serveur de base de données suffit pour répondre aux demandes de base de données des applications Epic. Dans les déploiements de grande envergure, un modèle distribué peut être pris en charge à l'aide du protocole ECP (Enterprise Caché Protocol) d'InterSystems.
@@ -33,6 +34,7 @@ La mise à jour de la base de données Iris présente de nombreux avantages :
 
 
 
+[[cach-database-servers-and-storage-usage]]
 == Serveurs de base de données Caché et utilisation du stockage
 
 * *Production* dans les environnements logiciels Epic, une base de données unique centrée sur le patient est déployée. Dans les exigences matérielles d'Epic, le serveur physique hébergeant le serveur de données Iris de lecture/écriture principal est appelé serveur de base de données de production. Ce serveur nécessite un stockage 100 % Flash haute performance pour les fichiers appartenant à l'instance de base de données primaire. Pour la haute disponibilité, Epic prend en charge l'utilisation d'un serveur de base de données de basculement ayant accès aux mêmes fichiers. Iris utilise Epic Mirror pour répliquer en lecture seule des rapports, la reprise après incident et la prise en charge des copies en lecture seule. Chaque type de serveur de base de données peut être basculé en mode lecture/écriture pour des raisons de continuité d'activité.
@@ -66,6 +68,7 @@ Les besoins en stockage de toutes ces charges de travail multiples, pools, proto
 
 
 
+[[operational-database-workloads]]
 == Charges de travail opérationnelles des bases de données
 
 Chaque serveur de base de données Epic effectue des E/S sur les types de fichiers suivants :

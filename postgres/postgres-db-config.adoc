@@ -32,6 +32,7 @@ Consultez la documentation PostgreSQL pour obtenir une liste complète des param
 
 
 
+[[toast]]
 == TOASTS
 
 TOAST est l'acronyme de Oversized-Attribute Storage technique. PostgreSQL utilise une taille de page fixe (généralement 8 Ko) et ne permet pas aux blocs de données de couvrir plusieurs pages. Par conséquent, il n'est pas possible de stocker directement des valeurs de champ importantes. Lorsque vous essayez de stocker une ligne qui dépasse cette taille, TOAST divise les données de grandes colonnes en « morceaux » plus petits et les stocke dans une table de TOASTS.
@@ -40,6 +41,7 @@ Les grandes valeurs des attributs toastés sont extraites (si elles sont sélect
 
 
 
+[[vacuum]]
 == VIDE
 
 En mode PostgreSQL normal, les blocs de données supprimés ou rendus obsolètes par une mise à jour ne sont pas physiquement supprimés de leur table ; ils restent présents jusqu'à ce que LE VIDE soit exécuté. Par conséquent, vous devez faire fonctionner le VIDE régulièrement, en particulier sur les tables fréquemment mises à jour. L'espace qu'il occupe doit ensuite être récupéré pour réutilisation par de nouvelles lignes, afin d'éviter une panne d'espace disque. Cependant, il ne renvoie pas l'espace vers le système d'exploitation.

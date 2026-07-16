@@ -18,6 +18,7 @@ La liste ci-dessous répertorie les ports et les protocoles requis permettant la
 
 
 
+[[inbound-and-outbound-ports-required-for-otv]]
 == Ports entrants et sortants requis pour OTV
 
 Notez le tableau ci-dessous qui répertorie les ports entrants et sortants requis pour le bon fonctionnement des outils ONTAP. Il est important de s'assurer que seuls les ports mentionnés dans le tableau sont ouverts pour les connexions à partir de machines distantes, tandis que tous les autres ports doivent être bloqués pour les connexions à partir de machines distantes. Cela permet d'assurer la sécurité de votre système.
@@ -66,6 +67,7 @@ Utilisé pour les connexions SOAP sur HTTPS
 |===
 
 
+[[controlling-remote-access-to-the-derby-database]]
 == Contrôle de l'accès à distance à la base de données Derby
 
 Les administrateurs peuvent accéder à la base de données derby à l'aide des commandes suivantes. Il est accessible via la machine virtuelle locale des outils ONTAP ainsi qu'un serveur distant en procédant comme suit :

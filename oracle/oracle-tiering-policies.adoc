@@ -19,6 +19,7 @@ Quatre règles sont disponibles dans ONTAP, qui contrôlent la façon dont les d
 
 
 
+[[snapshot-only]]
 == Copies Snapshot uniquement
 
 Le `snapshot-only` `tiering-policy` s'applique uniquement aux blocs qui ne sont pas partagés avec le système de fichiers actif. Elle entraîne essentiellement une hiérarchisation des sauvegardes de bases de données. Les blocs deviennent candidats au Tiering après la création d'une copie Snapshot et l'écrasement du bloc, ce qui entraîne l'affichage d'un bloc uniquement dans la copie Snapshot. Le délai avant un `snapshot-only` le bloc est considéré comme froid est contrôlé par le `tiering-minimum-cooling-days` réglage du volume. La plage à partir de ONTAP 9.8 est de 2 à 183 jours.
@@ -27,6 +28,7 @@ De nombreux jeux de données ont des taux de modification faibles, ce qui permet
 
 
 
+[[auto]]
 == Auto
 
 Le `auto` la règle de tiering étend le tiering aux blocs spécifiques de snapshot et aux blocs dans le système de fichiers actif. Le délai avant qu'un bloc soit considéré comme froid est contrôlé par le `tiering-minimum-cooling-days` réglage du volume. La plage à partir de ONTAP 9.8 est de 2 à 183 jours.
@@ -35,6 +37,7 @@ Cette approche permet d'activer des options de hiérarchisation qui ne sont pas 
 
 
 
+[[none]]
 == Aucune
 
 Le `none` la règle de tiering empêche tout bloc supplémentaire d'être hiérarchisé de la couche de stockage, mais toutes les données qui se trouvent toujours dans le tier de capacité restent dans le tier de capacité jusqu'à ce qu'elles soient lues. Si le bloc est ensuite lu, il est retiré et placé sur le Tier de performance.
@@ -43,6 +46,7 @@ La principale raison d'utiliser le `none` la règle de tiering consiste à empê
 
 
 
+[[all]]
 == Tout
 
 Le `all` la règle de tiering remplace la `backup` Politique à partir de ONTAP 9.6. Le `backup` Règle appliquée uniquement aux volumes de protection des données, c'est-à-dire une destination SnapMirror ou NetApp SnapVault. Le `all` les règles fonctionnent de même, mais ne se limitent pas aux volumes de protection des données.

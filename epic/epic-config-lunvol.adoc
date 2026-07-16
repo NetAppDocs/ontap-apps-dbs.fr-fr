@@ -27,6 +27,7 @@ Pour optimiser les performances d'une charge de travail, comme Epic ODB ou Clari
 
 
 
+[[scaling-options]]
 == Options d'évolutivité
 
 Si le serveur requiert plus de stockage, l'option la plus simple est d'augmenter les LUN contenant des volumes. La seconde option consiste à ajouter des LUN aux groupes de volumes par multiples de deux à la fois (un par volume par nœud).
@@ -35,6 +36,7 @@ Exemple :
 
 
 
+[[volume-and-8-lun-layout]]
 == Disposition des volumes et 8 LUN
 
 image:epic-8lun.png["Disposition Epic 8 LUN"]
@@ -44,6 +46,7 @@ NOTE: Si dans un grand environnement nécessitant plus de 4 nœuds ou 8 LUN, con
 
 
 
+[[best-practices]]
 == Et des meilleures pratiques
 
 * Utilisez 8 LUN dans 8 volumes pour démarrer, en ajoutant 2 LUN à la fois, sur tous les nœuds du cluster.

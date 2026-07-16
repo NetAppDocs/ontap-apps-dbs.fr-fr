@@ -17,6 +17,7 @@ NOTE: Les informations dans le link:#misscount["misscount"] La section contient 
 
 
 
+[[disktimeout]]
 == disktimeout
 
 Le paramètre RAC principal lié au stockage est `disktimeout`. Ce paramètre contrôle le seuil au sein duquel les E/S du fichier de vote doivent être terminées. Si le `disktimeout` Le paramètre est dépassé, puis le nœud RAC est supprimé du cluster. La valeur par défaut de ce paramètre est 200. Cette valeur doit être suffisante pour les procédures standard de Takeover et and Giveback du stockage.
@@ -36,6 +37,7 @@ En l'absence d'un basculement ou d'un retour de stockage réel, l'effet peut êt
 ====
 
 
+[[misscount]]
 == misscount
 
 Le `misscount` Le paramètre affecte normalement uniquement la pulsation réseau entre les nœuds RAC. La valeur par défaut est 30 secondes. Si les binaires de la grille se trouvent sur une matrice de stockage ou si le disque d'amorçage du système d'exploitation n'est pas local, ce paramètre peut devenir important. Cela inclut les hôtes avec des lecteurs de démarrage situés sur un SAN FC, les systèmes d'exploitation démarrés par NFS et les lecteurs de démarrage situés sur les datastores de virtualisation, tels qu'un fichier VMDK.

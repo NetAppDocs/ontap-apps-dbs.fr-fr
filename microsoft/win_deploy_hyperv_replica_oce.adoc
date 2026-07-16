@@ -18,6 +18,7 @@ Cette annexe décrit le déploiement d'un réplica Hyper-V en dehors d'un enviro
 
 
 
+[[prerequisites]]
 == Prérequis
 
 * Vous avez besoin de serveurs Hyper-V autonomes situés dans le même emplacement géographique ou dans des emplacements distincts servant de serveurs principaux et de serveurs de réplica.
@@ -27,6 +28,7 @@ Cette annexe décrit le déploiement d'un réplica Hyper-V en dehors d'un enviro
 
 
 
+[[deployment]]
 == Déploiement
 
 . Configurez le serveur de réplica.
@@ -58,6 +60,7 @@ Cette annexe décrit le déploiement d'un réplica Hyper-V en dehors d'un enviro
 
 
 
+[[replication]]
 == La réplication
 
 . Exécutez un basculement de test pour vous assurer que la machine virtuelle de réplica fonctionne correctement sur le serveur de réplica. Le test crée une machine virtuelle temporaire sur le serveur de réplica.

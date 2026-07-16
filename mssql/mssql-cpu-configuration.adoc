@@ -18,6 +18,7 @@ Les performances de SQL Server dépendent de plusieurs unités centrales et de l
 
 
 
+[[hyper-threading]]
 == Hyper-Threading
 
 L'Hyper-threading fait référence à la mise en œuvre simultanée de plusieurs threads (SMT), qui améliore la parallélisation des calculs réalisés sur les processeurs x86. La colocation sécurisée est disponible sur les processeurs Intel et AMD.
@@ -28,6 +29,7 @@ La mise en garde ici est que chaque version de SQL Server a ses propres limites 
 
 
 
+[[cores-and-licensing]]
 == Cœurs et gestion des licences
 
 Il existe deux options de licence pour SQL Server. Le premier est connu sous le nom de modèle serveur + licence d'accès client (CAL) ; le second est le modèle par cœur de processeur. Bien que vous puissiez accéder à toutes les fonctionnalités du produit disponibles dans SQL Server avec la stratégie serveur + CAL, il existe une limite matérielle de 20 cœurs de processeur par socket. Même si vous disposez de SQL Server Enterprise Edition + CAL pour un serveur avec plus de 20 cœurs de processeur par socket, l'application ne peut pas utiliser tous ces cœurs à la fois sur cette instance.
@@ -40,6 +42,7 @@ Par conséquent, pour utiliser tous les CPU, vous devez utiliser la licence par 
 
 
 
+[[cpu-affinity]]
 == Affinité CPU
 
 Il est peu probable que vous ayez à modifier les valeurs par défaut de l'affinité du processeur à moins que vous ne rencontriez des problèmes de performances, mais il est toujours utile de comprendre ce qu'elles sont et comment elles fonctionnent.
@@ -56,6 +59,7 @@ L'option de masque d'E/S d'affinité lie les E/S de disque SQL Server à un sous
 
 
 
+[[max-degree-of-parallelism-maxdop]]
 == Degré maximal de parallélisme (MAXDOP)
 
 Par défaut, SQL Server utilise tous les CPU disponibles pendant l'exécution d'une requête si la licence par cœur de processeur est choisie.
@@ -67,6 +71,7 @@ TIP: *NetApp recommande* pour DSS comme les data warehouses, commencez par `MAXD
 
 
 
+[[max-worker-threads]]
 == Nombre max. De threads de travail
 
 L'option max worker threads permet d'optimiser les performances lorsqu'un grand nombre de clients sont connectés à SQL Server.
@@ -81,6 +86,7 @@ image:../media/mssql-max-worker-threads.png["Nombre MAX. De threads de travail"]
 
 
 
+[[configuring-max-worker-threads-using-sql-server-management-studio]]
 === Configuration du nombre maximal de threads de travail à l'aide de SQL Server Management Studio.
 
 L'exemple suivant montre comment configurer l'option max Work threads à l'aide de T-SQL.

@@ -20,6 +20,7 @@ De plus, le plug-in SnapCenter pour VMware peut s'intégrer à https://docs.neta
 
 
 
+[[netapp-ontap-volume-snapshots]]
 == Snapshots de volumes NetApp ONTAP
 
 Utilisez les snapshots pour créer des copies rapides de votre machine virtuelle ou de votre datastore sans affecter les performances, puis envoyez-les à un système secondaire à l'aide de SnapMirror pour une protection des données hors site à plus long terme. Cette approche réduit l'espace de stockage et la bande passante réseau en stockant uniquement les informations modifiées.
@@ -36,6 +37,7 @@ Pour plus d'informations sur les instantanés, consultez la documentation ONTAP 
 
 
 
+[[snapcenter-plug-in-for-vmware-vsphere]]
 == Plug-in SnapCenter pour VMware vSphere
 
 SnapCenter vous permet de créer des règles de sauvegarde qui peuvent être appliquées à plusieurs tâches. Ces règles peuvent définir des fonctionnalités de planification, de conservation, de réplication et autres. Ils continuent d'autoriser une sélection facultative de snapshots cohérents avec les machines virtuelles, ce qui exploite la capacité de l'hyperviseur à suspendre les E/S avant de prendre un snapshot VMware. Cependant, en raison de l'impact des snapshots VMware sur les performances, ils ne sont généralement pas recommandés sauf si vous devez suspendre le système de fichiers invité. Utilisez plutôt les snapshots pour une protection générale et des outils applicatifs tels que les plug-ins d'applications SnapCenter pour protéger les données transactionnelles comme SQL Server ou Oracle.
@@ -50,6 +52,7 @@ Pour plus d'informations sur le dimensionnement, reportez-vous au https://kb.net
 
 
 
+[[ontap-tools-for-vmware-vsphere-with-vmware-live-site-recovery]]
 == Outils ONTAP pour VMware vSphere avec VMware Live site Recovery
 
 Les outils ONTAP pour VMware vSphere (OT4VS) sont un plug-in gratuit qui permet une intégration transparente entre VMware vSphere et NetApp ONTAP. Il vous permet de gérer votre stockage ONTAP directement à partir du client Web vSphere, ce qui facilite les tâches telles que le provisionnement du stockage, la gestion de la réplication et la surveillance des performances.
@@ -58,12 +61,14 @@ Pour améliorer les fonctionnalités de reprise après incident, envisagez d'uti
 
 
 
+[[netapp-disaster-recovery]]
 == NetApp Disaster Recovery
 
 Disaster Recovery (DR) est un service basé sur le cloud qui fournit une solution complète pour protéger vos données et vos applications en cas de sinistre. Il offre une gamme de fonctionnalités, notamment le basculement et la restauration automatiques, plusieurs points de récupération à un instant T, une reprise après sinistre cohérente avec les applications et la prise en charge des systèmes ONTAP sur site et dans le cloud. NetApp Disaster Recovery est conçu pour fonctionner de manière transparente avec ONTAP et votre environnement VMware vSphere, offrant une solution unifiée pour la reprise après sinistre.
 
 
 
+[[vsphere-metro-storage-cluster-vmsc-with-netapp-metrocluster-and-snapmirror-active-sync]]
 == Cluster de stockage vSphere Metro (vMSC) avec NetApp MetroCluster et la synchronisation active SnapMirror
 
 Enfin, pour une protection optimale des données, envisagez une configuration VMware vSphere Metro Storage Cluster (vMSC) utilisant NetApp MetroCluster. VMSC est une solution NetApp certifiée VMware qui utilise une réplication synchrone, offrant les mêmes avantages qu'un cluster haute disponibilité, mais distribuée sur des sites distincts, pour une protection contre les incidents sur site. La solution NetApp SnapMirror Active Sync, avec ASA et AFF, et MetroCluster avec AFF, offre des configurations économiques pour la réplication synchrone avec restauration transparente en cas de défaillance d'un composant de stockage unique, ainsi qu'une restauration transparente en cas de synchronisation active SnapMirror ou une restauration à commande unique en cas d'incident sur site avec MetroCluster. VMSC est décrit plus en détail dans https://www.netapp.com/pdf.html?item=/media/19773-tr-4128.pdf["TR-4128"^].

@@ -23,18 +23,21 @@ La procédure présentée ci-dessous est également essentiellement une opérati
 
 
 
+[[log-shipping-file-system-to-file-system]]
 == Envoi de journaux - système de fichiers vers le système de fichiers
 
 Cet exemple illustre la migration d'une base de données appelée WAFFLE d'un système de fichiers ordinaire vers un autre système de fichiers ordinaire situé sur un serveur différent. Il illustre également l'utilisation de SnapMirror pour effectuer une copie rapide des fichiers de données, mais cela ne fait pas partie intégrante de la procédure globale.
 
 
 
+[[create-database-backup]]
 === Créer une sauvegarde de base de données
 
 La première étape consiste à créer une sauvegarde de base de données. Plus précisément, cette procédure nécessite un ensemble de fichiers de données pouvant être utilisés pour la relecture des journaux d'archivage.
 
 
 
+[[environment]]
 === De production
 
 Dans cet exemple, la base de données source se trouve sur un système ONTAP. La méthode la plus simple pour créer une sauvegarde d'une base de données consiste à utiliser un instantané. La base de données est placée en mode de sauvegarde à chaud pendant quelques secondes `snapshot create` l'opération est exécutée sur le volume hébergeant les fichiers de données.
@@ -55,6 +58,7 @@ Le résultat est un instantané sur le disque appelé `hotbackup` qui contient u
 
 
 
+[[restore-to-new-environment]]
 === Restaurer dans un nouvel environnement
 
 La sauvegarde doit maintenant être restaurée dans le nouvel environnement. Cette opération peut être effectuée de plusieurs façons, notamment Oracle RMAN, la restauration à partir d'une application de sauvegarde comme NetBackup ou une simple opération de copie des fichiers de données placés en mode de sauvegarde à chaud.
@@ -115,6 +119,7 @@ fas8060-nfs1:/vol_logs            9961472       128    9961344   1% /logs
 
 
 
+[[create-controlfile-creation-template]]
 === Créer un modèle de création de fichier de contrôle
 
 Vous devez ensuite créer un modèle de fichier de contrôle. Le `backup controlfile to trace` commande crée des commandes texte pour recréer un fichier de contrôle. Dans certaines circonstances, cette fonction peut être utile pour restaurer une base de données à partir d'une sauvegarde, et elle est souvent utilisée avec des scripts qui effectuent des tâches telles que le clonage de base de données.
@@ -136,6 +141,7 @@ waffle.ctrl                                              100% 5199     5.1KB/s  
 
 
 
+[[backup-parameter-file]]
 === Sauvegarde du fichier de paramètres
 
 Un fichier de paramètres est également requis dans le nouvel environnement. La méthode la plus simple consiste à créer un fichier pfile à partir du fichier spfile ou pfile actuel. Dans cet exemple, la base de données source utilise un fichier spfile.
@@ -146,6 +152,7 @@ File created.
 ....
 
 
+[[create-oratab-entry]]
 === Créer une entrée oratab
 
 La création d'une entrée oratab est requise pour le bon fonctionnement des utilitaires tels que oraenv. Pour créer une entrée oratab, procédez comme suit.
@@ -155,6 +162,7 @@ WAFFLE:/orabin/product/12.1.0/dbhome_1:N
 ....
 
 
+[[prepare-directory-structure]]
 === Préparer la structure du répertoire
 
 Si les répertoires requis n'étaient pas déjà présents, vous devez les créer ou la procédure de démarrage de la base de données échoue. Pour préparer la structure de répertoires, remplissez les conditions minimales suivantes.
@@ -171,6 +179,7 @@ The Oracle base has been set to /orabin
 ....
 
 
+[[parameter-file-updates]]
 === Mises à jour du fichier de paramètres
 
 . Pour copier le fichier de paramètres sur le nouveau serveur, exécutez les commandes suivantes. L'emplacement par défaut est le `$ORACLE_HOME/dbs` répertoire. Dans ce cas, le fichier pfile peut être placé n'importe où. Il est utilisé uniquement comme étape intermédiaire dans le processus de migration.
@@ -224,6 +233,7 @@ File created.
 
 
 
+[[recreate-controlfiles]]
 === Recréer les fichiers de contrôle
 
 Dans une étape précédente, la sortie de `backup controlfile to trace` a été copié sur le nouveau serveur. La partie spécifique de la sortie requise est le `controlfile recreation` commande. Ces informations se trouvent dans le fichier sous la section marquée `Set #1. NORESETLOGS`. Il commence par la ligne `create controlfile reuse database` et doit inclure le mot `noresetlogs`. Il se termine par le caractère point-virgule (; ).
@@ -309,6 +319,7 @@ Si des fichiers sont mal placés ou si des paramètres sont mal configurés, des
 
 
 
+[[initial-log-replication]]
 === Réplication initiale du journal
 
 Au moins une opération de réponse de journal est nécessaire pour rendre les fichiers de données cohérents. De nombreuses options sont disponibles pour relire les journaux. Dans certains cas, l'emplacement du journal d'archivage d'origine sur le serveur d'origine peut être partagé via NFS et la réponse du journal peut être effectuée directement. Dans d'autres cas, les journaux d'archivage doivent être copiés.
@@ -330,6 +341,7 @@ oracle@jfsc1's password:
 ....
 
 
+[[initial-log-replay]]
 === Relecture initiale du journal
 
 Une fois les fichiers à l'emplacement du journal d'archivage, ils peuvent être relus en exécutant la commande `recover database until cancel` suivi de la réponse `AUTO` pour relire automatiquement tous les journaux disponibles.
@@ -363,6 +375,7 @@ Si la base de données source peut être arrêtée avant de copier les journaux 
 
 
 
+[[incremental-log-replication-and-replay]]
 === Réplication et relecture incrémentielles du journal
 
 Dans la plupart des cas, la migration n'est pas effectuée immédiatement. La fin du processus de migration peut prendre plusieurs jours, voire plusieurs semaines, ce qui signifie que les journaux doivent être envoyés en continu à la base de données de réplica et relus. Par conséquent, lors de la mise en service, un nombre minimal de données doit être transféré et relu.
@@ -453,6 +466,7 @@ With the Partitioning, OLAP, Advanced Analytics and Real Application Testing opt
 ....
 
 
+[[cutover]]
 === Mise en service
 
 Lorsque vous êtes prêt à passer au nouvel environnement, vous devez effectuer une synchronisation finale qui inclut à la fois les journaux d'archivage et les journaux de reprise. Si l'emplacement original du journal de reprise n'est pas déjà connu, il peut être identifié comme suit :
@@ -506,6 +520,7 @@ Database altered.
 
 
 
+[[log-shipping-asm-to-file-system]]
 == Envoi de journaux - ASM vers le système de fichiers
 
 Cet exemple illustre l'utilisation d'Oracle RMAN pour migrer une base de données. Il est très similaire à l'exemple précédent de système de fichiers pour l'envoi de journaux de système de fichiers, mais les fichiers sur ASM ne sont pas visibles par l'hôte. Les seules options de migration des données situées sur les périphériques ASM sont soit le déplacement du LUN ASM, soit l'utilisation d'Oracle RMAN pour effectuer les opérations de copie.
@@ -516,6 +531,7 @@ Cet exemple montre le déplacement d'une base de données appelée PANCAKE depui
 
 
 
+[[create-database-backup]]
 === Créer une sauvegarde de base de données
 
 La première étape consiste à créer une sauvegarde de la base de données à migrer vers un autre serveur. Comme la source utilise Oracle ASM, RMAN doit être utilisé. Une simple sauvegarde RMAN peut être effectuée comme suit. Cette méthode crée une sauvegarde balisée qui peut être facilement identifiée par RMAN plus tard dans la procédure.
@@ -556,6 +572,7 @@ Finished backup at 24-MAY-16
 ....
 
 
+[[backup-controlfile]]
 === Fichier de contrôle de sauvegarde
 
 Un fichier de contrôle de sauvegarde est requis plus tard dans la procédure pour `duplicate database` fonctionnement.
@@ -575,6 +592,7 @@ Finished backup at 24-MAY-16
 ....
 
 
+[[backup-parameter-file]]
 === Sauvegarde du fichier de paramètres
 
 Un fichier de paramètres est également requis dans le nouvel environnement. La méthode la plus simple consiste à créer un fichier pfile à partir du fichier spfile ou pfile actuel. Dans cet exemple, la base de données source utilise un fichier spfile.
@@ -585,6 +603,7 @@ Statement processed
 ....
 
 
+[[asm-file-rename-script]]
 === Script de renommage de fichier ASM
 
 Plusieurs emplacements de fichiers actuellement définis dans les fichiers de contrôle changent lorsque la base de données est déplacée. Le script suivant crée un script RMAN pour faciliter le processus. Cet exemple illustre une base de données comportant un très petit nombre de fichiers de données, mais en général, les bases de données contiennent des centaines, voire des milliers de fichiers de données.
@@ -628,6 +647,7 @@ duplicate target database for standby backup location '/rman/pancake';
 ....
 
 
+[[prepare-directory-structure]]
 === Préparer la structure du répertoire
 
 Les scripts sont presque prêts à être exécutés, mais d'abord la structure de répertoire doit être en place. Si les répertoires requis ne sont pas déjà présents, ils doivent être créés ou la procédure de démarrage de la base de données échoue. L'exemple ci-dessous reflète les exigences minimales.
@@ -642,6 +662,7 @@ Les scripts sont presque prêts à être exécutés, mais d'abord la structure d
 ....
 
 
+[[create-oratab-entry]]
 === Créer une entrée oratab
 
 La commande suivante est requise pour que des utilitaires tels que oraenv fonctionnent correctement.
@@ -651,6 +672,7 @@ PANCAKE:/orabin/product/12.1.0/dbhome_1:N
 ....
 
 
+[[parameter-updates]]
 === Mises à jour des paramètres
 
 Le fichier pfile enregistré doit être mis à jour pour refléter toute modification de chemin sur le nouveau serveur. Les modifications du chemin d'accès au fichier de données sont modifiées par le script de duplication RMAN, et presque toutes les bases de données nécessitent des modifications `control_files` et `log_archive_dest` paramètres. Il peut également y avoir des emplacements de fichiers d'audit qui doivent être modifiés, ainsi que des paramètres tels que `db_create_file_dest` Peut ne pas être pertinent en dehors d'ASM. Un administrateur de base de données expérimenté doit examiner attentivement les modifications proposées avant de poursuivre.
@@ -702,6 +724,7 @@ File created.
 ....
 
 
+[[startup-nomount]]
 === Nom de démarrage
 
 La dernière étape avant la réplication de la base de données consiste à afficher les processus de la base de données, mais pas à monter les fichiers. Dans cette étape, des problèmes avec le fichier spfile peuvent devenir évidents. Si le `startup nomount` la commande échoue en raison d'une erreur de paramètre, il est simple de s'arrêter, de corriger le modèle pfile, de le recharger en tant que fichier spfile et de réessayer.
@@ -717,6 +740,7 @@ Redo Buffers                5455872 bytes
 ....
 
 
+[[duplicate-the-database]]
 === Dupliquez la base de données
 
 La restauration de la sauvegarde RMAN précédente vers le nouvel emplacement prend plus de temps que les autres étapes de ce processus. La base de données doit être dupliquée sans modification de l'ID de base de données (DBID) ou réinitialisation des journaux. Cela empêche l'application des journaux, ce qui est une étape nécessaire pour synchroniser complètement les copies.
@@ -819,6 +843,7 @@ Finished Duplicate Db at 24-MAY-16
 ....
 
 
+[[initial-log-replication]]
 === Réplication initiale du journal
 
 Vous devez maintenant envoyer les modifications de la base de données source vers un nouvel emplacement. Cela peut nécessiter une combinaison d'étapes. La méthode la plus simple serait que RMAN sur la base de données source écrive des journaux d'archive sur une connexion réseau partagée. Si aucun emplacement partagé n'est disponible, une autre méthode consiste à utiliser RMAN pour écrire dans un système de fichiers local, puis à utiliser rcp ou rsync pour copier les fichiers.
@@ -861,6 +886,7 @@ Finished backup at 24-MAY-16
 ....
 
 
+[[initial-log-replay]]
 === Relecture initiale du journal
 
 Une fois les fichiers à l'emplacement du journal d'archivage, ils peuvent être relus en exécutant la commande `recover database until cancel` suivi de la réponse `AUTO` pour relire automatiquement tous les journaux disponibles. Le fichier de paramètres dirige actuellement les journaux d'archivage vers `/logs/archive`, Mais cela ne correspond pas à l'emplacement où RMAN a été utilisé pour enregistrer les journaux. L'emplacement peut être redirigé temporairement comme suit avant de récupérer la base de données.
@@ -896,6 +922,7 @@ Si la base de données source peut être arrêtée avant de copier les journaux 
 
 
 
+[[incremental-log-replication-and-replay]]
 === Réplication et relecture incrémentielles du journal
 
 Dans la plupart des cas, la migration n'est pas effectuée immédiatement. La fin du processus de migration peut prendre plusieurs jours, voire plusieurs semaines, ce qui signifie que les journaux doivent être envoyés en continu à la base de données de réplica et relus. Ainsi, le transfert et la lecture de données minimales doivent être assurés à l'arrivée de la mise en service.
@@ -987,6 +1014,7 @@ With the Partitioning, OLAP, Advanced Analytics and Real Application Testing opt
 ....
 
 
+[[cutover]]
 === Mise en service
 
 Lorsque vous êtes prêt à passer au nouvel environnement, vous devez effectuer une synchronisation finale. Lorsque vous travaillez avec des systèmes de fichiers réguliers, il est facile de s'assurer que la base de données migrée est synchronisée à 100 % par rapport à l'original car les journaux de reprise d'origine sont copiés et relus. Il n'y a pas de bonne façon de le faire avec ASM. Seuls les journaux d'archivage peuvent être facilement recopiés. Pour s'assurer qu'aucune donnée n'est perdue, l'arrêt final de la base de données d'origine doit être effectué avec précaution.
@@ -1118,6 +1146,7 @@ Table dropped.
 
 
 
+[[nondisruptive-redo-log-migration]]
 == Migration des journaux de reprise sans interruption
 
 Il arrive qu'une base de données soit correctement organisée de manière globale, à l'exception des journaux de reprise. Cela peut se produire pour de nombreuses raisons, dont la plus courante est liée aux snapshots. Des produits tels que SnapManager pour Oracle, SnapCenter et la structure de gestion du stockage NetApp Snap Creator permettent une restauration quasi instantanée d'une base de données, mais uniquement si vous restaurez l'état des volumes de fichiers de données. Si les journaux de reprise partagent l'espace avec les fichiers de données, la restauration ne peut pas être effectuée en toute sécurité, car elle entraînerait la destruction des journaux de reprise, ce qui entraînerait probablement une perte des données. Les journaux de reprise doivent donc être déplacés.
@@ -1126,6 +1155,7 @@ Cette procédure est simple et peut être effectuée sans interruption.
 
 
 
+[[current-redo-log-configuration]]
 === Configuration actuelle du journal de reprise
 
 . Identifiez le nombre de groupes de fichiers redo log et leurs numéros de groupe respectifs.
@@ -1156,6 +1186,7 @@ GROUP#||''||BYTES
 
 
 
+[[create-new-logs]]
 === Créer de nouveaux journaux
 
 . Pour chaque journal de reprise, créez un nouveau groupe avec la taille et le nombre de membres correspondants.
@@ -1193,6 +1224,7 @@ GROUP#||''||MEMBER
 
 
 
+[[drop-old-logs]]
 === Supprimez les anciens journaux
 
 . Supprimez les anciens journaux (groupes 1, 2 et 3).

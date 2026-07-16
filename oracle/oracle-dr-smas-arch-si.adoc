@@ -16,6 +16,7 @@ image:smas-oracle-si-nonuniform.png["Oracle si avec accès non uniforme"]
 
 
 
+[[failover-with-a-preconfigured-os]]
 == Basculement avec un système d'exploitation préconfiguré
 
 La synchronisation active SnapMirror fournit une copie synchrone des données au niveau du site de reprise d'activité. Toutefois, la mise à disposition des données requiert un système d'exploitation et les applications associées. L'automatisation de base peut considérablement améliorer le délai de basculement de l'environnement global. Les produits Clusterware tels que Pacemaker sont souvent utilisés pour créer un cluster sur les sites et, dans la plupart des cas, le processus de basculement peut être piloté par des scripts simples.
@@ -34,6 +35,7 @@ La procédure d'activation réelle est simple. Les commandes telles que la déco
 
 
 
+[[failover-with-a-virtualized-os]]
 == Basculement avec un système d'exploitation virtualisé
 
 Le basculement des environnements de base de données peut être étendu pour inclure le système d'exploitation lui-même. En théorie, ce basculement peut être effectué avec des LUN de démarrage, mais le plus souvent avec un système d'exploitation virtualisé. La procédure est similaire aux étapes suivantes :
@@ -48,6 +50,7 @@ Par exemple, un cluster ESX peut couvrir des sites. En cas d'incident, les machi
 
 
 
+[[storage-failure-protection]]
 == Protection contre les défaillances du stockage
 
 Le diagramme ci-dessus montre l'utilisation de link:oracle-dr-smas-nonuniform.html["accès non uniforme"], où le SAN n'est pas étendu entre les sites. Cela peut être plus simple à configurer et, dans certains cas, peut être la seule option étant donné les fonctionnalités SAN actuelles, mais cela signifie également que la défaillance du système de stockage principal entraînerait une panne de la base de données jusqu'à ce que l'application ait été ratée.

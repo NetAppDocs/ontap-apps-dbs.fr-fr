@@ -27,6 +27,7 @@ Certains grands clients ont adopté une approche plus simple en configurant des 
 
 
 
+[[data-layout]]
 == Disposition des données
 
 La solution la plus simple consiste à isoler les fichiers de données dans un ou plusieurs volumes, LUN ou espaces de noms NVMe dédiés. Les ressources de stockage ne doivent contenir aucun autre type de fichier. Ceci afin de garantir que les fichiers de données peuvent être rapidement restaurés via une opération SnapRestore sans détruire un journal de restauration important, un fichier de contrôle ou un journal d'archivage.
@@ -41,6 +42,7 @@ Si ces instructions sont respectées, les instantanés peuvent être programmés
 
 
 
+[[local-recovery-procedurenfs]]
 == Procédure de restauration locale : NFS
 
 Cette procédure peut être conduite manuellement ou via une application telle que SnapCenter. La procédure de base est la suivante :
@@ -57,6 +59,7 @@ En outre, dans le cas de bases de données plus petites, l'utilisateur peut rest
 
 
 
+[[local-recovery-proceduresan]]
 == Procédure de restauration locale—SAN
 
 Cette procédure peut être conduite manuellement ou via une application telle que SnapCenter. La procédure de base est la suivante :

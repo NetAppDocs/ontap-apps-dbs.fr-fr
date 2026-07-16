@@ -20,6 +20,7 @@ Les outils ONTAP incluent également les extensions d'interface utilisateur vCen
 
 
 
+[[products-and-documentation]]
 == Produits et documentation
 
 La licence ONTAP One inclut toutes les licences nécessaires pour utiliser les vVols avec les systèmes ONTAP. La seule autre exigence est les outils ONTAP gratuits OVA, qui agit en tant que fournisseur VASA. Dans un environnement vVols, le logiciel VASA Provider traduit les fonctionnalités des baies en attributs basés sur des règles qui peuvent être exploitées via les API VASA sans que l'administrateur vSphere n'ait à savoir comment les fonctionnalités sont gérées en arrière-plan. Cela permet une consommation dynamique de la capacité de stockage allouée sur la base de règles, ce qui évite de créer manuellement des datastores classiques et de gérer leurs taux de consommation de stockage individuels. En bref, les vVols simplifient la gestion du stockage d'entreprise et l'affranchit de l'administrateur vSphere pour qu'il puisse se concentrer sur la couche de virtualisation.
@@ -30,12 +31,14 @@ La gamme d'outils ONTAP 10 nouvelle génération modernise les fonctionnalités 
 
 
 
+[[ontap-tools-vasa-provider-architecture-when-using-iscsi-or-fcp-with-unified-systems]]
 === ONTAP Tools VASA Provider architecture lors de l'utilisation d'iSCSI ou FCP avec des systèmes unifiés
 
 image:vvols-image5.png["Architecture VASA Provider des outils ONTAP,240"]
 
 
 
+[[product-installation]]
 === Installation du produit
 
 Pour les nouvelles installations, déployez l'appliance virtuelle dans votre environnement vSphere. Une fois déployé, vous pouvez vous connecter à l'interface utilisateur du gestionnaire ou utiliser les API REST pour faire évoluer votre déploiement verticalement ou horizontalement, intégrer les vCenters (qui enregistrent le plug-in avec vCenter), intégrer les systèmes de stockage et associer les systèmes de stockage à vos vCenters. L'intégration de systèmes de stockage dans l'interface du gestionnaire d'outils ONTAP et l'association de clusters à des vCenters sont uniquement nécessaires si vous prévoyez d'utiliser la colocation sécurisée avec des SVM dédiés. Sinon, vous pouvez simplement intégrer le ou les clusters de stockage souhaités dans les extensions de l'interface utilisateur vCenter des outils ONTAP ou à l'aide des API REST.
@@ -53,6 +56,7 @@ Pour le dimensionnement de votre appliance virtuelle et la compréhension des li
 
 
 
+[[product-documentation]]
 === Documentation produit
 
 La documentation suivante est disponible pour vous aider à déployer les outils ONTAP.
@@ -90,12 +94,14 @@ https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/index.html["Document
 
 
 
+[[vasa-provider-dashboard]]
 === Tableau de bord VASA Provider
 
 Le fournisseur VASA inclut un tableau de bord contenant des informations sur les performances et la capacité des VM vVols individuelles. Ces informations proviennent directement de ONTAP pour les fichiers et les LUN VVol, notamment la latence, les IOPS, le débit, etc. Il est activé par défaut lors de l'utilisation de toutes les versions de ONTAP 9 actuellement prises en charge. Notez qu'après la configuration initiale, le tableau de bord peut contenir jusqu'à 30 minutes de données.
 
 
 
+[[other-best-practices]]
 == Autres pratiques exemplaires
 
 L'utilisation des vVols de ONTAP avec vSphere est simple et suit les méthodes vSphere publiées (consultez la documentation utilisation des volumes virtuels sous vSphere Storage in VMware pour votre version d'ESXi). Voici quelques autres pratiques à prendre en compte avec ONTAP.

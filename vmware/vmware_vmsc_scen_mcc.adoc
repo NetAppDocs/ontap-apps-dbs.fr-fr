@@ -18,6 +18,7 @@ Les sections suivantes décrivent les résultats attendus de différents scénar
 
 
 
+[[single-storage-path-failure]]
 == Défaillance d'un seul chemin de stockage
 
 Dans ce scénario, si des composants tels que le port HBA, le port réseau, le port du commutateur de données frontal ou un câble FC ou Ethernet échouent, ce chemin particulier vers le périphérique de stockage est marqué comme mort par l'hôte ESXi. Si plusieurs chemins sont configurés pour le périphérique de stockage en fournissant la résilience au niveau du port HBA/réseau/commutateur, ESXi effectue idéalement un basculement de chemin. Pendant cette période, les ordinateurs virtuels restent en fonctionnement sans être affectés, car la disponibilité du stockage est assurée par plusieurs chemins vers le périphérique de stockage.
@@ -27,6 +28,7 @@ NOTE: Dans ce scénario, le comportement de MetroCluster n'a pas changé et tous
 
 
 
+[[best-practice]]
 === _Meilleure pratique_
 
 Dans les environnements dans lesquels les volumes NFS/iSCSI sont utilisés, NetApp recommande de configurer au moins deux liaisons montantes réseau pour le port vmkernel NFS dans le vSwitch standard et la même pour le groupe de ports où l'interface vmkernel NFS est mappée pour le vSwitch distribué. Le regroupement de cartes réseau peut être configuré en mode actif-actif ou actif-veille.
@@ -35,6 +37,7 @@ En outre, pour les LUN iSCSI, les chemins d'accès multiples doivent être confi
 
 
 
+[[best-practice]]
 === _Meilleure pratique_
 
 Dans les environnements dans lesquels des LUN Fibre Channel sont utilisées, NetApp recommande d'avoir au moins deux HBA, ce qui garantit la résilience au niveau des HBA/ports. NetApp recommande également la segmentation entre un initiateur unique et une seule cible comme meilleure pratique pour la configuration de la segmentation.
@@ -43,6 +46,7 @@ Virtual Storage Console (VSC) doit être utilisé pour définir des règles de c
 
 
 
+[[single-esxi-host-failure]]
 == Défaillance d'un hôte ESXi unique
 
 image::../media/vmsc_5_1.png[Défaillance d'un seul hôte.,624,598]
@@ -57,6 +61,7 @@ Dans ce scénario, le comportement de MetroCluster n'a pas changé et tous les d
 
 
 
+[[esxi-host-isolation]]
 == Isolation de l'hôte ESXi
 
 image::../media/vmsc_5_2.png[Isolation de l'hôte ESXi,624,301]
@@ -67,6 +72,7 @@ Dans ce scénario, le comportement de MetroCluster n'a pas changé et tous les d
 
 
 
+[[disk-shelf-failure]]
 == Panne de tiroir disque
 
 Dans ce scénario, il y a une panne de plus de deux disques ou d'un tiroir entier. Les données sont servies depuis le plex opérationnel sans interruption des services de données. La défaillance de disque peut affecter un plex local ou distant. Les agrégats s'affichent en mode dégradé, car un seul plex est actif. Une fois les disques défaillants remplacés, les agrégats affectés resynchroniseront automatiquement pour reconstruire les données. Après la resynchronisation, les agrégats reviennent automatiquement en mode miroir normal. Si plus de deux disques d'un même groupe RAID sont défectueux, le plex doit être reconstruit.
@@ -80,6 +86,7 @@ image::../media/vmsc_5_3.png[Une panne de tiroir disque.,624,576]
 
 
 
+[[single-storage-controller-failure]]
 == Panne d'un seul contrôleur de stockage
 
 Dans ce scénario, l'un des deux contrôleurs de stockage tombe en panne sur un site. Comme il existe une paire haute disponibilité sur chaque site, la panne d'un nœud entraîne le basculement vers l'autre nœud de manière transparente et automatique. Par exemple, si le nœud A1 tombe en panne, son stockage et ses charges de travail sont automatiquement transférés vers le nœud A2. Les machines virtuelles ne seront pas affectées, car tous les plexes restent disponibles. Les nœuds du second site (B1 et B2) ne sont pas affectés. En outre, vSphere HA ne prendra aucune action, car le nœud maître du cluster recevra toujours les battements de cœur du réseau.
@@ -90,10 +97,12 @@ Si le basculement fait partie d'un incident en cours (le nœud A1 bascule vers A
 
 
 
+[[interswitch-link-failures]]
 == Défaillances de liaison entre commutateurs
 
 
 
+[[interswitch-link-failure-at-management-network]]
 === Défaillance de la liaison inter-commutateur sur le réseau de gestion
 
 image::../media/vmsc_5_5.png[Défaillance de la liaison entre les commutateurs au niveau du réseau de gestion,624,184]
@@ -105,6 +114,7 @@ NOTE: Pendant cette période, les machines virtuelles restent en cours d'exécut
 
 
 
+[[interswitch-link-failure-at-storage-network]]
 === Défaillance de la liaison intercommutateur sur le réseau de stockage
 
 image::../media/vmsc_5_6.png[Défaillance de la liaison de l'interswitch au niveau du réseau de stockage,624,481]
@@ -119,6 +129,7 @@ image::../media/vmsc_5_7.png[Une machine virtuelle violant une règle d'affinit�
 
 
 
+[[all-interswitch-failure-or-complete-data-center-partition]]
 === Défaillance de tous les commutateurs ou partition complète du centre de données
 
 Dans ce scénario, toutes les liaisons ISL entre les sites sont en panne et les deux sites sont isolés les uns des autres. Comme nous l'avons vu dans les scénarios précédents, tels que la défaillance des liens ISL au niveau du réseau de gestion et du réseau de stockage, les machines virtuelles ne sont pas affectées par la défaillance complète des liens ISL.
@@ -133,6 +144,7 @@ image::../media/vmsc_5_9.png[Partition de centre de données où VM1 a violé un
 
 
 
+[[interswitch-link-failure-on-both-fabrics-in-netapp-metrocluster]]
 === Défaillance de la liaison inter-commutateur sur les deux fabriques dans NetApp MetroCluster
 
 Dans le cas d'une défaillance d'un ou de plusieurs liens ISL, le trafic continue à travers les liens restants. Si toutes les liaisons ISL des deux structures échouent, de sorte qu'il n'y ait pas de liaison entre les sites pour le stockage et la réplication NVRAM, chaque contrôleur continue de transmettre ses données locales. Sur au moins un lien ISL est restauré, la resynchronisation de tous les plexes se produit automatiquement.
@@ -143,6 +155,7 @@ image::../media/vmsc_5_10.png[Défaillance de la liaison entre les commutateurs 
 
 
 
+[[peered-cluster-link-failure]]
 === Défaillance du lien de peering de cluster
 
 Dans le cas d'une défaillance de liaison de cluster peering, les liens ISL de la structure sont toujours actifs, les services de données (lectures et écritures) continuent sur les deux sites vers les deux plexes. Toute modification de la configuration du cluster (par exemple, ajout d'un SVM, provisionnement d'un volume ou d'une LUN dans un SVM existant) ne peut pas être propagée à l'autre site. Ils sont conservés dans les volumes de métadonnées CRS locaux et automatiquement propagés à l'autre cluster lors de la restauration de la liaison de cluster peering. Si un basculement forcé est nécessaire avant la restauration de la liaison de cluster peering, les modifications de la configuration du cluster en attente seront automatiquement lues à partir de la copie répliquée à distance des volumes de métadonnées sur le site survivant dans le cadre du processus de basculement.
@@ -151,6 +164,7 @@ image::../media/vmsc_5_11.png[Défaillance du lien de peering de cluster,624,303
 
 
 
+[[complete-site-failure]]
 === Défaillance complète du site
 
 Dans un scénario de défaillance de site complet A, les hôtes ESXi du site B n'obtiennent pas la pulsation réseau des hôtes ESXi du site A car ils sont en panne. Le maître haute disponibilité sur le site B vérifie que les pulsations du datastore ne sont pas présentes, déclare que les hôtes du site A sont en panne et tente de redémarrer le site A des machines virtuelles sur le site B. Pendant cette période, l'administrateur du stockage effectue un basculement pour reprendre les services des nœuds défaillants sur le site survivant, ce qui restaure tous les services de stockage du site A sur le site B. Une fois que les volumes ou les LUN du site A sont disponibles sur le site B, l'agent principal de haute disponibilité tente de redémarrer le site A des machines virtuelles sur le site B.

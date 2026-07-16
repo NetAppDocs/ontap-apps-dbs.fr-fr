@@ -18,6 +18,7 @@ SQL Server peut être configuré pour fonctionner avec la synchronisation active
 
 
 
+[[standalone-instance-of-sql-server]]
 == Instance autonome de SQL Server
 
 Les meilleures pratiques en matière de mise en page des fichiers et de configuration des serveurs sont les mêmes que celles recommandées dans link:mssql-storage-considerations.html["SQL Server sur ONTAP"] la documentation.
@@ -36,6 +37,7 @@ Un processus de basculement simple et automatisé peut être configuré plus fac
 
 
 
+[[sql-server-failover-cluster-instance]]
 == Instance de cluster de basculement SQL Server
 
 Les instances de basculement SQL Server peuvent également être hébergées sur un cluster de basculement Windows s'exécutant sur un serveur physique ou virtuel en tant que système d'exploitation invité. Cette architecture multi-hôtes fournit l'instance SQL Server et la résilience du stockage. Ce déploiement est utile dans les environnements très exigeants qui recherchent des processus de basculement robustes tout en maintenant des performances améliorées. Dans une configuration de cluster de basculement, lorsqu'un hôte ou un stockage primaire est affecté, SQL Services effectue un basculement vers l'hôte secondaire et, dans le même temps, le stockage secondaire est disponible pour transmettre les E/S. Aucun script d'automatisation ni aucune intervention de l'administrateur n'est nécessaire.

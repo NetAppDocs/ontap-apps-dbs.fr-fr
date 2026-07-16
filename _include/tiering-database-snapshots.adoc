@@ -6,6 +6,7 @@ La version initiale de FabricPool a ciblé le cas d'utilisation de la sauvegarde
 
 
 
+[[policies-local-snapshots]]
 == Règles - snapshots locaux
 
 Deux options sont disponibles pour le Tiering des blocs de snapshots inactifs vers le niveau de capacité. Tout d'abord, le `snapshot-only` la règle cible uniquement les blocs de snapshot. Bien que le `auto` la politique inclut le `snapshot-only` et tiering des blocs à partir du système de fichiers actif. Ce n'est peut-être pas souhaitable.
@@ -14,6 +15,7 @@ Le `tiering-minimum-cooling-days` value doit être défini sur une période qui 
 
 
 
+[[policies-replicated-snapshots]]
 == Règles - snapshots répliqués
 
 Les snapshots répliqués avec SnapMirror ou SnapVault, uniquement utilisés pour la restauration, doivent généralement utiliser FabricPool `all` politique. Avec cette règle, les métadonnées sont répliquées, mais tous les blocs de données sont immédiatement envoyés au niveau de capacité pour des performances maximales. La plupart des processus de restauration impliquent des E/S séquentielles, ce qui est intrinsèquement efficace. Le délai de restauration à partir de la destination du magasin d'objets doit être évalué, mais dans une architecture bien conçue, ce processus de restauration ne doit pas nécessairement être beaucoup plus lent que la restauration à partir de données locales.

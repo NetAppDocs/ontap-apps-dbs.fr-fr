@@ -19,20 +19,21 @@ Les administrateurs système préfèrent parfois simplifier leurs infrastructure
 
 
 
+[[fiber-channel]]
 === Fibre Channel
 
-À partir d'ONTAP 9.19.1, la connexion FC directe est prise en charge avec les SAN FC traditionnels (SCSI) et NVMe/FC avec certains adaptateurs FC pour systèmes de stockage. Les HBA établiront une connexion FC point à point standard.
-
-Avant ONTAP 9.19.1, les systèmes de stockage ONTAP nécessitent NPIV, ce qui signifie que le système de stockage doit être connecté à un commutateur FC qui prend également en charge NPIV.
+À partir d'ONTAP 9.19.1, la connexion FC directe est prise en charge avec les SAN FC traditionnels (SCSI) et NVMe/FC avec certains adaptateurs FC pour systèmes de stockage. Les HBA établiront une connexion FC point à point standard. Avant ONTAP 9.19.1, les systèmes de stockage ONTAP nécessitent NPIV, ce qui signifie que le système de stockage doit être connecté à un commutateur FC qui prend également en charge NPIV.
 
 
 
+[[iscsi-and-nvmetcp]]
 === ISCSI et NVMe/TCP
 
 Un hôte utilisant iSCSI ou NVMe/TCP peut être directement connecté à un système de stockage et fonctionner normalement. La raison en est le chemin d'accès. Les connexions directes à deux contrôleurs de stockage distincts donnent lieu à deux chemins de flux de données indépendants. La perte du chemin, du port ou du contrôleur n'empêche pas l'autre chemin d'être utilisé.
 
 
 
+[[nfs]]
 === NFS
 
 Vous pouvez utiliser un stockage NFS à connexion directe, mais avec une limitation importante : le basculement ne fonctionnera pas sans script important, ce qui incombera au client.

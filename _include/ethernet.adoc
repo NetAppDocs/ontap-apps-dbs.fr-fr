@@ -4,12 +4,14 @@
 
 
 
+[[host-os-settings]]
 == Paramètres du système d'exploitation hôte
 
 La plupart des documents des fournisseurs d'applications incluent des paramètres TCP et ethernet spécifiques destinés à garantir le fonctionnement optimal de l'application. Ces mêmes paramètres suffisent généralement pour assurer des performances de stockage IP optimales.
 
 
 
+[[ethernet-flow-control]]
 == Contrôle de flux Ethernet
 
 Cette technologie permet à un client de demander à un expéditeur d'arrêter temporairement la transmission de données. Cela est généralement fait parce que le récepteur est incapable de traiter les données entrantes assez rapidement. À un moment donné, demander à un expéditeur de cesser la transmission était moins perturbant que d'avoir un récepteur de paquets de rejet parce que les tampons étaient pleins. Ce n'est plus le cas avec les piles TCP utilisées dans les systèmes d'exploitation d'aujourd'hui. En fait, le contrôle de flux cause plus de problèmes qu'il ne résout.
@@ -23,6 +25,7 @@ TIP: *NetApp recommande* de s'assurer que les contrôleurs de stockage NetApp ne
 
 
 
+[[mtu-sizes]]
 == Tailles du MTU
 
 L'utilisation de trames Jumbo a été démontrée afin d'améliorer les performances des réseaux 1 Gbit en réduisant la surcharge du processeur et du réseau, mais l'avantage n'est généralement pas significatif.
@@ -47,6 +50,7 @@ Les problèmes avec cet arrangement sont rares dans un environnement complèteme
 ====
 
 
+[[tcp-parameters]]
 == Paramètres TCP
 
 Trois paramètres sont souvent mal configurés : les horodatages TCP, l'acquittement sélectif (SACK) et la mise à l'échelle de la fenêtre TCP. De nombreux documents obsolètes sur Internet recommandent de désactiver un ou plusieurs de ces paramètres pour améliorer les performances. Cette recommandation a été très utile il y a de nombreuses années, lorsque les capacités du processeur étaient beaucoup plus faibles et qu'il y avait un avantage à réduire la surcharge sur le traitement TCP chaque fois que cela était possible.

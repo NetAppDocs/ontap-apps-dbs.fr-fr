@@ -22,6 +22,7 @@ Les hôtes SQL Server accèdent au stockage via des LUN Fibre Channel (FC) ou iS
 
 
 
+[[architecture-of-snapmirror-active-sync-with-symmetric-activeactive]]
 == Architecture de la synchronisation active SnapMirror avec actif-actif symétrique
 
 image:../media/mssql-smas-architecture.png["Architecture de synchronisation active SnapMirror"]

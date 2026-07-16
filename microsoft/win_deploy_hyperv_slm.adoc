@@ -18,6 +18,7 @@ Découvrez comment configurer la migration dynamique du stockage Hyper-V.
 
 
 
+[[prerequisites]]
 == Prérequis
 
 * Vous devez disposer d'un serveur Hyper-V autonome avec stockage indépendant (DAS ou LUN) ou d'un stockage SMB (local ou partagé entre d'autres serveurs Hyper-V).
@@ -26,6 +27,7 @@ Découvrez comment configurer la migration dynamique du stockage Hyper-V.
 
 
 
+[[deployment]]
 == Déploiement
 
 . Ouvrez Hyper-V Manager.

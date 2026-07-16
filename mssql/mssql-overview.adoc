@@ -37,6 +37,7 @@ Pour plus d'informations sur la compatibilité entre les produits NetApp, consul
 
 
 
+[[microsoft-sql-server-workloads]]
 == Workloads Microsoft SQL Server
 
 Avant de déployer SQL Server, vous devez comprendre les exigences de charge de travail des applications prises en charge par vos instances de base de données SQL Server. Chaque application a des exigences variables en termes de capacité, de performance et de disponibilité. Par conséquent, chaque base de données doit être conçue de manière à répondre de manière optimale à ces exigences. De nombreuses entreprises classent les bases de données en plusieurs niveaux de gestion, en utilisant les exigences des applications pour définir des contrats de niveau de service. Les charges de travail SQL Server sont souvent classées comme décrit ci-dessous :

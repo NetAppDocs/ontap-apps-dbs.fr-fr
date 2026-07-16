@@ -17,12 +17,14 @@ Les environnements de copie complète de test (SUP, REL et PJX, par exemple) son
 
 
 
+[[four-node-architecture]]
 == Architecture à quatre nœuds
 
 image:epic-4node.png["Architecture Epic à 4 nœuds"]
 
 
 
+[[four-node-workload-placement]]
 == Placement des workloads à quatre nœuds
 
 image:epic-4node-design.png["Placement Epic à 4 nœuds"]

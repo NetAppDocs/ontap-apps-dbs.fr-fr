@@ -18,18 +18,21 @@ ONTAP offre une efficacité du stockage de pointe pour les environnements virtua
 
 
 
+[[netapp-deduplication]]
 == Déduplication NetApp
 
 La déduplication NetApp supprime les blocs dupliqués au niveau du volume de stockage et ne stocke qu'une seule copie physique, quel que soit le nombre de copies logiques présentes. Par conséquent, la déduplication crée l'illusion qu'il y a de nombreuses copies de ce bloc. La déduplication supprime automatiquement les blocs de données dupliqués au niveau d'un bloc de 4 Ko répartis sur un volume entier. Ce processus récupère le stockage pour réaliser des économies d'espace et de performances potentielles en réduisant le nombre d'écritures physiques sur le disque. La déduplication permet de réaliser des économies d'espace supérieures à 70 % dans les environnements Hyper-V.
 
 
 
+[[thin-provisioning]]
 == Provisionnement fin
 
 Le provisionnement fin constitue un moyen efficace de provisionner le stockage, car celui-ci n'est pas préalloué à l'avance. En d'autres termes, lorsqu'un volume ou une LUN est créé à l'aide du provisionnement fin, l'espace sur le système de stockage n'est pas utilisé. L'espace reste inutilisé jusqu'à ce que les données soient écrites sur la LUN ou le volume. Seul l'espace nécessaire pour stocker les données est utilisé. NetApp recommande d'activer le provisionnement fin sur le volume et de désactiver la réservation de LUN.
 
 
 
+[[quality-of-service]]
 == Qualité de service
 
 La QoS du stockage dans NetApp ONTAP vous permet de regrouper des objets de stockage et de définir des limites de débit sur le groupe. La QoS du stockage peut être utilisée pour limiter le débit aux charges de travail et surveiller la performance des charges de travail. L'administrateur du stockage peut ainsi séparer les charges de travail par organisation, application, entité commerciale ou environnement de production ou de développement.

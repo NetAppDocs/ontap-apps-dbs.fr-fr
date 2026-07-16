@@ -27,6 +27,7 @@ Voir également la discussion sur l'alignement des blocs de compression dans la 
 
 
 
+[[misalignment-warnings]]
 == Avertissements de mauvais alignement
 
 La journalisation des opérations de reprise et des transactions de la base de données génère normalement des E/S non alignées qui peuvent entraîner des avertissements erronés concernant les LUN mal alignées sur ONTAP.

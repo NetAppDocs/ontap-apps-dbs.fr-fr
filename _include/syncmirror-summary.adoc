@@ -4,6 +4,7 @@
 
 
 
+[[data-protection-with-syncmirror]]
 == Protection des données avec SyncMirror
 
 Au niveau le plus simple, la réplication synchrone implique que toute modification doit être apportée des deux côtés du stockage en miroir avant d'être reconnue. Par exemple, si une base de données écrit un journal ou si un invité VMware est en cours de correction, une écriture ne doit jamais être perdue. Au niveau du protocole, le système de stockage ne doit pas accuser réception de l'écriture tant qu'il n'a pas été validé sur un support non volatile des deux sites. Ce n'est qu'à cette condition qu'il est possible de continuer sans risque de perte de données.
@@ -12,6 +13,7 @@ L'utilisation d'une technologie de réplication synchrone est la première étap
 
 
 
+[[syncmirror-data-availability]]
 == Disponibilité des données SyncMirror
 
 La réplication MetroCluster repose sur la technologie NetApp SyncMirror, conçue pour basculer efficacement en mode synchrone et en sortir. Cette fonctionnalité répond aux exigences des clients qui demandent une réplication synchrone, mais qui ont également besoin d'une haute disponibilité pour leurs services de données. Par exemple, si la connectivité à un site distant est coupée, il est généralement préférable que le système de stockage continue de fonctionner dans un état non répliqué.

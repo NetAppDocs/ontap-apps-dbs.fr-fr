@@ -14,6 +14,7 @@ Rubriques de configuration pour la base de données Oracle sous IBM AIX avec ONT
 
 
 
+[[concurrent-io]]
 == E/S simultanées
 
 Pour obtenir des performances optimales sur IBM AIX, il est nécessaire d'utiliser des E/S simultanées Sans E/S simultanées, les limites de performances sont probablement dues au fait qu'AIX exécute des E/S atomiques sérialisées, ce qui entraîne une surcharge importante.
@@ -35,6 +36,7 @@ La meilleure méthode pour activer les E/S simultanées est de définir le `init
 ====
 
 
+[[aix-nfs-mount-options]]
 == Options de montage NFS AIX
 
 Le tableau suivant répertorie les options de montage NFS AIX pour les bases de données Oracle à instance unique.
@@ -93,6 +95,7 @@ En utilisant le `cio` option de montage et `init.ora` paramètre `filesystemio_o
 
 
 
+[[aix-jfsjfs2-mount-options]]
 == Options de montage AIX jfs/jfs2
 
 Le tableau suivant répertorie les options de montage AIX jfs/jfs2.

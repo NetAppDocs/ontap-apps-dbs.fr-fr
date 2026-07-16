@@ -18,6 +18,7 @@ La section suivante décrit les paramètres de mémoire SQL Server requis pour o
 
 
 
+[[max-server-memory]]
 == Mémoire maximale du serveur
 
 L'option max. De mémoire du serveur définit la quantité maximale de mémoire que l'instance SQL Server peut utiliser. Il est généralement utilisé si plusieurs applications s'exécutent sur le même serveur que SQL Server et que vous voulez vous assurer que ces applications disposent de suffisamment de mémoire pour fonctionner correctement.
@@ -33,6 +34,7 @@ image:mssql-max-server-memory.png["Erreur : image graphique manquante"]
 
 
 
+[[adjusting-minimum-and-maximum-server-memory-using-sql-server-management-studio]]
 === Réglage de la mémoire minimale et maximale du serveur à l'aide de SQL Server Management Studio.
 
 L'utilisation de SQL Server Management Studio pour ajuster la mémoire minimale ou maximale du serveur nécessite un redémarrage du service SQL Server. Vous pouvez également ajuster la mémoire du serveur à l'aide de Trantransaction SQL (T-SQL) à l'aide du code suivant :
@@ -48,6 +50,7 @@ RECONFIGURE WITH OVERRIDE
 ....
 
 
+[[nonuniform-memory-access]]
 == Accès à la mémoire non uniforme
 
 L'accès à la mémoire non uniforme (NUMA) est une technologie d'optimisation de l'accès à la mémoire qui permet d'éviter une charge supplémentaire sur le bus du processeur.
@@ -56,6 +59,7 @@ Si NUMA est configuré sur un serveur sur lequel SQL Server est installé, aucun
 
 
 
+[[index-create-memory]]
 == Mémoire de création d'index
 
 L'option index create memory est une autre option avancée qui ne devrait normalement pas avoir besoin d'être modifiée par défaut.
@@ -64,6 +68,7 @@ Il contrôle la quantité maximale de RAM initialement allouée pour la créatio
 
 
 
+[[min-memory-per-query]]
 == Mémoire min. Par requête
 
 Lorsqu'une requête est exécutée, SQL Server tente d'allouer la quantité optimale de mémoire pour s'exécuter efficacement.

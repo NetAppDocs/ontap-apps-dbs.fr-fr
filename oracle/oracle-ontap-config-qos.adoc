@@ -25,6 +25,7 @@ Il existe deux types de qualité de service (QoS) dans ONTAP : les IOPS et la b
 
 
 
+[[iops-qos]]
 == QoS des IOPS
 
 Un contrôle de la QoS pour les IOPS est évidemment basé sur l'ensemble des IOPS d'une ressource donnée, mais il existe un certain nombre d'aspects de la QoS pour les IOPS qui peuvent ne pas être intuitifs. Au départ, quelques clients ont été surpris par l'augmentation apparente de la latence lorsqu'un seuil d'IOPS est atteint. L'augmentation de la latence est la conséquence naturelle de la limitation des IOPS. Logiquement, il fonctionne de la même manière qu'un système de jetons. Par exemple, si un volume donné contenant des fichiers de données dispose d'une limite de 10 000 IOPS, chaque E/S arrivant doit d'abord recevoir un jeton pour poursuivre le traitement. Tant que plus de 10 000 jetons n'ont pas été consommés en une seconde donnée, aucun retard n'est présent. Si les opérations d'E/S doivent attendre la réception de leur jeton, cet attente apparaît comme une latence supplémentaire. Plus une charge de travail est élevée, plus les E/S sont longues à attendre dans la file d'attente pour le traitement de son tour, ce qui apparaît comme une latence plus élevée.
@@ -34,6 +35,7 @@ NOTE: Soyez prudent lorsque vous appliquez des contrôles QoS aux données des t
 
 
 
+[[bandwidth-qos]]
 == QoS de la bande passante
 
 Toutes les tailles d'E/S ne sont pas identiques. Par exemple, une base de données peut effectuer de nombreuses lectures de blocs de petite taille, ce qui entraînerait l'atteinte du seuil d'IOPS, mais il est également possible que les bases de données effectuent une analyse de table complète comprenant un très petit nombre de lectures de blocs volumineux, qui consomment une très grande quantité de bande passante, mais relativement peu d'IOPS.
@@ -44,6 +46,7 @@ Pour gérer efficacement les performances, les IOPS ou la bande passante doivent
 
 
 
+[[minimumguaranteed-qos]]
 == QoS minimale/garantie
 
 De nombreux clients recherchent une solution incluant une QoS garantie, qui semble plus difficile à atteindre qu'elle ne le paraît et qui risque d'être très gaspillée. Par exemple, pour placer 10 bases de données avec une garantie de 10 000 IOPS, il est nécessaire de dimensionner un système dans le cas où les 10 bases de données s'exécutent simultanément à 10 000 IOPS, pour un total de 100 000.
@@ -52,6 +55,7 @@ La meilleure utilisation pour les contrôles QoS minimaux est de protéger les c
 
 
 
+[[adaptive-qos]]
 == La QoS adaptative
 
 La QoS adaptative fait référence à la fonctionnalité ONTAP où la limite de QoS repose sur la capacité de l'objet de stockage. Elle est rarement utilisée avec les bases de données, car il n'existe généralement aucun lien entre la taille d'une base de données et ses exigences de performances. Les grandes bases de données peuvent être quasiment inertes, tandis que les bases de données plus petites peuvent être celles qui nécessitent le plus d'IOPS.

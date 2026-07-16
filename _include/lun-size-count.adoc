@@ -15,6 +15,7 @@ Il n'est pas recommandé d'établir une taille de LUN standard universelle, car 
 
 
 
+[[lun-count]]
 == Nombre de LUN
 
 Contrairement à la taille de LUN, le nombre de LUN affecte les performances. La performance des applications dépend souvent de la capacité à réaliser des E/S parallèles via la couche SCSI. Ainsi, deux LUN offrent de meilleures performances qu'une seule LUN. L'utilisation d'un LVM tel que Veritas VxVM, Linux LVM2 ou Oracle ASM est la méthode la plus simple pour augmenter le parallélisme.

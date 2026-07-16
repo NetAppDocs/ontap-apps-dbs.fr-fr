@@ -15,12 +15,14 @@ Cette architecture offre le meilleur équilibre entre performances et capacité 
 
 
 
+[[six-node-architecture]]
 == Architecture à six nœuds
 
 image:epic-6node.png["Architecture Epic à 6 nœuds"]
 
 
 
+[[six-node-workload-placement]]
 == Placement des workloads à 6 nœuds
 
 image:epic-6node-design.png["Placement Epic à 6 nœuds"]

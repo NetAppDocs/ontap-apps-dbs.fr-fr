@@ -8,6 +8,7 @@ Les recommandations de NetApp pour les systèmes de stockage utilisés pour les 
 
 
 
+[[aff-ssd-aggregates-and-asa-storage-availability-zones]]
 == Agrégats SSD AFF et zones de disponibilité de stockage ASA
 
 
@@ -17,6 +18,7 @@ La recommandation de 10 % d'espace libre est très prudente. Les agrégats SSD p
 
 
 
+[[hdd-aggregates-including-flash-pool-aggregates]]
 == Les agrégats HDD, y compris les agrégats Flash Pool
 
 

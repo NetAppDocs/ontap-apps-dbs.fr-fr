@@ -4,6 +4,7 @@
 
 
 
+[[volumes]]
 == Volumes
 
 L'un des points de confusion les plus courants avec les nouveaux clients ONTAP est l'utilisation des volumes FlexVol, communément appelés simplement « volumes ».
@@ -12,6 +13,7 @@ Un volume n'est pas une LUN. Ces termes sont utilisés de façon synonymie avec 
 
 
 
+[[volumes-and-luns]]
 == Volumes et LUN
 
 Les LUN associées sont généralement situées en colocation dans un seul volume. Par exemple, une base de données qui nécessite 10 LUN doit généralement avoir les 10 LUN placées sur le même volume.
@@ -26,6 +28,7 @@ Les LUN associées sont généralement situées en colocation dans un seul volum
 ====
 
 
+[[volumes-luns-and-snapshots]]
 == Volumes, LUN et snapshots
 
 Les règles et planifications Snapshot sont placées sur le volume, et non sur la LUN. Un jeu de données composé de 10 LUN ne nécessite qu'une seule règle de snapshot lorsque ces LUN sont co-localisées dans le même volume.
@@ -36,6 +39,7 @@ Dans certains cas, il peut être nécessaire de diviser un jeu de LUN associé e
 
 
 
+[[volumes-luns-and-snapmirror]]
 == Volumes, LUN et SnapMirror
 
 Les règles et opérations SnapMirror sont, tout comme les opérations Snapshot, exécutées sur le volume, et non sur la LUN.
@@ -44,6 +48,7 @@ La colocation de LUN associées dans un seul volume vous permet de créer une re
 
 
 
+[[volumes-luns-and-qos]]
 == Volumes, LUN et QoS
 
 S'il est possible d'appliquer la QoS de manière sélective à chaque LUN, il est généralement plus facile de la configurer au niveau du volume. Par exemple, toutes les LUN utilisées par les invités dans un serveur ESX donné peuvent être placées sur un seul volume, puis une règle de qualité de service adaptative de ONTAP peut être appliquée. Vous obtenez ainsi une limite d'IOPS par To qui s'applique à toutes les LUN.
@@ -52,6 +57,7 @@ De même, si une base de données nécessitait 100 000 IOPS et occupait 10 LUN, 
 
 
 
+[[multi-volume-layouts]]
 == Dispositions multi-volumes
 
 Dans certains cas, la distribution de LUN sur plusieurs volumes peut être avantageuse. La principale raison est la répartition des contrôleurs. Par exemple, un système de stockage haute disponibilité peut héberger une base de données unique dans laquelle chaque contrôleur a besoin du potentiel de traitement et de mise en cache complet. Dans ce cas, la conception type consisterait à placer la moitié des LUN dans un seul volume sur le contrôleur 1 et l'autre moitié des LUN dans un seul volume sur le contrôleur 2.

@@ -23,12 +23,14 @@ Les modifications mineures apportées aux règles de protection et de restaurati
 
 
 
+[[recovery-time-objective]]
 == Objectif de délai de restauration
 
 L'objectif de délai de restauration (RTO) définit le temps maximal autorisé pour la restauration d'un service. Par exemple, une base de données de ressources humaines peut atteindre un objectif de délai de restauration de 24 heures. En effet, même s'il ne serait pas très pratique de perdre l'accès à ces données pendant les jours de travail, l'entreprise peut tout de même fonctionner. En revanche, une base de données prenant en charge le grand livre d'une banque aurait un RTO mesuré en minutes, voire en secondes. Un objectif RTO de zéro n'est pas possible, car il doit y avoir un moyen de faire la différence entre une panne de service réelle et un événement de routine tel qu'un paquet réseau perdu. Toutefois, un objectif RTO quasi nul est généralement requis.
 
 
 
+[[recovery-point-objective]]
 == Objectif de point de récupération
 
 L'objectif de point de récupération (RPO) définit la perte de données maximale tolérable. Dans de nombreux cas, l'objectif de point de récupération est uniquement déterminé par la fréquence des copies Snapshot ou des mises à jour snapmirror.
@@ -39,6 +41,7 @@ Dans des scénarios inhabituels, les données des journaux peuvent être perdues
 
 
 
+[[disaster-recovery]]
 == Reprise après incident
 
 La reprise après incident comprend l'architecture INFORMATIQUE, les règles et les procédures requises pour restaurer un service en cas d'incident physique. Cela peut inclure les inondations, les incendies ou les personnes agissant avec une intention malveillante ou négligente.
@@ -53,6 +56,7 @@ Les exigences en termes de RTO et de RPO pour la reprise d'activité varient plu
 
 
 
+[[logical-disasters]]
 === Incidents logiques
 
 Les incidents logiques incluent la corruption des données provoquée par les utilisateurs, les bogues des applications ou du système d'exploitation et les dysfonctionnements logiciels. Les incidents logiques peuvent également inclure des attaques malveillantes de tiers contenant des virus ou des vers, ou encore en exploitant les vulnérabilités des applications. Dans ces cas, l'infrastructure physique n'est pas endommagée, mais les données sous-jacentes ne sont plus valides.
@@ -61,6 +65,7 @@ Les ransomwares sont un type de catastrophe logique de plus en plus courant qui 
 
 
 
+[[physical-disasters]]
 === Incidents physiques
 
 Les incidents physiques incluent la défaillance de composants d'une infrastructure qui dépasse ses capacités de redondance et entraînent une perte de données ou une perte de service prolongée. Par exemple, la protection RAID assure la redondance des disques durs et l'utilisation de HBA assure la redondance des ports FC et des câbles FC. Les pannes matérielles de ces composants sont prévisibles et n'ont pas d'incidence sur la disponibilité.
@@ -69,6 +74,7 @@ Dans un environnement d'entreprise, il est généralement possible de protéger 
 
 
 
+[[synchronous-and-asynchronous-data-protection]]
 === Protection des données synchrone et asynchrone
 
 Dans l'idéal, toutes les données seraient répliquées de manière synchrone sur des sites dispersés géographiquement. Une telle réplication n'est pas toujours possible, voire possible pour plusieurs raisons :
@@ -84,6 +90,7 @@ NetApp propose des solutions qui incluent à la fois la réplication synchrone p
 
 
 
+[[retention-time]]
 == Durée de conservation
 
 Le dernier aspect d'une stratégie de protection des données est la durée de conservation des données, qui peut varier considérablement.

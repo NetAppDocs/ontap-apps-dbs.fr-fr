@@ -21,12 +21,14 @@ NOTE: Si des LUN de démarrage, y compris des disques de démarrage virtualisés
 
 
 
+[[two-site-configuration]]
 == Configuration à deux sites
 
 Une configuration RAC étendue sur deux sites peut fournir des services de base de données actif-actif qui peuvent survivre à de nombreux scénarios d'incident, mais pas à tous, sans interruption.
 
 
 
+[[rac-voting-files]]
 === Fichiers de vote RAC
 
 La gestion du quorum doit être prise en compte lors du déploiement du RAC étendu sur MetroCluster. Oracle RAC dispose de deux mécanismes pour gérer le quorum : le battement de cœur du disque et le battement de cœur du réseau. La pulsation du disque surveille l'accès au stockage à l'aide des fichiers de vote. Dans le cas d'une configuration RAC à site unique, une ressource de vote unique suffit tant que le système de stockage sous-jacent offre des fonctionnalités haute disponibilité.
@@ -47,6 +49,7 @@ Les groupes de disques ASM disposent de trois options de redondance `external`, 
 
 
 
+[[rac-network-heartbeat]]
 === Pulsation du réseau RAC
 
 Le signal de présence du réseau RAC Oracle surveille l'accessibilité des nœuds sur l'interconnexion de cluster. Pour rester dans le cluster, un nœud doit pouvoir contacter plus de la moitié des autres nœuds. Dans une architecture à deux sites, cette exigence crée les choix suivants pour le nombre de nœuds RAC :
@@ -120,6 +123,7 @@ Comme il n'y a que deux sites, il n'est pas possible d'utiliser n'importe quel t
 
 
 
+[[three-site-configurations]]
 == Configurations à trois sites
 
 Un cluster RAC étendu est beaucoup plus facile à concevoir avec trois sites. Les deux sites hébergeant chaque moitié du système MetroCluster prennent également en charge les workloads de la base de données, tandis que le troisième sert de disjoncteur pour la base de données et le système MetroCluster. La configuration Oracle Tiebreaker peut être aussi simple que le placement d'un membre du groupe de disques ASM utilisé pour le vote sur un troisième site, et peut également inclure une instance opérationnelle sur le troisième site pour s'assurer qu'il y a un nombre impair de nœuds dans le cluster RAC.

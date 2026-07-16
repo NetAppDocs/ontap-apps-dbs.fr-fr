@@ -18,6 +18,7 @@ Ce document présente les lignes directrices en matière de conception et d'impl
 
 
 
+[[netapp-storage-configuration]]
 == Configuration du stockage NetApp
 
 Les instructions de configuration pour NetApp MetroCluster sont disponibles à l'adresse https://docs.netapp.com/us-en/ontap-metrocluster/["Documentation MetroCluster"]. Les instructions relatives à la synchronisation active SnapMirror (SMAs) sont également disponibles à l'adresse https://docs.netapp.com/us-en/ontap/smbc/index.html["Présentation de la continuité de l'activité SnapMirror"].
@@ -30,16 +31,19 @@ La gestion d'une configuration vMSC avec SnapMirror Active Sync est différente 
 
 
 
+[[using-the-ontap-tools-vcenter-plugin-for-snapmirror-active-sync]]
 == Utilisation du plug-in vCenter des outils ONTAP pour la synchronisation active SnapMirror
 
 Le plug-in vCenter des outils ONTAP offre un moyen simple et intuitif de configurer la synchronisation active SnapMirror pour vMSC. Vous pouvez utiliser le plug-in vCenter des outils ONTAP pour créer et gérer des relations de synchronisation active SnapMirror entre deux clusters ONTAP. Ce plug-in fournit une interface facile à utiliser pour établir et gérer efficacement ces relations. Pour en savoir plus sur le plug-in vCenter des outils ONTAP, rendez-vous sur https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/index.html["Les outils ONTAP pour VMware vSphere"] ou accédez directement à https://docs.netapp.com/us-en/ontap-tools-vmware-vsphere-10/configure/protect-cluster.html["Protégez à l'aide de la protection de cluster hôte"].
 
 
 
+[[vmware-vsphere-configuration]]
 == Configuration de VMware vSphere
 
 
 
+[[create-a-vsphere-ha-cluster]]
 === Créer un cluster haute disponibilité vSphere
 
 La création d'un cluster vSphere HA est un processus en plusieurs étapes entièrement documenté à l'adresse https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-vcenter-esxi-management/GUID-F7818000-26E3-4E2A-93D2-FCDCE7114508.html["Comment créer et configurer des clusters dans vSphere client sur docs.vmware.com"]. En bref, vous devez d'abord créer un cluster vide, puis, à l'aide de vCenter, vous devez ajouter des hôtes et spécifier les paramètres vSphere HA et autres du cluster.
@@ -125,6 +129,7 @@ image::../media/vmsc_3_5.png[vmsc 3 5,624,336]
 |===
 
 
+[[configure-datastores-for-heartbeating]]
 === Configurez les datastores pour Heartbeat
 
 VSphere HA utilise les datastores pour surveiller les hôtes et les machines virtuelles en cas de panne du réseau de gestion. Vous pouvez configurer la façon dont vCenter sélectionne les datastores Heartbeat. Pour configurer des datastores pour les pulsations, procédez comme suit :
@@ -137,6 +142,7 @@ image::../media/vmsc_3_6.png[Capture d'écran d'une description d'ordinateur gé
 
 
 
+[[configure-advanced-options]]
 === Configurer les options avancées
 
 Les événements d'isolation se produisent lorsque les hôtes d'un cluster haute disponibilité perdent la connectivité au réseau ou à d'autres hôtes du cluster. Par défaut, vSphere HA utilise la passerelle par défaut de son réseau de gestion comme adresse d'isolation par défaut. Toutefois, vous pouvez spécifier des adresses d'isolement supplémentaires pour que l'hôte puisse envoyer une requête ping afin de déterminer si une réponse d'isolement doit être déclenchée. Ajoutez deux adresses IP d'isolation pouvant être ping, une par site. N'utilisez pas l'adresse IP de la passerelle. Le paramètre avancé de vSphere HA utilisé est das.isolaaddress. Vous pouvez utiliser des adresses IP ONTAP ou Mediator à cette fin.
@@ -162,6 +168,7 @@ Dans cette section, nous créons des groupes DRS pour les machines virtuelles et
 ====
 
 
+[[create-drs-host-groups]]
 === Créer des groupes d'hôtes DRS
 
 Pour créer des groupes d'hôtes DRS spécifiques au site A et au site B, procédez comme suit :
@@ -178,6 +185,7 @@ Pour créer des groupes d'hôtes DRS spécifiques au site A et au site B, procé
 
 
 
+[[create-drs-vm-groups]]
 === Créer des groupes VM DRS
 
 Pour créer des groupes VM DRS spécifiques au site A et au site B, procédez comme suit :
@@ -196,6 +204,7 @@ Pour créer des groupes VM DRS spécifiques au site A et au site B, procédez co
 
 
 
+[[create-vm-host-rules]]
 === Créer des règles d'hôte VM
 
 Pour créer des règles d'affinité DRS spécifiques au site A et au site B, procédez comme suit :
@@ -218,6 +227,7 @@ image::../media/vmsc_3_8.png[Capture d'écran d'une description d'ordinateur gé
 
 
 
+[[create-datastore-clusters-if-needed]]
 == Créez des clusters de datastores si nécessaire
 
 Pour configurer un cluster de datastore pour chaque site, procédez comme suit :
@@ -254,6 +264,7 @@ image::../media/vmsc_3_12.png[les datastores,624,134]
 
 
 
+[[vcenter-server-availability]]
 === Disponibilité du serveur vCenter
 
 Vos appliances vCenter Server (VCSA) doivent être protégées avec vCenter HA. VCenter HA vous permet de déployer deux VCSA dans une paire haute disponibilité actif-passif. Un dans chaque domaine de défaillance. Pour en savoir plus sur vCenter HA, rendez-vous sur https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-availability/GUID-4A626993-A829-495C-9659-F64BA8B560BD.html["docs.vmware.com"].

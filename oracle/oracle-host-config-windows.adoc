@@ -14,12 +14,14 @@ Rubriques de configuration pour la base de données Oracle sous Microsoft Window
 
 
 
+[[nfs]]
 == NFS
 
 Oracle prend en charge l'utilisation de Microsoft Windows avec le client NFS direct. Cette fonctionnalité permet de bénéficier des avantages de gestion du NFS, notamment la possibilité de consulter des fichiers dans différents environnements, de redimensionner dynamiquement les volumes NFS et d'utiliser un protocole IP moins coûteux. Consultez la documentation officielle Oracle pour des informations sur l'installation et la configuration d'une base de données sur Microsoft Windows à l'aide de DNFS. Aucune bonne pratique particulière n'existe.
 
 
 
+[[san]]
 == SAN
 
 Pour une efficacité de compression optimale, assurez-vous que le système de fichiers NTFS utilise une unité d'allocation de 8 Ko ou plus. L'utilisation d'une unité d'allocation 4K, qui est généralement la valeur par défaut, a un impact négatif sur l'efficacité de la compression.
