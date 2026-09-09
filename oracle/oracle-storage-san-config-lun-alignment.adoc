@@ -36,7 +36,7 @@ La journalisation effectue une écriture séquentielle du fichier journal avec d
 
 Vérifiez l'alignement à l'aide d'utilitaires tels que  `sio` ou  `dd` qui peuvent générer des E/S avec une taille de bloc définie. Les statistiques d'alignement des E/S sur le système de stockage peuvent être consultées avec la commande  `stats`. Voir link:../oracle/oracle-notes-wafl-alignment-verification.html["Vérification de l'alignement WAFL"] pour plus d'informations.
 
-L'alignement dans les environnements Solaris est plus compliqué. Reportez-vous à la section http://support.netapp.com/documentation/productlibrary/index.html?productID=61343["Configuration de l'hôte SAN ONTAP"^] pour en savoir plus.
+L'alignement dans les environnements Solaris est plus complexe. Consultez  https://kb.netapp.com/on-prem/ontap/da/SAN/SAN-KBs/How_to_identify_unaligned_IO_on_LUNs["Comment identifier les E/S non alignées sur les LUN"] pour plus d'informations.
 
 |===
 | Avertissement 

@@ -97,15 +97,6 @@ Le kit NetApp PowerShell (PSTK) est un module PowerShell qui offre une automatis
 
 
 
-[[further-reading]]
-=== Lecture ultérieure
-
-* Pour plus d'informations sur le kit NetApp PowerShell, rendez-vous sur le https://mysupport.netapp.com/site/tools/tool-eula/ontap-powershell-toolkit["Site de support NetApp"].
-* Pour plus d'informations sur les bonnes pratiques du kit NetApp PowerShell, reportez-vous à la section https://www.netapp.com/media/16861-tr-4475.pdf?v=93202073432AM["Tr-4475 : guide des bonnes pratiques du kit NetApp PowerShell"].
-
-
-
-
 [[networking-best-practices]]
 == Meilleures pratiques en matière de mise en réseau
 
