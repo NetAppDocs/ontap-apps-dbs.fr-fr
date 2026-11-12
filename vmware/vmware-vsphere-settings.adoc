@@ -111,7 +111,7 @@ La définition de cette valeur permet d'éviter les erreurs d'E/S. | Non
 
 NOTE: Option de configuration avancée NFS MaxQueueDepth peut ne pas fonctionner comme prévu lors de l'utilisation de VMware vSphere ESXi 7.0.1 et de VMware vSphere ESXi 7.0.2. Référence link:https://kb.vmware.com/s/article/86331?lang=en_US["VMware KB 86331"] pour plus d'informations.
 
-Lors de la création de volumes et de LUN ONTAP FlexVol, les outils ONTAP permettent également de spécifier certains paramètres par défaut :
+Les outils ONTAP spécifient également certains paramètres par défaut lors de la création de volumes et de LUN FlexVol® ONTAP :
 
 |===
 
@@ -146,8 +146,10 @@ Lors de la création de volumes et de LUN ONTAP FlexVol, les outils ONTAP permet
 | Réservation d'espace par LUN | Désactivé 
 
 
-| Allocation d'espace de la LUN | Activé 
+| Allocation d'espace de la LUN | Activé* 
 |===
+*Veuillez noter qu’en raison du défaut COTV-9223, les versions 10.0-10.6P1 de ONTAP tools ne parviennent pas à définir correctement l’allocation d’espace LUN. Vous trouverez plus d’informations à l’adresse link:https://kb.netapp.com/data-mgmt/OTV/VSC_Kbs/OTV_10.x_creates_iSCSI_LUNs_with_space-allocation_disabled["ONTAP tools crée des LUN avec l'allocation d'espace désactivée"] Vous devrez activer space-allocation à l’aide de System Manager, de la CLI ou de la plateforme d’automatisation de votre choix en utilisant les API REST de ONTAP. Vous pouvez également choisir d’utiliser le serveur MCP ONTAP de NetApp avec l’environnement d’IA de votre choix. link:https://community.netapp.com/community/discussion/465968/new-ontap-mcp-ai-that-modernizes-your-storage-operations["Nouveau ONTAP MCP : l’IA qui modernise vos opérations de stockage"]
+
 
 
 [[multipath-settings-for-performance]]
