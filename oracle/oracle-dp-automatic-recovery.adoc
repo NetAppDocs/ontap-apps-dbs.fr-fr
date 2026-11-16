@@ -6,7 +6,12 @@ summary: Récupération automatique Oracle sans mode de sauvegarde.
 searchtitle: Récupération automatique Oracle sans mode de sauvegarde. 
 ---
 = Récupération automatique Oracle sans mode de sauvegarde
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ../media/
 
 
 [role="lead"]
@@ -36,7 +41,7 @@ Lors de la récupération, la base de données lit les métadonnées des fichier
 
 Cette approche permet d'approximer une restauration à un point précis dans le temps, mais avec une granularité limitée. Par exemple, si vous commencez avec des fichiers de données en mode sauvegarde, vous pouvez faire avancer la base de données jusqu'à n'importe quelle transaction.
 
-Si vous utilisez la méthode de récupération automatique, sans utiliser le mode de sauvegarde, vous devez restaurer la base de données jusqu'au point de l'instantané du journal. Dans des circonstances normales, le RPO resterait nul car les journaux d'archive, les journaux de restauration et les fichiers de contrôle d'origine seraient toujours disponibles dans le système de fichiers actif. Si une récupération devait être effectuée entièrement à partir d'instantanés en raison de la perte de toutes les données dans les systèmes de fichiers actifs, alors le RPO serait d'une heure.
++ Si vous utilisez la méthode de récupération automatique, sans utiliser le mode de sauvegarde, vous devez restaurer la base de données jusqu'au point de l'instantané du journal. Dans des circonstances normales, le RPO resterait nul, car les journaux d'archivage, les journaux redo et les fichiers de contrôle d'origine seraient toujours disponibles dans le système de fichiers actif. Si une récupération devait être effectuée entièrement à partir d'instantanés en raison de la perte de toutes les données dans les systèmes de fichiers actifs, le RPO serait d'une heure.
 
 []
 ====
